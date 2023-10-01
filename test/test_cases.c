@@ -59,5 +59,5 @@ int main(int argc, char **argv) {
     XTEST_RUN_FIXTURE(basic_run_of_pointer, project_tests, runner);
     XTEST_RUN_FIXTURE(basic_run_of_boolean, project_tests, runner);
 
-    return XTEST_RUNNER_END(&runner);
+    return XTEST_RUNNER_END(runner);
 } // end of function main
