@@ -1,0 +1,91 @@
+#
+# under: devops:
+# author: Michael Gene Brockus (Dreamer)
+# gmail: <michaelbrockus@gmail.com>
+#
+name: CI Meson Build Tester
+
+#
+# We have is configured so that ci_runner_linux only runs
+# when source files, build scripts and this CI files is
+# changed, we should not just run CI for all changes.
+#
+on:
+  push:
+    paths:
+      - "**.c"
+      - "**.h"
+      - "**.txt"
+      - "**.build"
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - "**.c"
+      - "**.h"
+      - "**.txt"
+      - "**.build"
+
+permissions:
+  contents: read
+
+#
+# Testing minimum and beta builds of Meson build
+# 
+jobs:
+
+  meson_latest:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        architecture: x64
+    - name: Install Meson Build System
+      run: |
+          pip install meson ninja
+          sudo apt-get install -y gcc
+    - name: Setup Build Directory
+      run: |
+            meson setup builddir -Dwith_tests=enabled
+    - name: Compile Source Code
+      run: |
+            meson compile -C builddir
+    - name: Test Project Code
+      run: |
+            meson test -C builddir -v
+    - uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: Latest_Meson_Testlog
+        path: builddir/meson-logs/testlog.txt
+
+  meson_minimum:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        architecture: x64
+    - name: Install Meson Build System
+      run: |
+          pip install meson==1.0.0 ninja==1.11.1
+          sudo apt-get install -y gcc
+    - name: Setup Build Directory
+      run: |
+            meson setup builddir -Dwith_tests=enabled
+    - name: Compile Source Code
+      run: |
+            meson compile -C builddir
+    - name: Test Project Code
+      run: |
+            meson test -C builddir -v
+    - uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: Latest_Meson_Testlog
+        path: builddir/meson-logs/testlog.txt
