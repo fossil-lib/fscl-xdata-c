@@ -6,5 +6,5 @@ if get_option('with_tests').enabled()
 
     test('Execute project Xunit tests', 
         executable('xrunner', 'test_cases.c',
-        dependencies : [test_deps, trilo_c_dep]))
+        dependencies : [test_deps, trilo_xdata_c_dep]))
 endif
