@@ -55,9 +55,9 @@ XTEST_CASE_FIXTURE(project_tests, basic_run_of_boolean) {
 int main(int argc, char **argv) {
     XUnitRunner runner = XTEST_RUNNER_START(argc, argv);
 
-    XTEST_RUN_FIXTURE(basic_run_of_string,  project_tests, runner);
-    XTEST_RUN_FIXTURE(basic_run_of_pointer, project_tests, runner);
-    XTEST_RUN_FIXTURE(basic_run_of_boolean, project_tests, runner);
+    XTEST_RUN_FIXTURE(basic_run_of_string,  project_tests, &runner);
+    XTEST_RUN_FIXTURE(basic_run_of_pointer, project_tests, &runner);
+    XTEST_RUN_FIXTURE(basic_run_of_boolean, project_tests, &runner);
 
     return XTEST_RUNNER_END(runner);
 } // end of function main
