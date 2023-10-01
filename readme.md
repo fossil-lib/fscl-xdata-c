@@ -1,4 +1,4 @@
-# Project Template Readme
+# Trilobite Data structures - C
 
 Welcome to the Project Template repository! This README file provides detailed instructions for users on Windows, macOS, and Linux systems to set up, compile, test, and run a project using the Meson build system. Please note that the Meson build system is required to successfully build this project.
 
@@ -29,7 +29,7 @@ Example of the usage in C
    website: <https://trilobite.code.blog>
 */
 #include <stdio.h>
-#include <trilobite/package.h>
+#include <trilobite/xdata.h>
 
 //
 // main is where all good examples start
@@ -42,11 +42,11 @@ int main(void) {
 
 ## Contributing
 
-If you're interested in contributing to this project, please consider opening pull requests or raising issues on the [GitHub repository](https://github.com/trilobite-stdlib/trilo-???-c) and be sure to read the docs on the owners' [website](https://trilobite.code.blog).
+If you're interested in contributing to this project, please consider opening pull requests or raising issues on the [GitHub repository](https://github.com/trilobite-stdlib/trilo-xdata-c) and be sure to read the docs on the owners' [website](https://trilobite.code.blog).
 
 ## Feedback and Support
 
-If you come across any issues, have questions, or would like to provide feedback, feel free to open an issue on the [GitHub repository](https://github.com/trilobite-stdlib/trilo-???-c/issues).
+If you come across any issues, have questions, or would like to provide feedback, feel free to open an issue on the [GitHub repository](https://github.com/trilobite-stdlib/trilo-xdata-c/issues).
 
 ## License
 
