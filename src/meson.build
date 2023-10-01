@@ -1,9 +1,10 @@
 source = files(
     'package.c')
 
-lib = library('trilo-c',
+trilo_xdata_c_lib = library('trilo-xdata-c',
     source,
     include_directories: dir)
 
-trilo_c_dep = declare_dependency(link_with: lib,
+trilo_xdata_c_dep = declare_dependency(
+    link_with: trilo_xdata_c_lib,
     include_directories: dir)
