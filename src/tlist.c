@@ -22,13 +22,16 @@ TriloTernaryListNode* trilo_xdata_tlist_node_create(TriloTofu data) {
     return node;
 } // end of func
 
-TriloTernaryList* trilo_xdata_tlist_create() {
+TriloTernaryList* trilo_xdata_tlist_create(enum DataType list_type) {
     TriloTernaryList* tlist = (TriloTernaryList*)malloc(sizeof(TriloTernaryList));
     if (tlist == NULL) {
         fprintf(stderr, "Memory allocation failed!\n");
         exit(EXIT_FAILURE);
     } // end if
+
     tlist->head = NULL;
+    tlist->list_type = list_type;
+
     return tlist;
 } // end of func
 
@@ -43,6 +46,12 @@ void trilo_xdata_tlist_destroy(TriloTernaryList* tlist) {
 } // end of func
 
 void trilo_xdata_tlist_insert(TriloTernaryList* tlist, TriloTofu data) {
+    // Check if the data type matches the list type
+    if (data.type != tlist->list_type) {
+        fprintf(stderr, "Error: Invalid data type for this list.\n");
+        return;
+    } // end if
+
     TriloTernaryListNode* newNode = trilo_xdata_tlist_node_create(data);
     if (tlist->head == NULL) {
         tlist->head = newNode;
