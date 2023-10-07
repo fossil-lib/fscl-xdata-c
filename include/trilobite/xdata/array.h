@@ -14,6 +14,12 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+// Define error constants for tuple operations
+enum {
+    TRILO_XDATA_ARRAY_TYPE_MISMATCH = -1,
+    TRILO_XDATA_ARRAY_OUT_OF_RANGE  = -2
+};
+
 // Structure for the array-based list
 typedef struct TriloArray {
     TriloTofu* data;

@@ -14,6 +14,12 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+// Define error constants for tuple operations
+enum {
+    TRILO_XDATA_MAP_TYPE_MISMATCH = -1,
+    TRILO_XDATA_MAP_OUT_OF_RANGE  = -2
+};
+
 // Structure for the map
 typedef struct TriloMapNode {
     char key[50];

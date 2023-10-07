@@ -14,6 +14,12 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+// Define error constants for tuple operations
+enum {
+    TRILO_XDATA_HASH_TYPE_MISMATCH = -1,
+    TRILO_XDATA_HASH_OUT_OF_RANGE  = -2
+};
+
 // Node structure for the hash table
 typedef struct TriloHashNode {
     char* key;

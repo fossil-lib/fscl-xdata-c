@@ -14,6 +14,12 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+// Define error constants for tuple operations
+enum {
+    TRILO_XDATA_DICT_TYPE_MISMATCH = -1,
+    TRILO_XDATA_DICT_OUT_OF_RANGE  = -2
+};
+
 // Dictionary structure
 typedef struct TriloDictNode {
     char key[50]; // Key as a string (max length 50)

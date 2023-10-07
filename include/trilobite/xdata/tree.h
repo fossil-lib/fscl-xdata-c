@@ -14,6 +14,12 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+// Define error constants for tuple operations
+enum {
+    TRILO_XDATA_TREE_TYPE_MISMATCH = -1,
+    TRILO_XDATA_TREE_OUT_OF_RANGE  = -2
+};
+
 // Node structure for the binary search tree
 typedef struct TriloTreeNode {
     TriloTofu data;

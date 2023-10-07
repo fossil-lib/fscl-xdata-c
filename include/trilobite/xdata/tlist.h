@@ -14,6 +14,12 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+// Define error constants for tuple operations
+enum {
+    TRILO_XDATA_TLIST_TYPE_MISMATCH = -1,
+    TRILO_XDATA_TLIST_OUT_OF_RANGE  = -2
+};
+
 // Node structure for the ternary linked list
 typedef struct TriloTernaryListNode {
     TriloTofu data;

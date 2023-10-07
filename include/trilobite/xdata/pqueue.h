@@ -14,6 +14,12 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+// Define error constants for tuple operations
+enum {
+    TRILO_XDATA_PQUEUE_TYPE_MISMATCH = -1,
+    TRILO_XDATA_PQUEUE_OUT_OF_RANGE  = -2
+};
+
 // Node structure for the priority queue
 typedef struct TriloPQueueNode {
     TriloTofu data;

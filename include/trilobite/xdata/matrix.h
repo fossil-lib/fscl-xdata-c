@@ -14,6 +14,12 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+// Define error constants for tuple operations
+enum {
+    TRILO_XDATA_MATRIX_TYPE_MISMATCH = -1,
+    TRILO_XDATA_MATRIX_OUT_OF_RANGE  = -2
+};
+
 // Matrix structure
 typedef struct TriloMatrix {
     TriloTofu** data;
