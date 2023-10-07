@@ -14,6 +14,11 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+enum {
+    TRILO_XDATA_STACK_TYPE_MISMATCH = -1,
+    TRILO_XDATA_STACK_OUT_OF_RANGE  = -2
+};
+
 // Stack structure
 typedef struct TriloStackNode {
     TriloTofu data; // Data stored in the stack node

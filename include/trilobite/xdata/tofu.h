@@ -68,6 +68,12 @@ extern "C"
 
 #include <stdbool.h> // Include the header for bool data type
 
+// Define error constants for tuple operations
+enum {
+    TRILO_XDATA_TOFU_TYPE_MISMATCH = -1,
+    TRILO_XDATA_TOFU_OUT_OF_RANGE  = -2
+};
+
 //
 // Generic and secure flavorless data type.
 //

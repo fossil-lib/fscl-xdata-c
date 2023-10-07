@@ -14,6 +14,11 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+enum {
+    TRILO_XDATA_SET_TYPE_MISMATCH = -1,
+    TRILO_XDATA_SET_OUT_OF_RANGE  = -2
+};
+
 // Node structure for the set
 typedef struct TriloSetNode {
     TriloTofu data;

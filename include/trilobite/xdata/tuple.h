@@ -14,6 +14,12 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+// Define error constants for tuple operations
+enum {
+    TRILO_XDATA_TUPLE_TYPE_MISMATCH = -1,
+    TRILO_XDATA_TUPLE_OUT_OF_RANGE  = -2
+};
+
 // Tuple structure
 typedef struct TriloTuple {
     TriloTofu* elements;
@@ -41,6 +47,30 @@ size_t trilo_xdata_tuple_size(const TriloTuple* tuple);
 
 // Function to print the elements in the tuple
 void trilo_xdata_tuple_print(const TriloTuple* tuple);
+
+// Function to set an integer value in the tuple at the specified index
+int trilo_xdata_tuple_set_integer(TriloTuple* tuple, int index, int value);
+
+// Function to set a double value in the tuple at the specified index
+int trilo_xdata_tuple_set_double(TriloTuple* tuple, int index, double value);
+
+// Function to set a string value in the tuple at the specified index
+int trilo_xdata_tuple_set_string(TriloTuple* tuple, int index, const char* value);
+
+// Function to get the integer data from a TriloTuple instance
+int trilo_xdata_tuple_get_integer(TriloTuple tuple);
+
+// Function to get the double data from a TriloTuple instance
+double trilo_xdata_tuple_get_double(TriloTuple tuple);
+
+// Function to get the char data from a TriloTuple instance
+char trilo_xdata_tuple_get_char(TriloTuple tuple);
+
+// Function to get the boolean data from a TriloTuple instance
+bool trilo_xdata_tuple_get_boolean(TriloTuple tuple);
+
+// Function to print the data in a TriloTuple instance
+void trilo_xdata_tuple_print(TriloTuple tuple);
 
 #ifdef __cplusplus
 }

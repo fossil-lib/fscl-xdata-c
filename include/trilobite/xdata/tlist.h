@@ -25,10 +25,11 @@ typedef struct TriloTernaryListNode {
 // Ternary linked list structure
 typedef struct TriloTernaryList {
     TriloTernaryListNode* head;
+    enum DataType list_type;  // Type of the list
 } TriloTernaryList;
 
 // Function to create a new TriloTernaryList
-TriloTernaryList* trilo_xdata_tlist_create();
+TriloTernaryList* trilo_xdata_tlist_create(enum DataType list_type);
 
 // Function to destroy the TriloTernaryList
 void trilo_xdata_tlist_destroy(TriloTernaryList* tlist);

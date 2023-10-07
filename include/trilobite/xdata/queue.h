@@ -14,6 +14,11 @@ extern "C"
 
 #include "xdata/tofu.h"
 
+enum {
+    TRILO_XDATA_QUEUE_TYPE_MISMATCH = -1,
+    TRILO_XDATA_QUEUE_OUT_OF_RANGE  = -2
+};
+
 // Node structure for the queue
 typedef struct TriloQueueNode {
     TriloTofu data;
