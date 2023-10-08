@@ -12,7 +12,7 @@ extern "C"
 {
 #endif
 
-#include "xdata/tofu.h"
+#include "trilobite/xdata/tofu.h"
 
 enum {
     TRILO_XDATA_SET_TYPE_MISMATCH = -1,
@@ -28,6 +28,7 @@ typedef struct TriloSetNode {
 // Set structure
 typedef struct TriloSet {
     TriloSetNode* head;
+    size_t size;
     enum DataType set_type;  // Type of the set
 } TriloSet;
 
@@ -51,6 +52,8 @@ bool trilo_xdata_set_contains(const TriloSet* set, TriloTofu data);
 
 // Function to print the elements in the set
 void trilo_xdata_set_print(const TriloSet* set);
+
+int trilo_xdata_set_size(const TriloSet* set);
 
 #ifdef __cplusplus
 }

@@ -110,3 +110,7 @@ void trilo_xdata_pqueue_print(const TriloPQueue* queue) {
     } // end while
     printf("NULL\n");
 } // end of func
+
+int trilo_xdata_pqueue_size(const TriloPQueue* pqueue) {
+    return pqueue->size;
+} // end of func

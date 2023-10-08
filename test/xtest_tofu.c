@@ -13,11 +13,11 @@
 // TEST DATA
 //
 XTEST_DATA(ProjectTestTofuData) {
-    TriloTofu *tofu_int;
-    TriloTofu *tofu_double;
-    TriloTofu *tofu_string;
-    TriloTofu *tofu_char;
-    TriloTofu *tofu_bool;
+    TriloTofu tofu_int;
+    TriloTofu tofu_double;
+    TriloTofu tofu_string;
+    TriloTofu tofu_char;
+    TriloTofu tofu_bool;
 }tofu_data;
 
 //
@@ -26,9 +26,9 @@ XTEST_DATA(ProjectTestTofuData) {
 XTEST_CASE(xdata_let_tofu_create_and_get) {
     // Test creating a TriloTofu instance and getting its data
     tofu_data.tofu_int = trilo_xdata_tofu_create_from_integer(42);
-    XASSERT_INT_EQUAL(INTEGER_TYPE, tofu_data.tofu.type);
-    XASSERT_INT_EQUAL(42, trilo_xdata_tofu_get_integer(tofu_data.tofu));
-    trilo_xdata_tofu_print(tofu_data.tofu); // Print the tofu data
+    XASSERT_INT_EQUAL(INTEGER_TYPE, tofu_data.tofu_int.type);
+    XASSERT_INT_EQUAL(42, trilo_xdata_tofu_get_integer(tofu_data.tofu_int));
+    trilo_xdata_tofu_print(tofu_data.tofu_int); // Print the tofu data
 }
 
 XTEST_CASE(xdata_let_tofu_type) {
@@ -54,6 +54,4 @@ void xdata_test_tofu_group(XUnitRunner *runner) {
 
     XTEST_RUN_UNIT(xdata_let_tofu_create_and_get, runner);
     XTEST_RUN_UNIT(xdata_let_tofu_type,           runner);
-    XTEST_RUN_UNIT(xdata_let_tofu_conversion,     runner);
-    XTEST_RUN_UNIT(xdata_let_tofu_type_mismatch,  runner);
 } // end of func

@@ -67,6 +67,7 @@ extern "C"
 */
 
 #include <stdbool.h> // Include the header for bool data type
+#include <stddef.h>
 
 // Define error constants for tuple operations
 enum {
@@ -82,7 +83,8 @@ enum DataType {
     DOUBLE_TYPE,
     STRING_TYPE,
     CHAR_TYPE,
-    BOOLEAN_TYPE
+    BOOLEAN_TYPE,
+    UNKNOWN_TYPE
 };
 
 //
@@ -144,7 +146,7 @@ int trilo_xdata_tofu_to_integer(TriloTofu tofu);
 double trilo_xdata_tofu_to_double(TriloTofu tofu);
 
 // Function to convert TriloTofu to a string
-const char* trilo_xdata_tofu_to_string(TriloTofu tofu);
+char* trilo_xdata_tofu_to_string(TriloTofu tofu);
 
 // Function to convert TriloTofu to a char
 char trilo_xdata_tofu_to_char(TriloTofu tofu);

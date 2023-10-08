@@ -15,7 +15,7 @@ TriloGraphNode* trilo_xdata_graph_node_create(const char* key, TriloTofu data) {
         fprintf(stderr, "Memory allocation failed!\n");
         exit(EXIT_FAILURE);
     } // end if
-    node->key = strdup(key); // Copy the key
+    strcpy(node->key, key); // Copy the key
     node->data = data;
     node->edges = NULL;
     node->next = NULL;

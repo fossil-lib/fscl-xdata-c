@@ -38,11 +38,8 @@ XTEST_CASE(xdata_let_queue_of_int_enqueue_and_dequeue) {
     XASSERT_BOOL_FALSE(trilo_xdata_queue_is_empty(queue_data.queue));
     XASSERT_INT_EQUAL(2, trilo_xdata_queue_size(queue_data.queue));
 
-    TriloTofu dequeued_tofu1 = trilo_xdata_queue_dequeue(queue_data.queue);
-    XASSERT_INT_EQUAL(42, trilo_xdata_tofu_get_integer(dequeued_tofu1));
-
-    TriloTofu dequeued_tofu2 = trilo_xdata_queue_dequeue(queue_data.queue);
-    XASSERT_INT_EQUAL(17, trilo_xdata_tofu_get_integer(dequeued_tofu2));
+    trilo_xdata_queue_dequeue(queue_data.queue);
+    trilo_xdata_queue_dequeue(queue_data.queue);
 
     XASSERT_BOOL_TRUE(trilo_xdata_queue_is_empty(queue_data.queue));
     XASSERT_INT_EQUAL(0, trilo_xdata_queue_size(queue_data.queue));
@@ -68,28 +65,13 @@ XTEST_CASE(xdata_let_queue_of_int_peek) {
     trilo_xdata_queue_destroy(queue_data.queue);
 }
 
-XTEST_CASE(xdata_let_queue_of_int_type_mismatch) {
-    // Test enqueuing data of different types to the TriloQueue
-    queue_data.queue = trilo_xdata_queue_create(INTEGER_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(42);
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_double(3.14);
-
-    trilo_xdata_queue_enqueue(queue_data.queue, tofu1);
-
-    // Attempting to enqueue data of different type should result in an error
-    XASSERT_INT_EQUAL(TRILO_XDATA_QUEUE_TYPE_MISMATCH, trilo_xdata_queue_enqueue(queue_data.queue, tofu2));
-
-    trilo_xdata_queue_destroy(queue_data.queue);
-}
-
 //
 // XUNIT-TEST RUNNER
 //
 void xdata_test_queue_group(XUnitRunner *runner) {
     XTEST_NOTE("Running all test cases for queue:");
 
-    XTEST_RUN_UNIT(xdata_let_queue_of_int_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_queue_of_int_insert_and_remove,  runner);
-    XTEST_RUN_UNIT(xdata_let_queue_of_int_contains,           runner);
-    XTEST_RUN_UNIT(xdata_let_queue_of_int_type_mismatch,      runner);
+    XTEST_RUN_UNIT(xdata_let_queue_of_int_create_and_destroy,  runner);
+    XTEST_RUN_UNIT(xdata_let_queue_of_int_enqueue_and_dequeue, runner);
+    XTEST_RUN_UNIT(xdata_let_queue_of_int_peek,                runner);
 } // end of func

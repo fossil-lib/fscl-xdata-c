@@ -12,7 +12,7 @@ extern "C"
 {
 #endif
 
-#include "xdata/tofu.h"
+#include "trilobite/xdata/tofu.h"
 
 // Define error constants for tuple operations
 enum {
@@ -31,6 +31,7 @@ typedef struct TriloDoublyListNode {
 typedef struct TriloDoublyList {
     TriloDoublyListNode* head;
     TriloDoublyListNode* tail;
+    size_t size;
     enum DataType list_type;  // Type of the linked list
 } TriloDoublyList;
 
@@ -57,6 +58,12 @@ void trilo_xdata_dlist_print_forward(const TriloDoublyList* list);
 
 // Function to print the data in the linked list backward
 void trilo_xdata_dlist_print_backward(const TriloDoublyList* list);
+
+// Function to retrieve the value at a specific index from the doubly linked list
+TriloTofu trilo_xdata_dlist_get(const TriloDoublyList* dlist, int index);
+
+// Function to get the number of values in the doubly linked list
+int trilo_xdata_dlist_size(const TriloDoublyList* dlist);
 
 #ifdef __cplusplus
 }

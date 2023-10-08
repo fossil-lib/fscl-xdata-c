@@ -37,38 +37,27 @@ bool trilo_xdata_queue_is_empty(const TriloQueue* queue) {
 } // end of func
 
 void trilo_xdata_queue_enqueue(TriloQueue* queue, TriloTofu data) {
-    // Ensure the data type matches the queue type
-    if (data.type != queue->queue_type) {
-        fprintf(stderr, "Data type mismatch!\n");
-        exit(EXIT_FAILURE);
-    } // end if
-
-    TriloQueueNode* new_node = (TriloQueueNode*)malloc(sizeof(TriloQueueNode));
-    if (new_node == NULL) {
-        fprintf(stderr, "Memory allocation failed!\n");
-        exit(EXIT_FAILURE);
-    } // end if
-    new_node->data = data;
-    new_node->next = NULL;
-
+    TriloQueueNode* newNode = trilo_xdata_queue_node_create(data);
     if (queue->rear == NULL) {
-        queue->front = new_node;
-        queue->rear = new_node;
+        queue->front = newNode;
+        queue->rear = newNode;
     } else {
-        queue->rear->next = new_node;
-        queue->rear = new_node;
+        queue->rear->next = newNode;
+        queue->rear = newNode;
     } // end if else
+    queue->size++;  // Increment the size
 } // end of func
 
 void trilo_xdata_queue_dequeue(TriloQueue* queue) {
-    if (queue->front == NULL) {
-        fprintf(stderr, "Queue is empty!\n");
-        exit(EXIT_FAILURE);
+    if (queue->front != NULL) {
+        TriloQueueNode* temp = queue->front;
+        queue->front = queue->front->next;
+        if (queue->front == NULL) {
+            queue->rear = NULL;
+        } // end if
+        free(temp);
+        queue->size--;  // Decrement the size
     } // end if
-
-    TriloQueueNode* temp = queue->front;
-    queue->front = queue->front->next;
-    free(temp);
 } // end of func
 
 TriloTofu trilo_xdata_queue_peek(const TriloQueue* queue) {
@@ -105,4 +94,8 @@ void trilo_xdata_queue_print(const TriloQueue* queue) {
         current = current->next;
     } // end while
     printf("NULL\n");
+} // end of func
+
+int trilo_xdata_queue_size(const TriloQueue* queue) {
+    return queue->size;
 } // end of func

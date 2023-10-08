@@ -353,3 +353,15 @@ void trilo_xdata_tree_print(const TriloTree* tree) {
     trilo_xdata_tree_inorder_traversal(tree->root);
     printf("NULL\n");
 } // end of func
+
+static int trilo_xdata_tree_size_node(const TriloTreeNode* root) {
+    if (root == NULL) {
+        return 0;
+    } // end if
+
+    return 1 + trilo_xdata_tree_size_node(root->left) + trilo_xdata_tree_size_node(root->right);
+} // end of func
+
+int trilo_xdata_tree_size(const TriloTree* tree) {
+    return trilo_xdata_tree_size_node(tree->root);
+} // end of func

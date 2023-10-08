@@ -1,10 +1,7 @@
 source = files(
     'queue.c', 'pqueue.c', 'dqueue.c',
-    'flist.c', 'dlist.c' , 'tlist.c' ,
-    'array.c', 'matrix.c', 'vector.c',
-    'tree.c' , 'set.c'   , 'map.c'   ,
-    'hash.c' , 'graph.c' , 'tuple.c' ,
-    'dict.c' , 'stack.c' , 'tofu.c')
+    'flist.c', 'dlist.c' , 'tree.c'  ,
+    'set.c'  , 'stack.c' , 'tofu.c')
 
 trilo_xdata_c_lib = library('trilo-xdata-c',
     source,

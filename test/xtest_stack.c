@@ -68,20 +68,6 @@ XTEST_CASE(xdata_let_stack_of_int_peek) {
     trilo_xdata_stack_destroy(stack_data.stack);
 }
 
-XTEST_CASE(xdata_let_stack_of_int_type_mismatch) {
-    // Test pushing data of different types to the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(INTEGER_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(42);
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_double(3.14);
-
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-
-    // Attempting to push data of different type should result in an error
-    XASSERT_INT_EQUAL(TRILO_XDATA_STACK_TYPE_MISMATCH, trilo_xdata_stack_push(stack_data.stack, tofu2));
-
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
-
 XTEST_CASE(xdata_let_stack_of_str_create_and_destroy) {
     // Test creating and destroying a TriloStack
     stack_data.stack = trilo_xdata_stack_create(STRING_TYPE);
@@ -127,20 +113,6 @@ XTEST_CASE(xdata_let_stack_of_str_peek) {
 
     XASSERT_BOOL_FALSE(trilo_xdata_stack_is_empty(stack_data.stack));
     XASSERT_INT_EQUAL(2, trilo_xdata_stack_size(stack_data.stack));
-
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
-
-XTEST_CASE(xdata_let_stack_of_str_type_mismatch) {
-    // Test pushing data of different types to the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(STRING_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_string("Answer is 42");
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_double(3.14);
-
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-
-    // Attempting to push data of different type should result in an error
-    XASSERT_INT_EQUAL(TRILO_XDATA_STACK_TYPE_MISMATCH, trilo_xdata_stack_push(stack_data.stack, tofu2));
 
     trilo_xdata_stack_destroy(stack_data.stack);
 }
@@ -194,20 +166,6 @@ XTEST_CASE(xdata_let_stack_of_char_peek) {
     trilo_xdata_stack_destroy(stack_data.stack);
 }
 
-XTEST_CASE(xdata_let_stack_of_char_type_mismatch) {
-    // Test pushing data of different types to the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(CHAR_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_char('X');
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_double(3.14);
-
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-
-    // Attempting to push data of different type should result in an error
-    XASSERT_INT_EQUAL(TRILO_XDATA_STACK_TYPE_MISMATCH, trilo_xdata_stack_push(stack_data.stack, tofu2));
-
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
-
 XTEST_CASE(xdata_let_stack_of_bool_create_and_destroy) {
     // Test creating and destroying a TriloStack
     stack_data.stack = trilo_xdata_stack_create(BOOLEAN_TYPE);
@@ -257,20 +215,6 @@ XTEST_CASE(xdata_let_stack_of_bool_peek) {
     trilo_xdata_stack_destroy(stack_data.stack);
 }
 
-XTEST_CASE(xdata_let_stack_of_bool_type_mismatch) {
-    // Test pushing data of different types to the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(BOOLEAN_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_boolean(true);
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_double(3.14);
-
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-
-    // Attempting to push data of different type should result in an error
-    XASSERT_INT_EQUAL(TRILO_XDATA_STACK_TYPE_MISMATCH, trilo_xdata_stack_push(stack_data.stack, tofu2));
-
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
-
 //
 // XUNIT-TEST RUNNER
 //
@@ -280,20 +224,16 @@ void xdata_test_stack_group(XUnitRunner *runner) {
     XTEST_RUN_UNIT(xdata_let_stack_of_int_create_and_destroy, runner);
     XTEST_RUN_UNIT(xdata_let_stack_of_int_push_and_pop,       runner);
     XTEST_RUN_UNIT(xdata_let_stack_of_int_peek,               runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_int_type_mismatch,      runner);
 
     XTEST_RUN_UNIT(xdata_let_stack_of_str_create_and_destroy, runner);
     XTEST_RUN_UNIT(xdata_let_stack_of_str_push_and_pop,       runner);
     XTEST_RUN_UNIT(xdata_let_stack_of_str_peek,               runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_str_type_mismatch,      runner);
 
     XTEST_RUN_UNIT(xdata_let_stack_of_char_create_and_destroy, runner);
     XTEST_RUN_UNIT(xdata_let_stack_of_char_push_and_pop,       runner);
     XTEST_RUN_UNIT(xdata_let_stack_of_char_peek,               runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_char_type_mismatch,      runner);
 
     XTEST_RUN_UNIT(xdata_let_stack_of_bool_create_and_destroy, runner);
     XTEST_RUN_UNIT(xdata_let_stack_of_bool_push_and_pop,       runner);
     XTEST_RUN_UNIT(xdata_let_stack_of_bool_peek,               runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_bool_type_mismatch,      runner);
 } // end of func

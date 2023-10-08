@@ -111,3 +111,7 @@ void trilo_xdata_set_print(const TriloSet* set) {
     } // end while
     printf("NULL\n");
 } // end of func
+
+int trilo_xdata_set_size(const TriloSet* set) {
+    return set->size;
+} // end of func

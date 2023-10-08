@@ -130,9 +130,11 @@ double trilo_xdata_tofu_to_double(TriloTofu tofu) {
 } // end of func
 
 // Function to convert TriloTofu to a string
-const char* trilo_xdata_tofu_to_string(TriloTofu tofu) {
+char* trilo_xdata_tofu_to_string(TriloTofu tofu) {
     if (tofu.type == STRING_TYPE) {
-        return tofu.data.string_type;
+        char value[100];
+        strcpy(value, tofu.data.string_type);
+        return value;
     } // end if
     return ""; // Return a default value or handle the error as needed
 } // end of func

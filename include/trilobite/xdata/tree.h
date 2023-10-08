@@ -12,7 +12,7 @@ extern "C"
 {
 #endif
 
-#include "xdata/tofu.h"
+#include "trilobite/xdata/tofu.h"
 
 // Define error constants for tuple operations
 enum {
@@ -53,6 +53,8 @@ bool trilo_xdata_tree_search(const TriloTree* tree, TriloTofu data);
 
 // Function to print the elements in the tree (in-order traversal)
 void trilo_xdata_tree_print(const TriloTree* tree);
+
+int trilo_xdata_tree_size(const TriloTree* tree);
 
 #ifdef __cplusplus
 }

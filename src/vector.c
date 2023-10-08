@@ -102,3 +102,25 @@ void trilo_xdata_vector_print(const TriloVector* vector) {
         } // end switch
     } // end for
 } // end of func
+
+void trilo_xdata_vector_remove(TriloVector* vector, int index) {
+    if (index < 0 || index >= vector->size)
+        return;
+
+    TriloVectorNode* current = vector->head;
+    if (index == 0) {
+        vector->head = current->next;
+        free(current);
+        vector->size--;
+        return;
+    } // end if
+
+    for (int i = 0; i < index - 1; i++) {
+        current = current->next;
+    } // end for
+
+    TriloVectorNode* temp = current->next;
+    current->next = temp->next;
+    free(temp);
+    vector->size--;
+} // end of func

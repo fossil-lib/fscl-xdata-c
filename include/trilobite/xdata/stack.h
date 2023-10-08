@@ -12,7 +12,7 @@ extern "C"
 {
 #endif
 
-#include "xdata/tofu.h"
+#include "trilobite/xdata/tofu.h"
 
 enum {
     TRILO_XDATA_STACK_TYPE_MISMATCH = -1,

@@ -113,3 +113,72 @@ void trilo_xdata_matrix_print(const TriloMatrix* matrix) {
         } // end for
     } // end for
 } // end of func
+
+void trilo_xdata_matrix_set_element(TriloMatrix* matrix, int row, int col, TriloTofu data) {
+    if (row < 0 || row >= matrix->rows || col < 0 || col >= matrix->cols)
+        return;
+
+    TriloMatrixNode* new_node = (TriloMatrixNode*)malloc(sizeof(TriloMatrixNode));
+    if (new_node == NULL) {
+        fprintf(stderr, "Memory allocation failed!\n");
+        exit(EXIT_FAILURE);
+    } // end if
+    new_node->data = data;
+    new_node->right = NULL;
+    new_node->down = NULL;
+
+    if (matrix->top_left == NULL) {
+        matrix->top_left = new_node;
+    } else {
+        TriloMatrixNode* current_row = matrix->top_left;
+        for (int i = 0; i < row; i++) {
+            if (current_row->down == NULL) {
+                TriloMatrixNode* new_row = (TriloMatrixNode*)malloc(sizeof(TriloMatrixNode));
+                if (new_row == NULL) {
+                    fprintf(stderr, "Memory allocation failed!\n");
+                    exit(EXIT_FAILURE);
+                } // end if
+                new_row->data = trilo_xdata_tofu_create_from_integer(0);
+                new_row->right = NULL;
+                new_row->down = NULL;
+                current_row->down = new_row;
+            } // end if
+            current_row = current_row->down;
+        } // end for
+
+        TriloMatrixNode* current_col = current_row;
+        for (int j = 0; j < col; j++) {
+            if (current_col->right == NULL) {
+                TriloMatrixNode* new_col = (TriloMatrixNode*)malloc(sizeof(TriloMatrixNode));
+                if (new_col == NULL) {
+                    fprintf(stderr, "Memory allocation failed!\n");
+                    exit(EXIT_FAILURE);
+                } // end if
+                new_col->data = trilo_xdata_tofu_create_from_integer(0);
+                new_col->right = NULL;
+                new_col->down = NULL;
+                current_col->right = new_col;
+            } // end if
+            current_col = current_col->right;
+        } // end for
+
+        current_col->right = new_node;
+    } // end if else
+} // end of func
+
+TriloTofu* trilo_xdata_matrix_get_element(const TriloMatrix* matrix, int row, int col) {
+    if (row < 0 || row >= matrix->rows || col < 0 || col >= matrix->cols)
+        return NULL;
+
+    TriloMatrixNode* current_row = matrix->top_left;
+    for (int i = 0; i < row; i++) {
+        current_row = current_row->down;
+    } // end for
+
+    TriloMatrixNode* current_col = current_row;
+    for (int j = 0; j < col; j++) {
+        current_col = current_col->right;
+    } // end for
+
+    return &(current_col->data);
+} // end of func

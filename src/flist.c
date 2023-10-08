@@ -130,3 +130,23 @@ void trilo_xdata_flist_print(const TriloForwardList* list) {
     } // end while
     printf("NULL\n");
 } // end of func
+
+// Function to get a TriloTofu data at a specified index in the forward list
+TriloTofu* trilo_xdata_flist_get(const TriloForwardList* flist, int index) {
+    if (flist == NULL || index < 0) {
+        return NULL;
+    } // end if
+
+    TriloForwardListNode* current = flist->head;
+    int i = 0;
+    while (current != NULL && i < index) {
+        current = current->next;
+        i++;
+    } // end while
+
+    if (current != NULL) {
+        return &(current->data);
+    } else {
+        return NULL;
+    } // end if else
+} // end of func

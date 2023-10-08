@@ -12,7 +12,7 @@ extern "C"
 {
 #endif
 
-#include "xdata/tofu.h"
+#include "trilobite/xdata/tofu.h"
 
 // Define error constants for tuple operations
 enum {

@@ -12,7 +12,7 @@ extern "C"
 {
 #endif
 
-#include "xdata/tofu.h"
+#include "trilobite/xdata/tofu.h"
 
 enum {
     TRILO_XDATA_QUEUE_TYPE_MISMATCH = -1,
@@ -29,6 +29,7 @@ typedef struct TriloQueueNode {
 typedef struct TriloQueue {
     TriloQueueNode* front;
     TriloQueueNode* rear;
+    size_t size;
     enum DataType queue_type;  // Type of the queue
 } TriloQueue;
 
@@ -52,6 +53,8 @@ TriloTofu trilo_xdata_queue_peek(const TriloQueue* queue);
 
 // Function to print the data in the queue
 void trilo_xdata_queue_print(const TriloQueue* queue);
+
+int trilo_xdata_queue_size(const TriloQueue* queue);
 
 #ifdef __cplusplus
 }

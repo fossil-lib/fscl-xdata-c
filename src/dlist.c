@@ -160,3 +160,37 @@ void trilo_xdata_dlist_print_backward(const TriloDoublyList* list) {
     } // endwhile
     printf("NULL\n");
 } // end of func
+
+TriloTofu trilo_xdata_dlist_get(const TriloDoublyList* dlist, int index) {
+    // Check if the doubly linked list is empty or the index is out of range
+    if (dlist == NULL || dlist->head == NULL || index < 0) {
+        // You can handle this case based on your requirements, such as returning a default value or raising an error.
+        // For this example, I'm returning an empty TriloTofu with type UNKNOWN_TYPE.
+        TriloTofu empty_tofu;
+        empty_tofu.type = UNKNOWN_TYPE;
+        return empty_tofu;
+    } // end if
+
+    // Traverse the doubly linked list to find the element at the specified index
+    TriloDoublyListNode* current = dlist->head;
+    int current_index = 0;
+    while (current != NULL && current_index < index) {
+        current = current->next;
+        current_index++;
+    } // end while
+
+    // If the index is out of range, return an empty TriloTofu with type UNKNOWN_TYPE
+    if (current == NULL) {
+        TriloTofu empty_tofu;
+        empty_tofu.type = UNKNOWN_TYPE;
+        return empty_tofu;
+    } // end if
+
+    // Return the value at the specified index
+    return current->data;
+} // end of func
+
+// Function to get the size of the doubly linked list
+int trilo_xdata_dlist_size(const TriloDoublyList* dlist) {
+    return dlist->size;
+} // end of func

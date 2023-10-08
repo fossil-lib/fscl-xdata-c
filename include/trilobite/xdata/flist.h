@@ -12,7 +12,7 @@ extern "C"
 {
 #endif
 
-#include "xdata/tofu.h"
+#include "trilobite/xdata/tofu.h"
 
 // Define error constants for tuple operations
 enum {
@@ -52,6 +52,9 @@ void trilo_xdata_flist_reverse(TriloForwardList* list);
 
 // Function to print the data in the linked list
 void trilo_xdata_flist_print(const TriloForwardList* list);
+
+// Function to get a TriloTofu data at a specified index in the forward list
+TriloTofu* trilo_xdata_flist_get(const TriloForwardList* flist, int index);
 
 #ifdef __cplusplus
 }

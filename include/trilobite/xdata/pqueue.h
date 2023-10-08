@@ -12,7 +12,7 @@ extern "C"
 {
 #endif
 
-#include "xdata/tofu.h"
+#include "trilobite/xdata/tofu.h"
 
 // Define error constants for tuple operations
 enum {
@@ -30,6 +30,7 @@ typedef struct TriloPQueueNode {
 // Priority queue structure
 typedef struct TriloPQueue {
     TriloPQueueNode* front;
+    size_t size;
     enum DataType queue_type;  // Type of the priority queue
 } TriloPQueue;
 
@@ -53,6 +54,8 @@ TriloTofu trilo_xdata_pqueue_peek(const TriloPQueue* queue);
 
 // Function to print the data in the priority queue
 void trilo_xdata_pqueue_print(const TriloPQueue* queue);
+
+int trilo_xdata_pqueue_size(const TriloPQueue* pqueue);
 
 #ifdef __cplusplus
 }
