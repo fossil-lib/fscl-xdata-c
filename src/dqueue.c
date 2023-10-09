@@ -165,7 +165,7 @@ size_t trilo_xdata_dqueue_size(const TriloDQueue* dqueue) {
 } // end of func
 
 // Function to insert a TriloTofu data into the list
-TriloTofu* trilo_xdata_dqueue_getter(const TriloDQueue* dqueue, TriloTofu data) {
+TriloTofu* trilo_xdata_dqueue_getter(TriloDQueue* dqueue, TriloTofu data) {
     if (dqueue == NULL) {
         return NULL;
     } // end if
