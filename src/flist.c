@@ -45,7 +45,7 @@ void trilo_xdata_flist_destroy(TriloForwardList* flist) {
 
 // Function to insert a TriloTofu data into the list
 TofuError trilo_xdata_flist_insert(TriloForwardList* flist, TriloTofu data) {
-    if (flist == NULL || data == NULL) {
+    if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
     if (flist->list_type != data.type) {
@@ -65,7 +65,7 @@ TofuError trilo_xdata_flist_insert(TriloForwardList* flist, TriloTofu data) {
 
 // Function to remove a TriloTofu data from the list
 TofuError trilo_xdata_flist_remove(TriloForwardList* flist, TriloTofu data) {
-    if (flist == NULL || data == NULL) {
+    if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
     if (flist->list_type != data.type) {
@@ -96,7 +96,7 @@ TofuError trilo_xdata_flist_remove(TriloForwardList* flist, TriloTofu data) {
 
 // Function to search for a TriloTofu data in the list
 TofuError trilo_xdata_flist_search(const TriloForwardList* flist, TriloTofu data) {
-    if (flist == NULL || data == NULL) {
+    if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
     if (flist->list_type != data.type) {
@@ -204,7 +204,7 @@ TriloTofu* trilo_xdata_flist_getter(TriloForwardList* flist, TriloTofu data) {
 
 // Function to set a TriloTofu data in the list
 TofuError trilo_xdata_flist_setter(TriloForwardList* flist, TriloTofu data) {
-    if (flist == NULL || data == NULL) {
+    if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
     if (flist->list_type != data.type) {
