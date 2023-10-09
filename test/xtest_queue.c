@@ -40,15 +40,15 @@ XTEST_CASE(xdata_let_queue_enqueue_and_dequeue) {
     result = trilo_xdata_queue_insert(queue, tofu3);
     XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    TriloTofu* dequeued_tofu1 = trilo_xdata_queue_remove(queue);
+    TriloTofu* dequeued_tofu1 = trilo_xdata_queue_remove(queue, 1;
     XASSERT_PTR_NOT_NULL(dequeued_tofu1);
     XASSERT_INT_EQUAL(1, trilo_xdata_tofu_get_integer(*dequeued_tofu1));
 
-    TriloTofu* dequeued_tofu2 = trilo_xdata_queue_remove(queue);
+    TriloTofu* dequeued_tofu2 = trilo_xdata_queue_remove(queue, 2);
     XASSERT_PTR_NOT_NULL(dequeued_tofu2);
     XASSERT_INT_EQUAL(2, trilo_xdata_tofu_get_integer(*dequeued_tofu2));
 
-    TriloTofu* dequeued_tofu3 = trilo_xdata_queue_remove(queue);
+    TriloTofu* dequeued_tofu3 = trilo_xdata_queue_remove(queue, 3);
     XASSERT_PTR_NOT_NULL(dequeued_tofu3);
     XASSERT_INT_EQUAL(3, trilo_xdata_tofu_get_integer(*dequeued_tofu3));
 
