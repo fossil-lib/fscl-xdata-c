@@ -25,7 +25,7 @@ typedef struct TriloDQueueNode {
 typedef struct TriloDQueue {
     TriloDQueueNode* front;
     TriloDQueueNode* rear;
-    enum DataType deque_type;  // Type of the deque
+    enum DataType list_type;  // Type of the deque
 } TriloDQueue;
 
 // =======================
