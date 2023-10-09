@@ -96,7 +96,7 @@ size_t trilo_xdata_tree_size(const TriloTree* tree);
  * @param data The TriloTofu data element to retrieve.
  * @return A pointer to the TriloTofu data element in the TriloTree (or NULL if not found).
  */
-TriloTofu* trilo_xdata_tree_getter(TriloTree* tree, TriloTofu data);
+TriloTofu* trilo_xdata_tree_getter(const TriloTree* tree, TriloTofu data);
 
 /**
  * @brief Setter function to update a TriloTofu data element in the TriloTree.

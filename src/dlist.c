@@ -14,7 +14,7 @@
 // =======================
 
 // Function to create a new TriloDoublyList
-TriloDoublyList* trilo_xdata_dlist_create(DataType list_type) {
+TriloDoublyList* trilo_xdata_dlist_create(enum DataType list_type) {
     TriloDoublyList* dlist = (TriloDoublyList*)malloc(sizeof(TriloDoublyList));
     if (dlist == NULL) {
         fprintf(stderr, "Memory allocation failed!\n");

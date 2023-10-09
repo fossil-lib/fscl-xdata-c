@@ -270,7 +270,7 @@ size_t trilo_xdata_tree_size(const TriloTree* tree) {
 } // end of func
 
 // Function to insert a TriloTofu data into the tree
-TriloTofu* trilo_xdata_tree_getter(TriloTree* tree, TriloTofu data) {
+TriloTofu* trilo_xdata_tree_getter(const TriloTree* tree, TriloTofu data) {
     if (tree == NULL) {
         return NULL;
     } // end if
