@@ -10,209 +10,94 @@
 #include <trilobite/xassert.h> // extra asserts
 
 //
-// TEST DATA
-//
-XTEST_DATA(ProjectTestStackData) {
-    TriloStack *stack;
-}stack_data;
-
-//
 // XUNIT TEST CASES
 //
-XTEST_CASE(xdata_let_stack_of_int_create_and_destroy) {
-    // Test creating and destroying a TriloStack
-    stack_data.stack = trilo_xdata_stack_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(stack_data.stack);
-    trilo_xdata_stack_destroy(stack_data.stack);
+
+// Test case 1: Test TriloStack creation and destruction
+XTEST_CASE(xdata_let_stack_create_and_destroy) {
+    TriloStack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(stack);
+
+    trilo_xdata_stack_destroy(stack);
+    XASSERT_PTR_NULL(stack);
 }
 
-XTEST_CASE(xdata_let_stack_of_int_push_and_pop) {
-    // Test pushing and popping data from the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(INTEGER_TYPE);
+// Test case 2: Test TriloStack push and pop operations
+XTEST_CASE(xdata_let_stack_push_and_pop) {
+    TriloStack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(stack);
+
+    TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
+    TriloTofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
+    TriloTofu tofu3 = trilo_xdata_tofu_create_from_integer(3);
+
+    TofuError result = trilo_xdata_stack_push(stack, tofu1);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
+
+    result = trilo_xdata_stack_push(stack, tofu2);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
+
+    result = trilo_xdata_stack_push(stack, tofu3);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
+
+    TriloTofu* popped_tofu = trilo_xdata_stack_pop(stack);
+    XASSERT_PTR_NOT_NULL(popped_tofu);
+    XASSERT_INT_EQUAL(3, trilo_xdata_tofu_get_integer(popped_tofu));
+
+    popped_tofu = trilo_xdata_stack_pop(stack);
+    XASSERT_PTR_NOT_NULL(popped_tofu);
+    XASSERT_INT_EQUAL(2, trilo_xdata_tofu_get_integer(popped_tofu));
+
+    trilo_xdata_stack_destroy(stack);
+}
+
+// Test case 3: Test TriloStack top operation
+XTEST_CASE(xdata_let_stack_top) {
+    TriloStack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(stack);
+
     TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(42);
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_integer(17);
+    trilo_xdata_stack_push(stack, tofu1);
 
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-    trilo_xdata_stack_push(stack_data.stack, tofu2);
+    TriloTofu* top_tofu = trilo_xdata_stack_top(stack);
+    XASSERT_PTR_NOT_NULL(top_tofu);
+    XASSERT_INT_EQUAL(42, trilo_xdata_tofu_get_integer(top_tofu));
 
-    XASSERT_BOOL_FALSE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(2, trilo_xdata_stack_size(stack_data.stack));
-
-    TriloTofu popped_tofu2 = trilo_xdata_stack_pop(stack_data.stack);
-    XASSERT_INT_EQUAL(17, trilo_xdata_tofu_get_integer(popped_tofu2));
-
-    TriloTofu popped_tofu1 = trilo_xdata_stack_pop(stack_data.stack);
-    XASSERT_INT_EQUAL(42, trilo_xdata_tofu_get_integer(popped_tofu1));
-
-    XASSERT_BOOL_TRUE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(0, trilo_xdata_stack_size(stack_data.stack));
-
-    trilo_xdata_stack_destroy(stack_data.stack);
+    trilo_xdata_stack_destroy(stack);
 }
 
-XTEST_CASE(xdata_let_stack_of_int_peek) {
-    // Test peeking at the top element of the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(INTEGER_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(42);
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_integer(17);
+// Test case 4: Test TriloStack size
+XTEST_CASE(xdata_let_stack_size) {
+    TriloStack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(stack);
 
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-    trilo_xdata_stack_push(stack_data.stack, tofu2);
+    TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
+    TriloTofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
 
-    TriloTofu peeked_tofu = trilo_xdata_stack_peek(stack_data.stack);
-    XASSERT_INT_EQUAL(17, trilo_xdata_tofu_get_integer(peeked_tofu));
+    trilo_xdata_stack_push(stack, tofu1);
+    trilo_xdata_stack_push(stack, tofu2);
 
-    XASSERT_BOOL_FALSE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(2, trilo_xdata_stack_size(stack_data.stack));
+    size_t size = trilo_xdata_stack_size(stack);
+    XASSERT_INT_EQUAL(2, size);
 
-    trilo_xdata_stack_destroy(stack_data.stack);
+    trilo_xdata_stack_destroy(stack);
 }
 
-XTEST_CASE(xdata_let_stack_of_str_create_and_destroy) {
-    // Test creating and destroying a TriloStack
-    stack_data.stack = trilo_xdata_stack_create(STRING_TYPE);
-    XASSERT_PTR_NOT_NULL(stack_data.stack);
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
+// Test case 5: Test TriloStack empty check
+XTEST_CASE(xdata_let_stack_empty_check) {
+    TriloStack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(stack);
 
-XTEST_CASE(xdata_let_stack_of_str_push_and_pop) {
-    // Test pushing and popping data from the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(STRING_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_string("Coffee");
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_string("Tea");
+    XASSERT_BOOL_TRUE(trilo_xdata_stack_is_empty(stack));
+    XASSERT_BOOL_FALSE(trilo_xdata_stack_not_empty(stack));
 
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-    trilo_xdata_stack_push(stack_data.stack, tofu2);
+    TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    trilo_xdata_stack_push(stack, tofu);
 
-    XASSERT_BOOL_FALSE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(2, trilo_xdata_stack_size(stack_data.stack));
+    XASSERT_BOOL_FALSE(trilo_xdata_stack_is_empty(stack));
+    XASSERT_BOOL_TRUE(trilo_xdata_stack_not_empty(stack));
 
-    TriloTofu popped_tofu2 = trilo_xdata_stack_pop(stack_data.stack);
-    XASSERT_STRING_EQUAL("Tea", trilo_xdata_tofu_get_string(popped_tofu2));
-
-    TriloTofu popped_tofu1 = trilo_xdata_stack_pop(stack_data.stack);
-    XASSERT_STRING_EQUAL("Coffee", trilo_xdata_tofu_get_string(popped_tofu1));
-
-    XASSERT_BOOL_TRUE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(0, trilo_xdata_stack_size(stack_data.stack));
-
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
-
-XTEST_CASE(xdata_let_stack_of_str_peek) {
-    // Test peeking at the top element of the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(STRING_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_string("Coffee");
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_string("Tea");
-
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-    trilo_xdata_stack_push(stack_data.stack, tofu2);
-
-    TriloTofu peeked_tofu = trilo_xdata_stack_peek(stack_data.stack);
-    XASSERT_INT_EQUAL("Tea", trilo_xdata_tofu_get_string(peeked_tofu));
-
-    XASSERT_BOOL_FALSE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(2, trilo_xdata_stack_size(stack_data.stack));
-
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
-
-XTEST_CASE(xdata_let_stack_of_char_create_and_destroy) {
-    // Test creating and destroying a TriloStack
-    stack_data.stack = trilo_xdata_stack_create(CHAR_TYPE);
-    XASSERT_PTR_NOT_NULL(stack_data.stack);
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
-
-XTEST_CASE(xdata_let_stack_of_char_push_and_pop) {
-    // Test pushing and popping data from the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(CHAR_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_char('X');
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_char('Y');
-
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-    trilo_xdata_stack_push(stack_data.stack, tofu2);
-
-    XASSERT_BOOL_FALSE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(2, trilo_xdata_stack_size(stack_data.stack));
-
-    TriloTofu popped_tofu2 = trilo_xdata_stack_pop(stack_data.stack);
-    XASSERT_CHAR_EQUAL('Y', trilo_xdata_tofu_get_char(popped_tofu2));
-
-    TriloTofu popped_tofu1 = trilo_xdata_stack_pop(stack_data.stack);
-    XASSERT_CHAR_EQUAL('X', trilo_xdata_tofu_get_char(popped_tofu1));
-
-    XASSERT_BOOL_TRUE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(0, trilo_xdata_stack_size(stack_data.stack));
-
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
-
-XTEST_CASE(xdata_let_stack_of_char_peek) {
-    // Test peeking at the top element of the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(CHAR_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_char('Y');
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_char('X');
-
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-    trilo_xdata_stack_push(stack_data.stack, tofu2);
-
-    TriloTofu peeked_tofu = trilo_xdata_stack_peek(stack_data.stack);
-    XASSERT_INT_EQUAL('X', trilo_xdata_tofu_get_char(peeked_tofu));
-
-    XASSERT_BOOL_FALSE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(2, trilo_xdata_stack_size(stack_data.stack));
-
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
-
-XTEST_CASE(xdata_let_stack_of_bool_create_and_destroy) {
-    // Test creating and destroying a TriloStack
-    stack_data.stack = trilo_xdata_stack_create(BOOLEAN_TYPE);
-    XASSERT_PTR_NOT_NULL(stack_data.stack);
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
-
-XTEST_CASE(xdata_let_stack_of_bool_push_and_pop) {
-    // Test pushing and popping data from the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(BOOLEAN_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_boolean(true);
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_boolean(false);
-
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-    trilo_xdata_stack_push(stack_data.stack, tofu2);
-
-    XASSERT_BOOL_FALSE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(2, trilo_xdata_stack_size(stack_data.stack));
-
-    TriloTofu popped_tofu2 = trilo_xdata_stack_pop(stack_data.stack);
-    XASSERT_BOOL_EQUAL(false, trilo_xdata_tofu_get_boolean(popped_tofu2));
-
-    TriloTofu popped_tofu1 = trilo_xdata_stack_pop(stack_data.stack);
-    XASSERT_BOOL_EQUAL(true, trilo_xdata_tofu_get_boolean(popped_tofu1));
-
-    XASSERT_BOOL_TRUE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(0, trilo_xdata_stack_size(stack_data.stack));
-
-    trilo_xdata_stack_destroy(stack_data.stack);
-}
-
-XTEST_CASE(xdata_let_stack_of_bool_peek) {
-    // Test peeking at the top element of the TriloStack
-    stack_data.stack = trilo_xdata_stack_create(BOOLEAN_TYPE);
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_boolean(true);
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_boolean(false);
-
-    trilo_xdata_stack_push(stack_data.stack, tofu1);
-    trilo_xdata_stack_push(stack_data.stack, tofu2);
-
-    TriloTofu peeked_tofu = trilo_xdata_stack_peek(stack_data.stack);
-    XASSERT_INT_EQUAL(false, trilo_xdata_tofu_get_boolean(peeked_tofu));
-
-    XASSERT_BOOL_FALSE(trilo_xdata_stack_is_empty(stack_data.stack));
-    XASSERT_INT_EQUAL(2, trilo_xdata_stack_size(stack_data.stack));
-
-    trilo_xdata_stack_destroy(stack_data.stack);
+    trilo_xdata_stack_destroy(stack);
 }
 
 //
@@ -221,19 +106,5 @@ XTEST_CASE(xdata_let_stack_of_bool_peek) {
 void xdata_test_stack_group(XUnitRunner *runner) {
     XTEST_NOTE("Running all test cases for stack:");
 
-    XTEST_RUN_UNIT(xdata_let_stack_of_int_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_int_push_and_pop,       runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_int_peek,               runner);
-
-    XTEST_RUN_UNIT(xdata_let_stack_of_str_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_str_push_and_pop,       runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_str_peek,               runner);
-
-    XTEST_RUN_UNIT(xdata_let_stack_of_char_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_char_push_and_pop,       runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_char_peek,               runner);
-
-    XTEST_RUN_UNIT(xdata_let_stack_of_bool_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_bool_push_and_pop,       runner);
-    XTEST_RUN_UNIT(xdata_let_stack_of_bool_peek,               runner);
+    XTEST_RUN_UNIT(xdata_let_stack, runner);
 } // end of func

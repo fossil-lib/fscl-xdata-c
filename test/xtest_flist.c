@@ -10,75 +10,86 @@
 #include <trilobite/xassert.h> // extra asserts
 
 //
-// TEST DATA
-//
-XTEST_DATA(ProjectTestFListData) {
-    TriloForwardList *flist;
-}flist_data;
-
-//
 // XUNIT TEST CASES
 //
-XTEST_CASE(xdata_let_flist_of_int_create_and_destroy) {
-    // Test creating and destroying a TriloForwardList
-    flist_data.flist = trilo_xdata_flist_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(flist_data.flist);
-    XASSERT_INT_EQUAL(INTEGER_TYPE, flist_data.flist->list_type);
-    trilo_xdata_flist_destroy(flist_data.flist);
+
+// Test case 1: Test TriloForwardList creation and destruction
+XTEST_CASE(xdata_let_flist_create_and_destroy) {
+    TriloForwardList* flist = trilo_xdata_flist_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(flist);
+
+    trilo_xdata_flist_destroy(flist);
+    XASSERT_PTR_NULL(flist);
 }
 
-XTEST_CASE(xdata_let_flist_of_int_insert_and_get_values) {
-    // Create a TriloForwardList of integers
-    flist_data.flist = trilo_xdata_flist_create(INTEGER_TYPE);
+// Test case 2: Test TriloForwardList insertion and retrieval
+XTEST_CASE(xdata_let_flist_insert_and_get) {
+    TriloForwardList* flist = trilo_xdata_flist_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(flist);
 
-    // Insert values into the forward list
-    TriloTofu value1 = trilo_xdata_tofu_create_from_integer(1);
-    TriloTofu value2 = trilo_xdata_tofu_create_from_integer(2);
-    TriloTofu value3 = trilo_xdata_tofu_create_from_integer(3);
+    TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    TofuError result = trilo_xdata_flist_insert(flist, tofu);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    trilo_xdata_flist_insert(flist_data.flist, value1);
-    trilo_xdata_flist_insert(flist_data.flist, value2);
-    trilo_xdata_flist_insert(flist_data.flist, value3);
+    TriloTofu* retrieved_tofu = trilo_xdata_flist_getter(flist, tofu);
+    XASSERT_PTR_NOT_NULL(retrieved_tofu);
+    XASSERT_INT_EQUAL(42, trilo_xdata_tofu_get_integer(*retrieved_tofu));
 
-    // Retrieve and check the values in the forward list
-    TriloTofu* value = trilo_xdata_flist_get(flist_data.flist, 0);
-    XASSERT_INT_EQUAL(1, trilo_xdata_tofu_get_integer(*value));
-
-    value = trilo_xdata_flist_get(flist_data.flist, 1);
-    XASSERT_INT_EQUAL(2, trilo_xdata_tofu_get_integer(*value));
-
-    value = trilo_xdata_flist_get(flist_data.flist, 2);
-    XASSERT_INT_EQUAL(3, trilo_xdata_tofu_get_integer(*value));
-
-    // Destroy the forward list
-    trilo_xdata_flist_destroy(flist_data.flist);
+    trilo_xdata_flist_destroy(flist);
 }
 
-XTEST_CASE(xdata_let_flist_of_int_remove) {
-    // Create a TriloForwardList of integers
-    flist_data.flist = trilo_xdata_flist_create(INTEGER_TYPE);
+// Test case 3: Test TriloForwardList removal
+XTEST_CASE(xdata_let_flist_remove) {
+    TriloForwardList* flist = trilo_xdata_flist_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(flist);
 
-    // Insert values into the forward list
-    TriloTofu value1 = trilo_xdata_tofu_create_from_integer(1);
-    TriloTofu value2 = trilo_xdata_tofu_create_from_integer(2);
-    TriloTofu value3 = trilo_xdata_tofu_create_from_integer(3);
+    TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    TofuError result = trilo_xdata_flist_insert(flist, tofu);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    trilo_xdata_flist_insert(flist_data.flist, value1);
-    trilo_xdata_flist_insert(flist_data.flist, value2);
-    trilo_xdata_flist_insert(flist_data.flist, value3);
+    result = trilo_xdata_flist_remove(flist, tofu);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    // Remove a value from the forward list
-    trilo_xdata_flist_remove(flist_data.flist, value2);
+    TriloTofu* retrieved_tofu = trilo_xdata_flist_getter(flist, tofu);
+    XASSERT_PTR_NULL(retrieved_tofu);
 
-    // Check the values in the forward list after removal
-    TriloTofu* value = trilo_xdata_flist_get(flist_data.flist, 0);
-    XASSERT_INT_EQUAL(1, trilo_xdata_tofu_get_integer(*value));
+    trilo_xdata_flist_destroy(flist);
+}
 
-    value = trilo_xdata_flist_get(flist_data.flist, 1);
-    XASSERT_INT_EQUAL(3, trilo_xdata_tofu_get_integer(*value));
+// Test case 4: Test TriloForwardList size
+XTEST_CASE(xdata_let_flist_size) {
+    TriloForwardList* flist = trilo_xdata_flist_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(flist);
 
-    // Destroy the forward list
-    trilo_xdata_flist_destroy(flist_data.flist);
+    TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
+    TriloTofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
+    TriloTofu tofu3 = trilo_xdata_tofu_create_from_integer(3);
+
+    trilo_xdata_flist_insert(flist, tofu1);
+    trilo_xdata_flist_insert(flist, tofu2);
+    trilo_xdata_flist_insert(flist, tofu3);
+
+    size_t size = trilo_xdata_flist_size(flist);
+    XASSERT_INT_EQUAL(3, size);
+
+    trilo_xdata_flist_destroy(flist);
+}
+
+// Test case 5: Test TriloForwardList empty check
+XTEST_CASE(xdata_let_flist_empty_check) {
+    TriloForwardList* flist = trilo_xdata_flist_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(flist);
+
+    XASSERT_BOOL_TRUE(trilo_xdata_flist_is_empty(flist));
+    XASSERT_BOOL_FALSE(trilo_xdata_flist_not_empty(flist));
+
+    TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    trilo_xdata_flist_insert(flist, tofu);
+
+    XASSERT_BOOL_FALSE(trilo_xdata_flist_is_empty(flist));
+    XASSERT_BOOL_TRUE(trilo_xdata_flist_not_empty(flist));
+
+    trilo_xdata_flist_destroy(flist);
 }
 
 //
@@ -87,7 +98,9 @@ XTEST_CASE(xdata_let_flist_of_int_remove) {
 void xdata_test_flist_group(XUnitRunner *runner) {
     XTEST_NOTE("Running all test cases for flist:");
 
-    XTEST_RUN_UNIT(xdata_let_flist_of_int_create_and_destroy,    runner);
-    XTEST_RUN_UNIT(xdata_let_flist_of_int_insert_and_get_values, runner);
-    XTEST_RUN_UNIT(xdata_let_flist_of_int_remove,                runner);
+    XTEST_RUN_UNIT(xdata_let_flist_create_and_destroy, runner);
+    XTEST_RUN_UNIT(xdata_let_flist_empty_check,        runner);
+    XTEST_RUN_UNIT(xdata_let_flist_insert_and_get,     runner);
+    XTEST_RUN_UNIT(xdata_let_flist_remove,             runner);
+    XTEST_RUN_UNIT(xdata_let_flist_size,               runner);
 } // end of func

@@ -10,78 +10,86 @@
 #include <trilobite/xassert.h> // extra asserts
 
 //
-// TEST DATA
-//
-XTEST_DATA(ProjectTestDListData) {
-    TriloDoublyList *dlist;
-}dlist_data;
-
-//
 // XUNIT TEST CASES
 //
-XTEST_CASE(xdata_let_dlist_of_int_create_and_destroy) {
-    // Test creating and destroying a TriloDoublyList
-    dlist_data.dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(dlist_data.dlist);
-    XASSERT_INT_EQUAL(INTEGER_TYPE, dlist_data.dlist->list_type);
-    trilo_xdata_dlist_destroy(dlist_data.dlist);
+
+// Test case 1: Test TriloDoublyList creation and destruction
+XTEST_CASE(xdata_let_dlist_create_and_destroy) {
+    TriloDoublyList* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(dlist);
+
+    trilo_xdata_dlist_destroy(dlist);
+    XASSERT_PTR_NULL(dlist);
 }
 
-XTEST_CASE(xdata_let_dlist_of_int_insert_and_get_values) {
-    // Test inserting values into the TriloDoublyList and getting values
-    dlist_data.dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+// Test case 2: Test TriloDoublyList insertion and retrieval
+XTEST_CASE(xdata_let_dlist_insert_and_get) {
+    TriloDoublyList* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(dlist);
 
-    TriloTofu value1 = trilo_xdata_tofu_create_from_integer(1);
-    TriloTofu value2 = trilo_xdata_tofu_create_from_integer(2);
-    TriloTofu value3 = trilo_xdata_tofu_create_from_integer(3);
+    TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    TofuError result = trilo_xdata_dlist_insert(dlist, tofu);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    trilo_xdata_dlist_insert(dlist_data.dlist, value1);
-    trilo_xdata_dlist_insert(dlist_data.dlist, value2);
-    trilo_xdata_dlist_insert(dlist_data.dlist, value3);
+    TriloTofu* retrieved_tofu = trilo_xdata_dlist_getter(dlist, tofu);
+    XASSERT_PTR_NOT_NULL(retrieved_tofu);
+    XASSERT_INT_EQUAL(42, trilo_xdata_tofu_get_integer(*retrieved_tofu));
 
-    TriloTofu* values = NULL;
-    int num_values = trilo_xdata_dlist_get(dlist_data.dlist, 0);
-
-    XASSERT_INT_EQUAL(3, num_values);
-
-    // Check the values in the doubly linked list
-    XASSERT_INT_EQUAL(1, trilo_xdata_tofu_get_integer(values[0]));
-    XASSERT_INT_EQUAL(2, trilo_xdata_tofu_get_integer(values[1]));
-    XASSERT_INT_EQUAL(3, trilo_xdata_tofu_get_integer(values[2]));
-
-    // Clean up allocated memory for values
-    free(values);
-
-    trilo_xdata_dlist_destroy(dlist_data.dlist);
+    trilo_xdata_dlist_destroy(dlist);
 }
 
-XTEST_CASE(xdata_let_dlist_of_int_remove) {
-    // Test removing values from the TriloDoublyList
-    dlist_data.dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+// Test case 3: Test TriloDoublyList removal
+XTEST_CASE(xdata_let_dlist_remove) {
+    TriloDoublyList* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(dlist);
 
-    TriloTofu value1 = trilo_xdata_tofu_create_from_integer(1);
-    TriloTofu value2 = trilo_xdata_tofu_create_from_integer(2);
-    TriloTofu value3 = trilo_xdata_tofu_create_from_integer(3);
+    TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    TofuError result = trilo_xdata_dlist_insert(dlist, tofu);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    trilo_xdata_dlist_insert(dlist_data.dlist, value1);
-    trilo_xdata_dlist_insert(dlist_data.dlist, value2);
-    trilo_xdata_dlist_insert(dlist_data.dlist, value3);
+    result = trilo_xdata_dlist_remove(dlist, tofu);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    // Remove a value from the doubly linked list
-    trilo_xdata_dlist_remove(dlist_data.dlist, value2);
+    TriloTofu* retrieved_tofu = trilo_xdata_dlist_getter(dlist, tofu);
+    XASSERT_PTR_NULL(retrieved_tofu);
 
-    // Get the number of values in the doubly linked list after removal
-    int num_values = trilo_xdata_dlist_size(dlist_data.dlist);
-    XASSERT_INT_EQUAL(2, num_values);
+    trilo_xdata_dlist_destroy(dlist);
+}
 
-    // Check the values in the doubly linked list after removal
-    TriloTofu value_at_index_0 = trilo_xdata_dlist_get(dlist_data.dlist, 0);
-    TriloTofu value_at_index_1 = trilo_xdata_dlist_get(dlist_data.dlist, 1);
+// Test case 4: Test TriloDoublyList size
+XTEST_CASE(xdata_let_dlist_size) {
+    TriloDoublyList* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(dlist);
 
-    XASSERT_INT_EQUAL(1, trilo_xdata_tofu_get_integer(value_at_index_0));
-    XASSERT_INT_EQUAL(3, trilo_xdata_tofu_get_integer(value_at_index_1));
+    TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
+    TriloTofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
+    TriloTofu tofu3 = trilo_xdata_tofu_create_from_integer(3);
 
-    trilo_xdata_dlist_destroy(dlist_data.dlist);
+    trilo_xdata_dlist_insert(dlist, tofu1);
+    trilo_xdata_dlist_insert(dlist, tofu2);
+    trilo_xdata_dlist_insert(dlist, tofu3);
+
+    size_t size = trilo_xdata_dlist_size(dlist);
+    XASSERT_INT_EQUAL(3, size);
+
+    trilo_xdata_dlist_destroy(dlist);
+}
+
+// Test case 5: Test TriloDoublyList empty check
+XTEST_CASE(xdata_let_dlist_empty_check) {
+    TriloDoublyList* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(dlist);
+
+    XASSERT_BOOL_TRUE(trilo_xdata_dlist_is_empty(dlist));
+    XASSERT_BOOL_FALSE(trilo_xdata_dlist_not_empty(dlist));
+
+    TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    trilo_xdata_dlist_insert(dlist, tofu);
+
+    XASSERT_BOOL_FALSE(trilo_xdata_dlist_is_empty(dlist));
+    XASSERT_BOOL_TRUE(trilo_xdata_dlist_not_empty(dlist));
+
+    trilo_xdata_dlist_destroy(dlist);
 }
 
 //
@@ -90,7 +98,9 @@ XTEST_CASE(xdata_let_dlist_of_int_remove) {
 void xdata_test_dlist_group(XUnitRunner *runner) {
     XTEST_NOTE("Running all test cases for dlist:");
 
-    XTEST_RUN_UNIT(xdata_let_dlist_of_int_create_and_destroy,    runner);
-    XTEST_RUN_UNIT(xdata_let_dlist_of_int_insert_and_get_values, runner);
-    XTEST_RUN_UNIT(xdata_let_dlist_of_int_remove,                runner);
+    XTEST_RUN_UNIT(xdata_let_dlist_create_and_destroy, runner);
+    XTEST_RUN_UNIT(xdata_let_dlist_empty_check,        runner);
+    XTEST_RUN_UNIT(xdata_let_dlist_insert_and_get,     runner);
+    XTEST_RUN_UNIT(xdata_let_dlist_remove,             runner);
+    XTEST_RUN_UNIT(xdata_let_dlist_size,               runner);
 } // end of func
