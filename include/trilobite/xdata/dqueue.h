@@ -14,12 +14,6 @@ extern "C"
 
 #include "trilobite/xdata/tofu.h"
 
-// Define error constants for tuple operations
-enum {
-    TRILO_XDATA_DQUEUE_TYPE_MISMATCH = -1,
-    TRILO_XDATA_DQUEUE_OUT_OF_RANGE  = -2
-};
-
 // Node structure for the double-ended queue
 typedef struct TriloDQueueNode {
     TriloTofu data;
@@ -34,38 +28,117 @@ typedef struct TriloDQueue {
     enum DataType deque_type;  // Type of the deque
 } TriloDQueue;
 
-// Function to create a new TriloDQueue
-TriloDQueue* trilo_xdata_dqueue_create(enum DataType deque_type);
+// =======================
+// CREATE and DELETE
+// =======================
 
-// Function to destroy the TriloDQueue
-void trilo_xdata_dqueue_destroy(TriloDQueue* deque);
+/**
+ * @brief Creates a new TriloDQueue instance with the specified list type.
+ *
+ * @param list_type The data type for the TriloDQueue (e.g., INTEGER_TYPE, DOUBLE_TYPE).
+ * @return A pointer to the newly created TriloDQueue instance.
+ */
+TriloDQueue* trilo_xdata_dqueue_create(enum DataType list_type);
 
-// Function to check if the deque is empty
-bool trilo_xdata_dqueue_is_empty(const TriloDQueue* deque);
+/**
+ * @brief Destroys the TriloDQueue instance, freeing all associated memory.
+ *
+ * @param dqueue The TriloDQueue instance to be destroyed.
+ */
+void trilo_xdata_dqueue_destroy(TriloDQueue* dqueue);
 
-// Function to insert a TriloTofu data at the front of the deque
-void trilo_xdata_dqueue_push_front(TriloDQueue* deque, TriloTofu data);
+// =======================
+// ALGORITHM FUNCTIONS
+// =======================
 
-// Function to insert a TriloTofu data at the rear of the deque
-void trilo_xdata_dqueue_push_rear(TriloDQueue* deque, TriloTofu data);
+/**
+ * @brief Inserts a TriloTofu data element into the TriloDQueue.
+ *
+ * @param dqueue The TriloDQueue where the data will be inserted.
+ * @param data   The TriloTofu data element to be inserted.
+ * @return A TofuError value indicating the result of the insertion.
+ */
+TofuError trilo_xdata_dqueue_insert(TriloDQueue* dqueue, TriloTofu data);
 
-// Function to remove a TriloTofu data from the front of the deque
-void trilo_xdata_dqueue_pop_front(TriloDQueue* deque);
+/**
+ * @brief Removes a TriloTofu data element from the TriloDQueue.
+ *
+ * @param dqueue The TriloDQueue from which the data will be removed.
+ * @param data   The TriloTofu data element to be removed.
+ * @return A TofuError value indicating the result of the removal.
+ */
+TofuError trilo_xdata_dqueue_remove(TriloDQueue* dqueue, TriloTofu data);
 
-// Function to remove a TriloTofu data from the rear of the deque
-void trilo_xdata_dqueue_pop_rear(TriloDQueue* deque);
+/**
+ * @brief Searches for a TriloTofu data element in the TriloDQueue.
+ *
+ * @param dqueue The TriloDQueue to search within.
+ * @param data   The TriloTofu data element to search for.
+ * @return A TofuError value indicating the result of the search.
+ */
+TofuError trilo_xdata_dqueue_search(const TriloDQueue* dqueue, TriloTofu data);
 
-// Function to get the front TriloTofu data from the deque
-TriloTofu trilo_xdata_dqueue_front(const TriloDQueue* deque);
+// =======================
+// UTILITY FUNCTIONS
+// =======================
 
-// Function to get the rear TriloTofu data from the deque
-TriloTofu trilo_xdata_dqueue_rear(const TriloDQueue* deque);
+/**
+ * @brief Gets the size of the TriloDQueue.
+ *
+ * @param dqueue The TriloDQueue for which the size will be determined.
+ * @return The size of the TriloDQueue.
+ */
+size_t trilo_xdata_dqueue_size(const TriloDQueue* dqueue);
 
-// Function to print the data in the deque forward
-void trilo_xdata_dqueue_print_forward(const TriloDQueue* deque);
+/**
+ * @brief Getter function to retrieve a TriloTofu data element from the TriloDQueue.
+ *
+ * @param dqueue The TriloDQueue from which the data will be retrieved.
+ * @param data   The TriloTofu data element to retrieve.
+ * @return A pointer to the TriloTofu data element in the TriloDQueue (or NULL if not found).
+ */
+TriloTofu* trilo_xdata_dqueue_getter(TriloDQueue* dqueue, TriloTofu data);
 
-// Function to print the data in the deque backward
-void trilo_xdata_dqueue_print_backward(const TriloDQueue* deque);
+/**
+ * @brief Setter function to update a TriloTofu data element in the TriloDQueue.
+ *
+ * @param dqueue The TriloDQueue in which the data will be updated.
+ * @param data   The TriloTofu data element to update.
+ * @return A TofuError value indicating the result of the update.
+ */
+TofuError trilo_xdata_dqueue_setter(TriloDQueue* dqueue, TriloTofu data);
+
+/**
+ * @brief Checks if the TriloDQueue is not empty.
+ *
+ * @param dqueue The TriloDQueue to check.
+ * @return true if the TriloDQueue is not empty, false otherwise.
+ */
+bool trilo_xdata_dqueue_not_empty(const TriloDQueue* dqueue);
+
+/**
+ * @brief Checks if the TriloDQueue is not a null pointer.
+ *
+ * @param dqueue The TriloDQueue to check.
+ * @return true if the TriloDQueue is not a null pointer, false otherwise.
+ */
+bool trilo_xdata_dqueue_not_nullptr(const TriloDQueue* dqueue);
+
+/**
+ * @brief Checks if the TriloDQueue is empty.
+ *
+ * @param dqueue The TriloDQueue to check.
+ * @return true if the TriloDQueue is empty, false otherwise.
+ */
+bool trilo_xdata_dqueue_is_empty(const TriloDQueue* dqueue);
+
+/**
+ * @brief Checks if the TriloDQueue is a null pointer.
+ *
+ * @param dqueue The TriloDQueue to check.
+ * @return true if the TriloDQueue is a null pointer, false otherwise.
+ */
+bool trilo_xdata_dqueue_is_nullptr(const TriloDQueue* dqueue);
 
 #ifdef __cplusplus
 }

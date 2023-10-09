@@ -14,12 +14,6 @@ extern "C"
 
 #include "trilobite/xdata/tofu.h"
 
-// Define error constants for tuple operations
-enum {
-    TRILO_XDATA_FLIST_TYPE_MISMATCH = -1,
-    TRILO_XDATA_FLIST_OUT_OF_RANGE  = -2
-};
-
 // Node structure for the linked list
 typedef struct TriloForwardListNode {
     TriloTofu data;
@@ -32,29 +26,131 @@ typedef struct TriloForwardList {
     enum DataType list_type;  // Type of the linked list
 } TriloForwardList;
 
-// Function to create a new TriloForwardList
+// =======================
+// CREATE and DELETE
+// =======================
+
+/**
+ * @brief Creates a new TriloForwardList instance with the specified list type.
+ *
+ * @param list_type The data type for the TriloForwardList (e.g., INTEGER_TYPE, DOUBLE_TYPE).
+ * @return A pointer to the newly created TriloForwardList instance.
+ */
 TriloForwardList* trilo_xdata_flist_create(enum DataType list_type);
 
-// Function to destroy the TriloForwardList
-void trilo_xdata_flist_destroy(TriloForwardList* list);
+/**
+ * @brief Destroys the TriloForwardList instance, freeing all associated memory.
+ *
+ * @param flist The TriloForwardList instance to be destroyed.
+ */
+void trilo_xdata_flist_destroy(TriloForwardList* flist);
 
-// Function to check if the list is empty
-bool trilo_xdata_flist_is_empty(const TriloForwardList* list);
+// =======================
+// ALGORITHM FUNCTIONS
+// =======================
 
-// Function to insert a TriloTofu data at the end of the list
-void trilo_xdata_flist_insert(TriloForwardList* list, TriloTofu data);
+/**
+ * @brief Inserts a TriloTofu data element into the TriloForwardList.
+ *
+ * @param flist The TriloForwardList where the data will be inserted.
+ * @param data  The TriloTofu data element to be inserted.
+ * @return A TofuError value indicating the result of the insertion.
+ */
+TofuError trilo_xdata_flist_insert(TriloForwardList* flist, TriloTofu data);
 
-// Function to remove the first occurrence of a TriloTofu data from the list
-void trilo_xdata_flist_remove(TriloForwardList* list, TriloTofu data);
+/**
+ * @brief Removes a TriloTofu data element from the TriloForwardList.
+ *
+ * @param flist The TriloForwardList from which the data will be removed.
+ * @param data  The TriloTofu data element to be removed.
+ * @return A TofuError value indicating the result of the removal.
+ */
+TofuError trilo_xdata_flist_remove(TriloForwardList* flist, TriloTofu data);
 
-// Function to reverse the linked list in-place
-void trilo_xdata_flist_reverse(TriloForwardList* list);
+/**
+ * @brief Searches for a TriloTofu data element in the TriloForwardList.
+ *
+ * @param flist The TriloForwardList to search within.
+ * @param data  The TriloTofu data element to search for.
+ * @return A TofuError value indicating the result of the search.
+ */
+TofuError trilo_xdata_flist_search(const TriloForwardList* flist, TriloTofu data);
 
-// Function to print the data in the linked list
-void trilo_xdata_flist_print(const TriloForwardList* list);
+/**
+ * @brief Reverses the TriloForwardList in the forward direction.
+ *
+ * @param flist The TriloForwardList to be reversed.
+ */
+void trilo_xdata_flist_reverse_forward(TriloForwardList* flist);
 
-// Function to get a TriloTofu data at a specified index in the forward list
-TriloTofu* trilo_xdata_flist_get(const TriloForwardList* flist, int index);
+/**
+ * @brief Reverses the TriloForwardList in the backward direction.
+ *
+ * @param flist The TriloForwardList to be reversed.
+ */
+void trilo_xdata_flist_reverse_backward(TriloForwardList* flist);
+
+// =======================
+// UTILITY FUNCTIONS
+// =======================
+
+/**
+ * @brief Gets the size of the TriloForwardList.
+ *
+ * @param flist The TriloForwardList for which the size will be determined.
+ * @return The size of the TriloForwardList.
+ */
+size_t trilo_xdata_flist_size(const TriloForwardList* flist);
+
+/**
+ * @brief Getter function to retrieve a TriloTofu data element from the TriloForwardList.
+ *
+ * @param flist The TriloForwardList from which the data will be retrieved.
+ * @param data  The TriloTofu data element to retrieve.
+ * @return A pointer to the TriloTofu data element in the TriloForwardList (or NULL if not found).
+ */
+TriloTofu* trilo_xdata_flist_getter(TriloForwardList* flist, TriloTofu data);
+
+/**
+ * @brief Setter function to update a TriloTofu data element in the TriloForwardList.
+ *
+ * @param flist The TriloForwardList in which the data will be updated.
+ * @param data  The TriloTofu data element to update.
+ * @return A TofuError value indicating the result of the update.
+ */
+TofuError trilo_xdata_flist_setter(TriloForwardList* flist, TriloTofu data);
+
+/**
+ * @brief Checks if the TriloForwardList is not empty.
+ *
+ * @param flist The TriloForwardList to check.
+ * @return true if the TriloForwardList is not empty, false otherwise.
+ */
+bool trilo_xdata_flist_not_empty(const TriloForwardList* flist);
+
+/**
+ * @brief Checks if the TriloForwardList is not a null pointer.
+ *
+ * @param flist The TriloForwardList to check.
+ * @return true if the TriloForwardList is not a null pointer, false otherwise.
+ */
+bool trilo_xdata_flist_not_nullptr(const TriloForwardList* flist);
+
+/**
+ * @brief Checks if the TriloForwardList is empty.
+ *
+ * @param flist The TriloForwardList to check.
+ * @return true if the TriloForwardList is empty, false otherwise.
+ */
+bool trilo_xdata_flist_is_empty(const TriloForwardList* flist);
+
+/**
+ * @brief Checks if the TriloForwardList is a null pointer.
+ *
+ * @param flist The TriloForwardList to check.
+ * @return true if the TriloForwardList is a null pointer, false otherwise.
+ */
+bool trilo_xdata_flist_is_nullptr(const TriloForwardList* flist);
 
 #ifdef __cplusplus
 }

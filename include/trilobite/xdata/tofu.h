@@ -69,11 +69,15 @@ extern "C"
 #include <stdbool.h> // Include the header for bool data type
 #include <stddef.h>
 
-// Define error constants for tuple operations
-enum {
-    TRILO_XDATA_TOFU_TYPE_MISMATCH = -1,
-    TRILO_XDATA_TOFU_OUT_OF_RANGE  = -2
-};
+// Define error constants for tofu operations
+typedef enum {
+    TRILO_XDATA_TYPE_SUCCESS        = 0,
+    TRILO_XDATA_TYPE_WAS_MISMATCH   = -1,
+    TRILO_XDATA_TYPE_WAS_BAD_RANGE  = -2,
+    TRILO_XDATA_TYPE_WAS_NULLPTR    = -3,
+    TRILO_XDATA_TYPE_WAS_BAD_MALLOC = -4,
+    TRILO_XDATA_TYPE_WAS_UNKNOWN    = -5
+} TofuError;
 
 //
 // Generic and secure flavorless data type.
@@ -106,53 +110,149 @@ typedef struct {
     TriloTofuData data;
 } TriloTofu;
 
-// Function to create a new TriloTofu instance from an integer
+// =======================
+// CREATE and DELETE
+// =======================
+
+/**
+ * @brief Creates a new TriloTofu instance from an integer value.
+ *
+ * @param value The integer value to create the TriloTofu instance from.
+ * @return A TriloTofu instance containing the integer value.
+ */
 TriloTofu trilo_xdata_tofu_create_from_integer(int value);
 
-// Function to create a new TriloTofu instance from a double
+/**
+ * @brief Creates a new TriloTofu instance from a double value.
+ *
+ * @param value The double value to create the TriloTofu instance from.
+ * @return A TriloTofu instance containing the double value.
+ */
 TriloTofu trilo_xdata_tofu_create_from_double(double value);
 
-// Function to create a new TriloTofu instance from a string
+/**
+ * @brief Creates a new TriloTofu instance from a string value.
+ *
+ * @param value The string value to create the TriloTofu instance from.
+ * @return A TriloTofu instance containing the string value.
+ */
 TriloTofu trilo_xdata_tofu_create_from_string(const char* value);
 
-// Function to create a new TriloTofu instance from a char
+/**
+ * @brief Creates a new TriloTofu instance from a character value.
+ *
+ * @param value The character value to create the TriloTofu instance from.
+ * @return A TriloTofu instance containing the character value.
+ */
 TriloTofu trilo_xdata_tofu_create_from_char(char value);
 
-// Function to create a new TriloTofu instance from a bool
+/**
+ * @brief Creates a new TriloTofu instance from a boolean value.
+ *
+ * @param value The boolean value to create the TriloTofu instance from.
+ * @return A TriloTofu instance containing the boolean value.
+ */
 TriloTofu trilo_xdata_tofu_create_from_boolean(bool value);
 
-// Function to print the data in a TriloTofu instance
+// =======================
+// ALGORITHM FUNCTIONS
+// =======================
+
+/**
+ * @brief Compares two TriloTofu instances and returns the result.
+ *
+ * @param a The first TriloTofu instance for comparison.
+ * @param b The second TriloTofu instance for comparison.
+ * @return A TofuError value indicating the comparison result.
+ */
+TofuError trilo_xdata_tofu_compare(const TriloTofu a, const TriloTofu b);
+
+/**
+ * @brief Sorts an array of TriloTofu instances using the insertion sort algorithm.
+ *
+ * @param arr The array of TriloTofu instances to be sorted.
+ * @param n   The number of elements in the array.
+ */
+void trilo_xdata_tofu_insertion_sort(TriloTofu* arr, size_t n);
+
+/**
+ * @brief Sorts an array of TriloTofu instances using the selection sort algorithm.
+ *
+ * @param arr The array of TriloTofu instances to be sorted.
+ * @param n   The number of elements in the array.
+ */
+void trilo_xdata_tofu_selection_sort(TriloTofu* arr, size_t n);
+
+/**
+ * @brief Searches for a target TriloTofu instance in a sorted array using binary search.
+ *
+ * @param arr    The sorted array of TriloTofu instances.
+ * @param n      The number of elements in the array.
+ * @param target The TriloTofu instance to search for.
+ * @return       The index of the target if found, or -1 if not found.
+ */
+int trilo_xdata_tofu_binary_search(const TriloTofu* arr, size_t n, TriloTofu target);
+
+/**
+ * @brief Searches for a target TriloTofu instance in an array using linear search.
+ *
+ * @param arr    The array of TriloTofu instances.
+ * @param n      The number of elements in the array.
+ * @param target The TriloTofu instance to search for.
+ * @return       The index of the target if found, or -1 if not found.
+ */
+int trilo_xdata_tofu_linear_search(const TriloTofu* arr, size_t n, TriloTofu target);
+
+// =======================
+// UTILITY FUNCTIONS
+// =======================
+
+/**
+ * @brief Prints the data in a TriloTofu instance.
+ *
+ * @param tofu The TriloTofu instance to be printed.
+ */
 void trilo_xdata_tofu_print(TriloTofu tofu);
 
-// Function to get the integer data from a TriloTofu instance
+/**
+ * @brief Gets the integer data from a TriloTofu instance.
+ *
+ * @param tofu The TriloTofu instance to extract the integer data from.
+ * @return     The integer value from the TriloTofu instance.
+ */
 int trilo_xdata_tofu_get_integer(TriloTofu tofu);
 
-// Function to get the double data from a TriloTofu instance
+/**
+ * @brief Gets the double data from a TriloTofu instance.
+ *
+ * @param tofu The TriloTofu instance to extract the double data from.
+ * @return     The double value from the TriloTofu instance.
+ */
 double trilo_xdata_tofu_get_double(TriloTofu tofu);
 
-// Function to get the string data from a TriloTofu instance
+/**
+ * @brief Gets the string data from a TriloTofu instance.
+ *
+ * @param tofu The TriloTofu instance to extract the string data from.
+ * @return     A pointer to the string data in the TriloTofu instance.
+ */
 const char* trilo_xdata_tofu_get_string(TriloTofu tofu);
 
-// Function to get the char data from a TriloTofu instance
+/**
+ * @brief Gets the character data from a TriloTofu instance.
+ *
+ * @param tofu The TriloTofu instance to extract the character data from.
+ * @return     The character value from the TriloTofu instance.
+ */
 char trilo_xdata_tofu_get_char(TriloTofu tofu);
 
-// Function to get the boolean data from a TriloTofu instance
+/**
+ * @brief Gets the boolean data from a TriloTofu instance.
+ *
+ * @param tofu The TriloTofu instance to extract the boolean data from.
+ * @return     The boolean value from the TriloTofu instance.
+ */
 bool trilo_xdata_tofu_get_boolean(TriloTofu tofu);
-
-// Function to convert TriloTofu to an integer
-int trilo_xdata_tofu_to_integer(TriloTofu tofu);
-
-// Function to convert TriloTofu to a double
-double trilo_xdata_tofu_to_double(TriloTofu tofu);
-
-// Function to convert TriloTofu to a string
-char* trilo_xdata_tofu_to_string(TriloTofu tofu);
-
-// Function to convert TriloTofu to a char
-char trilo_xdata_tofu_to_char(TriloTofu tofu);
-
-// Function to convert TriloTofu to a bool
-bool trilo_xdata_tofu_to_boolean(TriloTofu tofu);
 
 #ifdef __cplusplus
 }

@@ -14,11 +14,6 @@ extern "C"
 
 #include "trilobite/xdata/tofu.h"
 
-enum {
-    TRILO_XDATA_QUEUE_TYPE_MISMATCH = -1,
-    TRILO_XDATA_QUEUE_OUT_OF_RANGE  = -2
-};
-
 // Node structure for the queue
 typedef struct TriloQueueNode {
     TriloTofu data;
@@ -29,32 +24,120 @@ typedef struct TriloQueueNode {
 typedef struct TriloQueue {
     TriloQueueNode* front;
     TriloQueueNode* rear;
-    size_t size;
     enum DataType queue_type;  // Type of the queue
 } TriloQueue;
 
-// Function to create a new TriloQueue
-TriloQueue* trilo_xdata_queue_create(enum DataType queue_type);
+// =======================
+// CREATE and DELETE
+// =======================
 
-// Function to destroy the TriloQueue
+/**
+ * @brief Creates a new TriloQueue instance with the specified list type.
+ *
+ * @param list_type The data type for the TriloQueue (e.g., INTEGER_TYPE, DOUBLE_TYPE).
+ * @return A pointer to the newly created TriloQueue instance.
+ */
+TriloQueue* trilo_xdata_queue_create(enum DataType list_type);
+
+/**
+ * @brief Destroys the TriloQueue instance, freeing all associated memory.
+ *
+ * @param queue The TriloQueue instance to be destroyed.
+ */
 void trilo_xdata_queue_destroy(TriloQueue* queue);
 
-// Function to check if the queue is empty
+// =======================
+// ALGORITHM FUNCTIONS
+// =======================
+
+/**
+ * @brief Inserts a TriloTofu data element into the TriloQueue.
+ *
+ * @param queue The TriloQueue where the data will be inserted.
+ * @param data  The TriloTofu data element to be inserted.
+ * @return A TofuError value indicating the result of the insertion.
+ */
+TofuError trilo_xdata_queue_insert(TriloQueue* queue, TriloTofu data);
+
+/**
+ * @brief Removes a TriloTofu data element from the TriloQueue.
+ *
+ * @param queue The TriloQueue from which the data will be removed.
+ * @param data  The TriloTofu data element to be removed.
+ * @return A TofuError value indicating the result of the removal.
+ */
+TofuError trilo_xdata_queue_remove(TriloQueue* queue, TriloTofu data);
+
+/**
+ * @brief Searches for a TriloTofu data element in the TriloQueue.
+ *
+ * @param queue The TriloQueue to search within.
+ * @param data  The TriloTofu data element to search for.
+ * @return A TofuError value indicating the result of the search.
+ */
+TofuError trilo_xdata_queue_search(const TriloQueue* queue, TriloTofu data);
+
+// =======================
+// UTILITY FUNCTIONS
+// =======================
+
+/**
+ * @brief Gets the size of the TriloQueue.
+ *
+ * @param queue The TriloQueue for which the size will be determined.
+ * @return The size of the TriloQueue.
+ */
+size_t trilo_xdata_queue_size(const TriloQueue* queue);
+
+/**
+ * @brief Getter function to retrieve a TriloTofu data element from the TriloQueue.
+ *
+ * @param queue The TriloQueue from which the data will be retrieved.
+ * @param data  The TriloTofu data element to retrieve.
+ * @return A pointer to the TriloTofu data element in the TriloQueue (or NULL if not found).
+ */
+TriloTofu* trilo_xdata_queue_getter(TriloQueue* queue, TriloTofu data);
+
+/**
+ * @brief Setter function to update a TriloTofu data element in the TriloQueue.
+ *
+ * @param queue The TriloQueue in which the data will be updated.
+ * @param data  The TriloTofu data element to update.
+ * @return A TofuError value indicating the result of the update.
+ */
+TofuError trilo_xdata_queue_setter(TriloQueue* queue, TriloTofu data);
+
+/**
+ * @brief Checks if the TriloQueue is not empty.
+ *
+ * @param queue The TriloQueue to check.
+ * @return true if the TriloQueue is not empty, false otherwise.
+ */
+bool trilo_xdata_queue_not_empty(const TriloQueue* queue);
+
+/**
+ * @brief Checks if the TriloQueue is not a null pointer.
+ *
+ * @param queue The TriloQueue to check.
+ * @return true if the TriloQueue is not a null pointer, false otherwise.
+ */
+bool trilo_xdata_queue_not_nullptr(const TriloQueue* queue);
+
+/**
+ * @brief Checks if the TriloQueue is empty.
+ *
+ * @param queue The TriloQueue to check.
+ * @return true if the TriloQueue is empty, false otherwise.
+ */
 bool trilo_xdata_queue_is_empty(const TriloQueue* queue);
 
-// Function to enqueue a TriloTofu data
-void trilo_xdata_queue_enqueue(TriloQueue* queue, TriloTofu data);
-
-// Function to dequeue a TriloTofu data
-void trilo_xdata_queue_dequeue(TriloQueue* queue);
-
-// Function to peek at the front of the queue
-TriloTofu trilo_xdata_queue_peek(const TriloQueue* queue);
-
-// Function to print the data in the queue
-void trilo_xdata_queue_print(const TriloQueue* queue);
-
-int trilo_xdata_queue_size(const TriloQueue* queue);
+/**
+ * @brief Checks if the TriloQueue is a null pointer.
+ *
+ * @param queue The TriloQueue to check.
+ * @return true if the TriloQueue is a null pointer, false otherwise.
+ */
+bool trilo_xdata_queue_is_nullptr(const TriloQueue* queue);
 
 #ifdef __cplusplus
 }
