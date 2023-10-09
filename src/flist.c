@@ -85,13 +85,15 @@ TofuError trilo_xdata_flist_remove(TriloForwardList* flist, TriloTofu data) {
                     prev->next = current->next;
                 } // end if else
                 free(current);
-                break; // Assuming only one match should be removed
+                return TRILO_XDATA_TYPE_SUCCESS;
             } // end if
         } // end if
 
         prev = current;
         current = current->next;
     } // end while
+
+    return TRILO_XDATA_TYPE_WAS_UNKNOWN;
 } // end of func
 
 // Function to search for a TriloTofu data in the list

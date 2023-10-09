@@ -73,6 +73,9 @@ TofuError trilo_xdata_dlist_remove(TriloDoublyList* dlist, TriloTofu data) {
     if (dlist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
+    if (dlist->list_type != data.type) {
+        return TRILO_XDATA_TYPE_WAS_MISMATCH;
+    } // end if
 
     TriloDoublyListNode* current = dlist->head;
     while (current != NULL) {
@@ -100,6 +103,9 @@ TofuError trilo_xdata_dlist_search(const TriloDoublyList* dlist, TriloTofu data)
     if (dlist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
+    if (dlist->list_type != data.type) {
+        return TRILO_XDATA_TYPE_WAS_MISMATCH;
+    } // end if
 
     TriloDoublyListNode* current = dlist->head;
     while (current != NULL) {
@@ -116,6 +122,9 @@ TofuError trilo_xdata_dlist_search(const TriloDoublyList* dlist, TriloTofu data)
 void trilo_xdata_dlist_reverse_forword(TriloDoublyList* dlist) {
     if (dlist == NULL || dlist->head == NULL) {
         return;
+    } // end if
+    if (dlist->list_type != data.type) {
+        return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
     TriloDoublyListNode* current = dlist->head;
