@@ -22,7 +22,7 @@ typedef struct TriloPQueueNode {
 
 typedef struct TriloPQueue {
     TriloPQueueNode* front;
-    DataType queue_type;
+    enum DataType queue_type;
 } TriloPQueue;
 
 // =======================
