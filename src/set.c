@@ -9,109 +9,222 @@
 #include <stdlib.h>
 #include <string.h>
 
+// =======================
+// CREATE and DELETE
+// =======================
+
+// Function to create a new TriloSet
 TriloSet* trilo_xdata_set_create(enum DataType set_type) {
     TriloSet* set = (TriloSet*)malloc(sizeof(TriloSet));
-    if (set == NULL) {
-        fprintf(stderr, "Memory allocation failed!\n");
-        exit(EXIT_FAILURE);
+    if (set != NULL) {
+        set->head = NULL;
+        set->set_type = set_type;
     } // end if
-    set->head = NULL;
-    set->set_type = set_type;
     return set;
 } // end of func
 
+// Function to destroy the TriloSet
 void trilo_xdata_set_destroy(TriloSet* set) {
+    if (set != NULL) {
+        // Free all nodes in the set
+        while (set->head != NULL) {
+            TriloSetNode* temp = set->head;
+            set->head = set->head->next;
+            free(temp);
+        } // end while
+        free(set);
+    } // end if
+} // end of func
+
+// =======================
+// ALGORITHM FUNCTIONS
+// =======================
+
+// Function to insert a TriloTofu data into the set
+TofuError trilo_xdata_set_insert(TriloSet* set, TriloTofu data) {
+    if (set == NULL) {
+        return TRILO_XDATA_TYPE_WAS_NULLPTR;
+    } // end if
+
+    TriloSetNode* newNode = (TriloSetNode*)malloc(sizeof(TriloSetNode));
+    if (newNode == NULL) {
+        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
+    } // end if
+
+    newNode->data = data;
+    newNode->next = NULL;
+
+    // Check if the data already exists in the set
     TriloSetNode* current = set->head;
-    TriloSetNode* next;
     while (current != NULL) {
-        next = current->next;
-        free(current);
-        current = next;
-    } // end while
-    free(set);
-} // end of func
-
-bool trilo_xdata_set_is_empty(const TriloSet* set) {
-    return set->head == NULL;
-} // end of func
-
-void trilo_xdata_set_insert(TriloSet* set, TriloTofu data) {
-    // Ensure the data type matches the set type
-    if (data.type != set->set_type) {
-        fprintf(stderr, "Data type mismatch!\n");
-        exit(EXIT_FAILURE);
-    } // end if
-
-    if (!trilo_xdata_set_contains(set, data)) {
-        TriloSetNode* new_node = (TriloSetNode*)malloc(sizeof(TriloSetNode));
-        if (new_node == NULL) {
-            fprintf(stderr, "Memory allocation failed!\n");
-            exit(EXIT_FAILURE);
+        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+            free(newNode); // Data already exists, don't insert it again
+            return TRILO_XDATA_TYPE_SUCCESS;
         } // end if
-        new_node->data = data;
-        new_node->next = set->head;
-        set->head = new_node;
-    } // end if
+        current = current->next;
+    } // end while
+
+    // Insert the new data into the set
+    newNode->next = set->head;
+    set->head = newNode;
+    return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
-void trilo_xdata_set_remove(TriloSet* set, TriloTofu data) {
+// Function to remove a TriloTofu data from the set
+TofuError trilo_xdata_set_remove(TriloSet* set, TriloTofu data) {
+    if (set == NULL) {
+        return TRILO_XDATA_TYPE_WAS_NULLPTR;
+    } // end if
+
     TriloSetNode* current = set->head;
     TriloSetNode* prev = NULL;
 
     while (current != NULL) {
-        if (memcmp(&current->data, &data, sizeof(TriloTofu)) == 0) {
+        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+
+        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             if (prev == NULL) {
                 set->head = current->next;
             } else {
                 prev->next = current->next;
             } // end if else
+
             free(current);
-            return;
+            return TRILO_XDATA_TYPE_SUCCESS;
         } // end if
+
         prev = current;
         current = current->next;
     } // end while
+
+    return TRILO_XDATA_TYPE_SUCCESS;  // No matching data found
 } // end of func
 
-bool trilo_xdata_set_contains(const TriloSet* set, TriloTofu data) {
+// Function to search for a TriloTofu data in the set
+TofuError trilo_xdata_set_search(const TriloSet* set, TriloTofu data) {
+    if (set == NULL) {
+        return TRILO_XDATA_TYPE_WAS_NULLPTR;
+    } // end if
+
     TriloSetNode* current = set->head;
+
     while (current != NULL) {
-        if (memcmp(&current->data, &data, sizeof(TriloTofu)) == 0) {
+        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+
+        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+            return TRILO_XDATA_TYPE_SUCCESS;
+        } // end if
+
+        current = current->next;
+    } // end while
+
+    return TRILO_XDATA_TYPE_SUCCESS;  // No matching data found
+} // end of func
+
+
+// =======================
+// UTILITY FUNCTIONS
+// =======================
+
+// Function to get the size of the TriloSet
+size_t trilo_xdata_set_size(const TriloSet* set) {
+    if (set == NULL) {
+        return 0;
+    } // end if
+
+    size_t size = 0;
+    TriloSetNode* current = set->head;
+
+    while (current != NULL) {
+        size++;
+        current = current->next;
+    } // end while
+
+    return size;
+} // end of func
+
+// Function to insert a TriloTofu data into the set
+TriloTofu* trilo_xdata_set_getter(TriloSet* set, TriloTofu data) {
+    if (set == NULL) {
+        return NULL;
+    } // end if
+
+    TriloSetNode* current = set->head;
+
+    while (current != NULL) {
+        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+
+        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+            return &current->data;
+        } // end if
+
+        current = current->next;
+    } // end while
+
+    return NULL;  // No matching data found
+} // end of func
+
+// Function to insert a TriloTofu data into the set
+TofuError trilo_xdata_set_setter(TriloSet* set, TriloTofu data) {
+    if (set == NULL) {
+        return TRILO_XDATA_TYPE_WAS_NULLPTR;
+    } // end if
+
+    TriloSetNode* current = set->head;
+
+    while (current != NULL) {
+        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+
+        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+            // Data with the same value already exists
+            current->data = data;
+            return TRILO_XDATA_TYPE_SUCCESS;
+        } // end if
+
+        current = current->next;
+    } // end while
+
+    return TRILO_XDATA_TYPE_SUCCESS;  // No matching data found, insert as a new node
+} // end of func
+
+// Function to check if the set is not empty
+bool trilo_xdata_set_not_empty(const TriloSet* set) {
+    return set != NULL && set->head != NULL;
+} // end of func
+
+// Function to check if the set is not null
+bool trilo_xdata_set_not_nullptr(const TriloSet* set) {
+    return set != NULL;
+} // end of func
+
+// Function to check if the set is empty
+bool trilo_xdata_set_is_empty(const TriloSet* set) {
+    return set == NULL || set->head == NULL;
+} // end of func
+
+// Function to check if the set is null
+bool trilo_xdata_set_is_nullptr(const TriloSet* set) {
+    return set == NULL;
+} // end of func
+
+// Function to check if a TriloTofu data is in the set
+bool trilo_xdata_set_contains(const TriloSet* set, TriloTofu data) {
+    if (set == NULL) {
+        return false;
+    } // end if
+
+    TriloSetNode* current = set->head;
+
+    while (current != NULL) {
+        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+
+        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             return true;
         } // end if
+
         current = current->next;
     } // end while
-    return false;
-} // end of func
 
-void trilo_xdata_set_print(const TriloSet* set) {
-    TriloSetNode* current = set->head;
-    while (current != NULL) {
-        switch (set->set_type) {
-            case INTEGER_TYPE:
-                printf("%d -> ", current->data.data.integer_type);
-                break;
-            case DOUBLE_TYPE:
-                printf("%lf -> ", current->data.data.double_type);
-                break;
-            case STRING_TYPE:
-                printf("%s -> ", current->data.data.string_type);
-                break;
-            case CHAR_TYPE:
-                printf("%c -> ", current->data.data.char_type);
-                break;
-            case BOOLEAN_TYPE:
-                printf("%s -> ", current->data.data.boolean_type ? "true" : "false");
-                break;
-            default:
-                printf("Unknown type\n");
-                break;
-        } // end switch
-        current = current->next;
-    } // end while
-    printf("NULL\n");
-} // end of func
-
-int trilo_xdata_set_size(const TriloSet* set) {
-    return set->size;
+    return false;  // No matching data found
 } // end of func

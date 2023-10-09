@@ -9,183 +9,231 @@
 #include <stdlib.h>
 #include <string.h>
 
-TriloDQueue* trilo_xdata_dqueue_create(enum DataType deque_type) {
-    TriloDQueue* deque = (TriloDQueue*)malloc(sizeof(TriloDQueue));
-    if (deque == NULL) {
-        fprintf(stderr, "Memory allocation failed!\n");
-        exit(EXIT_FAILURE);
+// =======================
+// CREATE and DELETE
+// =======================
+
+// Function to create a new TriloDQueue
+TriloDQueue* trilo_xdata_dqueue_create(enum DataType list_type) {
+    TriloDQueue* dqueue = (TriloDQueue*)malloc(sizeof(TriloDQueue));
+    if (dqueue == NULL) {
+        return NULL; // Memory allocation failed
     } // end if
-    deque->front = NULL;
-    deque->rear = NULL;
-    deque->deque_type = deque_type;
-    return deque;
+
+    dqueue->list_type = list_type;
+    dqueue->front = NULL;
+    dqueue->rear = NULL;
+
+    return dqueue;
 } // end of func
 
-void trilo_xdata_dqueue_destroy(TriloDQueue* deque) {
-    TriloDQueueNode* current = deque->front;
-    TriloDQueueNode* next;
-    while (current != NULL) {
-        next = current->next;
-        free(current);
-        current = next;
+// Function to destroy the TriloDQueue
+void trilo_xdata_dqueue_destroy(TriloDQueue* dqueue) {
+    if (dqueue == NULL) {
+        return; // Nothing to destroy
+    } // end if
+
+    while (dqueue->front != NULL) {
+        TriloDQueueNode* temp = dqueue->front;
+        dqueue->front = dqueue->front->next;
+        free(temp);
     } // end while
-    free(deque);
+
+    free(dqueue);
 } // end of func
 
-bool trilo_xdata_dqueue_is_empty(const TriloDQueue* deque) {
-    return deque->front == NULL;
-} // end of func
+// =======================
+// ALGORITHM FUNCTIONS
+// =======================
 
-void trilo_xdata_dqueue_push_front(TriloDQueue* deque, TriloTofu data) {
-    // Ensure the data type matches the deque type
-    if (data.type != deque->deque_type) {
-        fprintf(stderr, "Data type mismatch!\n");
-        exit(EXIT_FAILURE);
+// Function to insert a TriloTofu data into the list
+TofuError trilo_xdata_dqueue_insert(TriloDQueue* dqueue, TriloTofu data) {
+    if (dqueue == NULL) {
+        return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloDQueueNode* new_node = (TriloDQueueNode*)malloc(sizeof(TriloDQueueNode));
-    if (new_node == NULL) {
-        fprintf(stderr, "Memory allocation failed!\n");
-        exit(EXIT_FAILURE);
+    if (data.type != dqueue->list_type) {
+        return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
-    new_node->data = data;
-    new_node->prev = NULL;
-    new_node->next = deque->front;
 
-    if (deque->front == NULL) {
-        deque->front = new_node;
-        deque->rear = new_node;
+    TriloDQueueNode* newNode = (TriloDQueueNode*)malloc(sizeof(TriloDQueueNode));
+    if (newNode == NULL) {
+        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
+    } // end if
+
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (dqueue->rear == NULL) {
+        // If the queue is empty, set both front and rear to the new node
+        dqueue->front = newNode;
+        dqueue->rear = newNode;
     } else {
-        deque->front->prev = new_node;
-        deque->front = new_node;
+        // Otherwise, update the rear node's next pointer
+        dqueue->rear->next = newNode;
+        dqueue->rear = newNode;
     } // end if else
+
+    return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
-void trilo_xdata_dqueue_push_rear(TriloDQueue* deque, TriloTofu data) {
-    // Ensure the data type matches the deque type
-    if (data.type != deque->deque_type) {
-        fprintf(stderr, "Data type mismatch!\n");
-        exit(EXIT_FAILURE);
+// Function to remove a TriloTofu data from the list
+TofuError trilo_xdata_dqueue_remove(TriloDQueue* dqueue, TriloTofu data) {
+    if (dqueue == NULL) {
+        return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloDQueueNode* new_node = (TriloDQueueNode*)malloc(sizeof(TriloDQueueNode));
-    if (new_node == NULL) {
-        fprintf(stderr, "Memory allocation failed!\n");
-        exit(EXIT_FAILURE);
-    } // end if
-    new_node->data = data;
-    new_node->prev = deque->rear;
-    new_node->next = NULL;
-
-    if (deque->rear == NULL) {
-        deque->front = new_node;
-        deque->rear = new_node;
-    } else {
-        deque->rear->next = new_node;
-        deque->rear = new_node;
-    } // end if else
-} // end of func
-
-void trilo_xdata_dqueue_pop_front(TriloDQueue* deque) {
-    if (deque->front == NULL) {
-        fprintf(stderr, "Deque is empty!\n");
-        exit(EXIT_FAILURE);
+    if (dqueue->front == NULL) {
+        return TRILO_XDATA_TYPE_WAS_UNKNOWN;
     } // end if
 
-    TriloDQueueNode* front = deque->front;
-    deque->front = front->next;
-    if (deque->front != NULL) {
-        deque->front->prev = NULL;
-    } else {
-        deque->rear = NULL;
-    } // end if else
-    free(front);
-} // end of func
-
-void trilo_xdata_dqueue_pop_rear(TriloDQueue* deque) {
-    if (deque->rear == NULL) {
-        fprintf(stderr, "Deque is empty!\n");
-        exit(EXIT_FAILURE);
+    if (data.type != dqueue->list_type) {
+        return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloDQueueNode* rear = deque->rear;
-    deque->rear = rear->prev;
-    if (deque->rear != NULL) {
-        deque->rear->next = NULL;
-    } else {
-        deque->front = NULL;
-    } // end if else
-    free(rear);
-} // end of func
+    TriloDQueueNode* current = dqueue->front;
+    TriloDQueueNode* prev = NULL;
 
-TriloTofu trilo_xdata_dqueue_front(const TriloDQueue* deque) {
-    if (deque->front == NULL) {
-        fprintf(stderr, "Deque is empty!\n");
-        exit(EXIT_FAILURE);
-    } // end if
-    return deque->front->data;
-} // end of func
-
-TriloTofu trilo_xdata_dqueue_rear(const TriloDQueue* deque) {
-    if (deque->rear == NULL) {
-        fprintf(stderr, "Deque is empty!\n");
-        exit(EXIT_FAILURE);
-    } // end if
-    return deque->rear->data;
-} // end of func
-
-void trilo_xdata_dqueue_print_forward(const TriloDQueue* deque) {
-    TriloDQueueNode* current = deque->front;
     while (current != NULL) {
-        switch (deque->deque_type) {
-            case INTEGER_TYPE:
-                printf("%d -> ", current->data.data.integer_type);
-                break;
-            case DOUBLE_TYPE:
-                printf("%lf -> ", current->data.data.double_type);
-                break;
-            case STRING_TYPE:
-                printf("%s -> ", current->data.data.string_type);
-                break;
-            case CHAR_TYPE:
-                printf("%c -> ", current->data.data.char_type);
-                break;
-            case BOOLEAN_TYPE:
-                printf("%s -> ", current->data.data.boolean_type ? "true" : "false");
-                break;
-            default:
-                printf("Unknown type\n");
-                break;
-        } // end switch
+        if (trilo_xdata_tofu_compare(current->data, data) == TRILO_XDATA_TYPE_SUCCESS) {
+            if (current == dqueue->front) {
+                // If the front node matches, update the front pointer
+                dqueue->front = current->next;
+            } else if (current == dqueue->rear) {
+                // If the rear node matches, update the rear pointer
+                dqueue->rear = prev;
+                prev->next = NULL;
+            } else {
+                // Update the next pointer of the previous node
+                prev->next = current->next;
+            } // end if else's
+
+            // Free the memory for the removed node
+            free(current);
+            return TRILO_XDATA_TYPE_SUCCESS;
+        } // end if
+
+        prev = current;
         current = current->next;
     } // end while
-    printf("NULL\n");
+
+    return TRILO_XDATA_TYPE_WAS_UNKNOWN;
 } // end of func
 
-void trilo_xdata_dqueue_print_backward(const TriloDQueue* deque) {
-    TriloDQueueNode* current = deque->rear;
+// Function to search for a TriloTofu data in the list
+TofuError trilo_xdata_dqueue_search(const TriloDQueue* dqueue, TriloTofu data) {
+    if (dqueue == NULL) {
+        return TRILO_XDATA_TYPE_WAS_NULLPTR;
+    } // end if
+
+    if (data.type != dqueue->list_type) {
+        return TRILO_XDATA_TYPE_WAS_MISMATCH;
+    } // end if
+
+    TriloDQueueNode* current = dqueue->front;
+
     while (current != NULL) {
-        switch (deque->deque_type) {
-            case INTEGER_TYPE:
-                printf("%d -> ", current->data.data.integer_type);
-                break;
-            case DOUBLE_TYPE:
-                printf("%lf -> ", current->data.data.double_type);
-                break;
-            case STRING_TYPE:
-                printf("%s -> ", current->data.data.string_type);
-                break;
-            case CHAR_TYPE:
-                printf("%c -> ", current->data.data.char_type);
-                break;
-            case BOOLEAN_TYPE:
-                printf("%s -> ", current->data.data.boolean_type ? "true" : "false");
-                break;
-            default:
-                printf("Unknown type\n");
-                break;
-        } // end switch
-        current = current->prev;
+        if (trilo_xdata_tofu_compare(current->data, data) == TRILO_XDATA_TYPE_SUCCESS) {
+            return TRILO_XDATA_TYPE_SUCCESS;
+        } // end if
+
+        current = current->next;
     } // end while
-    printf("NULL\n");
+
+    return TRILO_XDATA_TYPE_WAS_UNKNOWN;
+} // end of func
+
+// =======================
+// UTILITY FUNCTIONS
+// =======================
+
+// Function to get the size of the TriloDQueue
+size_t trilo_xdata_dqueue_size(const TriloDQueue* dqueue) {
+    if (dqueue == NULL) {
+        return 0;
+    } // end if
+
+    size_t size = 0;
+    TriloDQueueNode* current = dqueue->front;
+
+    while (current != NULL) {
+        size++;
+        current = current->next;
+    } // end while
+
+    return size;
+} // end of func
+
+// Function to insert a TriloTofu data into the list
+TriloTofu* trilo_xdata_dqueue_getter(const TriloDQueue* dqueue, TriloTofu data) {
+    if (dqueue == NULL) {
+        return NULL;
+    } // end if
+
+    if (data.type != dqueue->list_type) {
+        return NULL;
+    } // end if
+
+    TriloDQueueNode* current = dqueue->front;
+
+    while (current != NULL) {
+        if (trilo_xdata_tofu_compare(current->data, data) == TRILO_XDATA_TYPE_SUCCESS) {
+            return &(current->data);
+        } // end if
+
+        current = current->next;
+    } // end while
+
+    return NULL;
+} // end of func
+
+// Function to insert a TriloTofu data into the list
+TofuError trilo_xdata_dqueue_setter(TriloDQueue* dqueue, TriloTofu data) {
+    if (dqueue == NULL) {
+        return TRILO_XDATA_TYPE_WAS_NULLPTR;
+    } // end if
+
+    if (data.type != dqueue->list_type) {
+        return TRILO_XDATA_TYPE_WAS_MISMATCH;
+    } // end if
+
+    TriloDQueueNode* newNode = (TriloDQueueNode*)malloc(sizeof(TriloDQueueNode));
+    if (newNode == NULL) {
+        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
+    } // end if
+
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (dqueue->rear == NULL) {
+        // If the queue is empty, set both front and rear to the new node
+        dqueue->front = newNode;
+        dqueue->rear = newNode;
+    } else {
+        // Otherwise, update the rear node's next pointer
+        dqueue->rear->next = newNode;
+        dqueue->rear = newNode;
+    } // end if else
+
+    return TRILO_XDATA_TYPE_SUCCESS;
+} // end of func
+
+// Function to check if the list is not empty
+bool trilo_xdata_dqueue_not_empty(const TriloDQueue* dqueue) {
+    return (dqueue != NULL) && (dqueue->front != NULL);
+} // end of func
+
+// Function to check if the list is null
+bool trilo_xdata_dqueue_not_nullptr(const TriloDQueue* dqueue) {
+    return dqueue != NULL;
+} // end of func
+
+// Function to check if the list is empty
+bool trilo_xdata_dqueue_is_empty(const TriloDQueue* dqueue) {
+    return (dqueue == NULL) || (dqueue->front == NULL);
+} // end of func
+
+// Function to check if the list is null
+bool trilo_xdata_dqueue_is_nullptr(const TriloDQueue* dqueue) {
+    return dqueue == NULL;
 } // end of func

@@ -9,359 +9,334 @@
 #include <stdlib.h>
 #include <string.h>
 
-TriloTreeNode* trilo_xdata_tree_node_create(TriloTofu data) {
-    TriloTreeNode* node = (TriloTreeNode*)malloc(sizeof(TriloTreeNode));
-    if (node == NULL) {
-        fprintf(stderr, "Memory allocation failed!\n");
-        exit(EXIT_FAILURE);
-    } // end if
-    node->data = data;
-    node->left = NULL;
-    node->right = NULL;
-    return node;
-} // end of func
+// =======================
+// CREATE and DELETE
+// =======================
 
+// Function to create a new TriloTree
 TriloTree* trilo_xdata_tree_create(enum DataType tree_type) {
     TriloTree* tree = (TriloTree*)malloc(sizeof(TriloTree));
-    if (tree == NULL) {
-        fprintf(stderr, "Memory allocation failed!\n");
-        exit(EXIT_FAILURE);
+    if (tree != NULL) {
+        tree->root = NULL;
+        tree->tree_type = tree_type;
     } // end if
-    tree->root = NULL;
-    tree->tree_type = tree_type;
     return tree;
 } // end of func
 
-void trilo_xdata_tree_destroy_helper(TriloTreeNode* node) {
+// Helper function to destroy the tree recursively
+void trilo_xdata_tree_destroy_recursive(TriloTreeNode* node) {
     if (node == NULL) {
         return;
     } // end if
-    trilo_xdata_tree_destroy_helper(node->left);
-    trilo_xdata_tree_destroy_helper(node->right);
+
+    trilo_xdata_tree_destroy_recursive(node->left);
+    trilo_xdata_tree_destroy_recursive(node->right);
     free(node);
 } // end of func
 
+// Function to destroy the TriloTree
 void trilo_xdata_tree_destroy(TriloTree* tree) {
-    trilo_xdata_tree_destroy_helper(tree->root);
-    free(tree);
+    if (tree != NULL) {
+        trilo_xdata_tree_destroy_recursive(tree->root);
+        free(tree);
+    } // end if
 } // end of func
 
-bool trilo_xdata_tree_is_empty(const TriloTree* tree) {
-    return tree->root == NULL;
-} // end of func
+// =======================
+// ALGORITHM FUNCTIONS
+// =======================
 
-TriloTreeNode* trilo_xdata_tree_insert_helper(TriloTreeNode* node, TriloTofu data) {
-    if (node == NULL) {
-        return trilo_xdata_tree_node_create(data);
+// Function to insert a TriloTofu data into the tree
+TofuError trilo_xdata_tree_insert(TriloTree* tree, TriloTofu data) {
+    if (tree == NULL) {
+        return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    // Ensure the data type matches the tree type
-    if (data.type != node->data.type) {
-        fprintf(stderr, "Data type mismatch!\n");
-        exit(EXIT_FAILURE);
+    TriloTreeNode* newNode = (TriloTreeNode*)malloc(sizeof(TriloTreeNode));
+    if (newNode == NULL) {
+        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
     } // end if
 
-    if (data.type == INTEGER_TYPE) {
-        if (data.data.integer_type < node->data.data.integer_type) {
-            node->left = trilo_xdata_tree_insert_helper(node->left, data);
-        } else if (data.data.integer_type > node->data.data.integer_type) {
-            node->right = trilo_xdata_tree_insert_helper(node->right, data);
-        }
-    } else if (data.type == DOUBLE_TYPE) {
-        if (data.data.double_type < node->data.data.double_type) {
-            node->left = trilo_xdata_tree_insert_helper(node->left, data);
-        } else if (data.data.double_type > node->data.data.double_type) {
-            node->right = trilo_xdata_tree_insert_helper(node->right, data);
-        }
-    } else if (data.type == STRING_TYPE) {
-        int cmp = strcmp(data.data.string_type, node->data.data.string_type);
-        if (cmp < 0) {
-            node->left = trilo_xdata_tree_insert_helper(node->left, data);
-        } else if (cmp > 0) {
-            node->right = trilo_xdata_tree_insert_helper(node->right, data);
-        }
-    } else if (data.type == CHAR_TYPE) {
-        if (data.data.char_type < node->data.data.char_type) {
-            node->left = trilo_xdata_tree_insert_helper(node->left, data);
-        } else if (data.data.char_type > node->data.data.char_type) {
-            node->right = trilo_xdata_tree_insert_helper(node->right, data);
-        }
-    } else if (data.type == BOOLEAN_TYPE) {
-        if (data.data.boolean_type < node->data.data.boolean_type) {
-            node->left = trilo_xdata_tree_insert_helper(node->left, data);
-        } else if (data.data.boolean_type > node->data.data.boolean_type) {
-            node->right = trilo_xdata_tree_insert_helper(node->right, data);
-        }
-    } // end if else if's
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
 
-    return node;
-} // end of func
+    // If the tree is empty, set the new node as the root
+    if (tree->root == NULL) {
+        tree->root = newNode;
+        return TRILO_XDATA_TYPE_SUCCESS;
+    } // end if
 
-void trilo_xdata_tree_insert(TriloTree* tree, TriloTofu data) {
-    tree->root = trilo_xdata_tree_insert_helper(tree->root, data);
-} // end of func
+    // Otherwise, insert the new node into the tree
+    TriloTreeNode* current = tree->root;
+    while (1) {
+        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
 
-TriloTreeNode* trilo_xdata_tree_find_min(TriloTreeNode* node) {
-    while (node->left != NULL) {
-        node = node->left;
+        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+            free(newNode); // Data already exists, don't insert it again
+            return TRILO_XDATA_TYPE_SUCCESS;
+        } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
+            // Determine whether to go left or right based on the comparison result
+            compareResult = trilo_xdata_tofu_compare(data, current->data);
+
+            if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
+                // Data with the same value already exists, don't insert it again
+                free(newNode);
+                return TRILO_XDATA_TYPE_SUCCESS;
+            } else if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+                // Insert as left child
+                if (current->left == NULL) {
+                    current->left = newNode;
+                    return TRILO_XDATA_TYPE_SUCCESS;
+                }
+                current = current->left;
+            } else {
+                // Insert as right child
+                if (current->right == NULL) {
+                    current->right = newNode;
+                    return TRILO_XDATA_TYPE_SUCCESS;
+                }
+                current = current->right;
+            }
+        } else {
+            free(newNode); // Invalid comparison result, don't insert the data
+            return TRILO_XDATA_TYPE_WAS_UNKNOWN;
+        } // end if else
     } // end while
-    return node;
 } // end of func
 
-TriloTreeNode* trilo_xdata_tree_remove_helper(TriloTreeNode* node, TriloTofu data) {
-    if (node == NULL) {
-        return node;
+// Function to remove a TriloTofu data from the tree
+TofuError trilo_xdata_tree_remove(TriloTree* tree, TriloTofu data) {
+    if (tree == NULL) {
+        return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    // Ensure the data type matches the tree type
-    if (data.type != node->data.type) {
-        fprintf(stderr, "Data type mismatch!\n");
-        exit(EXIT_FAILURE);
+    if (tree->root == NULL) {
+        return TRILO_XDATA_TYPE_SUCCESS; // Empty tree, nothing to remove
     } // end if
 
-    if (data.type == INTEGER_TYPE) {
-        if (data.data.integer_type < node->data.data.integer_type) {
-            node->left = trilo_xdata_tree_remove_helper(node->left, data);
-        } else if (data.data.integer_type > node->data.data.integer_type) {
-            node->right = trilo_xdata_tree_remove_helper(node->right, data);
-        } else {
-            // Node with only one child or no child
-            if (node->left == NULL) {
-                TriloTreeNode* temp = node->right;
-                free(node);
-                return temp;
-            } else if (node->right == NULL) {
-                TriloTreeNode* temp = node->left;
-                free(node);
-                return temp;
+    TriloTreeNode* current = tree->root;
+    TriloTreeNode* parent = NULL;
+    TofuError compareResult;
+
+    while (current != NULL) {
+        compareResult = trilo_xdata_tofu_compare(current->data, data);
+
+        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+            // Node with the matching data found, perform removal
+            if (parent == NULL) {
+                // If the node to be removed is the root
+                if (current->left == NULL && current->right == NULL) {
+                    free(current);
+                    tree->root = NULL;
+                    return TRILO_XDATA_TYPE_SUCCESS;
+                } else if (current->left == NULL) {
+                    TriloTreeNode* temp = current->right;
+                    free(current);
+                    tree->root = temp;
+                    return TRILO_XDATA_TYPE_SUCCESS;
+                } else if (current->right == NULL) {
+                    TriloTreeNode* temp = current->left;
+                    free(current);
+                    tree->root = temp;
+                    return TRILO_XDATA_TYPE_SUCCESS;
+                } else {
+                    TriloTreeNode* minRight = current->right;
+                    while (minRight->left != NULL) {
+                        minRight = minRight->left;
+                    }
+                    current->data = minRight->data;
+                    data = minRight->data;
+                    current = current->right;
+                }
+            } else {
+                // If the node to be removed is not the root
+                if (current->left == NULL && current->right == NULL) {
+                    free(current);
+                    if (parent->left == current) {
+                        parent->left = NULL;
+                    } else {
+                        parent->right = NULL;
+                    }
+                    return TRILO_XDATA_TYPE_SUCCESS;
+                } else if (current->left == NULL) {
+                    TriloTreeNode* temp = current->right;
+                    free(current);
+                    if (parent->left == current) {
+                        parent->left = temp;
+                    } else {
+                        parent->right = temp;
+                    }
+                    return TRILO_XDATA_TYPE_SUCCESS;
+                } else if (current->right == NULL) {
+                    TriloTreeNode* temp = current->left;
+                    free(current);
+                    if (parent->left == current) {
+                        parent->left = temp;
+                    } else {
+                        parent->right = temp;
+                    }
+                    return TRILO_XDATA_TYPE_SUCCESS;
+                } else {
+                    TriloTreeNode* minRight = current->right;
+                    while (minRight->left != NULL) {
+                        minRight = minRight->left;
+                    }
+                    current->data = minRight->data;
+                    data = minRight->data;
+                    current = current->right;
+                    parent = current;
+                }
             }
+        } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
+            // Determine whether to go left or right based on the comparison result
+            compareResult = trilo_xdata_tofu_compare(data, current->data);
 
-            // Node with two children, get the inorder successor (smallest in the right subtree)
-            TriloTreeNode* temp = trilo_xdata_tree_find_min(node->right);
-
-            // Copy the inorder successor's data to this node
-            node->data = temp->data;
-
-            // Delete the inorder successor
-            node->right = trilo_xdata_tree_remove_helper(node->right, temp->data);
-        }
-    } else if (data.type == DOUBLE_TYPE) {
-        if (data.data.double_type < node->data.data.double_type) {
-            node->left = trilo_xdata_tree_remove_helper(node->left, data);
-        } else if (data.data.double_type > node->data.data.double_type) {
-            node->right = trilo_xdata_tree_remove_helper(node->right, data);
-        } else {
-            // Node with only one child or no child
-            if (node->left == NULL) {
-                TriloTreeNode* temp = node->right;
-                free(node);
-                return temp;
-            } else if (node->right == NULL) {
-                TriloTreeNode* temp = node->left;
-                free(node);
-                return temp;
+            if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
+                // Data not found in the tree
+                return TRILO_XDATA_TYPE_SUCCESS;
+            } else if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+                parent = current;
+                current = current->left;
+            } else {
+                parent = current;
+                current = current->right;
             }
-
-            // Node with two children, get the inorder successor (smallest in the right subtree)
-            TriloTreeNode* temp = trilo_xdata_tree_find_min(node->right);
-
-            // Copy the inorder successor's data to this node
-            node->data = temp->data;
-
-            // Delete the inorder successor
-            node->right = trilo_xdata_tree_remove_helper(node->right, temp->data);
-        }
-    } else if (data.type == STRING_TYPE) {
-        int cmp = strcmp(data.data.string_type, node->data.data.string_type);
-        if (cmp < 0) {
-            node->left = trilo_xdata_tree_remove_helper(node->left, data);
-        } else if (cmp > 0) {
-            node->right = trilo_xdata_tree_remove_helper(node->right, data);
         } else {
-            // Node with only one child or no child
-            if (node->left == NULL) {
-                TriloTreeNode* temp = node->right;
-                free(node);
-                return temp;
-            } else if (node->right == NULL) {
-                TriloTreeNode* temp = node->left;
-                free(node);
-                return temp;
-            }
+            return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Invalid comparison result
+        } // end if else if's
+    } // end while
 
-            // Node with two children, get the inorder successor (smallest in the right subtree)
-            TriloTreeNode* temp = trilo_xdata_tree_find_min(node->right);
-
-            // Copy the inorder successor's data to this node
-            node->data = temp->data;
-
-            // Delete the inorder successor
-            node->right = trilo_xdata_tree_remove_helper(node->right, temp->data);
-        }
-    } else if (data.type == CHAR_TYPE) {
-        if (data.data.char_type < node->data.data.char_type) {
-            node->left = trilo_xdata_tree_remove_helper(node->left, data);
-        } else if (data.data.char_type > node->data.data.char_type) {
-            node->right = trilo_xdata_tree_remove_helper(node->right, data);
-        } else {
-            // Node with only one child or no child
-            if (node->left == NULL) {
-                TriloTreeNode* temp = node->right;
-                free(node);
-                return temp;
-            } else if (node->right == NULL) {
-                TriloTreeNode* temp = node->left;
-                free(node);
-                return temp;
-            }
-
-            // Node with two children, get the inorder successor (smallest in the right subtree)
-            TriloTreeNode* temp = trilo_xdata_tree_find_min(node->right);
-
-            // Copy the inorder successor's data to this node
-            node->data = temp->data;
-
-            // Delete the inorder successor
-            node->right = trilo_xdata_tree_remove_helper(node->right, temp->data);
-        }
-    } else if (data.type == BOOLEAN_TYPE) {
-        if (data.data.boolean_type < node->data.data.boolean_type) {
-            node->left = trilo_xdata_tree_remove_helper(node->left, data);
-        } else if (data.data.boolean_type > node->data.data.boolean_type) {
-            node->right = trilo_xdata_tree_remove_helper(node->right, data);
-        } else {
-            // Node with only one child or no child
-            if (node->left == NULL) {
-                TriloTreeNode* temp = node->right;
-                free(node);
-                return temp;
-            } else if (node->right == NULL) {
-                TriloTreeNode* temp = node->left;
-                free(node);
-                return temp;
-            }
-
-            // Node with two children, get the inorder successor (smallest in the right subtree)
-            TriloTreeNode* temp = trilo_xdata_tree_find_min(node->right);
-
-            // Copy the inorder successor's data to this node
-            node->data = temp->data;
-
-            // Delete the inorder successor
-            node->right = trilo_xdata_tree_remove_helper(node->right, temp->data);
-        }
-    } // end if else if's
-
-    return node;
+    return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Data not found in the tree
 } // end of func
 
-void trilo_xdata_tree_remove(TriloTree* tree, TriloTofu data) {
-    tree->root = trilo_xdata_tree_remove_helper(tree->root, data);
-} // end of func
-
-bool trilo_xdata_tree_search_helper(const TriloTreeNode* node, TriloTofu data) {
-    if (node == NULL) {
-        return false;
+// Function to search for a TriloTofu data in the tree
+TofuError trilo_xdata_tree_search(const TriloTree* tree, TriloTofu data) {
+    if (tree == NULL) {
+        return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    // Ensure the data type matches the tree type
-    if (data.type != node->data.type) {
-        fprintf(stderr, "Data type mismatch!\n");
-        exit(EXIT_FAILURE);
+    TriloTreeNode* current = tree->root;
+    TofuError compareResult;
+
+    while (current != NULL) {
+        compareResult = trilo_xdata_tofu_compare(current->data, data);
+
+        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+            // Data found in the tree
+            return TRILO_XDATA_TYPE_SUCCESS;
+        } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
+            // Determine whether to go left or right based on the comparison result
+            compareResult = trilo_xdata_tofu_compare(data, current->data);
+
+            if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
+                // Data not found in the tree
+                return TRILO_XDATA_TYPE_SUCCESS;
+            } else if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+                current = current->left;
+            } else {
+                current = current->right;
+            } // end if else if's
+        } else {
+            return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Invalid comparison result
+        } // end if else
+    } // end while
+
+    return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Data not found in the tree
+} // end of func
+
+// =======================
+// UTILITY FUNCTIONS
+// =======================
+
+// Helper function to count nodes in the tree
+static void count_nodes(const TriloTreeNode* node, size_t* count) {
+    if (node != NULL) {
+        (*count)++;
+        count_nodes(node->left, count);
+        count_nodes(node->right, count);
     } // end if
-
-    if (data.type == INTEGER_TYPE) {
-        if (data.data.integer_type < node->data.data.integer_type) {
-            return trilo_xdata_tree_search_helper(node->left, data);
-        } else if (data.data.integer_type > node->data.data.integer_type) {
-            return trilo_xdata_tree_search_helper(node->right, data);
-        } else {
-            return true;
-        }
-    } else if (data.type == DOUBLE_TYPE) {
-        if (data.data.double_type < node->data.data.double_type) {
-            return trilo_xdata_tree_search_helper(node->left, data);
-        } else if (data.data.double_type > node->data.data.double_type) {
-            return trilo_xdata_tree_search_helper(node->right, data);
-        } else {
-            return true;
-        }
-    } else if (data.type == STRING_TYPE) {
-        int cmp = strcmp(data.data.string_type, node->data.data.string_type);
-        if (cmp < 0) {
-            return trilo_xdata_tree_search_helper(node->left, data);
-        } else if (cmp > 0) {
-            return trilo_xdata_tree_search_helper(node->right, data);
-        } else {
-            return true;
-        }
-    } else if (data.type == CHAR_TYPE) {
-        if (data.data.char_type < node->data.data.char_type) {
-            return trilo_xdata_tree_search_helper(node->left, data);
-        } else if (data.data.char_type > node->data.data.char_type) {
-            return trilo_xdata_tree_search_helper(node->right, data);
-        } else {
-            return true;
-        }
-    } else if (data.type == BOOLEAN_TYPE) {
-        if (data.data.boolean_type < node->data.data.boolean_type) {
-            return trilo_xdata_tree_search_helper(node->left, data);
-        } else if (data.data.boolean_type > node->data.data.boolean_type) {
-            return trilo_xdata_tree_search_helper(node->right, data);
-        } else {
-            return true;
-        }
-    } // end if else's
-
-    return false; // Data not found
 } // end of func
 
-bool trilo_xdata_tree_search(const TriloTree* tree, TriloTofu data) {
-    return trilo_xdata_tree_search_helper(tree->root, data);
-} // end of func
-
-void trilo_xdata_tree_inorder_traversal(const TriloTreeNode* node) {
-    if (node == NULL) {
-        return;
-    } // end if
-
-    trilo_xdata_tree_inorder_traversal(node->left);
-    switch (node->data.type) {
-        case INTEGER_TYPE:
-            printf("%d -> ", node->data.data.integer_type);
-            break;
-        case DOUBLE_TYPE:
-            printf("%lf -> ", node->data.data.double_type);
-            break;
-        case STRING_TYPE:
-            printf("%s -> ", node->data.data.string_type);
-            break;
-        case CHAR_TYPE:
-            printf("%c -> ", node->data.data.char_type);
-            break;
-        case BOOLEAN_TYPE:
-            printf("%s -> ", node->data.data.boolean_type ? "true" : "false");
-            break;
-        default:
-            printf("Unknown type\n");
-            break;
-    } // end switch
-    trilo_xdata_tree_inorder_traversal(node->right);
-} // end of func
-
-void trilo_xdata_tree_print(const TriloTree* tree) {
-    trilo_xdata_tree_inorder_traversal(tree->root);
-    printf("NULL\n");
-} // end of func
-
-static int trilo_xdata_tree_size_node(const TriloTreeNode* root) {
-    if (root == NULL) {
+// Function to get the size of the TriloTree
+size_t trilo_xdata_tree_size(const TriloTree* tree) {
+    if (tree == NULL || tree->root == NULL) {
         return 0;
     } // end if
 
-    return 1 + trilo_xdata_tree_size_node(root->left) + trilo_xdata_tree_size_node(root->right);
+    size_t count = 0;
+    count_nodes(tree->root, &count);
+    return count;
 } // end of func
 
-int trilo_xdata_tree_size(const TriloTree* tree) {
-    return trilo_xdata_tree_size_node(tree->root);
+// Function to insert a TriloTofu data into the tree
+TriloTofu* trilo_xdata_tree_getter(TriloTree* tree, TriloTofu data) {
+    if (tree == NULL) {
+        return NULL;
+    } // end if
+
+    TriloTreeNode* current = tree->root;
+    TofuError compareResult;
+
+    while (current != NULL) {
+        compareResult = trilo_xdata_tofu_compare(current->data, data);
+
+        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+            // Data found in the tree, return a pointer to it
+            return &(current->data);
+        } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
+            // Determine whether to go left or right based on the comparison result
+            compareResult = trilo_xdata_tofu_compare(data, current->data);
+
+            if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
+                // Data not found in the tree
+                return NULL;
+            } else if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+                current = current->left;
+            } else {
+                current = current->right;
+            }
+        } else {
+            return NULL; // Invalid comparison result
+        } // end if else's
+    } // end while
+
+    return NULL; // Data not found in the tree
+} // end of func
+
+// Function to insert a TriloTofu data into the tree
+TofuError trilo_xdata_tree_setter(TriloTree* tree, TriloTofu data) {
+    TriloTofu* existingData = trilo_xdata_tree_getter(tree, data);
+
+    if (existingData != NULL) {
+        // Data with the same value already exists, don't insert it again
+        return TRILO_XDATA_TYPE_SUCCESS;
+    } // end if
+
+    return trilo_xdata_tree_insert(tree, data);
+} // end of func
+
+// Function to check if the tree is empty
+bool trilo_xdata_tree_not_empty(const TriloTree* tree) {
+    return tree != NULL && tree->root != NULL;
+} // end of func
+
+// Function to check if the tree is not null
+bool trilo_xdata_tree_not_nullptr(const TriloTree* tree) {
+    return tree != NULL;
+} // end of func
+
+// Function to check if the tree is empty
+bool trilo_xdata_tree_is_empty(const TriloTree* tree) {
+    return tree == NULL || tree->root == NULL;
+} // end of func
+
+// Function to check if the tree is null
+bool trilo_xdata_tree_is_nullptr(const TriloTree* tree) {
+    return tree == NULL;
+} // end of func
+
+// Function to check if a TriloTofu data is in the tree
+bool trilo_xdata_tree_contains(const TriloTree* tree, TriloTofu data) {
+    return trilo_xdata_tree_getter(tree, data) != NULL;
 } // end of func
