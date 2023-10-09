@@ -3,35 +3,46 @@
 #include <stdio.h>
 
 int main() {
-    // Create a singly linked list for integers
-    TriloForwardList* intList = trilo_xdata_flist_create(INTEGER_TYPE);
+    // Create a TriloForwardList instance with INTEGER_TYPE
+    TriloForwardList* flist = trilo_xdata_flist_create(INTEGER_TYPE);
 
-    // Insert some integer values
-    trilo_xdata_flist_insert(intList, trilo_xdata_tofu_create_from_integer(42));
-    trilo_xdata_flist_insert(intList, trilo_xdata_tofu_create_from_integer(123));
-    trilo_xdata_flist_insert(intList, trilo_xdata_tofu_create_from_integer(7));
+    // Insert data elements into the TriloForwardList
+    trilo_xdata_flist_insert(flist, trilo_xdata_tofu_create_from_integer(10));
+    trilo_xdata_flist_insert(flist, trilo_xdata_tofu_create_from_integer(20));
+    trilo_xdata_flist_insert(flist, trilo_xdata_tofu_create_from_integer(30));
 
-    // Print the list
-    printf("List of Integers:\n");
-    trilo_xdata_flist_print(intList);
+    // Print the size of the TriloForwardList
+    printf("Size of the forward list: %zu\n", trilo_xdata_flist_size(flist));
 
-    // Remove an element
-    trilo_xdata_flist_remove(intList, trilo_xdata_tofu_create_from_integer(123));
+    // Print the TriloForwardList elements
+    printf("Forward list elements:\n");
+    TriloForwardListNode* current = trilo_xdata_flist_get_head(flist);
+    while (current != NULL) {
+        TriloTofu* tofu = trilo_xdata_flist_get_node_data(current);
+        printf("%d\n", trilo_xdata_tofu_get_integer(*tofu));
+        current = trilo_xdata_flist_get_next(current);
+    } // end while
 
-    // Print the updated list
-    printf("Updated List of Integers:\n");
-    trilo_xdata_flist_print(intList);
+    // Check if the TriloForwardList is not empty
+    printf("Is forward list not empty? %s\n", trilo_xdata_flist_not_empty(flist) ? "true" : "false");
 
-    // Reverse the list
-    trilo_xdata_flist_reverse(intList);
+    // Reverse the TriloForwardList in the forward direction
+    trilo_xdata_flist_reverse_forward(flist);
 
-    // Print the reversed list
-    printf("Reversed List of Integers:\n");
-    trilo_xdata_flist_print(intList);
+    // Print the reversed TriloForwardList elements
+    printf("Reversed forward list elements:\n");
+    current = trilo_xdata_flist_get_head(flist);
+    while (current != NULL) {
+        TriloTofu* tofu = trilo_xdata_flist_get_node_data(current);
+        printf("%d\n", trilo_xdata_tofu_get_integer(*tofu));
+        current = trilo_xdata_flist_get_next(current);
+    } // end while
 
-    // Destroy the list and free memory
-    trilo_xdata_flist_destroy(intList);
+    // Check if the TriloForwardList is not empty
+    printf("Is forward list not empty? %s\n", trilo_xdata_flist_not_empty(flist) ? "true" : "false");
+
+    // Destroy the TriloForwardList
+    trilo_xdata_flist_destroy(flist);
 
     return 0;
 } // end of func
-

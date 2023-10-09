@@ -3,31 +3,43 @@
 #include <stdio.h>
 
 int main() {
-    // Create a doubly linked list
-    TriloDoublyList* intDeque = trilo_xdata_dlist_create();
+    // Create a TriloDoublyList instance with INTEGER_TYPE
+    TriloDoublyList* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
 
-    // Add elements to the front and back of the deque
-    trilo_xdata_dlist_push_front(intDeque, trilo_xdata_tofu_create_from_integer(10));
-    trilo_xdata_dlist_push_back(intDeque, trilo_xdata_tofu_create_from_integer(20));
-    trilo_xdata_dlist_push_front(intDeque, trilo_xdata_tofu_create_from_integer(5));
-    trilo_xdata_dlist_push_back(intDeque, trilo_xdata_tofu_create_from_integer(30));
+    // Insert data elements into the TriloDoublyList
+    trilo_xdata_dlist_insert(dlist, trilo_xdata_tofu_create_from_integer(10));
+    trilo_xdata_dlist_insert(dlist, trilo_xdata_tofu_create_from_integer(20));
+    trilo_xdata_dlist_insert(dlist, trilo_xdata_tofu_create_from_integer(30));
 
-    // Print the deque from front to back
-    printf("Deque contents (front to back): ");
-    trilo_xdata_dlist_print(intDeque);
-    printf("\n");
+    // Print the size of the TriloDoublyList
+    printf("Size of the doubly list: %zu\n", trilo_xdata_dlist_size(dlist));
 
-    // Remove elements from the front and back of the deque
-    trilo_xdata_dlist_pop_front(intDeque);
-    trilo_xdata_dlist_pop_back(intDeque);
+    // Print the TriloDoublyList elements in forward order
+    printf("Doubly list elements in forward order:\n");
+    TriloDoublyListNode* current = trilo_xdata_dlist_get_head(dlist);
+    while (current != NULL) {
+        TriloTofu* tofu = trilo_xdata_dlist_get_node_data(current);
+        printf("%d\n", trilo_xdata_tofu_get_integer(*tofu));
+        current = trilo_xdata_dlist_get_next(current);
+    } // end while
 
-    // Print the deque after removals
-    printf("Deque contents after removals: ");
-    trilo_xdata_dlist_print(intDeque);
-    printf("\n");
+    // Reverse the TriloDoublyList in the forward direction
+    trilo_xdata_dlist_reverse_forward(dlist);
 
-    // Clean up and destroy the deque
-    trilo_xdata_dlist_destroy(intDeque);
+    // Print the reversed TriloDoublyList elements
+    printf("Reversed doubly list elements in forward order:\n");
+    current = trilo_xdata_dlist_get_head(dlist);
+    while (current != NULL) {
+        TriloTofu* tofu = trilo_xdata_dlist_get_node_data(current);
+        printf("%d\n", trilo_xdata_tofu_get_integer(*tofu));
+        current = trilo_xdata_dlist_get_next(current);
+    } // end while
+
+    // Check if the TriloDoublyList is not empty
+    printf("Is doubly list not empty? %s\n", trilo_xdata_dlist_not_empty(dlist) ? "true" : "false");
+
+    // Destroy the TriloDoublyList
+    trilo_xdata_dlist_destroy(dlist);
 
     return 0;
 } // end of func
