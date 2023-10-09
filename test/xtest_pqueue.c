@@ -100,9 +100,9 @@ XTEST_CASE(xdata_let_pqueue_empty_check) {
 void xdata_test_pqueue_group(XUnitRunner *runner) {
     XTEST_NOTE("Running all test cases for pqueue:");
 
-    XTEST_RUN_UNIT(xdata_let_pqueue, runner);
-    XTEST_RUN_UNIT(xdata_let_pqueue, runner);
-    XTEST_RUN_UNIT(xdata_let_pqueue, runner);
-    XTEST_RUN_UNIT(xdata_let_pqueue, runner);
-    XTEST_RUN_UNIT(xdata_let_pqueue, runner);
+    XTEST_RUN_UNIT(xdata_let_pqueue_create_and_destroy, runner);
+    XTEST_RUN_UNIT(xdata_let_pqueue_empty_check,        runner);
+    XTEST_RUN_UNIT(xdata_let_pqueue_insert_and_get,     runner);
+    XTEST_RUN_UNIT(xdata_let_pqueue_remove,             runner);
+    XTEST_RUN_UNIT(xdata_let_pqueue_size,               runner);
 } // end of func
