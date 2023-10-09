@@ -14,7 +14,7 @@
 // =======================
 
 // Function to create a new TriloPQueue
-TriloPQueue* trilo_xdata_pqueue_create(DataType queue_type) {
+TriloPQueue* trilo_xdata_pqueue_create(enum DataType queue_type) {
     TriloPQueue* pqueue = (TriloPQueue*)malloc(sizeof(TriloPQueue));
     if (pqueue == NULL) {
         // Handle memory allocation failure
