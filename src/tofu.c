@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 // Function to create a new TriloTofu instance from an integer
 TriloTofu trilo_xdata_tofu_create_from_integer(int value) {
