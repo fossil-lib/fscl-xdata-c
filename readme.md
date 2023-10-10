@@ -1,6 +1,6 @@
 # Trilobite Data structures - C
 
-Welcome to the Project Template repository! This README file provides detailed instructions for users on Windows, macOS, and Linux systems to set up, compile, test, and run a project using the Meson build system. Please note that the Meson build system is required to successfully build this project.
+The TriloXData library is a versatile and efficient collection of data structures and algorithms designed to handle a wide range of data types and operations. It provides a robust foundation for managing and manipulating data in various applications, with a focus on ease of use, reliability, and performance.
 
 ## Intended Audience
 
