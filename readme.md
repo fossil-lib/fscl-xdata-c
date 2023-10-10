@@ -29,13 +29,51 @@ Example of the usage in C
    website: <https://trilobite.code.blog>
 */
 #include <stdio.h>
-#include <trilobite/xdata.h>
+#include <trilobite/xdata/dlist.h> // using doubly linked list
+#include <trilobite/xdata/tofu.h>  // using tofu data type
+
+// Function to print the shopping list
+void print_shopping_list(const TriloDoublyList* shoppingList) {
+    if (trilo_xdata_dlist_is_empty(shoppingList)) {
+        printf("Your shopping list is empty.\n");
+        return;
+    } // end if
+
+    printf("Eco-Friendly Shopping List:\n");
+    TriloDoublyListNode* current = shoppingList->head;
+    while (current != NULL) {
+        TriloTofu* item = &current->data;
+        printf("- %s\n", trilo_xdata_tofu_get_string(*item));
+        current = current->next;
+    } // end while
+} // end of func
 
 //
 // main is where all good examples start
 //
-int main(void) {
-    printf("%s\n", greet());
+int main() {
+    TriloDoublyList* shopping_list = trilo_xdata_dlist_create(STRING_TYPE);
+
+    // Add eco-friendly items to the shopping list
+    for (int i = 0; i < 5; i++) {
+        char item_name[50];
+        printf("Enter an eco-friendly item for your shopping list (or 'exit' to finish): ");
+        scanf("%s", item_name);
+
+        if (strcmp(item_name, "exit") == 0) {
+            break;
+        } // end if
+
+        TriloTofu item = trilo_xdata_tofu_create_from_string(item_name);
+        trilo_xdata_dlist_insert(shopping_list, item);
+    } // end for
+
+    // Print the shopping list
+    print_shopping_list(shopping_list);
+
+    // Clean up memory
+    trilo_xdata_dlist_destroy(shopping_list);
+
     return 0;
 } // end of func
 ```
