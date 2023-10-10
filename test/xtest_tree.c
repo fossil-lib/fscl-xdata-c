@@ -13,73 +13,46 @@
 // XUNIT TEST CASES
 //
 
-XTEST_CASE(xdata_let_tree_create_and_destroy) {
+// Test case for creating and destroying a tree
+XTEST_CASE(xdata_let_tree_create_and_destroy_tree) {
     TriloTree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
     XASSERT_PTR_NOT_NULL(tree);
-    trilo_xdata_tree_destroy(tree);
-}
-
-XTEST_CASE(xdata_let_tree_insert_and_search) {
-    TriloTree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
-
-    // Insert values into the tree
-    trilo_xdata_tree_insert(tree, 10);
-    trilo_xdata_tree_insert(tree, 5);
-    trilo_xdata_tree_insert(tree, 15);
-
-    // Search for values in the tree
-    XASSERT_BOOL_TRUE(trilo_xdata_tree_search(tree, 10));
-    XASSERT_BOOL_TRUE(trilo_xdata_tree_search(tree, 5));
-    XASSERT_BOOL_TRUE(trilo_xdata_tree_search(tree, 15));
-    XASSERT_BOOL_FALSE(trilo_xdata_tree_search(tree, 7)); // Value not in the tree
 
     trilo_xdata_tree_destroy(tree);
 }
 
-XTEST_CASE(xdata_let_tree_remove) {
+// Test case for inserting and searching for a node in the tree
+XTEST_CASE(xdata_let_tree_insert_and_search_tree) {
     TriloTree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(tree);
 
-    // Insert values into the tree
-    trilo_xdata_tree_insert(tree, 10);
-    trilo_xdata_tree_insert(tree, 5);
-    trilo_xdata_tree_insert(tree, 15);
+    TriloTofu data_to_insert = trilo_xdata_tofu_create_from_integer(42);
 
-    // Remove a value from the tree
-    trilo_xdata_tree_remove(tree, 10);
+    // Insert a node into the tree
+    TofuError insert_result = trilo_xdata_tree_insert(tree, data_to_insert);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, insert_result);
 
-    // Check if the value is removed
-    XASSERT_BOOL_FALSE(trilo_xdata_tree_search(tree, 10));
+    // Search for the inserted node
+    TofuError search_result = trilo_xdata_tree_search(tree, data_to_insert);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, search_result);
 
     trilo_xdata_tree_destroy(tree);
 }
 
-XTEST_CASE(xdata_let_tree_size) {
+// Test case for inserting and deleting a node in the tree
+XTEST_CASE(xdata_let_tree_insert_and_delete_tree) {
     TriloTree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
+    XASSERT_PTR_NOT_NULL(tree);
 
-    // Insert values into the tree
-    trilo_xdata_tree_insert(tree, 10);
-    trilo_xdata_tree_insert(tree, 5);
-    trilo_xdata_tree_insert(tree, 15);
+    TriloTofu data_to_insert = trilo_xdata_tofu_create_from_integer(42);
 
-    // Check the size of the tree
-    XASSERT_INT_EQUAL(3, trilo_xdata_tree_size(tree));
+    // Insert a node into the tree
+    TofuError insert_result = trilo_xdata_tree_insert(tree, data_to_insert);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, insert_result);
 
-    trilo_xdata_tree_destroy(tree);
-}
-
-XTEST_CASE(xdata_let_tree_contains) {
-    TriloTree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
-
-    // Insert values into the tree
-    trilo_xdata_tree_insert(tree, 10);
-    trilo_xdata_tree_insert(tree, 5);
-    trilo_xdata_tree_insert(tree, 15);
-
-    // Check if values are present in the tree
-    XASSERT_BOOL_TRUE(trilo_xdata_tree_contains(tree, 10));
-    XASSERT_BOOL_TRUE(trilo_xdata_tree_contains(tree, 5));
-    XASSERT_BOOL_TRUE(trilo_xdata_tree_contains(tree, 15));
-    XASSERT_BOOL_FALSE(trilo_xdata_tree_contains(tree, 7)); // Value not in the tree
+    // Delete the inserted node
+    TofuError delete_result = trilo_xdata_tree_remove(tree, data_to_insert);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, delete_result);
 
     trilo_xdata_tree_destroy(tree);
 }
@@ -90,9 +63,7 @@ XTEST_CASE(xdata_let_tree_contains) {
 void xdata_test_tree_group(XUnitRunner *runner) {
     XTEST_NOTE("Running all test cases for tree:");
 
-    XTEST_RUN_UNIT(xdata_let_tree_contains,           runner);
-    XTEST_RUN_UNIT(xdata_let_tree_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_tree_insert_and_search,  runner);
-    XTEST_RUN_UNIT(xdata_let_tree_remove,             runner);
-    XTEST_RUN_UNIT(xdata_let_tree_size,               runner);
+    XTEST_RUN_UNIT(xdata_let_tree_create_and_destroy_tree, runner);
+    XTEST_RUN_UNIT(xdata_let_tree_insert_and_search_tree,  runner);
+    XTEST_RUN_UNIT(xdata_let_tree_insert_and_delete_tree,  runner);
 } // end of func

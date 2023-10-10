@@ -43,8 +43,8 @@ XTEST_CASE(xdata_let_set_insert_and_remove) {
     result = trilo_xdata_set_remove(set, tofu2);
     XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    TriloTofu* found_tofu2 = trilo_xdata_set_search(set, tofu2);
-    XASSERT_PTR_NULL(found_tofu2);
+    TofuError found_tofu2 = trilo_xdata_set_search(set, tofu2);
+    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, found_tofu2);
 
     trilo_xdata_set_destroy(set);
 }

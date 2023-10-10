@@ -12,6 +12,7 @@
 // =======================
 // CREATE and DELETE
 // =======================
+
 // Function to create a new TriloQueue
 TriloQueue* trilo_xdata_queue_create(enum DataType queue_type) {
     TriloQueue* queue = (TriloQueue*)malloc(sizeof(TriloQueue));
@@ -65,37 +66,27 @@ TofuError trilo_xdata_queue_insert(TriloQueue* queue, TriloTofu data) {
 } // end of func
 
 // Function to remove a TriloTofu data from the queue
-TofuError trilo_xdata_queue_remove(TriloQueue* queue, TriloTofu data) {
-    if (queue == NULL) {
+TofuError trilo_xdata_queue_remove(TriloQueue* queue) {
+    // Check if the queue is NULL or empty
+    if (queue == NULL || trilo_xdata_queue_is_empty(queue)) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloQueueNode* current = queue->front;
-    TriloQueueNode* prev = NULL;
+    // Save a reference to the front node
+    TriloQueueNode* frontNode = queue->front;
 
-    while (current != NULL) {
-        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+    // Update the front pointer to the next node
+    queue->front = frontNode->next;
 
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            if (prev == NULL) {
-                queue->front = current->next;
-            } else {
-                prev->next = current->next;
-            } // end if else
+    // If the removed node was the last one, update the rear pointer
+    if (queue->front == NULL) {
+        queue->rear = NULL;
+    } // end if
 
-            if (current == queue->rear) {
-                queue->rear = prev;
-            } // end if
+    // Free the memory of the removed node
+    free(frontNode);
 
-            free(current);
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } // end if
-
-        prev = current;
-        current = current->next;
-    } // end while
-
-    return TRILO_XDATA_TYPE_SUCCESS;  // No matching data found
+    return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
 // Function to search for a TriloTofu data in the queue

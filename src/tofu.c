@@ -189,7 +189,8 @@ double trilo_xdata_tofu_get_double(TriloTofu tofu) {
 // Function to get the string data from a TriloTofu instance
 const char* trilo_xdata_tofu_get_string(TriloTofu tofu) {
     if (tofu.type == STRING_TYPE) {
-        return tofu.data.string_type;
+        const char *value = tofu.data.string_type;
+        return value;
     } // end if
     return ""; // Return a default value or handle the error as needed
 } // end of func
@@ -208,4 +209,58 @@ bool trilo_xdata_tofu_get_boolean(TriloTofu tofu) {
         return tofu.data.boolean_type;
     } // end if
     return false; // Return a default value or handle the error as needed
+} // end of func
+
+// Function to create a copy of a TriloTofu instance
+TriloTofu trilo_xdata_tofu_copy(TriloTofu tofu) {
+    TriloTofu copy;
+    copy.type = tofu.type;
+    switch (tofu.type) {
+        case INTEGER_TYPE:
+            copy.data.integer_type = tofu.data.integer_type;
+            break;
+        case DOUBLE_TYPE:
+            copy.data.double_type = tofu.data.double_type;
+            break;
+        case STRING_TYPE:
+            strncpy(copy.data.string_type, tofu.data.string_type, sizeof(copy.data.string_type));
+            break;
+        case CHAR_TYPE:
+            copy.data.char_type = tofu.data.char_type;
+            break;
+        case BOOLEAN_TYPE:
+            copy.data.boolean_type = tofu.data.boolean_type;
+            break;
+        default:
+            copy.type = UNKNOWN_TYPE;
+            break;
+    } // end switch
+    return copy;
+} // end of func
+
+// Checks if two TriloTofu instances are equal.
+bool trilo_xdata_tofu_equal(const TriloTofu a, const TriloTofu b) {
+    if (a.type != b.type) {
+        return false; // Types are different, not equal.
+    } // end if
+
+    switch (a.type) {
+        case INTEGER_TYPE:
+            return a.data.integer_type == b.data.integer_type;
+        case DOUBLE_TYPE:
+            return a.data.double_type == b.data.double_type;
+        case STRING_TYPE:
+            return strcmp(a.data.string_type, b.data.string_type) == 0;
+        case CHAR_TYPE:
+            return a.data.char_type == b.data.char_type;
+        case BOOLEAN_TYPE:
+            return a.data.boolean_type == b.data.boolean_type;
+        default:
+            return false; // Unknown type, not equal.
+    } // end switch
+} // end of func
+
+// Gets the data type of a TriloTofu instance.
+enum DataType trilo_xdata_tofu_get_type(const TriloTofu tofu) {
+    return tofu.type;
 } // end of func

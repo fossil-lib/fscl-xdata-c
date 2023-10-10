@@ -60,13 +60,14 @@ void trilo_xdata_queue_destroy(TriloQueue* queue);
 TofuError trilo_xdata_queue_insert(TriloQueue* queue, TriloTofu data);
 
 /**
- * @brief Removes a TriloTofu data element from the TriloQueue.
+ * @brief Removes an element from the front of the TriloQueue.
  *
- * @param queue The TriloQueue from which the data will be removed.
- * @param data  The TriloTofu data element to be removed.
+ * This function removes an element from the front of the TriloQueue if it's not empty.
+ *
+ * @param queue The TriloQueue from which the element will be removed.
  * @return A TofuError value indicating the result of the removal.
  */
-TofuError trilo_xdata_queue_remove(TriloQueue* queue, TriloTofu data);
+TofuError trilo_xdata_queue_remove(TriloQueue* queue);
 
 /**
  * @brief Searches for a TriloTofu data element in the TriloQueue.

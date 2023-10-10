@@ -254,6 +254,38 @@ char trilo_xdata_tofu_get_char(TriloTofu tofu);
  */
 bool trilo_xdata_tofu_get_boolean(TriloTofu tofu);
 
+/**
+ * @brief Creates a copy of a TriloTofu instance.
+ *
+ * This function creates a new TriloTofu instance that is a deep copy of the
+ * provided source TriloTofu. The copy includes both the data type and data
+ * content, ensuring that any modifications to the copy do not affect the
+ * original source.
+ *
+ * @param tofu The source TriloTofu instance to be copied.
+ * @return A new TriloTofu instance that is a copy of the source.
+ */
+TriloTofu trilo_xdata_tofu_copy(TriloTofu tofu);
+
+/**
+ * @brief Checks if two TriloTofu instances are equal.
+ *
+ * @param a The first TriloTofu instance for comparison.
+ * @param b The second TriloTofu instance for comparison.
+ * @return true if the instances are equal, false otherwise.
+ */
+bool trilo_xdata_tofu_equal(const TriloTofu a, const TriloTofu b);
+
+/**
+ * @brief Gets the data type of a TriloTofu instance.
+ *
+ * This function returns the data type of the provided TriloTofu instance.
+ *
+ * @param tofu The TriloTofu instance to get the data type from.
+ * @return The data type of the TriloTofu instance.
+ */
+enum DataType trilo_xdata_tofu_get_type(const TriloTofu tofu);
+
 #ifdef __cplusplus
 }
 #endif
