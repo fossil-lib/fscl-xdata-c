@@ -1,90 +1,65 @@
-# Trilobite Data structures - C
+# Trilobite Data libraries - C
 
-The TriloXData library is a versatile and efficient collection of data structures and algorithms designed to handle a wide range of data types and operations. It provides a robust foundation for managing and manipulating data in various applications, with a focus on ease of use, reliability, and performance.
+The Trilobite XData library is a versatile and efficient collection of data structures and algorithms designed to handle a wide range of data types and operations. It provides a robust foundation for managing and manipulating data in various applications, with a focus on ease of use, reliability, and performance.
 
-## Intended Audience
+## Who is This For?
 
-This guide is aimed at developers of all levels who wish to utilize the Meson build system for their projects. It assumes a basic familiarity with command-line interfaces and project organization.
+This guide is designed for developers of all skill levels who want to use the Meson build system for their projects. It assumes basic familiarity with command-line interfaces and project organization.
 
 ## Prerequisites
 
-Before you proceed, ensure you have the following prerequisites installed:
+Before getting started, make sure you have the following installed:
 
-- **Meson Build System**: The project relies on the Meson build system. If you do not have Meson installed, please visit the official [Meson website](https://mesonbuild.com/Getting-meson.html) for instructions on how to install it.
+- **Meson Build System**: This project relies on Meson. If you don't have Meson installed, visit the official [Meson website](https://mesonbuild.com/Getting-meson.html) for installation instructions.
 
 ## Setting up Meson Build
 
 1. **Install Meson**:
-   - Follow the installation instructions provided on the [Meson website](https://mesonbuild.com/Getting-meson.html) based on your operating system.
+   - Follow the installation instructions on the [Meson website](https://mesonbuild.com/Getting-meson.html) for your operating system.
 
-## Example
+## Setting up, Compiling, Installing, and Running the Project
 
-Example of the usage in C
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/trilobite-stdlib/trilo-xdata-c.git
+   cd trilo-xdata-c
+   ```
 
-```c
-/*
-   under:   trilobite stdlib
-   author:  Michael Gene Brockus (Dreamer)
-   gmail:   <michaelbrockus@gmail.com>
-   website: <https://trilobite.code.blog>
-*/
-#include <stdio.h>
-#include <trilobite/xdata/dlist.h> // using doubly linked list
-#include <trilobite/xdata/tofu.h>  // using tofu data type
+2. **Configure the Build**:
+   ```bash
+   meson setup builddir
+   ```
 
-// Function to print the shopping list
-void print_shopping_list(const TriloDoublyList* shoppingList) {
-    if (trilo_xdata_dlist_is_empty(shoppingList)) {
-        printf("Your shopping list is empty.\n");
-        return;
-    } // end if
+3. **Compile the Project**:
+   ```bash
+   meson compile -C builddir
+   ```
 
-    printf("Eco-Friendly Shopping List:\n");
-    TriloDoublyListNode* current = shoppingList->head;
-    while (current != NULL) {
-        TriloTofu* item = &current->data;
-        printf("- %s\n", trilo_xdata_tofu_get_string(*item));
-        current = current->next;
-    } // end while
-} // end of func
+4. **Install the Project**:
+   ```bash
+   meson install -C builddir
+   ```
 
-//
-// main is where all good examples start
-//
-int main() {
-    TriloDoublyList* shopping_list = trilo_xdata_dlist_create(STRING_TYPE);
+## Including the Demo and Running Tests
 
-    // Add eco-friendly items to the shopping list
-    for (int i = 0; i < 5; i++) {
-        char item_name[50];
-        printf("Enter an eco-friendly item for your shopping list (or 'exit' to finish): ");
-        scanf("%s", item_name);
+To include the demo and run tests, you can use the following options when configuring the build:
 
-        if (strcmp(item_name, "exit") == 0) {
-            break;
-        } // end if
+- **Including the Demo**: Add `-Dwith_demo=enabled` when configuring the build.
+- **Running Tests**: Add `-Dwith_test=enabled` when configuring the build.
 
-        TriloTofu item = trilo_xdata_tofu_create_from_string(item_name);
-        trilo_xdata_dlist_insert(shopping_list, item);
-    } // end for
+Example:
 
-    // Print the shopping list
-    print_shopping_list(shopping_list);
-
-    // Clean up memory
-    trilo_xdata_dlist_destroy(shopping_list);
-
-    return 0;
-} // end of func
+```bash
+meson setup builddir -Dwith_demo=enabled -Dwith_test=enabled
 ```
 
 ## Contributing
 
-If you're interested in contributing to this project, please consider opening pull requests or raising issues on the [GitHub repository](https://github.com/trilobite-stdlib/trilo-xdata-c) and be sure to read the docs on the owners' [website](https://trilobite.code.blog).
+If you're interested in contributing to this project, please consider opening pull requests or creating issues on the [GitHub repository](https://github.com/trilobite-stdlib/trilo-xdata-c). Be sure to read the documentation on the [project website](https://trilobite.code.blog).
 
 ## Feedback and Support
 
-If you come across any issues, have questions, or would like to provide feedback, feel free to open an issue on the [GitHub repository](https://github.com/trilobite-stdlib/trilo-xdata-c/issues).
+If you encounter any issues, have questions, or would like to provide feedback, don't hesitate to open an issue on the [GitHub repository](https://github.com/trilobite-stdlib/trilo-xdata-c/issues).
 
 ## License
 
@@ -92,12 +67,8 @@ This project is licensed under the [Apache License 2.0](LICENSE).
 
 ---
 
-Thank you for choosing this project with the Meson build system. Enjoy coding and building great projects!
+Thank you for choosing this project with the Meson build system. Happy coding and building amazing projects!
 
-## contact
+## Contact
 
-* * *
-
-If you want to contact me and have a few questions
-regarding the solutions in the programming you can
-find a method on my [website](https://trilobite.code.blog/contact/).
+If you have questions or want to get in touch regarding programming solutions, you can find a way to contact me on my [website](https://trilobite.code.blog/contact/).
