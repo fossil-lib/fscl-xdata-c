@@ -1,4 +1,4 @@
-if get_option('with_tests').enabled()
+if get_option('with_test').enabled()
     test_deps = [
         dependency('trilo-xtest-c'),
         dependency('trilo-xmock-c')
