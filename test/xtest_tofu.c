@@ -51,7 +51,7 @@ XTEST_CASE(xdata_let_tofu_create_and_get_integer) {
 XTEST_CASE(xdata_let_tofu_create_and_get_double) {
     TriloTofu tofu = trilo_xdata_tofu_create_from_double(3.14);
     TEST_ASSERT_EQUAL_BOOL(DOUBLE_TYPE, trilo_xdata_tofu_get_type(tofu));
-    TEST_ASSERT_EQUAL_DOUBLE(3.14, trilo_xdata_tofu_get_double(tofu));
+    TEST_ASSERT_DOUBLE_EQUAL(3.14, trilo_xdata_tofu_get_double(tofu));
 }
 
 // Test case 3: Test TriloTofu equality
