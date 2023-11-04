@@ -1,9 +1,4 @@
-#
-# under: devops:
-# author: Michael Gene Brockus (Dreamer)
-# gmail: <michaelbrockus@gmail.com>
-#
-name: CI System Tester
+name: Host System Tester
 
 on:
   pull_request:
@@ -13,16 +8,11 @@ on:
       - "**.c"
       - "**.h"
       - "**.txt"
-      - "**.yaml"
       - "**.build"
 
 permissions:
   contents: read
 
-#
-# Full-on DevOps pipline for testing on mock host systems
-# from Windwos, Max OS, and Linux systems.
-# 
 jobs:
   host_macosx:
     strategy:
@@ -42,7 +32,7 @@ jobs:
           brew install cppcheck
     - name: Setup Build Directory
       run: |
-            scan-build meson setup builddir -Dwith_tests=enabled
+            scan-build meson setup builddir -Dwith_test=enabled
     - name: Scan Compile Commands
       run: |
             cppcheck --project=builddir/compile_commands.json
@@ -52,11 +42,6 @@ jobs:
     - name: Test Project Code
       run: |
             scan-build meson test -C builddir -v
-    - uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        name: MacOSX_${{ matrix.os }}_Meson_Testlog
-        path: builddir/meson-logs/testlog.txt
 
   host_windows:
     strategy:
@@ -82,18 +67,13 @@ jobs:
           pip install meson==1.0.0 ninja==1.11.1
     - name: Setup Build Directory
       run: |
-            meson setup builddir -Dwith_tests=enabled
+            meson setup builddir -Dwith_test=enabled
     - name: Compile Source Code
       run: |
             meson compile -C builddir -v
     - name: Test Project Code
       run: |
             meson test -C builddir -v
-    - uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        name: ${{ matrix.mingw }}_Meson_Testlog
-        path: builddir/meson-logs/testlog.txt
 
   host_ubuntu:
     strategy:
@@ -113,7 +93,7 @@ jobs:
           sudo apt-get install -y cppcheck gcc
     - name: Setup Build Directory
       run: |
-            scan-build meson setup builddir -Dwith_tests=enabled
+            scan-build meson setup builddir -Dwith_test=enabled
     - name: Scan Compile Commands
       run: |
             cppcheck --project=builddir/compile_commands.json
@@ -123,8 +103,3 @@ jobs:
     - name: Test Project Code
       run: |
             scan-build meson test -C builddir -v
-    - uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        name: Ubuntu_${{ matrix.ubuntu_version }}_Meson_Testlog
-        path: builddir/meson-logs/testlog.txt

@@ -3,7 +3,8 @@
 # These files are text and should be normalized (convert crlf to lf)
 *.c               text
 *.h               text
-*.md              text
-*.yml             text
 *.txt             text
+*.yaml            text
+*.md              text
 meson.build       text
+meson_options.txt text
