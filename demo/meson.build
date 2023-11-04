@@ -5,6 +5,6 @@ if get_option('with_demos').enabled()
         'set.c'  , 'stack.c' , 'tofu.c']
 
     foreach iter : demo_srcs
-        executable('demo_' + iter, 'demo_' + iter, dependencies : [trilo_xcore_c_dep])
+        executable('demo_' + iter, 'demo_' + iter, dependencies : [trilo_xdata_c_dep])
     endforeach
 endif
