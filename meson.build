@@ -4,6 +4,6 @@ project('Trilobite XData', 'c',
     meson_version: '>=1.0.0',
     default_options: ['c_std=c11'])
 
-subdir('include')
-subdir('src')
+subdir('demo')
+subdir('code')
 subdir('test')
