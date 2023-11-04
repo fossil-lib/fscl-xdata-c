@@ -1,12 +1,12 @@
-source = files(
+code = files(
     'queue.c', 'pqueue.c', 'dqueue.c',
     'flist.c', 'dlist.c' , 'tree.c'  ,
     'set.c'  , 'stack.c' , 'tofu.c')
 
-trilo_xdata_c_lib = library('trilo-xdata-c',
-    source,
+lib = library('trilo-xdata-c',
+    code,
     include_directories: dir)
 
 trilo_xdata_c_dep = declare_dependency(
-    link_with: trilo_xdata_c_lib,
+    link_with: lib,
     include_directories: dir)

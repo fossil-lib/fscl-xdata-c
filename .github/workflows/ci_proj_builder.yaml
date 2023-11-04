@@ -1,15 +1,5 @@
-#
-# under: devops:
-# author: Michael Gene Brockus (Dreamer)
-# gmail: <michaelbrockus@gmail.com>
-#
-name: CI Meson Build Tester
+name: CI Project Builder
 
-#
-# We have is configured so that ci_runner_linux only runs
-# when source files, build scripts and this CI files is
-# changed, we should not just run CI for all changes.
-#
 on:
   push:
     paths:
@@ -29,11 +19,7 @@ on:
 permissions:
   contents: read
 
-#
-# Testing minimum and beta builds of Meson build
-# 
 jobs:
-
   meson_latest:
     runs-on: ubuntu-latest
     steps:
@@ -49,18 +35,13 @@ jobs:
           sudo apt-get install -y gcc
     - name: Setup Build Directory
       run: |
-            meson setup builddir -Dwith_tests=enabled
+            meson setup builddir -Dwith_test=enabled
     - name: Compile Source Code
       run: |
             meson compile -C builddir
     - name: Test Project Code
       run: |
             meson test -C builddir -v
-    - uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        name: Latest_Meson_Testlog
-        path: builddir/meson-logs/testlog.txt
 
   meson_minimum:
     runs-on: ubuntu-latest
@@ -77,15 +58,10 @@ jobs:
           sudo apt-get install -y gcc
     - name: Setup Build Directory
       run: |
-            meson setup builddir -Dwith_tests=enabled
+            meson setup builddir -Dwith_test=enabled
     - name: Compile Source Code
       run: |
             meson compile -C builddir
     - name: Test Project Code
       run: |
             meson test -C builddir -v
-    - uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        name: Latest_Meson_Testlog
-        path: builddir/meson-logs/testlog.txt

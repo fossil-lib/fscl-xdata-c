@@ -1,8 +1,33 @@
-/*
-   under:   trilobite stdlib
-   author:  Michael Gene Brockus (Dreamer)
-   gmail:   <michaelbrockus@gmail.com>
-   website: <https://trilobite.code.blog>
+/*  ----------------------------------------------------------------------------
+    File: xtest_pqueue.c
+
+    Description:
+    This test file contains unit tests for the various functions and utilities provided
+    by the Trilobite Stdlib. These tests ensure the correctness and reliability of the
+    library's components and demonstrate their intended usage.
+
+    Author: Michael Gene Brockus (Dreamer)
+    Email: michaelbrockus@gmail.com
+    Website: [Trilobite Coder Blog](https://trilobite.home.blog)
+
+    Project: Trilobite Stdlib
+
+    License: Apache License 2.0
+    SPDX Identifier: Apache-2.0
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+
+    Unless required by applicable law or agreed to in writing, software distributed under the License
+    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+    or implied. See the License for the specific language governing permissions and limitations
+    under the License.
+
+    Please review the full text of the Apache License 2.0 for the complete terms and conditions.
+
+    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
+    ----------------------------------------------------------------------------
 */
 #include "trilobite/xdata/pqueue.h" // lib source code
 
@@ -16,25 +41,25 @@
 // Test case 1: Test TriloPQueue creation and destruction
 XTEST_CASE(xdata_let_pqueue_create_and_destroy) {
     TriloPQueue* pqueue = trilo_xdata_pqueue_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(pqueue);
+    TEST_ASSERT_NOT_NULL_PTR(pqueue);
 
     trilo_xdata_pqueue_destroy(pqueue);
-    XASSERT_PTR_NULL(pqueue);
+    TEST_ASSERT_NULL_PTR(pqueue);
 }
 
 // Test case 2: Test TriloPQueue insertion and retrieval
 XTEST_CASE(xdata_let_pqueue_insert_and_get) {
     TriloPQueue* pqueue = trilo_xdata_pqueue_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(pqueue);
+    TEST_ASSERT_NOT_NULL_PTR(pqueue);
 
     TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
     int priority = 2;
     TofuError result = trilo_xdata_pqueue_insert(pqueue, tofu, priority);
-    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
     TriloTofu* retrieved_tofu = trilo_xdata_pqueue_getter(pqueue, tofu, priority);
-    XASSERT_PTR_NOT_NULL(retrieved_tofu);
-    XASSERT_INT_EQUAL(42, trilo_xdata_tofu_get_integer(*retrieved_tofu));
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
+    TEST_ASSERT_EQUAL_INT(42, trilo_xdata_tofu_get_integer(*retrieved_tofu));
 
     trilo_xdata_pqueue_destroy(pqueue);
 }
@@ -42,18 +67,18 @@ XTEST_CASE(xdata_let_pqueue_insert_and_get) {
 // Test case 3: Test TriloPQueue removal
 XTEST_CASE(xdata_let_pqueue_remove) {
     TriloPQueue* pqueue = trilo_xdata_pqueue_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(pqueue);
+    TEST_ASSERT_NOT_NULL_PTR(pqueue);
 
     TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
     int priority = 2;
     TofuError result = trilo_xdata_pqueue_insert(pqueue, tofu, priority);
-    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
     result = trilo_xdata_pqueue_remove(pqueue, tofu, priority);
-    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
     TriloTofu* retrieved_tofu = trilo_xdata_pqueue_getter(pqueue, tofu, priority);
-    XASSERT_PTR_NULL(retrieved_tofu);
+    TEST_ASSERT_NULL_PTR(retrieved_tofu);
 
     trilo_xdata_pqueue_destroy(pqueue);
 }
@@ -61,7 +86,7 @@ XTEST_CASE(xdata_let_pqueue_remove) {
 // Test case 4: Test TriloPQueue size
 XTEST_CASE(xdata_let_pqueue_size) {
     TriloPQueue* pqueue = trilo_xdata_pqueue_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(pqueue);
+    TEST_ASSERT_NOT_NULL_PTR(pqueue);
 
     TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
     TriloTofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
@@ -72,7 +97,7 @@ XTEST_CASE(xdata_let_pqueue_size) {
     trilo_xdata_pqueue_insert(pqueue, tofu3, 1);
 
     size_t size = trilo_xdata_pqueue_size(pqueue);
-    XASSERT_INT_EQUAL(3, size);
+    TEST_ASSERT_EQUAL_INT(3, size);
 
     trilo_xdata_pqueue_destroy(pqueue);
 }
@@ -80,16 +105,16 @@ XTEST_CASE(xdata_let_pqueue_size) {
 // Test case 5: Test TriloPQueue empty check
 XTEST_CASE(xdata_let_pqueue_empty_check) {
     TriloPQueue* pqueue = trilo_xdata_pqueue_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(pqueue);
+    TEST_ASSERT_NOT_NULL_PTR(pqueue);
 
-    XASSERT_BOOL_TRUE(trilo_xdata_pqueue_is_empty(pqueue));
-    XASSERT_BOOL_FALSE(trilo_xdata_pqueue_not_empty(pqueue));
+    TEST_ASSERT_TRUE_BOOL(trilo_xdata_pqueue_is_empty(pqueue));
+    TEST_ASSERT_FALSE_BOOL(trilo_xdata_pqueue_not_empty(pqueue));
 
     TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
     trilo_xdata_pqueue_insert(pqueue, tofu, 1);
 
-    XASSERT_BOOL_FALSE(trilo_xdata_pqueue_is_empty(pqueue));
-    XASSERT_BOOL_TRUE(trilo_xdata_pqueue_not_empty(pqueue));
+    TEST_ASSERT_FALSE_BOOL(trilo_xdata_pqueue_is_empty(pqueue));
+    TEST_ASSERT_TRUE_BOOL(trilo_xdata_pqueue_not_empty(pqueue));
 
     trilo_xdata_pqueue_destroy(pqueue);
 }
