@@ -1,8 +1,33 @@
-/*
-   under:   trilobite stdlib
-   author:  Michael Gene Brockus (Dreamer)
-   gmail:   <michaelbrockus@gmail.com>
-   website: <https://trilobite.code.blog>
+/*  ----------------------------------------------------------------------------
+    File: xtest_set.c
+
+    Description:
+    This test file contains unit tests for the various functions and utilities provided
+    by the Trilobite Stdlib. These tests ensure the correctness and reliability of the
+    library's components and demonstrate their intended usage.
+
+    Author: Michael Gene Brockus (Dreamer)
+    Email: michaelbrockus@gmail.com
+    Website: [Trilobite Coder Blog](https://trilobite.home.blog)
+
+    Project: Trilobite Stdlib
+
+    License: Apache License 2.0
+    SPDX Identifier: Apache-2.0
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+
+    Unless required by applicable law or agreed to in writing, software distributed under the License
+    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+    or implied. See the License for the specific language governing permissions and limitations
+    under the License.
+
+    Please review the full text of the Apache License 2.0 for the complete terms and conditions.
+
+    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
+    ----------------------------------------------------------------------------
 */
 #include "trilobite/xdata/set.h" // lib source code
 
@@ -16,35 +41,35 @@
 // Test case 1: Test TriloSet creation and destruction
 XTEST_CASE(xdata_let_set_create_and_destroy) {
     TriloSet* set = trilo_xdata_set_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(set);
+    TEST_ASSERT_NOT_NULL_PTR(set);
 
     trilo_xdata_set_destroy(set);
-    XASSERT_PTR_NULL(set);
+    TEST_ASSERT_NULL_PTR(set);
 }
 
 // Test case 2: Test TriloSet insertion and removal
 XTEST_CASE(xdata_let_set_insert_and_remove) {
     TriloSet* set = trilo_xdata_set_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(set);
+    TEST_ASSERT_NOT_NULL_PTR(set);
 
     TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
     TriloTofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
     TriloTofu tofu3 = trilo_xdata_tofu_create_from_integer(3);
 
     TofuError result = trilo_xdata_set_insert(set, tofu1);
-    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
     result = trilo_xdata_set_insert(set, tofu2);
-    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
     result = trilo_xdata_set_insert(set, tofu3);
-    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
     result = trilo_xdata_set_remove(set, tofu2);
-    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, result);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
     TofuError found_tofu2 = trilo_xdata_set_search(set, tofu2);
-    XASSERT_BOOL_EQUAL(TRILO_XDATA_TYPE_SUCCESS, found_tofu2);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, found_tofu2);
 
     trilo_xdata_set_destroy(set);
 }
@@ -52,7 +77,7 @@ XTEST_CASE(xdata_let_set_insert_and_remove) {
 // Test case 3: Test TriloSet size
 XTEST_CASE(xdata_let_set_size) {
     TriloSet* set = trilo_xdata_set_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(set);
+    TEST_ASSERT_NOT_NULL_PTR(set);
 
     TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
     TriloTofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
@@ -61,7 +86,7 @@ XTEST_CASE(xdata_let_set_size) {
     trilo_xdata_set_insert(set, tofu2);
 
     size_t size = trilo_xdata_set_size(set);
-    XASSERT_INT_EQUAL(2, size);
+    TEST_ASSERT_EQUAL_INT(2, size);
 
     trilo_xdata_set_destroy(set);
 }
@@ -69,16 +94,16 @@ XTEST_CASE(xdata_let_set_size) {
 // Test case 4: Test TriloSet empty check
 XTEST_CASE(xdata_let_set_empty_check) {
     TriloSet* set = trilo_xdata_set_create(INTEGER_TYPE);
-    XASSERT_PTR_NOT_NULL(set);
+    TEST_ASSERT_NOT_NULL_PTR(set);
 
-    XASSERT_BOOL_TRUE(trilo_xdata_set_is_empty(set));
-    XASSERT_BOOL_FALSE(trilo_xdata_set_not_empty(set));
+    TEST_ASSERT_TRUE_BOOL(trilo_xdata_set_is_empty(set));
+    TEST_ASSERT_FALSE_BOOL(trilo_xdata_set_not_empty(set));
 
     TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
     trilo_xdata_set_insert(set, tofu);
 
-    XASSERT_BOOL_FALSE(trilo_xdata_set_is_empty(set));
-    XASSERT_BOOL_TRUE(trilo_xdata_set_not_empty(set));
+    TEST_ASSERT_FALSE_BOOL(trilo_xdata_set_is_empty(set));
+    TEST_ASSERT_TRUE_BOOL(trilo_xdata_set_not_empty(set));
 
     trilo_xdata_set_destroy(set);
 }
