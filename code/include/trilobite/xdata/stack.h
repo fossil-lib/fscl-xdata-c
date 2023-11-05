@@ -178,7 +178,7 @@ bool trilo_xdata_stack_is_nullptr(const TriloStack* stack);
  * @param stack The TriloStack instance to get the top element from.
  * @return A copy of the top element of the stack.
  */
-TriloTofu trilo_xdata_stack_top(TriloStack* stack);
+TriloTofu* trilo_xdata_stack_top(TriloStack* stack);
 
 #ifdef __cplusplus
 }
