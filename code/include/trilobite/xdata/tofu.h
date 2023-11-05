@@ -102,6 +102,8 @@ extern "C"
 #include <stdbool.h> // Include the header for bool data type
 #include <stddef.h>
 
+enum {MAX_SIZE_TOFU_STRING = 100};
+
 // Define error constants for tofu operations
 typedef enum {
     TRILO_XDATA_TYPE_SUCCESS        = 0,
@@ -130,7 +132,7 @@ enum DataType {
 typedef union {
     int integer_type;
     double double_type;
-    char string_type[50];
+    char string_type[MAX_SIZE_TOFU_STRING];
     char char_type;
     bool boolean_type;
 } TriloTofuData;
