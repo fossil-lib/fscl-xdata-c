@@ -101,7 +101,7 @@ size_t trilo_xdata_map_size(const TriloMap* map) {
 } // end of func
 
 // Getter function to retrieve a key-value pair
-TofuError trilo_xdata_map_getter(const TriloMap* map, TriloTofu key, TriloTofu* value) {
+TofuError trilo_xdata_map_getter(TriloMap* map, TriloTofu key, TriloTofu* value) {
     if (map) {
         for (size_t i = 0; i < map->size; i++) {
             if (trilo_xdata_tofu_equal(key, map->keys[i])) {
