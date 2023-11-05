@@ -138,7 +138,7 @@ TofuError trilo_xdata_map_get(TriloMap* map, TriloTofu key, TriloTofu* value);
  * @param value The new value to set.
  * @return A TofuError value indicating the result of the update.
  */
-TofuError trilo_xdata_map_set(TriloMap* map, TriloTofu key, TriloTofu value);
+TofuError trilo_xdata_map_setter(TriloMap* map, TriloTofu key, TriloTofu value);
 
 /**
  * @brief Checks if the TriloMap is not empty.

@@ -97,7 +97,7 @@ XTEST_CASE(xdata_let_map_getter_and_setter) {
     TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_SUCCESS, insertResult);
 
     TriloTofu newValue = trilo_xdata_tofu_create_from_boolean(false);
-    TofuError setResult = trilo_xdata_map_set(map, key, newValue);
+    TofuError setResult = trilo_xdata_map_setter(map, key, newValue);
     TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_SUCCESS, setResult);
 
     TriloTofu retrievedValue;
