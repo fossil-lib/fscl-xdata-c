@@ -101,7 +101,7 @@ XTEST_CASE(xdata_let_map_getter_and_setter) {
     TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_SUCCESS, setResult);
 
     TriloTofu retrievedValue;
-    TofuError getResult = trilo_xdata_map_get(map, key, &retrievedValue);
+    TofuError getResult = trilo_xdata_map_getter(map, key, &retrievedValue);
     TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_SUCCESS, getResult);
     TEST_ASSERT_TRUE(trilo_xdata_tofu_get_boolean(retrievedValue) == false);
 

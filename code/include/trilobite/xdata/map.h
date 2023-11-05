@@ -128,7 +128,7 @@ size_t trilo_xdata_map_size(const TriloMap* map);
  * @param value A pointer to store the retrieved value.
  * @return A TofuError value indicating the result of the retrieval.
  */
-TofuError trilo_xdata_map_get(TriloMap* map, TriloTofu key, TriloTofu* value);
+TofuError trilo_xdata_map_getter(TriloMap* map, TriloTofu key, TriloTofu* value);
 
 /**
  * @brief Setter function to update a value by key in the TriloMap.
