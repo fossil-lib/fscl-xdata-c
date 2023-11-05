@@ -184,11 +184,13 @@ bool trilo_xdata_stack_is_nullptr(const TriloStack* stack) {
 } // end of func
 
 // This function returns a copy of the top element of the stack without removing it.
-TriloTofu* trilo_xdata_stack_top(TriloStack* stack) {
+TriloTofu trilo_xdata_stack_top(TriloStack* stack) {
     if (stack == NULL || stack->top == NULL) {
-        return NULL; // Return NULL if the stack is empty or invalid
+        TriloTofu empty_tofu;
+        empty_tofu.type = UNKNOWN_TYPE; // Set the data type to indicate an error
+        return empty_tofu; // Return an empty TriloTofu if the stack is empty or invalid
     } // end if
 
-    // Return a pointer to the top element's data
-    return &stack->top->data;
+    // Return the top element's data
+    return stack->top->data;
 } // end of func
