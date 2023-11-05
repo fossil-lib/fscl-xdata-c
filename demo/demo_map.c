@@ -50,13 +50,13 @@ int main() {
     if (lookupResult == TRILO_XDATA_TYPE_SUCCESS) {
         trilo_xdata_map_getter(map, key1, &result);
         printf("Name: %s\n", trilo_xdata_tofu_get_string(result));
-    }
+    } // end if
 
     lookupResult = trilo_xdata_map_search(map, key2);
     if (lookupResult == TRILO_XDATA_TYPE_SUCCESS) {
         trilo_xdata_map_getter(map, key2, &result);
         printf("Age: %d\n", trilo_xdata_tofu_get_integer(result));
-    }
+    } // end if
 
     // Remove a key-value pair
     trilo_xdata_map_remove(map, key1);
@@ -66,7 +66,7 @@ int main() {
         printf("Key 'name' exists in the map.\n");
     } else {
         printf("Key 'name' does not exist in the map.\n");
-    }
+    } // end if else
 
     // Get the number of key-value pairs in the map
     size_t mapSize = trilo_xdata_map_size(map);
