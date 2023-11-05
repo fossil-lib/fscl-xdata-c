@@ -47,8 +47,7 @@ TriloMap* trilo_xdata_map_create(enum DataType list_type) {
 void trilo_xdata_map_destroy(TriloMap* map) {
     if (map) {
         for (size_t i = 0; i < map->size; i++) {
-            trilo_xdata_tofu_destroy(map->keys[i]);
-            trilo_xdata_tofu_destroy(map->values[i]);
+            // No need to destroy the key and value
         } // end for
         free(map);
     } // end if
@@ -70,8 +69,7 @@ TofuError trilo_xdata_map_remove(TriloMap* map, TriloTofu key) {
     if (map) {
         for (size_t i = 0; i < map->size; i++) {
             if (trilo_xdata_tofu_equal(key, map->keys[i])) {
-                trilo_xdata_tofu_destroy(map->keys[i]);
-                trilo_xdata_tofu_destroy(map->values[i]);
+                // No need to destroy the key and value
                 // Shift elements to remove the key-value pair
                 for (size_t j = i; j < map->size - 1; j++) {
                     map->keys[j] = map->keys[j + 1];
@@ -120,7 +118,7 @@ TofuError trilo_xdata_map_setter(TriloMap* map, TriloTofu key, TriloTofu value) 
     if (map) {
         for (size_t i = 0; i < map->size; i++) {
             if (trilo_xdata_tofu_equal(key, map->keys[i])) {
-                trilo_xdata_tofu_destroy(map->values[i]);
+                // No need to destroy the old value
                 map->values[i] = value;
                 return TRILO_XDATA_TYPE_SUCCESS;
             } // end if
