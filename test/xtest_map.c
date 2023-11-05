@@ -46,6 +46,7 @@ XTEST_CASE(xdata_let_map_create_and_destroy) {
     trilo_xdata_map_destroy(map);
 }
 
+// Test case 2: Test TriloMap insert and search
 XTEST_CASE(xdata_let_map_insert_and_search) {
     TriloMap* map = trilo_xdata_map_create(STRING_TYPE);
     TEST_ASSERT_NOT_NULL(map);
@@ -63,6 +64,7 @@ XTEST_CASE(xdata_let_map_insert_and_search) {
     trilo_xdata_map_destroy(map);
 }
 
+// Test case 3: Test TriloMap remove operation
 XTEST_CASE(xdata_let_map_remove) {
     TriloMap* map = trilo_xdata_map_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL(map);
@@ -83,6 +85,7 @@ XTEST_CASE(xdata_let_map_remove) {
     trilo_xdata_map_destroy(map);
 }
 
+// Test case 4: Test TriloMap setter and getter operations
 XTEST_CASE(xdata_let_map_getter_and_setter) {
     TriloMap* map = trilo_xdata_map_create(BOOLEAN_TYPE);
     TEST_ASSERT_NOT_NULL(map);
@@ -106,6 +109,7 @@ XTEST_CASE(xdata_let_map_getter_and_setter) {
     trilo_xdata_map_destroy(map);
 }
 
+// Test case 5: Test TriloMap size operation
 XTEST_CASE(xdata_let_map_size) {
     TriloMap* map = trilo_xdata_map_create(DOUBLE_TYPE);
     TEST_ASSERT_NOT_NULL(map);
@@ -128,6 +132,7 @@ XTEST_CASE(xdata_let_map_size) {
     trilo_xdata_map_destroy(map);
 }
 
+// Test case 6: Test TriloMap contains operation
 XTEST_CASE(xdata_let_map_contains) {
     TriloMap* map = trilo_xdata_map_create(CHAR_TYPE);
     TEST_ASSERT_NOT_NULL(map);
