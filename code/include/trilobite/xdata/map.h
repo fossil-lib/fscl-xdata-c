@@ -67,14 +67,14 @@ typedef struct {
  * @param list_type The data type for the TriloMap (e.g., INTEGER_TYPE, DOUBLE_TYPE).
  * @return A pointer to the newly created TriloMap instance.
  */
-TriloMap* trilo_map_create(enum DataType list_type);
+TriloMap* trilo_xdata_map_create(enum DataType list_type);
 
 /**
  * @brief Destroys the TriloMap instance, freeing all associated memory.
  *
  * @param map The TriloMap instance to be destroyed.
  */
-void trilo_map_destroy(TriloMap* map);
+void trilo_xdata_map_destroy(TriloMap* map);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -88,7 +88,7 @@ void trilo_map_destroy(TriloMap* map);
  * @param value The value in the key-value pair.
  * @return A TofuError value indicating the result of the insertion.
  */
-TofuError trilo_map_insert(TriloMap* map, TriloTofu key, TriloTofu value);
+TofuError trilo_xdata_map_insert(TriloMap* map, TriloTofu key, TriloTofu value);
 
 /**
  * @brief Removes a key-value pair from the TriloMap by key.
@@ -97,7 +97,7 @@ TofuError trilo_map_insert(TriloMap* map, TriloTofu key, TriloTofu value);
  * @param key The key of the key-value pair to be removed.
  * @return A TofuError value indicating the result of the removal.
  */
-TofuError trilo_map_remove(TriloMap* map, TriloTofu key);
+TofuError trilo_xdata_map_remove(TriloMap* map, TriloTofu key);
 
 /**
  * @brief Searches for a key in the TriloMap.
@@ -106,7 +106,7 @@ TofuError trilo_map_remove(TriloMap* map, TriloTofu key);
  * @param key The key to search for.
  * @return A TofuError value indicating the result of the search.
  */
-TofuError trilo_map_search(const TriloMap* map, TriloTofu key);
+TofuError trilo_xdata_map_search(const TriloMap* map, TriloTofu key);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -118,7 +118,7 @@ TofuError trilo_map_search(const TriloMap* map, TriloTofu key);
  * @param map The TriloMap for which the size will be determined.
  * @return The size of the TriloMap.
  */
-size_t trilo_map_size(const TriloMap* map);
+size_t trilo_xdata_map_size(const TriloMap* map);
 
 /**
  * @brief Getter function to retrieve a value by key from the TriloMap.
@@ -128,7 +128,7 @@ size_t trilo_map_size(const TriloMap* map);
  * @param value A pointer to store the retrieved value.
  * @return A TofuError value indicating the result of the retrieval.
  */
-TofuError trilo_map_get(TriloMap* map, TriloTofu key, TriloTofu* value);
+TofuError trilo_xdata_map_get(TriloMap* map, TriloTofu key, TriloTofu* value);
 
 /**
  * @brief Setter function to update a value by key in the TriloMap.
@@ -138,7 +138,7 @@ TofuError trilo_map_get(TriloMap* map, TriloTofu key, TriloTofu* value);
  * @param value The new value to set.
  * @return A TofuError value indicating the result of the update.
  */
-TofuError trilo_map_set(TriloMap* map, TriloTofu key, TriloTofu value);
+TofuError trilo_xdata_map_set(TriloMap* map, TriloTofu key, TriloTofu value);
 
 /**
  * @brief Checks if the TriloMap is not empty.
@@ -146,7 +146,7 @@ TofuError trilo_map_set(TriloMap* map, TriloTofu key, TriloTofu value);
  * @param map The TriloMap to check.
  * @return true if the TriloMap is not empty, false otherwise.
  */
-bool trilo_map_not_empty(const TriloMap* map);
+bool trilo_xdata_map_not_empty(const TriloMap* map);
 
 /**
  * @brief Checks if the TriloMap is not a null pointer.
@@ -154,7 +154,7 @@ bool trilo_map_not_empty(const TriloMap* map);
  * @param map The TriloMap to check.
  * @return true if the TriloMap is not a null pointer, false otherwise.
  */
-bool trilo_map_not_nullptr(const TriloMap* map);
+bool trilo_xdata_map_not_nullptr(const TriloMap* map);
 
 /**
  * @brief Checks if the TriloMap is empty.
@@ -162,7 +162,7 @@ bool trilo_map_not_nullptr(const TriloMap* map);
  * @param map The TriloMap to check.
  * @return true if the TriloMap is empty, false otherwise.
  */
-bool trilo_map_is_empty(const TriloMap* map);
+bool trilo_xdata_map_is_empty(const TriloMap* map);
 
 /**
  * @brief Checks if the TriloMap is a null pointer.
@@ -170,7 +170,7 @@ bool trilo_map_is_empty(const TriloMap* map);
  * @param map The TriloMap to check.
  * @return true if the TriloMap is a null pointer, false otherwise.
  */
-bool trilo_map_is_nullptr(const TriloMap* map);
+bool trilo_xdata_map_is_nullptr(const TriloMap* map);
 
 /**
  * @brief Checks if a key exists in the TriloMap.
@@ -179,7 +179,7 @@ bool trilo_map_is_nullptr(const TriloMap* map);
  * @param key The key to search for.
  * @return true if the key exists in the TriloMap, false otherwise.
  */
-bool trilo_map_contains(const TriloMap* map, TriloTofu key);
+bool trilo_xdata_map_contains(const TriloMap* map, TriloTofu key);
 
 #ifdef __cplusplus
 }
