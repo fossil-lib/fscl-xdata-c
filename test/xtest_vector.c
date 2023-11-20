@@ -29,7 +29,7 @@
     (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
     ----------------------------------------------------------------------------
 */
-#include "trilobite/xdata/stack.h" // lib source code
+#include "trilobite/xdata/vector.h" // lib source code
 
 #include <trilobite/xtest.h>   // basic test tools
 #include <trilobite/xassert.h> // extra asserts
@@ -57,7 +57,7 @@ XTEST_CASE(xdata_let_vector_push_back_and_peek) {
     TEST_ASSERT_FALSE(trilo_xdata_vector_is_empty(&vector));
     TEST_ASSERT_EQUAL(1, trilo_xdata_vector_size(&vector));
 
-    TriloTofu element = trilo_xdata_vector_get(&vector, 0);
+    TriloTofu element = trilo_xdata_vector_getter(&vector, 0);
     TEST_ASSERT_DOUBLE_EQUAL(3.14, trilo_xdata_tofu_get_double(element));
 
     trilo_xdata_vector_destroy(&vector);
@@ -86,8 +86,8 @@ XTEST_CASE(xdata_let_vector_reverse) {
 
     trilo_xdata_vector_reverse(&vector);
 
-    TEST_ASSERT_EQUAL(false, trilo_xdata_tofu_get_boolean(trilo_xdata_vector_get(&vector, 0)));
-    TEST_ASSERT_EQUAL(true, trilo_xdata_tofu_get_boolean(trilo_xdata_vector_get(&vector, 1)));
+    TEST_ASSERT_EQUAL(false, trilo_xdata_tofu_get_boolean(trilo_xdata_vector_getter(&vector, 0)));
+    TEST_ASSERT_EQUAL(true, trilo_xdata_tofu_get_boolean(trilo_xdata_vector_getter(&vector, 1)));
 
     trilo_xdata_vector_destroy(&vector);
 }
