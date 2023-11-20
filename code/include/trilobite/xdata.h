@@ -94,6 +94,15 @@ extern "C"
 // Stacks follow the Last-In-First-Out (LIFO) principle and are used for managing data with a strict order of insertion and removal.
 #include "xdata/stack.h"
 
+/**
+ * @file xdata/vector.c
+ * @brief Unit tests for the TriloVector functions.
+ *
+ * These tests use the Unity Test Framework. Include the corresponding header
+ * file for the TriloVector functions, which is assumed to be "xdata/vector.h".
+ */
+#include "xdata/vector.h"
+
 const char * const TRILOBITE_XDATA_STD = "Redlichiids";
 
 #ifdef __cplusplus

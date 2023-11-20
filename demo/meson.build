@@ -3,7 +3,7 @@ if get_option('with_demo').enabled()
         'queue', 'pqueue', 'dqueue',
         'flist', 'dlist' , 'tree'  ,
         'set'  , 'stack' , 'map',
-        'tofu']
+        'vector', 'tofu']
 
     foreach iter : demo_srcs
         executable('demo_' + iter, 'demo_' + iter + '.c', dependencies : [trilo_xdata_c_dep])
