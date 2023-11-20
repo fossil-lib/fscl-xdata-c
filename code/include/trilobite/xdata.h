@@ -96,10 +96,10 @@ extern "C"
 
 /**
  * @file xdata/vector.c
- * @brief Unit tests for the TriloXDataVector functions.
+ * @brief Unit tests for the TriloVector functions.
  *
  * These tests use the Unity Test Framework. Include the corresponding header
- * file for the TriloXDataVector functions, which is assumed to be "xdata/vector.h".
+ * file for the TriloVector functions, which is assumed to be "xdata/vector.h".
  */
 #include "xdata/vector.h"
 
