@@ -94,7 +94,7 @@ extern "C"
 // Stacks follow the Last-In-First-Out (LIFO) principle and are used for managing data with a strict order of insertion and removal.
 #include "xdata/stack.h"
 
-const char * const TRILOBITE_XDATA_STD = "Redlichiids";
+const char * const TRILOBITE_XDATA_STD = "Ptychopariida";
 
 #ifdef __cplusplus
 }
