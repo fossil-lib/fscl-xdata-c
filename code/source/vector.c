@@ -106,7 +106,7 @@ bool trilo_xdata_vector_not_empty(const TriloVector* vector) {
     return vector->size != 0;
 } // end of func
 
-void trilo_xdata_vector_set(TriloVector* vector, size_t index, TriloTofu element) {
+void trilo_xdata_vector_setter(TriloVector* vector, size_t index, TriloTofu element) {
     if (index < vector->size) {
         if (element.type == vector->expected_type || vector->expected_type == UNKNOWN_TYPE) {
             vector->data[index] = element;
@@ -122,7 +122,7 @@ void trilo_xdata_vector_set(TriloVector* vector, size_t index, TriloTofu element
     }
 } // end of func
 
-TriloTofu trilo_xdata_vector_get(const TriloVector* vector, size_t index) {
+TriloTofu trilo_xdata_vector_getter(const TriloVector* vector, size_t index) {
     if (index < vector->size) {
         return vector->data[index];
     } else {

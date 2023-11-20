@@ -138,7 +138,7 @@ bool trilo_xdata_vector_not_empty(const TriloVector* vector);
  * @param index The index at which to set the element.
  * @param element The TriloTofu element to set.
  */
-void trilo_xdata_vector_set(TriloVector* vector, size_t index, TriloTofu element);
+void trilo_xdata_vector_setter(TriloVector* vector, size_t index, TriloTofu element);
 
 /**
  * @brief Gets the element at a specific index in a TriloVector.
@@ -147,7 +147,7 @@ void trilo_xdata_vector_set(TriloVector* vector, size_t index, TriloTofu element
  * @param index The index of the element to retrieve.
  * @return The TriloTofu element at the specified index.
  */
-TriloTofu trilo_xdata_vector_get(const TriloVector* vector, size_t index);
+TriloTofu trilo_xdata_vector_getter(const TriloVector* vector, size_t index);
 
 /**
  * @brief Gets the size of a TriloVector.
