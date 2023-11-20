@@ -80,6 +80,14 @@ void trilo_xdata_vector_destroy(TriloVector* vector);
 // =======================
 
 /**
+ * @brief Adds a TriloTofu element to the end of a TriloXDataVector.
+ *
+ * @param vector The TriloXDataVector to which the element will be added.
+ * @param element The TriloTofu element to add to the vector.
+ */
+void trilo_xdata_vector_push_back(TriloVector* vector, TriloTofu element);
+
+/**
  * @brief Searches for a target TriloTofu instance in a TriloVector.
  *
  * @param vector The TriloVector to search in.

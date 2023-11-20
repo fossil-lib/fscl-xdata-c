@@ -61,6 +61,28 @@ void trilo_xdata_vector_destroy(TriloVector* vector) {
 // ALGORITHM FUNCTIONS
 // =======================
 
+void trilo_xdata_vector_push_back(TriloVector* vector, TriloTofu element) {
+    if (vector->size == vector->capacity) {
+        // Resize the vector if it reaches its capacity
+        vector->capacity *= 2;
+        vector->data = (TriloTofu*)realloc(vector->data, vector->capacity * sizeof(TriloTofu));
+        if (vector->data == NULL) {
+            // Handle memory allocation failure
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    if (element.type == vector->expected_type || vector->expected_type == UNKNOWN_TYPE) {
+        vector->data[vector->size] = element;
+        vector->size++;
+    } else {
+        // Handle data type mismatch
+        fprintf(stderr, "Data type mismatch. Expected: %d, Actual: %d\n", vector->expected_type, element.type);
+        exit(EXIT_FAILURE);
+    }
+} // end of func
+
+
 int trilo_xdata_vector_search(const TriloVector* vector, TriloTofu target) {
     for (size_t i = 0; i < vector->size; ++i) {
         if (trilo_xdata_tofu_equal(vector->data[i], target)) {
