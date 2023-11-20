@@ -19,6 +19,7 @@ extern void xdata_test_dqueue_group(XUnitRunner *runner);
 extern void xdata_test_pqueue_group(XUnitRunner *runner);
 extern void xdata_test_queue_group (XUnitRunner *runner);
 extern void xdata_test_stack_group (XUnitRunner *runner);
+extern void xdata_test_vector_group(XUnitRunner *runner);
 
 //
 // XUNIT-TEST RUNNER
@@ -36,6 +37,7 @@ int main(int argc, char **argv) {
     xdata_test_pqueue_group(&runner);
     xdata_test_queue_group (&runner);
     xdata_test_stack_group (&runner);
+    xdata_test_vector_group(&runner);
 
     return XTEST_RUNNER_END(runner);
 } // end of function main
