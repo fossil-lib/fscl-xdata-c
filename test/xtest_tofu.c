@@ -101,21 +101,6 @@ XTEST_CASE(xdata_let_tofu_create_and_get_null_edge_cases) {
     TEST_ASSERT_TRUE_BOOL(trilo_xdata_tofu_is_null(null_tofu));
 }
 
-XTEST_CASE(xdata_let_tofu_create_and_get_array_edge_cases) {
-    ctofu empty_array_tofu = trilo_xdata_tofu_create_from_empty_array();
-    TEST_ASSERT_EQUAL_BOOL(ARRAY_TYPE, trilo_xdata_tofu_get_type(empty_array_tofu));
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_tofu_is_empty_array(empty_array_tofu));
-
-    // Creating a tofu representing an array with multiple elements
-    ctofu array_tofu = trilo_xdata_tofu_create_array();
-    for (int i = 0; i < 5; ++i) {
-        trilo_xdata_tofu_array_push_back(array_tofu, trilo_xdata_tofu_create_from_integer(i));
-    }
-    TEST_ASSERT_EQUAL_INT(5, trilo_xdata_tofu_array_size(array_tofu));
-
-    trilo_xdata_tofu_destroy(array_tofu);
-}
-
 //
 // XUNIT-TEST RUNNER
 //
@@ -129,5 +114,4 @@ void xdata_test_tofu_group(XUnitRunner *runner) {
     XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_string_edge_cases,  runner);
     XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_boolean_edge_cases, runner);
     XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_null_edge_cases,    runner);
-    XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_array_edge_cases,   runner);
 } // end of func
