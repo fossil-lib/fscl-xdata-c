@@ -111,7 +111,8 @@ typedef enum {
     TRILO_XDATA_TYPE_WAS_BAD_RANGE  = -2,
     TRILO_XDATA_TYPE_WAS_NULLPTR    = -3,
     TRILO_XDATA_TYPE_WAS_BAD_MALLOC = -4,
-    TRILO_XDATA_TYPE_WAS_UNKNOWN    = -5
+    TRILO_XDATA_TYPE_WAS_UNKNOWN    = -5,
+    TRILO_XDATA_TYPE_NOT_FOUND      = -6
 } ctofu_error;
 
 //
@@ -125,6 +126,7 @@ enum ctofu_type {
     BOOLEAN_TYPE,
     ARRAY_TYPE,
     NULLPTR_TYPE,
+    INVALID_TYPE,
     UNKNOWN_TYPE
 };
 
