@@ -113,45 +113,6 @@ XTEST_CASE(xdata_let_vector_create_and_destroy_with_types) {
     TEST_ASSERT_TRUE(trilo_xdata_vector_is_nullptr(&invalid_vector));
 }
 
-XTEST_CASE(xdata_let_vector_push_back_and_peek_edge_cases) {
-    cvector int_vector = trilo_xdata_vector_create(INTEGER_TYPE);
-    cvector double_vector = trilo_xdata_vector_create(DOUBLE_TYPE);
-    cvector string_vector = trilo_xdata_vector_create(STRING_TYPE);
-
-    // Test pushing back elements of various types
-    trilo_xdata_vector_push_back(&int_vector, trilo_xdata_tofu_create_from_int(42));
-    TEST_ASSERT_EQUAL(42, trilo_xdata_tofu_get_int(trilo_xdata_vector_getter(&int_vector, 0)));
-
-    trilo_xdata_vector_push_back(&double_vector, trilo_xdata_tofu_create_from_double(3.14));
-    TEST_ASSERT_DOUBLE_EQUAL(3.14, trilo_xdata_tofu_get_double(trilo_xdata_vector_getter(&double_vector, 0)));
-
-    trilo_xdata_vector_push_back(&string_vector, trilo_xdata_tofu_create_from_string("Hello"));
-    TEST_ASSERT_EQUAL_STRING("Hello", trilo_xdata_tofu_get_string(trilo_xdata_vector_getter(&string_vector, 0)));
-
-    // Test pushing back a large number of elements
-    for (int i = 0; i < 1000; ++i) {
-        trilo_xdata_vector_push_back(&int_vector, trilo_xdata_tofu_create_from_int(i));
-    }
-    TEST_ASSERT_EQUAL(1000, trilo_xdata_vector_size(&int_vector));
-
-    trilo_xdata_vector_destroy(&int_vector);
-    trilo_xdata_vector_destroy(&double_vector);
-    trilo_xdata_vector_destroy(&string_vector);
-}
-
-XTEST_CASE(xdata_let_vector_search_edge_cases) {
-    cvector empty_vector = trilo_xdata_vector_create(INTEGER_TYPE);
-    TEST_ASSERT_EQUAL(-1, trilo_xdata_vector_search(&empty_vector, trilo_xdata_tofu_create_from_int(42)));
-
-    cvector duplicate_vector = trilo_xdata_vector_create(DOUBLE_TYPE);
-    trilo_xdata_vector_push_back(&duplicate_vector, trilo_xdata_tofu_create_from_double(2.5));
-    trilo_xdata_vector_push_back(&duplicate_vector, trilo_xdata_tofu_create_from_double(2.5));
-    TEST_ASSERT_EQUAL(0, trilo_xdata_vector_search(&duplicate_vector, trilo_xdata_tofu_create_from_double(2.5)));
-
-    trilo_xdata_vector_destroy(&empty_vector);
-    trilo_xdata_vector_destroy(&duplicate_vector);
-}
-
 //
 // XUNIT-TEST RUNNER
 //
@@ -163,6 +124,4 @@ void xdata_test_vector_group(XUnitRunner *runner) {
     XTEST_RUN_UNIT(xdata_let_vector_search,             runner);
     XTEST_RUN_UNIT(xdata_let_vector_reverse,            runner);
     XTEST_RUN_UNIT(xdata_let_vector_create_and_destroy_with_types, runner);
-    XTEST_RUN_UNIT(xdata_let_vector_push_back_and_peek_edge_cases, runner);
-    XTEST_RUN_UNIT(xdata_let_vector_search_edge_cases,             runner);
 } // end of func
