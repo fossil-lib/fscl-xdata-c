@@ -138,7 +138,7 @@ typedef union {
     char char_type;
     bool boolean_type;
     struct {
-        ctofu* elements;
+        struct ctofu* elements;
         size_t size;
     } array_type;
 } ctofu_data;
