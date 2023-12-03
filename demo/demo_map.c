@@ -33,20 +33,20 @@
 #include <stdio.h>
 
 int main() {
-    TriloMap* map = trilo_xdata_map_create(STRING_TYPE);
+    cmap* map = trilo_xdata_map_create(STRING_TYPE);
 
     // Insert key-value pairs into the map
-    TriloTofu key1 = trilo_xdata_tofu_create_from_string("name");
-    TriloTofu value1 = trilo_xdata_tofu_create_from_string("John");
+    ctofu key1 = trilo_xdata_tofu_create_from_string("name");
+    ctofu value1 = trilo_xdata_tofu_create_from_string("John");
     trilo_xdata_map_insert(map, key1, value1);
 
-    TriloTofu key2 = trilo_xdata_tofu_create_from_string("age");
-    TriloTofu value2 = trilo_xdata_tofu_create_from_integer(30);
+    ctofu key2 = trilo_xdata_tofu_create_from_string("age");
+    ctofu value2 = trilo_xdata_tofu_create_from_integer(30);
     trilo_xdata_map_insert(map, key2, value2);
 
     // Lookup values by key
-    TriloTofu result;
-    TofuError lookupResult = trilo_xdata_map_search(map, key1);
+    ctofu result;
+    ctofu_error lookupResult = trilo_xdata_map_search(map, key1);
     if (lookupResult == TRILO_XDATA_TYPE_SUCCESS) {
         trilo_xdata_map_getter(map, key1, &result);
         printf("Name: %s\n", trilo_xdata_tofu_get_string(result));

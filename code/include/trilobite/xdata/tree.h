@@ -48,138 +48,138 @@ extern "C"
 #include "trilobite/xdata/tofu.h"
 
 // Node structure for the binary search tree
-typedef struct TriloTreeNode {
-    TriloTofu data;
-    struct TriloTreeNode* left;
-    struct TriloTreeNode* right;
-} TriloTreeNode;
+typedef struct ctree_node {
+    ctofu data;
+    struct ctree_node* left;
+    struct ctree_node* right;
+} ctree_node;
 
 // Tree structure
-typedef struct TriloTree {
-    TriloTreeNode* root;
-    enum DataType tree_type;  // Type of the tree
-} TriloTree;
+typedef struct ctree {
+    ctree_node* root;
+    enum ctofu_type tree_type;  // Type of the tree
+} ctree;
 
 // =======================
 // CREATE and DELETE
 // =======================
 
 /**
- * @brief Creates a new TriloTree instance with the specified list type.
+ * @brief Creates a new ctree instance with the specified list type.
  *
- * @param list_type The data type for the TriloTree (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created TriloTree instance.
+ * @param list_type The data type for the ctree (e.g., INTEGER_TYPE, DOUBLE_TYPE).
+ * @return A pointer to the newly created ctree instance.
  */
-TriloTree* trilo_xdata_tree_create(enum DataType list_type);
+ctree* trilo_xdata_tree_create(enum ctofu_type list_type);
 
 /**
- * @brief Destroys the TriloTree instance, freeing all associated memory.
+ * @brief Destroys the ctree instance, freeing all associated memory.
  *
- * @param tree The TriloTree instance to be destroyed.
+ * @param tree The ctree instance to be destroyed.
  */
-void trilo_xdata_tree_destroy(TriloTree* tree);
+void trilo_xdata_tree_destroy(ctree* tree);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
 /**
- * @brief Inserts a TriloTofu data element into the TriloTree.
+ * @brief Inserts a ctofu data element into the ctree.
  *
- * @param tree The TriloTree where the data will be inserted.
- * @param data The TriloTofu data element to be inserted.
- * @return A TofuError value indicating the result of the insertion.
+ * @param tree The ctree where the data will be inserted.
+ * @param data The ctofu data element to be inserted.
+ * @return A ctofu_error value indicating the result of the insertion.
  */
-TofuError trilo_xdata_tree_insert(TriloTree* tree, TriloTofu data);
+ctofu_error trilo_xdata_tree_insert(ctree* tree, ctofu data);
 
 /**
- * @brief Removes a TriloTofu data element from the TriloTree.
+ * @brief Removes a ctofu data element from the ctree.
  *
- * @param tree The TriloTree from which the data will be removed.
- * @param data The TriloTofu data element to be removed.
- * @return A TofuError value indicating the result of the removal.
+ * @param tree The ctree from which the data will be removed.
+ * @param data The ctofu data element to be removed.
+ * @return A ctofu_error value indicating the result of the removal.
  */
-TofuError trilo_xdata_tree_remove(TriloTree* tree, TriloTofu data);
+ctofu_error trilo_xdata_tree_remove(ctree* tree, ctofu data);
 
 /**
- * @brief Searches for a TriloTofu data element in the TriloTree.
+ * @brief Searches for a ctofu data element in the ctree.
  *
- * @param tree The TriloTree to search within.
- * @param data The TriloTofu data element to search for.
- * @return A TofuError value indicating the result of the search.
+ * @param tree The ctree to search within.
+ * @param data The ctofu data element to search for.
+ * @return A ctofu_error value indicating the result of the search.
  */
-TofuError trilo_xdata_tree_search(const TriloTree* tree, TriloTofu data);
+ctofu_error trilo_xdata_tree_search(const ctree* tree, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
 /**
- * @brief Gets the size of the TriloTree.
+ * @brief Gets the size of the ctree.
  *
- * @param tree The TriloTree for which the size will be determined.
- * @return The size of the TriloTree.
+ * @param tree The ctree for which the size will be determined.
+ * @return The size of the ctree.
  */
-size_t trilo_xdata_tree_size(const TriloTree* tree);
+size_t trilo_xdata_tree_size(const ctree* tree);
 
 /**
- * @brief Getter function to retrieve a TriloTofu data element from the TriloTree.
+ * @brief Getter function to retrieve a ctofu data element from the ctree.
  *
- * @param tree The TriloTree from which the data will be retrieved.
- * @param data The TriloTofu data element to retrieve.
- * @return A pointer to the TriloTofu data element in the TriloTree (or NULL if not found).
+ * @param tree The ctree from which the data will be retrieved.
+ * @param data The ctofu data element to retrieve.
+ * @return A pointer to the ctofu data element in the ctree (or NULL if not found).
  */
-TriloTofu* trilo_xdata_tree_getter(const TriloTree* tree, TriloTofu data);
+ctofu* trilo_xdata_tree_getter(const ctree* tree, ctofu data);
 
 /**
- * @brief Setter function to update a TriloTofu data element in the TriloTree.
+ * @brief Setter function to update a ctofu data element in the ctree.
  *
- * @param tree The TriloTree in which the data will be updated.
- * @param data The TriloTofu data element to update.
- * @return A TofuError value indicating the result of the update.
+ * @param tree The ctree in which the data will be updated.
+ * @param data The ctofu data element to update.
+ * @return A ctofu_error value indicating the result of the update.
  */
-TofuError trilo_xdata_tree_setter(TriloTree* tree, TriloTofu data);
+ctofu_error trilo_xdata_tree_setter(ctree* tree, ctofu data);
 
 /**
- * @brief Checks if the TriloTree is not empty.
+ * @brief Checks if the ctree is not empty.
  *
- * @param tree The TriloTree to check.
- * @return true if the TriloTree is not empty, false otherwise.
+ * @param tree The ctree to check.
+ * @return true if the ctree is not empty, false otherwise.
  */
-bool trilo_xdata_tree_not_empty(const TriloTree* tree);
+bool trilo_xdata_tree_not_empty(const ctree* tree);
 
 /**
- * @brief Checks if the TriloTree is not a null pointer.
+ * @brief Checks if the ctree is not a null pointer.
  *
- * @param tree The TriloTree to check.
- * @return true if the TriloTree is not a null pointer, false otherwise.
+ * @param tree The ctree to check.
+ * @return true if the ctree is not a null pointer, false otherwise.
  */
-bool trilo_xdata_tree_not_nullptr(const TriloTree* tree);
+bool trilo_xdata_tree_not_nullptr(const ctree* tree);
 
 /**
- * @brief Checks if the TriloTree is empty.
+ * @brief Checks if the ctree is empty.
  *
- * @param tree The TriloTree to check.
- * @return true if the TriloTree is empty, false otherwise.
+ * @param tree The ctree to check.
+ * @return true if the ctree is empty, false otherwise.
  */
-bool trilo_xdata_tree_is_empty(const TriloTree* tree);
+bool trilo_xdata_tree_is_empty(const ctree* tree);
 
 /**
- * @brief Checks if the TriloTree is a null pointer.
+ * @brief Checks if the ctree is a null pointer.
  *
- * @param tree The TriloTree to check.
- * @return true if the TriloTree is a null pointer, false otherwise.
+ * @param tree The ctree to check.
+ * @return true if the ctree is a null pointer, false otherwise.
  */
-bool trilo_xdata_tree_is_nullptr(const TriloTree* tree);
+bool trilo_xdata_tree_is_nullptr(const ctree* tree);
 
 /**
- * @brief Checks if a TriloTofu data element is present in the TriloTree.
+ * @brief Checks if a ctofu data element is present in the ctree.
  *
- * @param tree The TriloTree to check.
- * @param data The TriloTofu data element to search for.
+ * @param tree The ctree to check.
+ * @param data The ctofu data element to search for.
  * @return true if the data element is present, false otherwise.
  */
-bool trilo_xdata_tree_contains(const TriloTree* tree, TriloTofu data);
+bool trilo_xdata_tree_contains(const ctree* tree, ctofu data);
 
 #ifdef __cplusplus
 }

@@ -38,9 +38,9 @@
 // CREATE and DELETE
 // =======================
 
-// Function to create a new TriloDQueue
-TriloDQueue* trilo_xdata_dqueue_create(enum DataType list_type) {
-    TriloDQueue* dqueue = (TriloDQueue*)malloc(sizeof(TriloDQueue));
+// Function to create a new cdqueue
+cdqueue* trilo_xdata_dqueue_create(enum ctofu_type list_type) {
+    cdqueue* dqueue = (cdqueue*)malloc(sizeof(cdqueue));
     if (dqueue == NULL) {
         return NULL; // Memory allocation failed
     } // end if
@@ -52,14 +52,14 @@ TriloDQueue* trilo_xdata_dqueue_create(enum DataType list_type) {
     return dqueue;
 } // end of func
 
-// Function to destroy the TriloDQueue
-void trilo_xdata_dqueue_destroy(TriloDQueue* dqueue) {
+// Function to destroy the cdqueue
+void trilo_xdata_dqueue_destroy(cdqueue* dqueue) {
     if (dqueue == NULL) {
         return; // Nothing to destroy
     } // end if
 
     while (dqueue->front != NULL) {
-        TriloDQueueNode* temp = dqueue->front;
+        cdqueue_node* temp = dqueue->front;
         dqueue->front = dqueue->front->next;
         free(temp);
     } // end while
@@ -71,8 +71,8 @@ void trilo_xdata_dqueue_destroy(TriloDQueue* dqueue) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-// Function to insert a TriloTofu data into the list
-TofuError trilo_xdata_dqueue_insert(TriloDQueue* dqueue, TriloTofu data) {
+// Function to insert a ctofu data into the list
+ctofu_error trilo_xdata_dqueue_insert(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -81,7 +81,7 @@ TofuError trilo_xdata_dqueue_insert(TriloDQueue* dqueue, TriloTofu data) {
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloDQueueNode* newNode = (TriloDQueueNode*)malloc(sizeof(TriloDQueueNode));
+    cdqueue_node* newNode = (cdqueue_node*)malloc(sizeof(cdqueue_node));
     if (newNode == NULL) {
         return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
     } // end if
@@ -102,8 +102,8 @@ TofuError trilo_xdata_dqueue_insert(TriloDQueue* dqueue, TriloTofu data) {
     return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
-// Function to remove a TriloTofu data from the list
-TofuError trilo_xdata_dqueue_remove(TriloDQueue* dqueue, TriloTofu data) {
+// Function to remove a ctofu data from the list
+ctofu_error trilo_xdata_dqueue_remove(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -116,8 +116,8 @@ TofuError trilo_xdata_dqueue_remove(TriloDQueue* dqueue, TriloTofu data) {
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloDQueueNode* current = dqueue->front;
-    TriloDQueueNode* prev = NULL;
+    cdqueue_node* current = dqueue->front;
+    cdqueue_node* prev = NULL;
 
     while (current != NULL) {
         if (trilo_xdata_tofu_compare(current->data, data) == TRILO_XDATA_TYPE_SUCCESS) {
@@ -145,8 +145,8 @@ TofuError trilo_xdata_dqueue_remove(TriloDQueue* dqueue, TriloTofu data) {
     return TRILO_XDATA_TYPE_WAS_UNKNOWN;
 } // end of func
 
-// Function to search for a TriloTofu data in the list
-TofuError trilo_xdata_dqueue_search(const TriloDQueue* dqueue, TriloTofu data) {
+// Function to search for a ctofu data in the list
+ctofu_error trilo_xdata_dqueue_search(const cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -155,7 +155,7 @@ TofuError trilo_xdata_dqueue_search(const TriloDQueue* dqueue, TriloTofu data) {
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloDQueueNode* current = dqueue->front;
+    cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
         if (trilo_xdata_tofu_compare(current->data, data) == TRILO_XDATA_TYPE_SUCCESS) {
@@ -172,14 +172,14 @@ TofuError trilo_xdata_dqueue_search(const TriloDQueue* dqueue, TriloTofu data) {
 // UTILITY FUNCTIONS
 // =======================
 
-// Function to get the size of the TriloDQueue
-size_t trilo_xdata_dqueue_size(const TriloDQueue* dqueue) {
+// Function to get the size of the cdqueue
+size_t trilo_xdata_dqueue_size(const cdqueue* dqueue) {
     if (dqueue == NULL) {
         return 0;
     } // end if
 
     size_t size = 0;
-    TriloDQueueNode* current = dqueue->front;
+    cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
         size++;
@@ -189,8 +189,8 @@ size_t trilo_xdata_dqueue_size(const TriloDQueue* dqueue) {
     return size;
 } // end of func
 
-// Function to insert a TriloTofu data into the list
-TriloTofu* trilo_xdata_dqueue_getter(TriloDQueue* dqueue, TriloTofu data) {
+// Function to insert a ctofu data into the list
+ctofu* trilo_xdata_dqueue_getter(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
         return NULL;
     } // end if
@@ -199,7 +199,7 @@ TriloTofu* trilo_xdata_dqueue_getter(TriloDQueue* dqueue, TriloTofu data) {
         return NULL;
     } // end if
 
-    TriloDQueueNode* current = dqueue->front;
+    cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
         if (trilo_xdata_tofu_compare(current->data, data) == TRILO_XDATA_TYPE_SUCCESS) {
@@ -212,8 +212,8 @@ TriloTofu* trilo_xdata_dqueue_getter(TriloDQueue* dqueue, TriloTofu data) {
     return NULL;
 } // end of func
 
-// Function to insert a TriloTofu data into the list
-TofuError trilo_xdata_dqueue_setter(TriloDQueue* dqueue, TriloTofu data) {
+// Function to insert a ctofu data into the list
+ctofu_error trilo_xdata_dqueue_setter(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -222,7 +222,7 @@ TofuError trilo_xdata_dqueue_setter(TriloDQueue* dqueue, TriloTofu data) {
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloDQueueNode* newNode = (TriloDQueueNode*)malloc(sizeof(TriloDQueueNode));
+    cdqueue_node* newNode = (cdqueue_node*)malloc(sizeof(cdqueue_node));
     if (newNode == NULL) {
         return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
     } // end if
@@ -244,21 +244,21 @@ TofuError trilo_xdata_dqueue_setter(TriloDQueue* dqueue, TriloTofu data) {
 } // end of func
 
 // Function to check if the list is not empty
-bool trilo_xdata_dqueue_not_empty(const TriloDQueue* dqueue) {
+bool trilo_xdata_dqueue_not_empty(const cdqueue* dqueue) {
     return (dqueue != NULL) && (dqueue->front != NULL);
 } // end of func
 
 // Function to check if the list is null
-bool trilo_xdata_dqueue_not_nullptr(const TriloDQueue* dqueue) {
+bool trilo_xdata_dqueue_not_nullptr(const cdqueue* dqueue) {
     return dqueue != NULL;
 } // end of func
 
 // Function to check if the list is empty
-bool trilo_xdata_dqueue_is_empty(const TriloDQueue* dqueue) {
+bool trilo_xdata_dqueue_is_empty(const cdqueue* dqueue) {
     return (dqueue == NULL) || (dqueue->front == NULL);
 } // end of func
 
 // Function to check if the list is null
-bool trilo_xdata_dqueue_is_nullptr(const TriloDQueue* dqueue) {
+bool trilo_xdata_dqueue_is_nullptr(const cdqueue* dqueue) {
     return dqueue == NULL;
 } // end of func

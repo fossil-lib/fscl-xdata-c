@@ -48,144 +48,144 @@ extern "C"
 #include "trilobite/xdata/tofu.h"
 
 // Node structure for the doubly linked list
-typedef struct TriloDoublyListNode {
-    TriloTofu data;
-    struct TriloDoublyListNode* prev;
-    struct TriloDoublyListNode* next;
-} TriloDoublyListNode;
+typedef struct cdlist_node {
+    ctofu data;
+    struct cdlist_node* prev;
+    struct cdlist_node* next;
+} cdlist_node;
 
 // Doubly linked list structure
-typedef struct TriloDoublyList {
-    TriloDoublyListNode* head;
-    TriloDoublyListNode* tail;
-    enum DataType list_type;  // Type of the linked list
-} TriloDoublyList;
+typedef struct cdlist {
+    cdlist_node* head;
+    cdlist_node* tail;
+    enum ctofu_type list_type;  // Type of the linked list
+} cdlist;
 
 // =======================
 // CREATE and DELETE
 // =======================
 
 /**
- * @brief Creates a new TriloDoublyList instance with the specified list type.
+ * @brief Creates a new cdlist instance with the specified list type.
  *
- * @param list_type The data type for the TriloDoublyList (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created TriloDoublyList instance.
+ * @param list_type The data type for the cdlist (e.g., INTEGER_TYPE, DOUBLE_TYPE).
+ * @return A pointer to the newly created cdlist instance.
  */
-TriloDoublyList* trilo_xdata_dlist_create(enum DataType list_type);
+cdlist* trilo_xdata_dlist_create(enum ctofu_type list_type);
 
 /**
- * @brief Destroys the TriloDoublyList instance, freeing all associated memory.
+ * @brief Destroys the cdlist instance, freeing all associated memory.
  *
- * @param dlist The TriloDoublyList instance to be destroyed.
+ * @param dlist The cdlist instance to be destroyed.
  */
-void trilo_xdata_dlist_destroy(TriloDoublyList* dlist);
+void trilo_xdata_dlist_destroy(cdlist* dlist);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
 /**
- * @brief Inserts a TriloTofu data element into the TriloDoublyList.
+ * @brief Inserts a ctofu data element into the cdlist.
  *
- * @param dlist The TriloDoublyList where the data will be inserted.
- * @param data   The TriloTofu data element to be inserted.
- * @return A TofuError value indicating the result of the insertion.
+ * @param dlist The cdlist where the data will be inserted.
+ * @param data   The ctofu data element to be inserted.
+ * @return A ctofu_error value indicating the result of the insertion.
  */
-TofuError trilo_xdata_dlist_insert(TriloDoublyList* dlist, TriloTofu data);
+ctofu_error trilo_xdata_dlist_insert(cdlist* dlist, ctofu data);
 
 /**
- * @brief Removes a TriloTofu data element from the TriloDoublyList.
+ * @brief Removes a ctofu data element from the cdlist.
  *
- * @param dlist The TriloDoublyList from which the data will be removed.
- * @param data   The TriloTofu data element to be removed.
- * @return A TofuError value indicating the result of the removal.
+ * @param dlist The cdlist from which the data will be removed.
+ * @param data   The ctofu data element to be removed.
+ * @return A ctofu_error value indicating the result of the removal.
  */
-TofuError trilo_xdata_dlist_remove(TriloDoublyList* dlist, TriloTofu data);
+ctofu_error trilo_xdata_dlist_remove(cdlist* dlist, ctofu data);
 
 /**
- * @brief Searches for a TriloTofu data element in the TriloDoublyList.
+ * @brief Searches for a ctofu data element in the cdlist.
  *
- * @param dlist The TriloDoublyList to search within.
- * @param data   The TriloTofu data element to search for.
- * @return A TofuError value indicating the result of the search.
+ * @param dlist The cdlist to search within.
+ * @param data   The ctofu data element to search for.
+ * @return A ctofu_error value indicating the result of the search.
  */
-TofuError trilo_xdata_dlist_search(const TriloDoublyList* dlist, TriloTofu data);
+ctofu_error trilo_xdata_dlist_search(const cdlist* dlist, ctofu data);
 
 /**
- * @brief Reverses the TriloDoublyList in the forward direction.
+ * @brief Reverses the cdlist in the forward direction.
  *
- * @param dlist The TriloDoublyList to be reversed.
+ * @param dlist The cdlist to be reversed.
  */
-void trilo_xdata_dlist_reverse_forward(TriloDoublyList* dlist);
+void trilo_xdata_dlist_reverse_forward(cdlist* dlist);
 
 /**
- * @brief Reverses the TriloDoublyList in the backward direction.
+ * @brief Reverses the cdlist in the backward direction.
  *
- * @param dlist The TriloDoublyList to be reversed.
+ * @param dlist The cdlist to be reversed.
  */
-void trilo_xdata_dlist_reverse_backward(TriloDoublyList* dlist);
+void trilo_xdata_dlist_reverse_backward(cdlist* dlist);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
 /**
- * @brief Gets the size of the TriloDoublyList.
+ * @brief Gets the size of the cdlist.
  *
- * @param dlist The TriloDoublyList for which the size will be determined.
- * @return The size of the TriloDoublyList.
+ * @param dlist The cdlist for which the size will be determined.
+ * @return The size of the cdlist.
  */
-size_t trilo_xdata_dlist_size(const TriloDoublyList* dlist);
+size_t trilo_xdata_dlist_size(const cdlist* dlist);
 
 /**
- * @brief Getter function to retrieve a TriloTofu data element from the TriloDoublyList.
+ * @brief Getter function to retrieve a ctofu data element from the cdlist.
  *
- * @param dlist The TriloDoublyList from which the data will be retrieved.
- * @param data   The TriloTofu data element to retrieve.
- * @return A pointer to the TriloTofu data element in the TriloDoublyList (or NULL if not found).
+ * @param dlist The cdlist from which the data will be retrieved.
+ * @param data   The ctofu data element to retrieve.
+ * @return A pointer to the ctofu data element in the cdlist (or NULL if not found).
  */
-TriloTofu* trilo_xdata_dlist_getter(TriloDoublyList* dlist, TriloTofu data);
+ctofu* trilo_xdata_dlist_getter(cdlist* dlist, ctofu data);
 
 /**
- * @brief Setter function to update a TriloTofu data element in the TriloDoublyList.
+ * @brief Setter function to update a ctofu data element in the cdlist.
  *
- * @param dlist The TriloDoublyList in which the data will be updated.
- * @param data   The TriloTofu data element to update.
- * @return A TofuError value indicating the result of the update.
+ * @param dlist The cdlist in which the data will be updated.
+ * @param data   The ctofu data element to update.
+ * @return A ctofu_error value indicating the result of the update.
  */
-TofuError trilo_xdata_dlist_setter(TriloDoublyList* dlist, TriloTofu data);
+ctofu_error trilo_xdata_dlist_setter(cdlist* dlist, ctofu data);
 
 /**
- * @brief Checks if the TriloDoublyList is not empty.
+ * @brief Checks if the cdlist is not empty.
  *
- * @param dlist The TriloDoublyList to check.
- * @return true if the TriloDoublyList is not empty, false otherwise.
+ * @param dlist The cdlist to check.
+ * @return true if the cdlist is not empty, false otherwise.
  */
-bool trilo_xdata_dlist_not_empty(const TriloDoublyList* dlist);
+bool trilo_xdata_dlist_not_empty(const cdlist* dlist);
 
 /**
- * @brief Checks if the TriloDoublyList is not a null pointer.
+ * @brief Checks if the cdlist is not a null pointer.
  *
- * @param dlist The TriloDoublyList to check.
- * @return true if the TriloDoublyList is not a null pointer, false otherwise.
+ * @param dlist The cdlist to check.
+ * @return true if the cdlist is not a null pointer, false otherwise.
  */
-bool trilo_xdata_dlist_not_nullptr(const TriloDoublyList* dlist);
+bool trilo_xdata_dlist_not_nullptr(const cdlist* dlist);
 
 /**
- * @brief Checks if the TriloDoublyList is empty.
+ * @brief Checks if the cdlist is empty.
  *
- * @param dlist The TriloDoublyList to check.
- * @return true if the TriloDoublyList is empty, false otherwise.
+ * @param dlist The cdlist to check.
+ * @return true if the cdlist is empty, false otherwise.
  */
-bool trilo_xdata_dlist_is_empty(const TriloDoublyList* dlist);
+bool trilo_xdata_dlist_is_empty(const cdlist* dlist);
 
 /**
- * @brief Checks if the TriloDoublyList is a null pointer.
+ * @brief Checks if the cdlist is a null pointer.
  *
- * @param dlist The TriloDoublyList to check.
- * @return true if the TriloDoublyList is a null pointer, false otherwise.
+ * @param dlist The cdlist to check.
+ * @return true if the cdlist is a null pointer, false otherwise.
  */
-bool trilo_xdata_dlist_is_nullptr(const TriloDoublyList* dlist);
+bool trilo_xdata_dlist_is_nullptr(const cdlist* dlist);
 
 #ifdef __cplusplus
 }

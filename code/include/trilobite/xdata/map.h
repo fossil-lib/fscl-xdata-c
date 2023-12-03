@@ -50,136 +50,136 @@ extern "C"
 // Define a maximum number of key-value pairs that can be stored in the map
 #define MAX_MAP_SIZE 100
 
-// Define a structure to represent a TriloMap
+// Define a structure to represent a cmap
 typedef struct {
-    TriloTofu keys[MAX_MAP_SIZE];
-    TriloTofu values[MAX_MAP_SIZE];
+    ctofu keys[MAX_MAP_SIZE];
+    ctofu values[MAX_MAP_SIZE];
     size_t size;
-} TriloMap;
+} cmap;
 
 // =======================
 // CREATE and DELETE
 // =======================
 
 /**
- * @brief Creates a new TriloMap instance with the specified list type.
+ * @brief Creates a new cmap instance with the specified list type.
  *
- * @param list_type The data type for the TriloMap (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created TriloMap instance.
+ * @param list_type The data type for the cmap (e.g., INTEGER_TYPE, DOUBLE_TYPE).
+ * @return A pointer to the newly created cmap instance.
  */
-TriloMap* trilo_xdata_map_create(enum DataType list_type);
+cmap* trilo_xdata_map_create(enum ctofu_type list_type);
 
 /**
- * @brief Destroys the TriloMap instance, freeing all associated memory.
+ * @brief Destroys the cmap instance, freeing all associated memory.
  *
- * @param map The TriloMap instance to be destroyed.
+ * @param map The cmap instance to be destroyed.
  */
-void trilo_xdata_map_destroy(TriloMap* map);
+void trilo_xdata_map_destroy(cmap* map);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
 /**
- * @brief Inserts a key-value pair into the TriloMap.
+ * @brief Inserts a key-value pair into the cmap.
  *
- * @param map   The TriloMap where the key-value pair will be inserted.
+ * @param map   The cmap where the key-value pair will be inserted.
  * @param key   The key in the key-value pair.
  * @param value The value in the key-value pair.
- * @return A TofuError value indicating the result of the insertion.
+ * @return A ctofu_error value indicating the result of the insertion.
  */
-TofuError trilo_xdata_map_insert(TriloMap* map, TriloTofu key, TriloTofu value);
+ctofu_error trilo_xdata_map_insert(cmap* map, ctofu key, ctofu value);
 
 /**
- * @brief Removes a key-value pair from the TriloMap by key.
+ * @brief Removes a key-value pair from the cmap by key.
  *
- * @param map The TriloMap from which the key-value pair will be removed.
+ * @param map The cmap from which the key-value pair will be removed.
  * @param key The key of the key-value pair to be removed.
- * @return A TofuError value indicating the result of the removal.
+ * @return A ctofu_error value indicating the result of the removal.
  */
-TofuError trilo_xdata_map_remove(TriloMap* map, TriloTofu key);
+ctofu_error trilo_xdata_map_remove(cmap* map, ctofu key);
 
 /**
- * @brief Searches for a key in the TriloMap.
+ * @brief Searches for a key in the cmap.
  *
- * @param map The TriloMap to search within.
+ * @param map The cmap to search within.
  * @param key The key to search for.
- * @return A TofuError value indicating the result of the search.
+ * @return A ctofu_error value indicating the result of the search.
  */
-TofuError trilo_xdata_map_search(const TriloMap* map, TriloTofu key);
+ctofu_error trilo_xdata_map_search(const cmap* map, ctofu key);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
 /**
- * @brief Gets the size of the TriloMap.
+ * @brief Gets the size of the cmap.
  *
- * @param map The TriloMap for which the size will be determined.
- * @return The size of the TriloMap.
+ * @param map The cmap for which the size will be determined.
+ * @return The size of the cmap.
  */
-size_t trilo_xdata_map_size(const TriloMap* map);
+size_t trilo_xdata_map_size(const cmap* map);
 
 /**
- * @brief Getter function to retrieve a value by key from the TriloMap.
+ * @brief Getter function to retrieve a value by key from the cmap.
  *
- * @param map  The TriloMap from which the value will be retrieved.
+ * @param map  The cmap from which the value will be retrieved.
  * @param key  The key for which the value will be retrieved.
  * @param value A pointer to store the retrieved value.
- * @return A TofuError value indicating the result of the retrieval.
+ * @return A ctofu_error value indicating the result of the retrieval.
  */
-TofuError trilo_xdata_map_getter(TriloMap* map, TriloTofu key, TriloTofu* value);
+ctofu_error trilo_xdata_map_getter(cmap* map, ctofu key, ctofu* value);
 
 /**
- * @brief Setter function to update a value by key in the TriloMap.
+ * @brief Setter function to update a value by key in the cmap.
  *
- * @param map   The TriloMap in which the value will be updated.
+ * @param map   The cmap in which the value will be updated.
  * @param key   The key for which the value will be updated.
  * @param value The new value to set.
- * @return A TofuError value indicating the result of the update.
+ * @return A ctofu_error value indicating the result of the update.
  */
-TofuError trilo_xdata_map_setter(TriloMap* map, TriloTofu key, TriloTofu value);
+ctofu_error trilo_xdata_map_setter(cmap* map, ctofu key, ctofu value);
 
 /**
- * @brief Checks if the TriloMap is not empty.
+ * @brief Checks if the cmap is not empty.
  *
- * @param map The TriloMap to check.
- * @return true if the TriloMap is not empty, false otherwise.
+ * @param map The cmap to check.
+ * @return true if the cmap is not empty, false otherwise.
  */
-bool trilo_xdata_map_not_empty(const TriloMap* map);
+bool trilo_xdata_map_not_empty(const cmap* map);
 
 /**
- * @brief Checks if the TriloMap is not a null pointer.
+ * @brief Checks if the cmap is not a null pointer.
  *
- * @param map The TriloMap to check.
- * @return true if the TriloMap is not a null pointer, false otherwise.
+ * @param map The cmap to check.
+ * @return true if the cmap is not a null pointer, false otherwise.
  */
-bool trilo_xdata_map_not_nullptr(const TriloMap* map);
+bool trilo_xdata_map_not_nullptr(const cmap* map);
 
 /**
- * @brief Checks if the TriloMap is empty.
+ * @brief Checks if the cmap is empty.
  *
- * @param map The TriloMap to check.
- * @return true if the TriloMap is empty, false otherwise.
+ * @param map The cmap to check.
+ * @return true if the cmap is empty, false otherwise.
  */
-bool trilo_xdata_map_is_empty(const TriloMap* map);
+bool trilo_xdata_map_is_empty(const cmap* map);
 
 /**
- * @brief Checks if the TriloMap is a null pointer.
+ * @brief Checks if the cmap is a null pointer.
  *
- * @param map The TriloMap to check.
- * @return true if the TriloMap is a null pointer, false otherwise.
+ * @param map The cmap to check.
+ * @return true if the cmap is a null pointer, false otherwise.
  */
-bool trilo_xdata_map_is_nullptr(const TriloMap* map);
+bool trilo_xdata_map_is_nullptr(const cmap* map);
 
 /**
- * @brief Checks if a key exists in the TriloMap.
+ * @brief Checks if a key exists in the cmap.
  *
- * @param map The TriloMap to check.
+ * @param map The cmap to check.
  * @param key The key to search for.
- * @return true if the key exists in the TriloMap, false otherwise.
+ * @return true if the key exists in the cmap, false otherwise.
  */
-bool trilo_xdata_map_contains(const TriloMap* map, TriloTofu key);
+bool trilo_xdata_map_contains(const cmap* map, ctofu key);
 
 #ifdef __cplusplus
 }

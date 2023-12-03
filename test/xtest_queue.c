@@ -38,9 +38,9 @@
 // XUNIT TEST CASES
 //
 
-// Test case 1: Test TriloQueue creation and destruction
+// Test case 1: Test cqueue creation and destruction
 XTEST_CASE(xdata_let_queue_create_destroy) {
-    TriloQueue* queue = trilo_xdata_queue_create(INTEGER_TYPE);
+    cqueue* queue = trilo_xdata_queue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(queue);
     
     trilo_xdata_queue_destroy(queue);
@@ -48,10 +48,10 @@ XTEST_CASE(xdata_let_queue_create_destroy) {
 }
 
 XTEST_CASE(xdata_let_queue_insert) {
-    TriloQueue* queue = trilo_xdata_queue_create(DOUBLE_TYPE);
+    cqueue* queue = trilo_xdata_queue_create(DOUBLE_TYPE);
     
-    TriloTofu data = trilo_xdata_tofu_create_from_double(42.5);
-    TofuError error = trilo_xdata_queue_insert(queue, data);
+    ctofu data = trilo_xdata_tofu_create_from_double(42.5);
+    ctofu_error error = trilo_xdata_queue_insert(queue, data);
     
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
     
@@ -59,12 +59,12 @@ XTEST_CASE(xdata_let_queue_insert) {
 }
 
 XTEST_CASE(xdata_let_queue_remove) {
-    TriloQueue* queue = trilo_xdata_queue_create(STRING_TYPE);
+    cqueue* queue = trilo_xdata_queue_create(STRING_TYPE);
     
-    TriloTofu data = trilo_xdata_tofu_create_from_string("Hello");
+    ctofu data = trilo_xdata_tofu_create_from_string("Hello");
     trilo_xdata_queue_insert(queue, data);
     
-    TofuError error = trilo_xdata_queue_remove(queue);
+    ctofu_error error = trilo_xdata_queue_remove(queue);
     
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
     
@@ -72,12 +72,12 @@ XTEST_CASE(xdata_let_queue_remove) {
 }
 
 XTEST_CASE(xdata_let_queue_search) {
-    TriloQueue* queue = trilo_xdata_queue_create(CHAR_TYPE);
+    cqueue* queue = trilo_xdata_queue_create(CHAR_TYPE);
     
-    TriloTofu data = trilo_xdata_tofu_create_from_char('A');
+    ctofu data = trilo_xdata_tofu_create_from_char('A');
     trilo_xdata_queue_insert(queue, data);
     
-    TofuError error = trilo_xdata_queue_search(queue, data);
+    ctofu_error error = trilo_xdata_queue_search(queue, data);
     
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
     

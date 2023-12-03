@@ -48,130 +48,130 @@ extern "C"
 #include "trilobite/xdata/tofu.h"
 
 // Node structure for the double-ended queue
-typedef struct TriloDQueueNode {
-    TriloTofu data;
-    struct TriloDQueueNode* prev;
-    struct TriloDQueueNode* next;
-} TriloDQueueNode;
+typedef struct cdqueue_node {
+    ctofu data;
+    struct cdqueue_node* prev;
+    struct cdqueue_node* next;
+} cdqueue_node;
 
 // Double-ended queue structure
-typedef struct TriloDQueue {
-    TriloDQueueNode* front;
-    TriloDQueueNode* rear;
-    enum DataType list_type;  // Type of the deque
-} TriloDQueue;
+typedef struct cdqueue {
+    cdqueue_node* front;
+    cdqueue_node* rear;
+    enum ctofu_type list_type;  // Type of the deque
+} cdqueue;
 
 // =======================
 // CREATE and DELETE
 // =======================
 
 /**
- * @brief Creates a new TriloDQueue instance with the specified list type.
+ * @brief Creates a new cdqueue instance with the specified list type.
  *
- * @param list_type The data type for the TriloDQueue (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created TriloDQueue instance.
+ * @param list_type The data type for the cdqueue (e.g., INTEGER_TYPE, DOUBLE_TYPE).
+ * @return A pointer to the newly created cdqueue instance.
  */
-TriloDQueue* trilo_xdata_dqueue_create(enum DataType list_type);
+cdqueue* trilo_xdata_dqueue_create(enum ctofu_type list_type);
 
 /**
- * @brief Destroys the TriloDQueue instance, freeing all associated memory.
+ * @brief Destroys the cdqueue instance, freeing all associated memory.
  *
- * @param dqueue The TriloDQueue instance to be destroyed.
+ * @param dqueue The cdqueue instance to be destroyed.
  */
-void trilo_xdata_dqueue_destroy(TriloDQueue* dqueue);
+void trilo_xdata_dqueue_destroy(cdqueue* dqueue);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
 /**
- * @brief Inserts a TriloTofu data element into the TriloDQueue.
+ * @brief Inserts a ctofu data element into the cdqueue.
  *
- * @param dqueue The TriloDQueue where the data will be inserted.
- * @param data   The TriloTofu data element to be inserted.
- * @return A TofuError value indicating the result of the insertion.
+ * @param dqueue The cdqueue where the data will be inserted.
+ * @param data   The ctofu data element to be inserted.
+ * @return A ctofu_error value indicating the result of the insertion.
  */
-TofuError trilo_xdata_dqueue_insert(TriloDQueue* dqueue, TriloTofu data);
+ctofu_error trilo_xdata_dqueue_insert(cdqueue* dqueue, ctofu data);
 
 /**
- * @brief Removes a TriloTofu data element from the TriloDQueue.
+ * @brief Removes a ctofu data element from the cdqueue.
  *
- * @param dqueue The TriloDQueue from which the data will be removed.
- * @param data   The TriloTofu data element to be removed.
- * @return A TofuError value indicating the result of the removal.
+ * @param dqueue The cdqueue from which the data will be removed.
+ * @param data   The ctofu data element to be removed.
+ * @return A ctofu_error value indicating the result of the removal.
  */
-TofuError trilo_xdata_dqueue_remove(TriloDQueue* dqueue, TriloTofu data);
+ctofu_error trilo_xdata_dqueue_remove(cdqueue* dqueue, ctofu data);
 
 /**
- * @brief Searches for a TriloTofu data element in the TriloDQueue.
+ * @brief Searches for a ctofu data element in the cdqueue.
  *
- * @param dqueue The TriloDQueue to search within.
- * @param data   The TriloTofu data element to search for.
- * @return A TofuError value indicating the result of the search.
+ * @param dqueue The cdqueue to search within.
+ * @param data   The ctofu data element to search for.
+ * @return A ctofu_error value indicating the result of the search.
  */
-TofuError trilo_xdata_dqueue_search(const TriloDQueue* dqueue, TriloTofu data);
+ctofu_error trilo_xdata_dqueue_search(const cdqueue* dqueue, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
 /**
- * @brief Gets the size of the TriloDQueue.
+ * @brief Gets the size of the cdqueue.
  *
- * @param dqueue The TriloDQueue for which the size will be determined.
- * @return The size of the TriloDQueue.
+ * @param dqueue The cdqueue for which the size will be determined.
+ * @return The size of the cdqueue.
  */
-size_t trilo_xdata_dqueue_size(const TriloDQueue* dqueue);
+size_t trilo_xdata_dqueue_size(const cdqueue* dqueue);
 
 /**
- * @brief Getter function to retrieve a TriloTofu data element from the TriloDQueue.
+ * @brief Getter function to retrieve a ctofu data element from the cdqueue.
  *
- * @param dqueue The TriloDQueue from which the data will be retrieved.
- * @param data   The TriloTofu data element to retrieve.
- * @return A pointer to the TriloTofu data element in the TriloDQueue (or NULL if not found).
+ * @param dqueue The cdqueue from which the data will be retrieved.
+ * @param data   The ctofu data element to retrieve.
+ * @return A pointer to the ctofu data element in the cdqueue (or NULL if not found).
  */
-TriloTofu* trilo_xdata_dqueue_getter(TriloDQueue* dqueue, TriloTofu data);
+ctofu* trilo_xdata_dqueue_getter(cdqueue* dqueue, ctofu data);
 
 /**
- * @brief Setter function to update a TriloTofu data element in the TriloDQueue.
+ * @brief Setter function to update a ctofu data element in the cdqueue.
  *
- * @param dqueue The TriloDQueue in which the data will be updated.
- * @param data   The TriloTofu data element to update.
- * @return A TofuError value indicating the result of the update.
+ * @param dqueue The cdqueue in which the data will be updated.
+ * @param data   The ctofu data element to update.
+ * @return A ctofu_error value indicating the result of the update.
  */
-TofuError trilo_xdata_dqueue_setter(TriloDQueue* dqueue, TriloTofu data);
+ctofu_error trilo_xdata_dqueue_setter(cdqueue* dqueue, ctofu data);
 
 /**
- * @brief Checks if the TriloDQueue is not empty.
+ * @brief Checks if the cdqueue is not empty.
  *
- * @param dqueue The TriloDQueue to check.
- * @return true if the TriloDQueue is not empty, false otherwise.
+ * @param dqueue The cdqueue to check.
+ * @return true if the cdqueue is not empty, false otherwise.
  */
-bool trilo_xdata_dqueue_not_empty(const TriloDQueue* dqueue);
+bool trilo_xdata_dqueue_not_empty(const cdqueue* dqueue);
 
 /**
- * @brief Checks if the TriloDQueue is not a null pointer.
+ * @brief Checks if the cdqueue is not a null pointer.
  *
- * @param dqueue The TriloDQueue to check.
- * @return true if the TriloDQueue is not a null pointer, false otherwise.
+ * @param dqueue The cdqueue to check.
+ * @return true if the cdqueue is not a null pointer, false otherwise.
  */
-bool trilo_xdata_dqueue_not_nullptr(const TriloDQueue* dqueue);
+bool trilo_xdata_dqueue_not_nullptr(const cdqueue* dqueue);
 
 /**
- * @brief Checks if the TriloDQueue is empty.
+ * @brief Checks if the cdqueue is empty.
  *
- * @param dqueue The TriloDQueue to check.
- * @return true if the TriloDQueue is empty, false otherwise.
+ * @param dqueue The cdqueue to check.
+ * @return true if the cdqueue is empty, false otherwise.
  */
-bool trilo_xdata_dqueue_is_empty(const TriloDQueue* dqueue);
+bool trilo_xdata_dqueue_is_empty(const cdqueue* dqueue);
 
 /**
- * @brief Checks if the TriloDQueue is a null pointer.
+ * @brief Checks if the cdqueue is a null pointer.
  *
- * @param dqueue The TriloDQueue to check.
- * @return true if the TriloDQueue is a null pointer, false otherwise.
+ * @param dqueue The cdqueue to check.
+ * @return true if the cdqueue is a null pointer, false otherwise.
  */
-bool trilo_xdata_dqueue_is_nullptr(const TriloDQueue* dqueue);
+bool trilo_xdata_dqueue_is_nullptr(const cdqueue* dqueue);
 
 #ifdef __cplusplus
 }

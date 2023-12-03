@@ -39,9 +39,9 @@
 // CREATE and DELETE
 // =======================
 
-// Function to create a new TriloForwardList
-TriloForwardList* trilo_xdata_flist_create(enum DataType list_type) {
-    TriloForwardList* flist = (TriloForwardList*)malloc(sizeof(TriloForwardList));
+// Function to create a new cflist
+cflist* trilo_xdata_flist_create(enum ctofu_type list_type) {
+    cflist* flist = (cflist*)malloc(sizeof(cflist));
     if (flist == NULL) {
         exit(EXIT_FAILURE);
     } // end if
@@ -52,11 +52,11 @@ TriloForwardList* trilo_xdata_flist_create(enum DataType list_type) {
     return flist;
 } // end of func
 
-// Function to destroy the TriloForwardList
-void trilo_xdata_flist_destroy(TriloForwardList* flist) {
-    TriloForwardListNode* current = flist->head;
+// Function to destroy the cflist
+void trilo_xdata_flist_destroy(cflist* flist) {
+    cflist_node* current = flist->head;
     while (current != NULL) {
-        TriloForwardListNode* temp = current;
+        cflist_node* temp = current;
         current = current->next;
         free(temp);
     } // end while
@@ -68,8 +68,8 @@ void trilo_xdata_flist_destroy(TriloForwardList* flist) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-// Function to insert a TriloTofu data into the list
-TofuError trilo_xdata_flist_insert(TriloForwardList* flist, TriloTofu data) {
+// Function to insert a ctofu data into the list
+ctofu_error trilo_xdata_flist_insert(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -77,7 +77,7 @@ TofuError trilo_xdata_flist_insert(TriloForwardList* flist, TriloTofu data) {
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloForwardListNode* newNode = (TriloForwardListNode*)malloc(sizeof(TriloForwardListNode));
+    cflist_node* newNode = (cflist_node*)malloc(sizeof(cflist_node));
     if (newNode == NULL) {
         return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
     } // end if
@@ -88,8 +88,8 @@ TofuError trilo_xdata_flist_insert(TriloForwardList* flist, TriloTofu data) {
     return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
-// Function to remove a TriloTofu data from the list
-TofuError trilo_xdata_flist_remove(TriloForwardList* flist, TriloTofu data) {
+// Function to remove a ctofu data from the list
+ctofu_error trilo_xdata_flist_remove(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -97,8 +97,8 @@ TofuError trilo_xdata_flist_remove(TriloForwardList* flist, TriloTofu data) {
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloForwardListNode* current = flist->head;
-    TriloForwardListNode* prev = NULL;
+    cflist_node* current = flist->head;
+    cflist_node* prev = NULL;
 
     while (current != NULL) {
         if (current->data.type == data.type) {
@@ -121,8 +121,8 @@ TofuError trilo_xdata_flist_remove(TriloForwardList* flist, TriloTofu data) {
     return TRILO_XDATA_TYPE_WAS_UNKNOWN;
 } // end of func
 
-// Function to search for a TriloTofu data in the list
-TofuError trilo_xdata_flist_search(const TriloForwardList* flist, TriloTofu data) {
+// Function to search for a ctofu data in the list
+ctofu_error trilo_xdata_flist_search(const cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -130,7 +130,7 @@ TofuError trilo_xdata_flist_search(const TriloForwardList* flist, TriloTofu data
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloForwardListNode* current = flist->head;
+    cflist_node* current = flist->head;
 
     while (current != NULL) {
         if (current->data.type == data.type) {
@@ -147,10 +147,10 @@ TofuError trilo_xdata_flist_search(const TriloForwardList* flist, TriloTofu data
 } // end of func
 
 // Function to reverse the list in the forward direction
-void trilo_xdata_flist_reverse_forword(TriloForwardList* flist) {
-    TriloForwardListNode* prev = NULL;
-    TriloForwardListNode* current = flist->head;
-    TriloForwardListNode* next = NULL;
+void trilo_xdata_flist_reverse_forword(cflist* flist) {
+    cflist_node* prev = NULL;
+    cflist_node* current = flist->head;
+    cflist_node* next = NULL;
 
     while (current != NULL) {
         next = current->next;
@@ -163,13 +163,13 @@ void trilo_xdata_flist_reverse_forword(TriloForwardList* flist) {
 } // end of func
 
 // Function to reverse the list in the backward direction
-void trilo_xdata_flist_reverse_backward(TriloForwardList* flist) {
+void trilo_xdata_flist_reverse_backward(cflist* flist) {
     // Assuming you want to reverse the list by using additional memory
-    TriloForwardListNode* current = flist->head;
-    TriloForwardListNode* reversed = NULL;
+    cflist_node* current = flist->head;
+    cflist_node* reversed = NULL;
 
     while (current != NULL) {
-        TriloForwardListNode* newNode = (TriloForwardListNode*)malloc(sizeof(TriloForwardListNode));
+        cflist_node* newNode = (cflist_node*)malloc(sizeof(cflist_node));
         if (newNode == NULL) {
             exit(EXIT_FAILURE);
         } // end if
@@ -183,7 +183,7 @@ void trilo_xdata_flist_reverse_backward(TriloForwardList* flist) {
 
     // Clean up the original list
     while (flist->head != NULL) {
-        TriloForwardListNode* temp = flist->head;
+        cflist_node* temp = flist->head;
         flist->head = flist->head->next;
         free(temp);
     } // end while
@@ -195,14 +195,14 @@ void trilo_xdata_flist_reverse_backward(TriloForwardList* flist) {
 // UTILITY FUNCTIONS
 // =======================
 
-// Function to get the size of the TriloForwardList
-size_t trilo_xdata_flist_size(const TriloForwardList* flist) {
+// Function to get the size of the cflist
+size_t trilo_xdata_flist_size(const cflist* flist) {
     if (flist == NULL) {
         return 0;
     } // end if
 
     size_t count = 0;
-    TriloForwardListNode* current = flist->head;
+    cflist_node* current = flist->head;
     while (current != NULL) {
         count++;
         current = current->next;
@@ -211,13 +211,13 @@ size_t trilo_xdata_flist_size(const TriloForwardList* flist) {
     return count;
 } // end of func
 
-// Function to get a pointer to a TriloTofu data in the list
-TriloTofu* trilo_xdata_flist_getter(TriloForwardList* flist, TriloTofu data) {
+// Function to get a pointer to a ctofu data in the list
+ctofu* trilo_xdata_flist_getter(cflist* flist, ctofu data) {
     if (flist == NULL || flist->list_type != data.type) {
         return NULL;
     } // end if
 
-    TriloForwardListNode* current = flist->head;
+    cflist_node* current = flist->head;
     while (current != NULL) {
         if (trilo_xdata_tofu_compare(current->data, data) == 0) {
             // Found the matching data, return a pointer to the data
@@ -229,8 +229,8 @@ TriloTofu* trilo_xdata_flist_getter(TriloForwardList* flist, TriloTofu data) {
     return NULL; // Return NULL if the data is not found
 } // end of func
 
-// Function to set a TriloTofu data in the list
-TofuError trilo_xdata_flist_setter(TriloForwardList* flist, TriloTofu data) {
+// Function to set a ctofu data in the list
+ctofu_error trilo_xdata_flist_setter(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -239,7 +239,7 @@ TofuError trilo_xdata_flist_setter(TriloForwardList* flist, TriloTofu data) {
     } // end if
 
     // Check if the data already exists in the list
-    TriloTofu* existingData = trilo_xdata_flist_getter(flist, data);
+    ctofu* existingData = trilo_xdata_flist_getter(flist, data);
 
     if (existingData != NULL) {
         // Data already exists, update the existing data
@@ -252,21 +252,21 @@ TofuError trilo_xdata_flist_setter(TriloForwardList* flist, TriloTofu data) {
 } // end of func
 
 // Function to check if the list is not empty
-bool trilo_xdata_flist_not_empty(const TriloForwardList* flist) {
+bool trilo_xdata_flist_not_empty(const cflist* flist) {
     return trilo_xdata_flist_size(flist) > 0;
 } // end of func
 
 // Function to check if the list is not null
-bool trilo_xdata_flist_not_nullptr(const TriloForwardList* flist) {
+bool trilo_xdata_flist_not_nullptr(const cflist* flist) {
     return flist != NULL;
 } // end of func
 
 // Function to check if the list is empty
-bool trilo_xdata_flist_is_empty(const TriloForwardList* flist) {
+bool trilo_xdata_flist_is_empty(const cflist* flist) {
     return !trilo_xdata_flist_not_empty(flist);
 } // end of func
 
 // Function to check if the list is null
-bool trilo_xdata_flist_is_nullptr(const TriloForwardList* flist) {
+bool trilo_xdata_flist_is_nullptr(const cflist* flist) {
     return !trilo_xdata_flist_not_nullptr(flist);
 } // end of func

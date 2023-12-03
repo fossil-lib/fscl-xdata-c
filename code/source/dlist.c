@@ -38,9 +38,9 @@
 // CREATE and DELETE
 // =======================
 
-// Function to create a new TriloDoublyList
-TriloDoublyList* trilo_xdata_dlist_create(enum DataType list_type) {
-    TriloDoublyList* dlist = (TriloDoublyList*)malloc(sizeof(TriloDoublyList));
+// Function to create a new cdlist
+cdlist* trilo_xdata_dlist_create(enum ctofu_type list_type) {
+    cdlist* dlist = (cdlist*)malloc(sizeof(cdlist));
     if (dlist == NULL) {
         fprintf(stderr, "Memory allocation failed!\n");
         exit(EXIT_FAILURE);
@@ -50,11 +50,11 @@ TriloDoublyList* trilo_xdata_dlist_create(enum DataType list_type) {
     return dlist;
 } // end of func
 
-// Function to destroy the TriloDoublyList
-void trilo_xdata_dlist_destroy(TriloDoublyList* dlist) {
-    TriloDoublyListNode* current = dlist->head;
+// Function to destroy the cdlist
+void trilo_xdata_dlist_destroy(cdlist* dlist) {
+    cdlist_node* current = dlist->head;
     while (current != NULL) {
-        TriloDoublyListNode* temp = current;
+        cdlist_node* temp = current;
         current = current->next;
         free(temp);
     } // end while
@@ -65,8 +65,8 @@ void trilo_xdata_dlist_destroy(TriloDoublyList* dlist) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-// Function to insert a TriloTofu data into the list
-TofuError trilo_xdata_dlist_insert(TriloDoublyList* dlist, TriloTofu data) {
+// Function to insert a ctofu data into the list
+ctofu_error trilo_xdata_dlist_insert(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -75,7 +75,7 @@ TofuError trilo_xdata_dlist_insert(TriloDoublyList* dlist, TriloTofu data) {
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloDoublyListNode* newNode = (TriloDoublyListNode*)malloc(sizeof(TriloDoublyListNode));
+    cdlist_node* newNode = (cdlist_node*)malloc(sizeof(cdlist_node));
     if (newNode == NULL) {
         return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
     } // end of
@@ -93,8 +93,8 @@ TofuError trilo_xdata_dlist_insert(TriloDoublyList* dlist, TriloTofu data) {
     return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
-// Function to remove a TriloTofu data from the list
-TofuError trilo_xdata_dlist_remove(TriloDoublyList* dlist, TriloTofu data) {
+// Function to remove a ctofu data from the list
+ctofu_error trilo_xdata_dlist_remove(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -103,7 +103,7 @@ TofuError trilo_xdata_dlist_remove(TriloDoublyList* dlist, TriloTofu data) {
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloDoublyListNode* current = dlist->head;
+    cdlist_node* current = dlist->head;
     while (current != NULL) {
         if (trilo_xdata_tofu_compare(current->data, data) == 0) {
             // Found the data to remove
@@ -124,8 +124,8 @@ TofuError trilo_xdata_dlist_remove(TriloDoublyList* dlist, TriloTofu data) {
     return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Data not found
 } // end of func
 
-// Function to search for a TriloTofu data in the list
-TofuError trilo_xdata_dlist_search(const TriloDoublyList* dlist, TriloTofu data) {
+// Function to search for a ctofu data in the list
+ctofu_error trilo_xdata_dlist_search(const cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -134,7 +134,7 @@ TofuError trilo_xdata_dlist_search(const TriloDoublyList* dlist, TriloTofu data)
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloDoublyListNode* current = dlist->head;
+    cdlist_node* current = dlist->head;
     while (current != NULL) {
         if (trilo_xdata_tofu_compare(current->data, data) == 0) {
             return TRILO_XDATA_TYPE_SUCCESS; // Data found
@@ -146,16 +146,16 @@ TofuError trilo_xdata_dlist_search(const TriloDoublyList* dlist, TriloTofu data)
 } // end of func
 
 // Function to reverse the list in the forward direction
-void trilo_xdata_dlist_reverse_forword(TriloDoublyList* dlist) {
+void trilo_xdata_dlist_reverse_forword(cdlist* dlist) {
     if (dlist == NULL || dlist->head == NULL) {
         return;
     } // end if
 
-    TriloDoublyListNode* current = dlist->head;
-    TriloDoublyListNode* prev = NULL;
+    cdlist_node* current = dlist->head;
+    cdlist_node* prev = NULL;
 
     while (current != NULL) {
-        TriloDoublyListNode* next = current->next;
+        cdlist_node* next = current->next;
         current->next = prev;
         current->prev = next;
         prev = current;
@@ -166,12 +166,12 @@ void trilo_xdata_dlist_reverse_forword(TriloDoublyList* dlist) {
 } // end of func
 
 // Function to reverse the list in the backward direction
-void trilo_xdata_dlist_reverse_backward(TriloDoublyList* dlist) {
+void trilo_xdata_dlist_reverse_backward(cdlist* dlist) {
     if (dlist == NULL || dlist->head == NULL) {
         return;
     } // end if
 
-    TriloDoublyListNode* current = dlist->head;
+    cdlist_node* current = dlist->head;
 
     while (current->next != NULL) {
         current = current->next;
@@ -180,7 +180,7 @@ void trilo_xdata_dlist_reverse_backward(TriloDoublyList* dlist) {
     dlist->head = current;
 
     while (current != NULL) {
-        TriloDoublyListNode* temp = current->next;
+        cdlist_node* temp = current->next;
         current->next = current->prev;
         current->prev = temp;
         current = temp;
@@ -190,10 +190,10 @@ void trilo_xdata_dlist_reverse_backward(TriloDoublyList* dlist) {
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-// Function to get the size of the TriloDoublyList
-size_t trilo_xdata_dlist_size(const TriloDoublyList* dlist) {
+// Function to get the size of the cdlist
+size_t trilo_xdata_dlist_size(const cdlist* dlist) {
     size_t count = 0;
-    TriloDoublyListNode* current = dlist->head;
+    cdlist_node* current = dlist->head;
     while (current != NULL) {
         count++;
         current = current->next;
@@ -201,13 +201,13 @@ size_t trilo_xdata_dlist_size(const TriloDoublyList* dlist) {
     return count;
 } // end of func
 
-// Function to insert a TriloTofu data into the list
-TriloTofu* trilo_xdata_dlist_getter(TriloDoublyList* dlist, TriloTofu data) {
+// Function to insert a ctofu data into the list
+ctofu* trilo_xdata_dlist_getter(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return NULL;
     } // end if
 
-    TriloDoublyListNode* current = dlist->head;
+    cdlist_node* current = dlist->head;
     while (current != NULL) {
         if (trilo_xdata_tofu_compare(current->data, data) == 0) {
             return &(current->data); // Data found, return a pointer to it
@@ -218,8 +218,8 @@ TriloTofu* trilo_xdata_dlist_getter(TriloDoublyList* dlist, TriloTofu data) {
     return NULL; // Data not found
 } // end of func
 
-// Function to insert a TriloTofu data into the list
-TofuError trilo_xdata_dlist_setter(TriloDoublyList* dlist, TriloTofu data) {
+// Function to insert a ctofu data into the list
+ctofu_error trilo_xdata_dlist_setter(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -228,7 +228,7 @@ TofuError trilo_xdata_dlist_setter(TriloDoublyList* dlist, TriloTofu data) {
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
     } // end if
 
-    TriloDoublyListNode* newNode = (TriloDoublyListNode*)malloc(sizeof(TriloDoublyListNode));
+    cdlist_node* newNode = (cdlist_node*)malloc(sizeof(cdlist_node));
     if (newNode == NULL) {
         return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
     } // end if
@@ -247,21 +247,21 @@ TofuError trilo_xdata_dlist_setter(TriloDoublyList* dlist, TriloTofu data) {
 } // end of func
 
 // Function to check if the list is empty
-bool trilo_xdata_dlist_not_empty(const TriloDoublyList* dlist) {
+bool trilo_xdata_dlist_not_empty(const cdlist* dlist) {
     return dlist != NULL && dlist->head != NULL;
 } // end of func
 
 // Function to check if the list is null
-bool trilo_xdata_dlist_not_nullptr(const TriloDoublyList* dlist) {
+bool trilo_xdata_dlist_not_nullptr(const cdlist* dlist) {
     return dlist != NULL;
 } // end of func
 
 // Function to check if the list is empty
-bool trilo_xdata_dlist_is_empty(const TriloDoublyList* dlist) {
+bool trilo_xdata_dlist_is_empty(const cdlist* dlist) {
     return dlist == NULL || dlist->head == NULL;
 } // end of func
 
 // Function to check if the list is null
-bool trilo_xdata_dlist_is_nullptr(const TriloDoublyList* dlist) {
+bool trilo_xdata_dlist_is_nullptr(const cdlist* dlist) {
     return dlist == NULL;
 } // end of func

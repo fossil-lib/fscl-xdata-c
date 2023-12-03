@@ -48,137 +48,137 @@ extern "C"
 #include "trilobite/xdata/tofu.h"
 
 // Node structure for the set
-typedef struct TriloSetNode {
-    TriloTofu data;
-    struct TriloSetNode* next;
-} TriloSetNode;
+typedef struct cset_node {
+    ctofu data;
+    struct cset_node* next;
+} cset_node;
 
 // Set structure
-typedef struct TriloSet {
-    TriloSetNode* head;
-    enum DataType set_type;  // Type of the set
-} TriloSet;
+typedef struct cset {
+    cset_node* head;
+    enum ctofu_type set_type;  // Type of the set
+} cset;
 
 // =======================
 // CREATE and DELETE
 // =======================
 
 /**
- * @brief Creates a new TriloSet instance with the specified list type.
+ * @brief Creates a new cset instance with the specified list type.
  *
- * @param list_type The data type for the TriloSet (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created TriloSet instance.
+ * @param list_type The data type for the cset (e.g., INTEGER_TYPE, DOUBLE_TYPE).
+ * @return A pointer to the newly created cset instance.
  */
-TriloSet* trilo_xdata_set_create(enum DataType list_type);
+cset* trilo_xdata_set_create(enum ctofu_type list_type);
 
 /**
- * @brief Destroys the TriloSet instance, freeing all associated memory.
+ * @brief Destroys the cset instance, freeing all associated memory.
  *
- * @param set The TriloSet instance to be destroyed.
+ * @param set The cset instance to be destroyed.
  */
-void trilo_xdata_set_destroy(TriloSet* set);
+void trilo_xdata_set_destroy(cset* set);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
 /**
- * @brief Inserts a TriloTofu data element into the TriloSet.
+ * @brief Inserts a ctofu data element into the cset.
  *
- * @param set  The TriloSet where the data will be inserted.
- * @param data The TriloTofu data element to be inserted.
- * @return A TofuError value indicating the result of the insertion.
+ * @param set  The cset where the data will be inserted.
+ * @param data The ctofu data element to be inserted.
+ * @return A ctofu_error value indicating the result of the insertion.
  */
-TofuError trilo_xdata_set_insert(TriloSet* set, TriloTofu data);
+ctofu_error trilo_xdata_set_insert(cset* set, ctofu data);
 
 /**
- * @brief Removes a TriloTofu data element from the TriloSet.
+ * @brief Removes a ctofu data element from the cset.
  *
- * @param set  The TriloSet from which the data will be removed.
- * @param data The TriloTofu data element to be removed.
- * @return A TofuError value indicating the result of the removal.
+ * @param set  The cset from which the data will be removed.
+ * @param data The ctofu data element to be removed.
+ * @return A ctofu_error value indicating the result of the removal.
  */
-TofuError trilo_xdata_set_remove(TriloSet* set, TriloTofu data);
+ctofu_error trilo_xdata_set_remove(cset* set, ctofu data);
 
 /**
- * @brief Searches for a TriloTofu data element in the TriloSet.
+ * @brief Searches for a ctofu data element in the cset.
  *
- * @param set  The TriloSet to search within.
- * @param data The TriloTofu data element to search for.
- * @return A TofuError value indicating the result of the search.
+ * @param set  The cset to search within.
+ * @param data The ctofu data element to search for.
+ * @return A ctofu_error value indicating the result of the search.
  */
-TofuError trilo_xdata_set_search(const TriloSet* set, TriloTofu data);
+ctofu_error trilo_xdata_set_search(const cset* set, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
 /**
- * @brief Gets the size of the TriloSet.
+ * @brief Gets the size of the cset.
  *
- * @param set The TriloSet for which the size will be determined.
- * @return The size of the TriloSet.
+ * @param set The cset for which the size will be determined.
+ * @return The size of the cset.
  */
-size_t trilo_xdata_set_size(const TriloSet* set);
+size_t trilo_xdata_set_size(const cset* set);
 
 /**
- * @brief Getter function to retrieve a TriloTofu data element from the TriloSet.
+ * @brief Getter function to retrieve a ctofu data element from the cset.
  *
- * @param set  The TriloSet from which the data will be retrieved.
- * @param data The TriloTofu data element to retrieve.
- * @return A pointer to the TriloTofu data element in the TriloSet (or NULL if not found).
+ * @param set  The cset from which the data will be retrieved.
+ * @param data The ctofu data element to retrieve.
+ * @return A pointer to the ctofu data element in the cset (or NULL if not found).
  */
-TriloTofu* trilo_xdata_set_getter(TriloSet* set, TriloTofu data);
+ctofu* trilo_xdata_set_getter(cset* set, ctofu data);
 
 /**
- * @brief Setter function to update a TriloTofu data element in the TriloSet.
+ * @brief Setter function to update a ctofu data element in the cset.
  *
- * @param set  The TriloSet in which the data will be updated.
- * @param data The TriloTofu data element to update.
- * @return A TofuError value indicating the result of the update.
+ * @param set  The cset in which the data will be updated.
+ * @param data The ctofu data element to update.
+ * @return A ctofu_error value indicating the result of the update.
  */
-TofuError trilo_xdata_set_setter(TriloSet* set, TriloTofu data);
+ctofu_error trilo_xdata_set_setter(cset* set, ctofu data);
 
 /**
- * @brief Checks if the TriloSet is not empty.
+ * @brief Checks if the cset is not empty.
  *
- * @param set The TriloSet to check.
- * @return true if the TriloSet is not empty, false otherwise.
+ * @param set The cset to check.
+ * @return true if the cset is not empty, false otherwise.
  */
-bool trilo_xdata_set_not_empty(const TriloSet* set);
+bool trilo_xdata_set_not_empty(const cset* set);
 
 /**
- * @brief Checks if the TriloSet is not a null pointer.
+ * @brief Checks if the cset is not a null pointer.
  *
- * @param set The TriloSet to check.
- * @return true if the TriloSet is not a null pointer, false otherwise.
+ * @param set The cset to check.
+ * @return true if the cset is not a null pointer, false otherwise.
  */
-bool trilo_xdata_set_not_nullptr(const TriloSet* set);
+bool trilo_xdata_set_not_nullptr(const cset* set);
 
 /**
- * @brief Checks if the TriloSet is empty.
+ * @brief Checks if the cset is empty.
  *
- * @param set The TriloSet to check.
- * @return true if the TriloSet is empty, false otherwise.
+ * @param set The cset to check.
+ * @return true if the cset is empty, false otherwise.
  */
-bool trilo_xdata_set_is_empty(const TriloSet* set);
+bool trilo_xdata_set_is_empty(const cset* set);
 
 /**
- * @brief Checks if the TriloSet is a null pointer.
+ * @brief Checks if the cset is a null pointer.
  *
- * @param set The TriloSet to check.
- * @return true if the TriloSet is a null pointer, false otherwise.
+ * @param set The cset to check.
+ * @return true if the cset is a null pointer, false otherwise.
  */
-bool trilo_xdata_set_is_nullptr(const TriloSet* set);
+bool trilo_xdata_set_is_nullptr(const cset* set);
 
 /**
- * @brief Checks if a TriloTofu data element is present in the TriloSet.
+ * @brief Checks if a ctofu data element is present in the cset.
  *
- * @param set  The TriloSet to check.
- * @param data The TriloTofu data element to search for.
+ * @param set  The cset to check.
+ * @param data The ctofu data element to search for.
  * @return true if the data element is present, false otherwise.
  */
-bool trilo_xdata_set_contains(const TriloSet* set, TriloTofu data);
+bool trilo_xdata_set_contains(const cset* set, ctofu data);
 
 #ifdef __cplusplus
 }

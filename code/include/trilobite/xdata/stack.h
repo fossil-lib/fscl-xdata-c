@@ -48,137 +48,137 @@ extern "C"
 #include "trilobite/xdata/tofu.h"
 
 // Stack structure
-typedef struct TriloStackNode {
-    TriloTofu data; // Data stored in the stack node
-    struct TriloStackNode* next; // Pointer to the next node
-} TriloStackNode;
+typedef struct cstack_node {
+    ctofu data; // Data stored in the stack node
+    struct cstack_node* next; // Pointer to the next node
+} cstack_node;
 
-typedef struct TriloStack {
-    enum DataType stack_type; // Type of the stack
-    TriloStackNode* top; // Pointer to the top node of the stack
-} TriloStack;
+typedef struct cstack {
+    enum ctofu_type stack_type; // Type of the stack
+    cstack_node* top; // Pointer to the top node of the stack
+} cstack;
 
 // =======================
 // CREATE and DELETE
 // =======================
 
 /**
- * @brief Creates a new TriloStack instance with the specified list type.
+ * @brief Creates a new cstack instance with the specified list type.
  *
- * @param list_type The data type for the TriloStack (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created TriloStack instance.
+ * @param list_type The data type for the cstack (e.g., INTEGER_TYPE, DOUBLE_TYPE).
+ * @return A pointer to the newly created cstack instance.
  */
-TriloStack* trilo_xdata_stack_create(enum DataType list_type);
+cstack* trilo_xdata_stack_create(enum ctofu_type list_type);
 
 /**
- * @brief Destroys the TriloStack instance, freeing all associated memory.
+ * @brief Destroys the cstack instance, freeing all associated memory.
  *
- * @param stack The TriloStack instance to be destroyed.
+ * @param stack The cstack instance to be destroyed.
  */
-void trilo_xdata_stack_destroy(TriloStack* stack);
+void trilo_xdata_stack_destroy(cstack* stack);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
 /**
- * @brief Inserts a TriloTofu data element into the TriloStack.
+ * @brief Inserts a ctofu data element into the cstack.
  *
- * @param stack The TriloStack where the data will be inserted.
- * @param data  The TriloTofu data element to be inserted.
- * @return A TofuError value indicating the result of the insertion.
+ * @param stack The cstack where the data will be inserted.
+ * @param data  The ctofu data element to be inserted.
+ * @return A ctofu_error value indicating the result of the insertion.
  */
-TofuError trilo_xdata_stack_insert(TriloStack* stack, TriloTofu data);
+ctofu_error trilo_xdata_stack_insert(cstack* stack, ctofu data);
 
 /**
- * @brief Removes a TriloTofu data element from the TriloStack.
+ * @brief Removes a ctofu data element from the cstack.
  *
- * @param stack The TriloStack from which the data will be removed.
- * @param data  The TriloTofu data element to be removed.
- * @return A TofuError value indicating the result of the removal.
+ * @param stack The cstack from which the data will be removed.
+ * @param data  The ctofu data element to be removed.
+ * @return A ctofu_error value indicating the result of the removal.
  */
-TofuError trilo_xdata_stack_remove(TriloStack* stack, TriloTofu data);
+ctofu_error trilo_xdata_stack_remove(cstack* stack, ctofu data);
 
 /**
- * @brief Searches for a TriloTofu data element in the TriloStack.
+ * @brief Searches for a ctofu data element in the cstack.
  *
- * @param stack The TriloStack to search within.
- * @param data  The TriloTofu data element to search for.
- * @return A TofuError value indicating the result of the search.
+ * @param stack The cstack to search within.
+ * @param data  The ctofu data element to search for.
+ * @return A ctofu_error value indicating the result of the search.
  */
-TofuError trilo_xdata_stack_search(const TriloStack* stack, TriloTofu data);
+ctofu_error trilo_xdata_stack_search(const cstack* stack, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
 /**
- * @brief Gets the size of the TriloStack.
+ * @brief Gets the size of the cstack.
  *
- * @param stack The TriloStack for which the size will be determined.
- * @return The size of the TriloStack.
+ * @param stack The cstack for which the size will be determined.
+ * @return The size of the cstack.
  */
-size_t trilo_xdata_stack_size(const TriloStack* stack);
+size_t trilo_xdata_stack_size(const cstack* stack);
 
 /**
- * @brief Getter function to retrieve a TriloTofu data element from the TriloStack.
+ * @brief Getter function to retrieve a ctofu data element from the cstack.
  *
- * @param stack The TriloStack from which the data will be retrieved.
- * @param data  The TriloTofu data element to retrieve.
- * @return A pointer to the TriloTofu data element in the TriloStack (or NULL if not found).
+ * @param stack The cstack from which the data will be retrieved.
+ * @param data  The ctofu data element to retrieve.
+ * @return A pointer to the ctofu data element in the cstack (or NULL if not found).
  */
-TriloTofu* trilo_xdata_stack_getter(TriloStack* stack, TriloTofu data);
+ctofu* trilo_xdata_stack_getter(cstack* stack, ctofu data);
 
 /**
- * @brief Setter function to update a TriloTofu data element in the TriloStack.
+ * @brief Setter function to update a ctofu data element in the cstack.
  *
- * @param stack The TriloStack in which the data will be updated.
- * @param data  The TriloTofu data element to update.
- * @return A TofuError value indicating the result of the update.
+ * @param stack The cstack in which the data will be updated.
+ * @param data  The ctofu data element to update.
+ * @return A ctofu_error value indicating the result of the update.
  */
-TofuError trilo_xdata_stack_setter(TriloStack* stack, TriloTofu data);
+ctofu_error trilo_xdata_stack_setter(cstack* stack, ctofu data);
 
 /**
- * @brief Checks if the TriloStack is not empty.
+ * @brief Checks if the cstack is not empty.
  *
- * @param stack The TriloStack to check.
- * @return true if the TriloStack is not empty, false otherwise.
+ * @param stack The cstack to check.
+ * @return true if the cstack is not empty, false otherwise.
  */
-bool trilo_xdata_stack_not_empty(const TriloStack* stack);
+bool trilo_xdata_stack_not_empty(const cstack* stack);
 
 /**
- * @brief Checks if the TriloStack is not a null pointer.
+ * @brief Checks if the cstack is not a null pointer.
  *
- * @param stack The TriloStack to check.
- * @return true if the TriloStack is not a null pointer, false otherwise.
+ * @param stack The cstack to check.
+ * @return true if the cstack is not a null pointer, false otherwise.
  */
-bool trilo_xdata_stack_not_nullptr(const TriloStack* stack);
+bool trilo_xdata_stack_not_nullptr(const cstack* stack);
 
 /**
- * @brief Checks if the TriloStack is empty.
+ * @brief Checks if the cstack is empty.
  *
- * @param stack The TriloStack to check.
- * @return true if the TriloStack is empty, false otherwise.
+ * @param stack The cstack to check.
+ * @return true if the cstack is empty, false otherwise.
  */
-bool trilo_xdata_stack_is_empty(const TriloStack* stack);
+bool trilo_xdata_stack_is_empty(const cstack* stack);
 
 /**
- * @brief Checks if the TriloStack is a null pointer.
+ * @brief Checks if the cstack is a null pointer.
  *
- * @param stack The TriloStack to check.
- * @return true if the TriloStack is a null pointer, false otherwise.
+ * @param stack The cstack to check.
+ * @return true if the cstack is a null pointer, false otherwise.
  */
-bool trilo_xdata_stack_is_nullptr(const TriloStack* stack);
+bool trilo_xdata_stack_is_nullptr(const cstack* stack);
 
 /**
  * @brief Gets the top element of the stack without removing it.
  *
  * This function returns a copy of the top element of the stack without removing it.
  *
- * @param stack The TriloStack instance to get the top element from.
+ * @param stack The cstack instance to get the top element from.
  * @return A copy of the top element of the stack.
  */
-TriloTofu trilo_xdata_stack_top(TriloStack* stack);
+ctofu trilo_xdata_stack_top(cstack* stack);
 
 #ifdef __cplusplus
 }

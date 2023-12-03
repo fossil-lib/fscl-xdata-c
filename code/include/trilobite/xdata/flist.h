@@ -48,142 +48,142 @@ extern "C"
 #include "trilobite/xdata/tofu.h"
 
 // Node structure for the linked list
-typedef struct TriloForwardListNode {
-    TriloTofu data;
-    struct TriloForwardListNode* next;
-} TriloForwardListNode;
+typedef struct cflist_node {
+    ctofu data;
+    struct cflist_node* next;
+} cflist_node;
 
 // Linked list structure
-typedef struct TriloForwardList {
-    TriloForwardListNode* head;
-    enum DataType list_type;  // Type of the linked list
-} TriloForwardList;
+typedef struct cflist {
+    cflist_node* head;
+    enum ctofu_type list_type;  // Type of the linked list
+} cflist;
 
 // =======================
 // CREATE and DELETE
 // =======================
 
 /**
- * @brief Creates a new TriloForwardList instance with the specified list type.
+ * @brief Creates a new cflist instance with the specified list type.
  *
- * @param list_type The data type for the TriloForwardList (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created TriloForwardList instance.
+ * @param list_type The data type for the cflist (e.g., INTEGER_TYPE, DOUBLE_TYPE).
+ * @return A pointer to the newly created cflist instance.
  */
-TriloForwardList* trilo_xdata_flist_create(enum DataType list_type);
+cflist* trilo_xdata_flist_create(enum ctofu_type list_type);
 
 /**
- * @brief Destroys the TriloForwardList instance, freeing all associated memory.
+ * @brief Destroys the cflist instance, freeing all associated memory.
  *
- * @param flist The TriloForwardList instance to be destroyed.
+ * @param flist The cflist instance to be destroyed.
  */
-void trilo_xdata_flist_destroy(TriloForwardList* flist);
+void trilo_xdata_flist_destroy(cflist* flist);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
 /**
- * @brief Inserts a TriloTofu data element into the TriloForwardList.
+ * @brief Inserts a ctofu data element into the cflist.
  *
- * @param flist The TriloForwardList where the data will be inserted.
- * @param data  The TriloTofu data element to be inserted.
- * @return A TofuError value indicating the result of the insertion.
+ * @param flist The cflist where the data will be inserted.
+ * @param data  The ctofu data element to be inserted.
+ * @return A ctofu_error value indicating the result of the insertion.
  */
-TofuError trilo_xdata_flist_insert(TriloForwardList* flist, TriloTofu data);
+ctofu_error trilo_xdata_flist_insert(cflist* flist, ctofu data);
 
 /**
- * @brief Removes a TriloTofu data element from the TriloForwardList.
+ * @brief Removes a ctofu data element from the cflist.
  *
- * @param flist The TriloForwardList from which the data will be removed.
- * @param data  The TriloTofu data element to be removed.
- * @return A TofuError value indicating the result of the removal.
+ * @param flist The cflist from which the data will be removed.
+ * @param data  The ctofu data element to be removed.
+ * @return A ctofu_error value indicating the result of the removal.
  */
-TofuError trilo_xdata_flist_remove(TriloForwardList* flist, TriloTofu data);
+ctofu_error trilo_xdata_flist_remove(cflist* flist, ctofu data);
 
 /**
- * @brief Searches for a TriloTofu data element in the TriloForwardList.
+ * @brief Searches for a ctofu data element in the cflist.
  *
- * @param flist The TriloForwardList to search within.
- * @param data  The TriloTofu data element to search for.
- * @return A TofuError value indicating the result of the search.
+ * @param flist The cflist to search within.
+ * @param data  The ctofu data element to search for.
+ * @return A ctofu_error value indicating the result of the search.
  */
-TofuError trilo_xdata_flist_search(const TriloForwardList* flist, TriloTofu data);
+ctofu_error trilo_xdata_flist_search(const cflist* flist, ctofu data);
 
 /**
- * @brief Reverses the TriloForwardList in the forward direction.
+ * @brief Reverses the cflist in the forward direction.
  *
- * @param flist The TriloForwardList to be reversed.
+ * @param flist The cflist to be reversed.
  */
-void trilo_xdata_flist_reverse_forward(TriloForwardList* flist);
+void trilo_xdata_flist_reverse_forward(cflist* flist);
 
 /**
- * @brief Reverses the TriloForwardList in the backward direction.
+ * @brief Reverses the cflist in the backward direction.
  *
- * @param flist The TriloForwardList to be reversed.
+ * @param flist The cflist to be reversed.
  */
-void trilo_xdata_flist_reverse_backward(TriloForwardList* flist);
+void trilo_xdata_flist_reverse_backward(cflist* flist);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
 /**
- * @brief Gets the size of the TriloForwardList.
+ * @brief Gets the size of the cflist.
  *
- * @param flist The TriloForwardList for which the size will be determined.
- * @return The size of the TriloForwardList.
+ * @param flist The cflist for which the size will be determined.
+ * @return The size of the cflist.
  */
-size_t trilo_xdata_flist_size(const TriloForwardList* flist);
+size_t trilo_xdata_flist_size(const cflist* flist);
 
 /**
- * @brief Getter function to retrieve a TriloTofu data element from the TriloForwardList.
+ * @brief Getter function to retrieve a ctofu data element from the cflist.
  *
- * @param flist The TriloForwardList from which the data will be retrieved.
- * @param data  The TriloTofu data element to retrieve.
- * @return A pointer to the TriloTofu data element in the TriloForwardList (or NULL if not found).
+ * @param flist The cflist from which the data will be retrieved.
+ * @param data  The ctofu data element to retrieve.
+ * @return A pointer to the ctofu data element in the cflist (or NULL if not found).
  */
-TriloTofu* trilo_xdata_flist_getter(TriloForwardList* flist, TriloTofu data);
+ctofu* trilo_xdata_flist_getter(cflist* flist, ctofu data);
 
 /**
- * @brief Setter function to update a TriloTofu data element in the TriloForwardList.
+ * @brief Setter function to update a ctofu data element in the cflist.
  *
- * @param flist The TriloForwardList in which the data will be updated.
- * @param data  The TriloTofu data element to update.
- * @return A TofuError value indicating the result of the update.
+ * @param flist The cflist in which the data will be updated.
+ * @param data  The ctofu data element to update.
+ * @return A ctofu_error value indicating the result of the update.
  */
-TofuError trilo_xdata_flist_setter(TriloForwardList* flist, TriloTofu data);
+ctofu_error trilo_xdata_flist_setter(cflist* flist, ctofu data);
 
 /**
- * @brief Checks if the TriloForwardList is not empty.
+ * @brief Checks if the cflist is not empty.
  *
- * @param flist The TriloForwardList to check.
- * @return true if the TriloForwardList is not empty, false otherwise.
+ * @param flist The cflist to check.
+ * @return true if the cflist is not empty, false otherwise.
  */
-bool trilo_xdata_flist_not_empty(const TriloForwardList* flist);
+bool trilo_xdata_flist_not_empty(const cflist* flist);
 
 /**
- * @brief Checks if the TriloForwardList is not a null pointer.
+ * @brief Checks if the cflist is not a null pointer.
  *
- * @param flist The TriloForwardList to check.
- * @return true if the TriloForwardList is not a null pointer, false otherwise.
+ * @param flist The cflist to check.
+ * @return true if the cflist is not a null pointer, false otherwise.
  */
-bool trilo_xdata_flist_not_nullptr(const TriloForwardList* flist);
+bool trilo_xdata_flist_not_nullptr(const cflist* flist);
 
 /**
- * @brief Checks if the TriloForwardList is empty.
+ * @brief Checks if the cflist is empty.
  *
- * @param flist The TriloForwardList to check.
- * @return true if the TriloForwardList is empty, false otherwise.
+ * @param flist The cflist to check.
+ * @return true if the cflist is empty, false otherwise.
  */
-bool trilo_xdata_flist_is_empty(const TriloForwardList* flist);
+bool trilo_xdata_flist_is_empty(const cflist* flist);
 
 /**
- * @brief Checks if the TriloForwardList is a null pointer.
+ * @brief Checks if the cflist is a null pointer.
  *
- * @param flist The TriloForwardList to check.
- * @return true if the TriloForwardList is a null pointer, false otherwise.
+ * @param flist The cflist to check.
+ * @return true if the cflist is a null pointer, false otherwise.
  */
-bool trilo_xdata_flist_is_nullptr(const TriloForwardList* flist);
+bool trilo_xdata_flist_is_nullptr(const cflist* flist);
 
 #ifdef __cplusplus
 }
