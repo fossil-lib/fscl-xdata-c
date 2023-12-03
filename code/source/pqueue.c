@@ -38,9 +38,9 @@
 // CREATE and DELETE
 // =======================
 
-// Function to create a new TriloPQueue
-TriloPQueue* trilo_xdata_pqueue_create(enum DataType queue_type) {
-    TriloPQueue* pqueue = (TriloPQueue*)malloc(sizeof(TriloPQueue));
+// Function to create a new cpqueue
+cpqueue* trilo_xdata_pqueue_create(enum ctofu_type queue_type) {
+    cpqueue* pqueue = (cpqueue*)malloc(sizeof(cpqueue));
     if (pqueue == NULL) {
         // Handle memory allocation failure
         return NULL;
@@ -51,16 +51,16 @@ TriloPQueue* trilo_xdata_pqueue_create(enum DataType queue_type) {
     return pqueue;
 } // end of func
 
-// Function to destroy the TriloPQueue
-void trilo_xdata_pqueue_destroy(TriloPQueue* pqueue) {
+// Function to destroy the cpqueue
+void trilo_xdata_pqueue_destroy(cpqueue* pqueue) {
     if (pqueue == NULL) {
         return;
     } // end if
 
     // Free nodes and their data
-    TriloPQueueNode* current = pqueue->front;
+    cpqueue_node* current = pqueue->front;
     while (current != NULL) {
-        TriloPQueueNode* temp = current;
+        cpqueue_node* temp = current;
         current = current->next;
         free(temp);
     } // end while
@@ -73,12 +73,12 @@ void trilo_xdata_pqueue_destroy(TriloPQueue* pqueue) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-TofuError trilo_xdata_pqueue_insert(TriloPQueue* pqueue, TriloTofu data, int priority) {
+ctofu_error trilo_xdata_pqueue_insert(cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloPQueueNode* newNode = (TriloPQueueNode*)malloc(sizeof(TriloPQueueNode));
+    cpqueue_node* newNode = (cpqueue_node*)malloc(sizeof(cpqueue_node));
     if (newNode == NULL) {
         return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
     } // end if
@@ -92,7 +92,7 @@ TofuError trilo_xdata_pqueue_insert(TriloPQueue* pqueue, TriloTofu data, int pri
         newNode->next = pqueue->front;
         pqueue->front = newNode;
     } else {
-        TriloPQueueNode* current = pqueue->front;
+        cpqueue_node* current = pqueue->front;
         while (current->next != NULL && current->next->priority >= priority) {
             current = current->next;
         } // end while
@@ -103,7 +103,7 @@ TofuError trilo_xdata_pqueue_insert(TriloPQueue* pqueue, TriloTofu data, int pri
     return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
-TofuError trilo_xdata_pqueue_remove(TriloPQueue* pqueue, TriloTofu data, int priority) {
+ctofu_error trilo_xdata_pqueue_remove(cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -113,8 +113,8 @@ TofuError trilo_xdata_pqueue_remove(TriloPQueue* pqueue, TriloTofu data, int pri
     } // end if
 
     // Remove the node with matching data and priority
-    TriloPQueueNode* current = pqueue->front;
-    TriloPQueueNode* prev = NULL;
+    cpqueue_node* current = pqueue->front;
+    cpqueue_node* prev = NULL;
 
     while (current != NULL) {
         if (current->priority == priority) {
@@ -180,12 +180,12 @@ TofuError trilo_xdata_pqueue_remove(TriloPQueue* pqueue, TriloTofu data, int pri
     return TRILO_XDATA_TYPE_SUCCESS;  // No matching data and priority found
 } // end of func
 
-TofuError trilo_xdata_pqueue_search(const TriloPQueue* pqueue, TriloTofu data, int priority) {
+ctofu_error trilo_xdata_pqueue_search(const cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloPQueueNode* current = pqueue->front;
+    cpqueue_node* current = pqueue->front;
     while (current != NULL) {
         if (current->priority == priority) {
             // Check data match based on type
@@ -229,13 +229,13 @@ TofuError trilo_xdata_pqueue_search(const TriloPQueue* pqueue, TriloTofu data, i
 // UTILITY FUNCTIONS
 // =======================
 
-size_t trilo_xdata_pqueue_size(const TriloPQueue* pqueue) {
+size_t trilo_xdata_pqueue_size(const cpqueue* pqueue) {
     if (pqueue == NULL) {
         return 0;
     } // end if
 
     size_t size = 0;
-    TriloPQueueNode* current = pqueue->front;
+    cpqueue_node* current = pqueue->front;
     while (current != NULL) {
         size++;
         current = current->next;
@@ -244,12 +244,12 @@ size_t trilo_xdata_pqueue_size(const TriloPQueue* pqueue) {
     return size;
 } // end of func
 
-TriloTofu* trilo_xdata_pqueue_getter(TriloPQueue* pqueue, TriloTofu data, int priority) {
+ctofu* trilo_xdata_pqueue_getter(cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
         return NULL;
     } // end if
 
-    TriloPQueueNode* current = pqueue->front;
+    cpqueue_node* current = pqueue->front;
     while (current != NULL) {
         if (current->priority == priority) {
             // Check data match based on type
@@ -289,12 +289,12 @@ TriloTofu* trilo_xdata_pqueue_getter(TriloPQueue* pqueue, TriloTofu data, int pr
     return NULL;  // No matching data and priority found
 } // end of func
 
-TofuError trilo_xdata_pqueue_setter(TriloPQueue* pqueue, TriloTofu data, int priority) {
+ctofu_error trilo_xdata_pqueue_setter(cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloTofu* existingData = trilo_xdata_pqueue_getter(pqueue, data, priority);
+    ctofu* existingData = trilo_xdata_pqueue_getter(pqueue, data, priority);
     if (existingData != NULL) {
         *existingData = data;
         return TRILO_XDATA_TYPE_SUCCESS;
@@ -303,18 +303,18 @@ TofuError trilo_xdata_pqueue_setter(TriloPQueue* pqueue, TriloTofu data, int pri
     return TRILO_XDATA_TYPE_WAS_MISMATCH;  // Data and priority not found
 } // end of func
 
-bool trilo_xdata_pqueue_not_empty(const TriloPQueue* pqueue) {
+bool trilo_xdata_pqueue_not_empty(const cpqueue* pqueue) {
     return pqueue != NULL && pqueue->front != NULL;
 } // end of func
 
-bool trilo_xdata_pqueue_not_nullptr(const TriloPQueue* pqueue) {
+bool trilo_xdata_pqueue_not_nullptr(const cpqueue* pqueue) {
     return pqueue != NULL;
 } // end of func
 
-bool trilo_xdata_pqueue_is_empty(const TriloPQueue* pqueue) {
+bool trilo_xdata_pqueue_is_empty(const cpqueue* pqueue) {
     return pqueue == NULL || pqueue->front == NULL;
 } // end of func
 
-bool trilo_xdata_pqueue_is_nullptr(const TriloPQueue* pqueue) {
+bool trilo_xdata_pqueue_is_nullptr(const cpqueue* pqueue) {
     return pqueue == NULL;
 } // end of func

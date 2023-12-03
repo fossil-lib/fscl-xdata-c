@@ -40,7 +40,7 @@
 
 // Test case for creating and destroying a tree
 XTEST_CASE(xdata_let_tree_create_and_destroy_tree) {
-    TriloTree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
+    ctree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(tree);
 
     trilo_xdata_tree_destroy(tree);
@@ -48,17 +48,17 @@ XTEST_CASE(xdata_let_tree_create_and_destroy_tree) {
 
 // Test case for inserting and searching for a node in the tree
 XTEST_CASE(xdata_let_tree_insert_and_search_tree) {
-    TriloTree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
+    ctree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(tree);
 
-    TriloTofu data_to_insert = trilo_xdata_tofu_create_from_integer(42);
+    ctofu data_to_insert = trilo_xdata_tofu_create_from_integer(42);
 
     // Insert a node into the tree
-    TofuError insert_result = trilo_xdata_tree_insert(tree, data_to_insert);
+    ctofu_error insert_result = trilo_xdata_tree_insert(tree, data_to_insert);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, insert_result);
 
     // Search for the inserted node
-    TofuError search_result = trilo_xdata_tree_search(tree, data_to_insert);
+    ctofu_error search_result = trilo_xdata_tree_search(tree, data_to_insert);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, search_result);
 
     trilo_xdata_tree_destroy(tree);
@@ -66,17 +66,17 @@ XTEST_CASE(xdata_let_tree_insert_and_search_tree) {
 
 // Test case for inserting and deleting a node in the tree
 XTEST_CASE(xdata_let_tree_insert_and_delete_tree) {
-    TriloTree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
+    ctree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(tree);
 
-    TriloTofu data_to_insert = trilo_xdata_tofu_create_from_integer(42);
+    ctofu data_to_insert = trilo_xdata_tofu_create_from_integer(42);
 
     // Insert a node into the tree
-    TofuError insert_result = trilo_xdata_tree_insert(tree, data_to_insert);
+    ctofu_error insert_result = trilo_xdata_tree_insert(tree, data_to_insert);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, insert_result);
 
     // Delete the inserted node
-    TofuError delete_result = trilo_xdata_tree_remove(tree, data_to_insert);
+    ctofu_error delete_result = trilo_xdata_tree_remove(tree, data_to_insert);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, delete_result);
 
     trilo_xdata_tree_destroy(tree);

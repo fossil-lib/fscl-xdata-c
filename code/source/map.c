@@ -34,17 +34,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Initialize a TriloMap
-TriloMap* trilo_xdata_map_create(enum DataType list_type) {
-    TriloMap* map = malloc(sizeof(TriloMap));
+// Initialize a cmap
+cmap* trilo_xdata_map_create(enum ctofu_type list_type) {
+    cmap* map = malloc(sizeof(cmap));
     if (map) {
         map->size = 0;
     } // end if
     return map;
 } // end of func
 
-// Destroy the TriloMap
-void trilo_xdata_map_destroy(TriloMap* map) {
+// Destroy the cmap
+void trilo_xdata_map_destroy(cmap* map) {
     if (map) {
         for (size_t i = 0; i < map->size; i++) {
             // No need to destroy the key and value
@@ -54,7 +54,7 @@ void trilo_xdata_map_destroy(TriloMap* map) {
 } // end of func
 
 // Insert a key-value pair into the map
-TofuError trilo_xdata_map_insert(TriloMap* map, TriloTofu key, TriloTofu value) {
+ctofu_error trilo_xdata_map_insert(cmap* map, ctofu key, ctofu value) {
     if (map && map->size < MAX_MAP_SIZE) {
         map->keys[map->size] = key;
         map->values[map->size] = value;
@@ -65,7 +65,7 @@ TofuError trilo_xdata_map_insert(TriloMap* map, TriloTofu key, TriloTofu value) 
 } // end of func
 
 // Remove a key-value pair by key
-TofuError trilo_xdata_map_remove(TriloMap* map, TriloTofu key) {
+ctofu_error trilo_xdata_map_remove(cmap* map, ctofu key) {
     if (map) {
         for (size_t i = 0; i < map->size; i++) {
             if (trilo_xdata_tofu_equal(key, map->keys[i])) {
@@ -84,7 +84,7 @@ TofuError trilo_xdata_map_remove(TriloMap* map, TriloTofu key) {
 } // end of func
 
 // Search for a key in the map
-TofuError trilo_xdata_map_search(const TriloMap* map, TriloTofu key) {
+ctofu_error trilo_xdata_map_search(const cmap* map, ctofu key) {
     if (map) {
         for (size_t i = 0; i < map->size; i++) {
             if (trilo_xdata_tofu_equal(key, map->keys[i])) {
@@ -96,12 +96,12 @@ TofuError trilo_xdata_map_search(const TriloMap* map, TriloTofu key) {
 } // end of func
 
 // Get the size of the map
-size_t trilo_xdata_map_size(const TriloMap* map) {
+size_t trilo_xdata_map_size(const cmap* map) {
     return map ? map->size : 0;
 } // end of func
 
 // Getter function to retrieve a key-value pair
-TofuError trilo_xdata_map_getter(TriloMap* map, TriloTofu key, TriloTofu* value) {
+ctofu_error trilo_xdata_map_getter(cmap* map, ctofu key, ctofu* value) {
     if (map) {
         for (size_t i = 0; i < map->size; i++) {
             if (trilo_xdata_tofu_equal(key, map->keys[i])) {
@@ -114,7 +114,7 @@ TofuError trilo_xdata_map_getter(TriloMap* map, TriloTofu key, TriloTofu* value)
 } // end of func
 
 // Setter function to update a key-value pair
-TofuError trilo_xdata_map_setter(TriloMap* map, TriloTofu key, TriloTofu value) {
+ctofu_error trilo_xdata_map_setter(cmap* map, ctofu key, ctofu value) {
     if (map) {
         for (size_t i = 0; i < map->size; i++) {
             if (trilo_xdata_tofu_equal(key, map->keys[i])) {
@@ -128,27 +128,27 @@ TofuError trilo_xdata_map_setter(TriloMap* map, TriloTofu key, TriloTofu value) 
 } // end of func
 
 // Check if the map is not empty
-bool trilo_xdata_map_not_empty(const TriloMap* map) {
+bool trilo_xdata_map_not_empty(const cmap* map) {
     return map ? map->size > 0 : false;
 } // end of func
 
 // Check if the map is not a null pointer
-bool trilo_xdata_map_not_nullptr(const TriloMap* map) {
+bool trilo_xdata_map_not_nullptr(const cmap* map) {
     return map != NULL;
 } // end of func
 
 // Check if the map is empty
-bool trilo_xdata_map_is_empty(const TriloMap* map) {
+bool trilo_xdata_map_is_empty(const cmap* map) {
     return map ? map->size == 0 : true;
 } // end of func
 
 // Check if the map is a null pointer
-bool trilo_xdata_map_is_nullptr(const TriloMap* map) {
+bool trilo_xdata_map_is_nullptr(const cmap* map) {
     return map == NULL;
 } // end of func
 
 // Check if a key exists in the map
-bool trilo_xdata_map_contains(const TriloMap* map, TriloTofu key) {
+bool trilo_xdata_map_contains(const cmap* map, ctofu key) {
     if (map) {
         for (size_t i = 0; i < map->size; i++) {
             if (trilo_xdata_tofu_equal(key, map->keys[i])) {

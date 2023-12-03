@@ -39,20 +39,20 @@
 //
 
 XTEST_CASE(xdata_let_stack_create_and_destroy) {
-    TriloStack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    cstack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(stack);
 
     trilo_xdata_stack_destroy(stack);
 }
 
 XTEST_CASE(xdata_let_stack_insert_and_size) {
-    TriloStack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    cstack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
     
-    TriloTofu data1 = trilo_xdata_tofu_create_from_integer(42);
-    TriloTofu data2 = trilo_xdata_tofu_create_from_integer(7);
+    ctofu data1 = trilo_xdata_tofu_create_from_integer(42);
+    ctofu data2 = trilo_xdata_tofu_create_from_integer(7);
 
-    TofuError result1 = trilo_xdata_stack_insert(stack, data1);
-    TofuError result2 = trilo_xdata_stack_insert(stack, data2);
+    ctofu_error result1 = trilo_xdata_stack_insert(stack, data1);
+    ctofu_error result2 = trilo_xdata_stack_insert(stack, data2);
     
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result1);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result2);
@@ -64,22 +64,22 @@ XTEST_CASE(xdata_let_stack_insert_and_size) {
 }
 
 XTEST_CASE(xdata_let_stack_remove_and_search) {
-    TriloStack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    cstack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
     
-    TriloTofu data1 = trilo_xdata_tofu_create_from_integer(42);
-    TriloTofu data2 = trilo_xdata_tofu_create_from_integer(7);
+    ctofu data1 = trilo_xdata_tofu_create_from_integer(42);
+    ctofu data2 = trilo_xdata_tofu_create_from_integer(7);
 
     trilo_xdata_stack_insert(stack, data1);
     trilo_xdata_stack_insert(stack, data2);
 
-    TofuError result1 = trilo_xdata_stack_remove(stack, data1);
-    TofuError result2 = trilo_xdata_stack_remove(stack, data2);
+    ctofu_error result1 = trilo_xdata_stack_remove(stack, data1);
+    ctofu_error result2 = trilo_xdata_stack_remove(stack, data2);
     
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result1);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result2);
     
-    TofuError search_result1 = trilo_xdata_stack_search(stack, data1);
-    TofuError search_result2 = trilo_xdata_stack_search(stack, data2);
+    ctofu_error search_result1 = trilo_xdata_stack_search(stack, data1);
+    ctofu_error search_result2 = trilo_xdata_stack_search(stack, data2);
     
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, search_result1);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, search_result2);
@@ -88,16 +88,16 @@ XTEST_CASE(xdata_let_stack_remove_and_search) {
 }
 
 XTEST_CASE(xdata_let_stack_getter_and_setter) {
-    TriloStack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    cstack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
     
-    TriloTofu data1 = trilo_xdata_tofu_create_from_integer(42);
-    TriloTofu data2 = trilo_xdata_tofu_create_from_integer(7);
+    ctofu data1 = trilo_xdata_tofu_create_from_integer(42);
+    ctofu data2 = trilo_xdata_tofu_create_from_integer(7);
 
     trilo_xdata_stack_insert(stack, data1);
     trilo_xdata_stack_insert(stack, data2);
 
-    TriloTofu* getter_result1 = trilo_xdata_stack_getter(stack, data1);
-    TriloTofu* getter_result2 = trilo_xdata_stack_getter(stack, data2);
+    ctofu* getter_result1 = trilo_xdata_stack_getter(stack, data1);
+    ctofu* getter_result2 = trilo_xdata_stack_getter(stack, data2);
     
     TEST_ASSERT_NOT_NULL_PTR(getter_result1);
     TEST_ASSERT_NOT_NULL_PTR(getter_result2);
@@ -105,11 +105,11 @@ XTEST_CASE(xdata_let_stack_getter_and_setter) {
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, trilo_xdata_tofu_compare(*getter_result1, data1));
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, trilo_xdata_tofu_compare(*getter_result2, data2));
     
-    TriloTofu new_data1 = trilo_xdata_tofu_create_from_integer(99);
-    TriloTofu new_data2 = trilo_xdata_tofu_create_from_integer(77);
+    ctofu new_data1 = trilo_xdata_tofu_create_from_integer(99);
+    ctofu new_data2 = trilo_xdata_tofu_create_from_integer(77);
 
-    TofuError setter_result1 = trilo_xdata_stack_setter(stack, new_data1);
-    TofuError setter_result2 = trilo_xdata_stack_setter(stack, new_data2);
+    ctofu_error setter_result1 = trilo_xdata_stack_setter(stack, new_data1);
+    ctofu_error setter_result2 = trilo_xdata_stack_setter(stack, new_data2);
     
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, setter_result1);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, setter_result2);
@@ -128,12 +128,12 @@ XTEST_CASE(xdata_let_stack_getter_and_setter) {
 }
 
 XTEST_CASE(xdata_let_stack_empty_check) {
-    TriloStack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    cstack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
 
     TEST_ASSERT_TRUE_BOOL(trilo_xdata_stack_is_empty(stack));
     TEST_ASSERT_FALSE_BOOL(trilo_xdata_stack_not_empty(stack));
 
-    TriloTofu data = trilo_xdata_tofu_create_from_integer(42);
+    ctofu data = trilo_xdata_tofu_create_from_integer(42);
     trilo_xdata_stack_insert(stack, data);
 
     TEST_ASSERT_FALSE_BOOL(trilo_xdata_stack_is_empty(stack));
@@ -143,7 +143,7 @@ XTEST_CASE(xdata_let_stack_empty_check) {
 }
 
 XTEST_CASE(xdata_let_stack_nullptr_check) {
-    TriloStack* stack = NULL;
+    cstack* stack = NULL;
 
     TEST_ASSERT_TRUE_BOOL(trilo_xdata_stack_is_nullptr(stack));
     TEST_ASSERT_FALSE_BOOL(trilo_xdata_stack_not_nullptr(stack));
@@ -157,10 +157,10 @@ XTEST_CASE(xdata_let_stack_nullptr_check) {
 }
 
 XTEST_CASE(xdata_let_stack_top) {
-    TriloStack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    cstack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
 
-    TriloTofu data1 = trilo_xdata_tofu_create_from_integer(42);
-    TriloTofu data2 = trilo_xdata_tofu_create_from_integer(7);
+    ctofu data1 = trilo_xdata_tofu_create_from_integer(42);
+    ctofu data2 = trilo_xdata_tofu_create_from_integer(7);
 
     trilo_xdata_stack_insert(stack, data1);
     trilo_xdata_stack_insert(stack, data2);

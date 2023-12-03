@@ -86,10 +86,10 @@ extern "C"
 
 #include "xdata/set.h"
 
-// xdata/tofu.h: Header for TriloTofu Data Structure
+// xdata/tofu.h: Header for ctofu Data Structure
 // @file
-// @brief This header defines a custom data structure named TriloTofu, which can hold data of different types (int, double, string, char, bool).
-//        It also provides functions for creating, manipulating, and converting TriloTofu instances.
+// @brief This header defines a custom data structure named ctofu, which can hold data of different types (int, double, string, char, bool).
+//        It also provides functions for creating, manipulating, and converting ctofu instances.
 #include "xdata/tofu.h"
 
 // xdata/dlist.h: Header for Doubly Linked List Data Structure
@@ -111,10 +111,10 @@ extern "C"
 #include "xdata/stack.h"
 
 // @file xdata/vector.c
-// @brief Unit tests for the TriloVector functions.
+// @brief Unit tests for the cvector functions.
 //
 // These tests use the Unity Test Framework. Include the corresponding header
-// file for the TriloVector functions, which is assumed to be "xdata/vector.h".
+// file for the cvector functions, which is assumed to be "xdata/vector.h".
 #include "xdata/vector.h"
 
 const char * const TRILOBITE_XDATA_STD = "Ptychopariida";

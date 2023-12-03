@@ -38,9 +38,9 @@
 // CREATE and DELETE
 // =======================
 
-// Function to create a new TriloSet
-TriloSet* trilo_xdata_set_create(enum DataType set_type) {
-    TriloSet* set = (TriloSet*)malloc(sizeof(TriloSet));
+// Function to create a new cset
+cset* trilo_xdata_set_create(enum ctofu_type set_type) {
+    cset* set = (cset*)malloc(sizeof(cset));
     if (set != NULL) {
         set->head = NULL;
         set->set_type = set_type;
@@ -48,12 +48,12 @@ TriloSet* trilo_xdata_set_create(enum DataType set_type) {
     return set;
 } // end of func
 
-// Function to destroy the TriloSet
-void trilo_xdata_set_destroy(TriloSet* set) {
+// Function to destroy the cset
+void trilo_xdata_set_destroy(cset* set) {
     if (set != NULL) {
         // Free all nodes in the set
         while (set->head != NULL) {
-            TriloSetNode* temp = set->head;
+            cset_node* temp = set->head;
             set->head = set->head->next;
             free(temp);
         } // end while
@@ -65,13 +65,13 @@ void trilo_xdata_set_destroy(TriloSet* set) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-// Function to insert a TriloTofu data into the set
-TofuError trilo_xdata_set_insert(TriloSet* set, TriloTofu data) {
+// Function to insert a ctofu data into the set
+ctofu_error trilo_xdata_set_insert(cset* set, ctofu data) {
     if (set == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloSetNode* newNode = (TriloSetNode*)malloc(sizeof(TriloSetNode));
+    cset_node* newNode = (cset_node*)malloc(sizeof(cset_node));
     if (newNode == NULL) {
         return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
     } // end if
@@ -80,9 +80,9 @@ TofuError trilo_xdata_set_insert(TriloSet* set, TriloTofu data) {
     newNode->next = NULL;
 
     // Check if the data already exists in the set
-    TriloSetNode* current = set->head;
+    cset_node* current = set->head;
     while (current != NULL) {
-        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             free(newNode); // Data already exists, don't insert it again
             return TRILO_XDATA_TYPE_SUCCESS;
@@ -96,17 +96,17 @@ TofuError trilo_xdata_set_insert(TriloSet* set, TriloTofu data) {
     return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
-// Function to remove a TriloTofu data from the set
-TofuError trilo_xdata_set_remove(TriloSet* set, TriloTofu data) {
+// Function to remove a ctofu data from the set
+ctofu_error trilo_xdata_set_remove(cset* set, ctofu data) {
     if (set == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloSetNode* current = set->head;
-    TriloSetNode* prev = NULL;
+    cset_node* current = set->head;
+    cset_node* prev = NULL;
 
     while (current != NULL) {
-        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             if (prev == NULL) {
@@ -126,16 +126,16 @@ TofuError trilo_xdata_set_remove(TriloSet* set, TriloTofu data) {
     return TRILO_XDATA_TYPE_SUCCESS;  // No matching data found
 } // end of func
 
-// Function to search for a TriloTofu data in the set
-TofuError trilo_xdata_set_search(const TriloSet* set, TriloTofu data) {
+// Function to search for a ctofu data in the set
+ctofu_error trilo_xdata_set_search(const cset* set, ctofu data) {
     if (set == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloSetNode* current = set->head;
+    cset_node* current = set->head;
 
     while (current != NULL) {
-        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             return TRILO_XDATA_TYPE_SUCCESS;
@@ -152,14 +152,14 @@ TofuError trilo_xdata_set_search(const TriloSet* set, TriloTofu data) {
 // UTILITY FUNCTIONS
 // =======================
 
-// Function to get the size of the TriloSet
-size_t trilo_xdata_set_size(const TriloSet* set) {
+// Function to get the size of the cset
+size_t trilo_xdata_set_size(const cset* set) {
     if (set == NULL) {
         return 0;
     } // end if
 
     size_t size = 0;
-    TriloSetNode* current = set->head;
+    cset_node* current = set->head;
 
     while (current != NULL) {
         size++;
@@ -169,16 +169,16 @@ size_t trilo_xdata_set_size(const TriloSet* set) {
     return size;
 } // end of func
 
-// Function to insert a TriloTofu data into the set
-TriloTofu* trilo_xdata_set_getter(TriloSet* set, TriloTofu data) {
+// Function to insert a ctofu data into the set
+ctofu* trilo_xdata_set_getter(cset* set, ctofu data) {
     if (set == NULL) {
         return NULL;
     } // end if
 
-    TriloSetNode* current = set->head;
+    cset_node* current = set->head;
 
     while (current != NULL) {
-        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             return &current->data;
@@ -190,16 +190,16 @@ TriloTofu* trilo_xdata_set_getter(TriloSet* set, TriloTofu data) {
     return NULL;  // No matching data found
 } // end of func
 
-// Function to insert a TriloTofu data into the set
-TofuError trilo_xdata_set_setter(TriloSet* set, TriloTofu data) {
+// Function to insert a ctofu data into the set
+ctofu_error trilo_xdata_set_setter(cset* set, ctofu data) {
     if (set == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloSetNode* current = set->head;
+    cset_node* current = set->head;
 
     while (current != NULL) {
-        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             // Data with the same value already exists
@@ -214,35 +214,35 @@ TofuError trilo_xdata_set_setter(TriloSet* set, TriloTofu data) {
 } // end of func
 
 // Function to check if the set is not empty
-bool trilo_xdata_set_not_empty(const TriloSet* set) {
+bool trilo_xdata_set_not_empty(const cset* set) {
     return set != NULL && set->head != NULL;
 } // end of func
 
 // Function to check if the set is not null
-bool trilo_xdata_set_not_nullptr(const TriloSet* set) {
+bool trilo_xdata_set_not_nullptr(const cset* set) {
     return set != NULL;
 } // end of func
 
 // Function to check if the set is empty
-bool trilo_xdata_set_is_empty(const TriloSet* set) {
+bool trilo_xdata_set_is_empty(const cset* set) {
     return set == NULL || set->head == NULL;
 } // end of func
 
 // Function to check if the set is null
-bool trilo_xdata_set_is_nullptr(const TriloSet* set) {
+bool trilo_xdata_set_is_nullptr(const cset* set) {
     return set == NULL;
 } // end of func
 
-// Function to check if a TriloTofu data is in the set
-bool trilo_xdata_set_contains(const TriloSet* set, TriloTofu data) {
+// Function to check if a ctofu data is in the set
+bool trilo_xdata_set_contains(const cset* set, ctofu data) {
     if (set == NULL) {
         return false;
     } // end if
 
-    TriloSetNode* current = set->head;
+    cset_node* current = set->head;
 
     while (current != NULL) {
-        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             return true;

@@ -47,133 +47,133 @@ extern "C"
 
 #include "trilobite/xdata/tofu.h"
 
-typedef struct TriloPQueueNode {
-    TriloTofu data;
+typedef struct cpqueue_node {
+    ctofu data;
     int priority;
-    struct TriloPQueueNode* next;
-} TriloPQueueNode;
+    struct cpqueue_node* next;
+} cpqueue_node;
 
-typedef struct TriloPQueue {
-    TriloPQueueNode* front;
-    enum DataType queue_type;
-} TriloPQueue;
+typedef struct cpqueue {
+    cpqueue_node* front;
+    enum ctofu_type queue_type;
+} cpqueue;
 
 // =======================
 // CREATE and DELETE
 // =======================
 
 /**
- * @brief Creates a new TriloPQueue instance with the specified queue type.
+ * @brief Creates a new cpqueue instance with the specified queue type.
  *
- * @param queue_type The data type for the TriloPQueue (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created TriloPQueue instance.
+ * @param queue_type The data type for the cpqueue (e.g., INTEGER_TYPE, DOUBLE_TYPE).
+ * @return A pointer to the newly created cpqueue instance.
  */
-TriloPQueue* trilo_xdata_pqueue_create(enum DataType queue_type);
+cpqueue* trilo_xdata_pqueue_create(enum ctofu_type queue_type);
 
 /**
- * @brief Destroys the TriloPQueue instance, freeing all associated memory.
+ * @brief Destroys the cpqueue instance, freeing all associated memory.
  *
- * @param pqueue The TriloPQueue instance to be destroyed.
+ * @param pqueue The cpqueue instance to be destroyed.
  */
-void trilo_xdata_pqueue_destroy(TriloPQueue* pqueue);
+void trilo_xdata_pqueue_destroy(cpqueue* pqueue);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
 /**
- * @brief Inserts a TriloTofu data element with a given priority into the TriloPQueue.
+ * @brief Inserts a ctofu data element with a given priority into the cpqueue.
  *
- * @param pqueue   The TriloPQueue where the data will be inserted.
- * @param data     The TriloTofu data element to be inserted.
+ * @param pqueue   The cpqueue where the data will be inserted.
+ * @param data     The ctofu data element to be inserted.
  * @param priority The priority of the data element.
- * @return A TofuError value indicating the result of the insertion.
+ * @return A ctofu_error value indicating the result of the insertion.
  */
-TofuError trilo_xdata_pqueue_insert(TriloPQueue* pqueue, TriloTofu data, int priority);
+ctofu_error trilo_xdata_pqueue_insert(cpqueue* pqueue, ctofu data, int priority);
 
 /**
- * @brief Removes a TriloTofu data element with a given priority from the TriloPQueue.
+ * @brief Removes a ctofu data element with a given priority from the cpqueue.
  *
- * @param pqueue   The TriloPQueue from which the data will be removed.
- * @param data     The TriloTofu data element to be removed.
+ * @param pqueue   The cpqueue from which the data will be removed.
+ * @param data     The ctofu data element to be removed.
  * @param priority The priority of the data element to remove.
- * @return A TofuError value indicating the result of the removal.
+ * @return A ctofu_error value indicating the result of the removal.
  */
-TofuError trilo_xdata_pqueue_remove(TriloPQueue* pqueue, TriloTofu data, int priority);
+ctofu_error trilo_xdata_pqueue_remove(cpqueue* pqueue, ctofu data, int priority);
 
 /**
- * @brief Searches for a TriloTofu data element with a given priority in the TriloPQueue.
+ * @brief Searches for a ctofu data element with a given priority in the cpqueue.
  *
- * @param pqueue   The TriloPQueue to search within.
- * @param data     The TriloTofu data element to search for.
+ * @param pqueue   The cpqueue to search within.
+ * @param data     The ctofu data element to search for.
  * @param priority The priority of the data element to search for.
- * @return A TofuError value indicating the result of the search.
+ * @return A ctofu_error value indicating the result of the search.
  */
-TofuError trilo_xdata_pqueue_search(const TriloPQueue* pqueue, TriloTofu data, int priority);
+ctofu_error trilo_xdata_pqueue_search(const cpqueue* pqueue, ctofu data, int priority);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
 /**
- * @brief Gets the size of the TriloPQueue.
+ * @brief Gets the size of the cpqueue.
  *
- * @param pqueue The TriloPQueue for which the size will be determined.
- * @return The size of the TriloPQueue.
+ * @param pqueue The cpqueue for which the size will be determined.
+ * @return The size of the cpqueue.
  */
-size_t trilo_xdata_pqueue_size(const TriloPQueue* pqueue);
+size_t trilo_xdata_pqueue_size(const cpqueue* pqueue);
 
 /**
- * @brief Getter function to retrieve a TriloTofu data element with a given priority from the TriloPQueue.
+ * @brief Getter function to retrieve a ctofu data element with a given priority from the cpqueue.
  *
- * @param pqueue   The TriloPQueue from which the data will be retrieved.
- * @param data     The TriloTofu data element to retrieve.
+ * @param pqueue   The cpqueue from which the data will be retrieved.
+ * @param data     The ctofu data element to retrieve.
  * @param priority The priority of the data element to retrieve.
- * @return A pointer to the TriloTofu data element in the TriloPQueue (or NULL if not found).
+ * @return A pointer to the ctofu data element in the cpqueue (or NULL if not found).
  */
-TriloTofu* trilo_xdata_pqueue_getter(TriloPQueue* pqueue, TriloTofu data, int priority);
+ctofu* trilo_xdata_pqueue_getter(cpqueue* pqueue, ctofu data, int priority);
 
 /**
- * @brief Setter function to update a TriloTofu data element with a given priority in the TriloPQueue.
+ * @brief Setter function to update a ctofu data element with a given priority in the cpqueue.
  *
- * @param pqueue   The TriloPQueue in which the data will be updated.
- * @param data     The TriloTofu data element to update.
+ * @param pqueue   The cpqueue in which the data will be updated.
+ * @param data     The ctofu data element to update.
  * @param priority The priority of the data element to update.
- * @return A TofuError value indicating the result of the update.
+ * @return A ctofu_error value indicating the result of the update.
  */
-TofuError trilo_xdata_pqueue_setter(TriloPQueue* pqueue, TriloTofu data, int priority);
+ctofu_error trilo_xdata_pqueue_setter(cpqueue* pqueue, ctofu data, int priority);
 
 /**
- * @brief Checks if the TriloPQueue is not empty.
+ * @brief Checks if the cpqueue is not empty.
  *
- * @param pqueue The TriloPQueue to check.
- * @return true if the TriloPQueue is not empty, false otherwise.
+ * @param pqueue The cpqueue to check.
+ * @return true if the cpqueue is not empty, false otherwise.
  */
-bool trilo_xdata_pqueue_not_empty(const TriloPQueue* pqueue);
+bool trilo_xdata_pqueue_not_empty(const cpqueue* pqueue);
 
 /**
- * @brief Checks if the TriloPQueue is not a null pointer.
+ * @brief Checks if the cpqueue is not a null pointer.
  *
- * @param pqueue The TriloPQueue to check.
- * @return true if the TriloPQueue is not a null pointer, false otherwise.
+ * @param pqueue The cpqueue to check.
+ * @return true if the cpqueue is not a null pointer, false otherwise.
  */
-bool trilo_xdata_pqueue_not_nullptr(const TriloPQueue* pqueue);
+bool trilo_xdata_pqueue_not_nullptr(const cpqueue* pqueue);
 
 /**
- * @brief Checks if the TriloPQueue is empty.
+ * @brief Checks if the cpqueue is empty.
  *
- * @param pqueue The TriloPQueue to check.
- * @return true if the TriloPQueue is empty, false otherwise.
+ * @param pqueue The cpqueue to check.
+ * @return true if the cpqueue is empty, false otherwise.
  */
-bool trilo_xdata_pqueue_is_empty(const TriloPQueue* pqueue);
+bool trilo_xdata_pqueue_is_empty(const cpqueue* pqueue);
 
 /**
- * @brief Checks if the TriloPQueue is a null pointer.
+ * @brief Checks if the cpqueue is a null pointer.
  *
- * @param pqueue The TriloPQueue to check.
- * @return true if the TriloPQueue is a null pointer, false otherwise.
+ * @param pqueue The cpqueue to check.
+ * @return true if the cpqueue is a null pointer, false otherwise.
  */
-bool trilo_xdata_pqueue_is_nullptr(const TriloPQueue* pqueue);
+bool trilo_xdata_pqueue_is_nullptr(const cpqueue* pqueue);
 
 #ifdef __cplusplus
 }

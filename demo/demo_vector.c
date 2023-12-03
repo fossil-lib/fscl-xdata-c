@@ -33,9 +33,9 @@
 #include <stdio.h>
 
 int main() {
-    // Example usage of the TriloVector structure
-    TriloVector intVector = trilo_xdata_vector_create(INTEGER_TYPE);
-    TriloVector stringVector = trilo_xdata_vector_create(STRING_TYPE);
+    // Example usage of the cvector structure
+    cvector intVector = trilo_xdata_vector_create(INTEGER_TYPE);
+    cvector stringVector = trilo_xdata_vector_create(STRING_TYPE);
 
     trilo_xdata_vector_push_back(&intVector, trilo_xdata_tofu_create_from_integer(42));
     trilo_xdata_vector_push_back(&intVector, trilo_xdata_tofu_create_from_integer(23));

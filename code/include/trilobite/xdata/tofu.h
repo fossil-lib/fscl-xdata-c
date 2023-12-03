@@ -112,12 +112,12 @@ typedef enum {
     TRILO_XDATA_TYPE_WAS_NULLPTR    = -3,
     TRILO_XDATA_TYPE_WAS_BAD_MALLOC = -4,
     TRILO_XDATA_TYPE_WAS_UNKNOWN    = -5
-} TofuError;
+} ctofu_error;
 
 //
 // Generic and secure flavorless data type.
 //
-enum DataType {
+enum ctofu_type {
     INTEGER_TYPE,
     DOUBLE_TYPE,
     STRING_TYPE,
@@ -135,191 +135,191 @@ typedef union {
     char string_type[MAX_SIZE_TOFU_STRING];
     char char_type;
     bool boolean_type;
-} TriloTofuData;
+} ctofu_data;
 
 //
 // Define a struct to represent the data and its type
 //
 typedef struct {
-    enum DataType type;
-    TriloTofuData data;
-} TriloTofu;
+    enum ctofu_type type;
+    ctofu_data data;
+} ctofu;
 
 // =======================
 // CREATE and DELETE
 // =======================
 
 /**
- * @brief Creates a new TriloTofu instance from an integer value.
+ * @brief Creates a new ctofu instance from an integer value.
  *
- * @param value The integer value to create the TriloTofu instance from.
- * @return A TriloTofu instance containing the integer value.
+ * @param value The integer value to create the ctofu instance from.
+ * @return A ctofu instance containing the integer value.
  */
-TriloTofu trilo_xdata_tofu_create_from_integer(int value);
+ctofu trilo_xdata_tofu_create_from_integer(int value);
 
 /**
- * @brief Creates a new TriloTofu instance from a double value.
+ * @brief Creates a new ctofu instance from a double value.
  *
- * @param value The double value to create the TriloTofu instance from.
- * @return A TriloTofu instance containing the double value.
+ * @param value The double value to create the ctofu instance from.
+ * @return A ctofu instance containing the double value.
  */
-TriloTofu trilo_xdata_tofu_create_from_double(double value);
+ctofu trilo_xdata_tofu_create_from_double(double value);
 
 /**
- * @brief Creates a new TriloTofu instance from a string value.
+ * @brief Creates a new ctofu instance from a string value.
  *
- * @param value The string value to create the TriloTofu instance from.
- * @return A TriloTofu instance containing the string value.
+ * @param value The string value to create the ctofu instance from.
+ * @return A ctofu instance containing the string value.
  */
-TriloTofu trilo_xdata_tofu_create_from_string(const char* value);
+ctofu trilo_xdata_tofu_create_from_string(const char* value);
 
 /**
- * @brief Creates a new TriloTofu instance from a character value.
+ * @brief Creates a new ctofu instance from a character value.
  *
- * @param value The character value to create the TriloTofu instance from.
- * @return A TriloTofu instance containing the character value.
+ * @param value The character value to create the ctofu instance from.
+ * @return A ctofu instance containing the character value.
  */
-TriloTofu trilo_xdata_tofu_create_from_char(char value);
+ctofu trilo_xdata_tofu_create_from_char(char value);
 
 /**
- * @brief Creates a new TriloTofu instance from a boolean value.
+ * @brief Creates a new ctofu instance from a boolean value.
  *
- * @param value The boolean value to create the TriloTofu instance from.
- * @return A TriloTofu instance containing the boolean value.
+ * @param value The boolean value to create the ctofu instance from.
+ * @return A ctofu instance containing the boolean value.
  */
-TriloTofu trilo_xdata_tofu_create_from_boolean(bool value);
+ctofu trilo_xdata_tofu_create_from_boolean(bool value);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
 /**
- * @brief Compares two TriloTofu instances and returns the result.
+ * @brief Compares two ctofu instances and returns the result.
  *
- * @param a The first TriloTofu instance for comparison.
- * @param b The second TriloTofu instance for comparison.
- * @return A TofuError value indicating the comparison result.
+ * @param a The first ctofu instance for comparison.
+ * @param b The second ctofu instance for comparison.
+ * @return A ctofu_error value indicating the comparison result.
  */
-TofuError trilo_xdata_tofu_compare(const TriloTofu a, const TriloTofu b);
+ctofu_error trilo_xdata_tofu_compare(const ctofu a, const ctofu b);
 
 /**
- * @brief Sorts an array of TriloTofu instances using the insertion sort algorithm.
+ * @brief Sorts an array of ctofu instances using the insertion sort algorithm.
  *
- * @param arr The array of TriloTofu instances to be sorted.
+ * @param arr The array of ctofu instances to be sorted.
  * @param n   The number of elements in the array.
  */
-void trilo_xdata_tofu_insertion_sort(TriloTofu* arr, size_t n);
+void trilo_xdata_tofu_insertion_sort(ctofu* arr, size_t n);
 
 /**
- * @brief Sorts an array of TriloTofu instances using the selection sort algorithm.
+ * @brief Sorts an array of ctofu instances using the selection sort algorithm.
  *
- * @param arr The array of TriloTofu instances to be sorted.
+ * @param arr The array of ctofu instances to be sorted.
  * @param n   The number of elements in the array.
  */
-void trilo_xdata_tofu_selection_sort(TriloTofu* arr, size_t n);
+void trilo_xdata_tofu_selection_sort(ctofu* arr, size_t n);
 
 /**
- * @brief Searches for a target TriloTofu instance in a sorted array using binary search.
+ * @brief Searches for a target ctofu instance in a sorted array using binary search.
  *
- * @param arr    The sorted array of TriloTofu instances.
+ * @param arr    The sorted array of ctofu instances.
  * @param n      The number of elements in the array.
- * @param target The TriloTofu instance to search for.
+ * @param target The ctofu instance to search for.
  * @return       The index of the target if found, or -1 if not found.
  */
-int trilo_xdata_tofu_binary_search(const TriloTofu* arr, size_t n, TriloTofu target);
+int trilo_xdata_tofu_binary_search(const ctofu* arr, size_t n, ctofu target);
 
 /**
- * @brief Searches for a target TriloTofu instance in an array using linear search.
+ * @brief Searches for a target ctofu instance in an array using linear search.
  *
- * @param arr    The array of TriloTofu instances.
+ * @param arr    The array of ctofu instances.
  * @param n      The number of elements in the array.
- * @param target The TriloTofu instance to search for.
+ * @param target The ctofu instance to search for.
  * @return       The index of the target if found, or -1 if not found.
  */
-int trilo_xdata_tofu_linear_search(const TriloTofu* arr, size_t n, TriloTofu target);
+int trilo_xdata_tofu_linear_search(const ctofu* arr, size_t n, ctofu target);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
 /**
- * @brief Prints the data in a TriloTofu instance.
+ * @brief Prints the data in a ctofu instance.
  *
- * @param tofu The TriloTofu instance to be printed.
+ * @param tofu The ctofu instance to be printed.
  */
-void trilo_xdata_tofu_print(TriloTofu tofu);
+void trilo_xdata_tofu_print(ctofu tofu);
 
 /**
- * @brief Gets the integer data from a TriloTofu instance.
+ * @brief Gets the integer data from a ctofu instance.
  *
- * @param tofu The TriloTofu instance to extract the integer data from.
- * @return     The integer value from the TriloTofu instance.
+ * @param tofu The ctofu instance to extract the integer data from.
+ * @return     The integer value from the ctofu instance.
  */
-int trilo_xdata_tofu_get_integer(TriloTofu tofu);
+int trilo_xdata_tofu_get_integer(ctofu tofu);
 
 /**
- * @brief Gets the double data from a TriloTofu instance.
+ * @brief Gets the double data from a ctofu instance.
  *
- * @param tofu The TriloTofu instance to extract the double data from.
- * @return     The double value from the TriloTofu instance.
+ * @param tofu The ctofu instance to extract the double data from.
+ * @return     The double value from the ctofu instance.
  */
-double trilo_xdata_tofu_get_double(TriloTofu tofu);
+double trilo_xdata_tofu_get_double(ctofu tofu);
 
 /**
- * @brief Gets the string data from a TriloTofu instance.
+ * @brief Gets the string data from a ctofu instance.
  *
- * @param tofu The TriloTofu instance to extract the string data from.
- * @return     A pointer to the string data in the TriloTofu instance.
+ * @param tofu The ctofu instance to extract the string data from.
+ * @return     A pointer to the string data in the ctofu instance.
  */
-const char* trilo_xdata_tofu_get_string(TriloTofu tofu);
+const char* trilo_xdata_tofu_get_string(ctofu tofu);
 
 /**
- * @brief Gets the character data from a TriloTofu instance.
+ * @brief Gets the character data from a ctofu instance.
  *
- * @param tofu The TriloTofu instance to extract the character data from.
- * @return     The character value from the TriloTofu instance.
+ * @param tofu The ctofu instance to extract the character data from.
+ * @return     The character value from the ctofu instance.
  */
-char trilo_xdata_tofu_get_char(TriloTofu tofu);
+char trilo_xdata_tofu_get_char(ctofu tofu);
 
 /**
- * @brief Gets the boolean data from a TriloTofu instance.
+ * @brief Gets the boolean data from a ctofu instance.
  *
- * @param tofu The TriloTofu instance to extract the boolean data from.
- * @return     The boolean value from the TriloTofu instance.
+ * @param tofu The ctofu instance to extract the boolean data from.
+ * @return     The boolean value from the ctofu instance.
  */
-bool trilo_xdata_tofu_get_boolean(TriloTofu tofu);
+bool trilo_xdata_tofu_get_boolean(ctofu tofu);
 
 /**
- * @brief Creates a copy of a TriloTofu instance.
+ * @brief Creates a copy of a ctofu instance.
  *
- * This function creates a new TriloTofu instance that is a deep copy of the
- * provided source TriloTofu. The copy includes both the data type and data
+ * This function creates a new ctofu instance that is a deep copy of the
+ * provided source ctofu. The copy includes both the data type and data
  * content, ensuring that any modifications to the copy do not affect the
  * original source.
  *
- * @param tofu The source TriloTofu instance to be copied.
- * @return A new TriloTofu instance that is a copy of the source.
+ * @param tofu The source ctofu instance to be copied.
+ * @return A new ctofu instance that is a copy of the source.
  */
-TriloTofu trilo_xdata_tofu_copy(TriloTofu tofu);
+ctofu trilo_xdata_tofu_copy(ctofu tofu);
 
 /**
- * @brief Checks if two TriloTofu instances are equal.
+ * @brief Checks if two ctofu instances are equal.
  *
- * @param a The first TriloTofu instance for comparison.
- * @param b The second TriloTofu instance for comparison.
+ * @param a The first ctofu instance for comparison.
+ * @param b The second ctofu instance for comparison.
  * @return true if the instances are equal, false otherwise.
  */
-bool trilo_xdata_tofu_equal(const TriloTofu a, const TriloTofu b);
+bool trilo_xdata_tofu_equal(const ctofu a, const ctofu b);
 
 /**
- * @brief Gets the data type of a TriloTofu instance.
+ * @brief Gets the data type of a ctofu instance.
  *
- * This function returns the data type of the provided TriloTofu instance.
+ * This function returns the data type of the provided ctofu instance.
  *
- * @param tofu The TriloTofu instance to get the data type from.
- * @return The data type of the TriloTofu instance.
+ * @param tofu The ctofu instance to get the data type from.
+ * @return The data type of the ctofu instance.
  */
-enum DataType trilo_xdata_tofu_get_type(const TriloTofu tofu);
+enum ctofu_type trilo_xdata_tofu_get_type(const ctofu tofu);
 
 #ifdef __cplusplus
 }

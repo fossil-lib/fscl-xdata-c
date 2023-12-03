@@ -38,9 +38,9 @@
 // CREATE and DELETE
 // =======================
 
-// Function to create a new TriloQueue
-TriloQueue* trilo_xdata_queue_create(enum DataType queue_type) {
-    TriloQueue* queue = (TriloQueue*)malloc(sizeof(TriloQueue));
+// Function to create a new cqueue
+cqueue* trilo_xdata_queue_create(enum ctofu_type queue_type) {
+    cqueue* queue = (cqueue*)malloc(sizeof(cqueue));
     if (queue != NULL) {
         queue->front = NULL;
         queue->rear = NULL;
@@ -49,12 +49,12 @@ TriloQueue* trilo_xdata_queue_create(enum DataType queue_type) {
     return queue;
 } // end of func
 
-// Function to destroy the TriloQueue
-void trilo_xdata_queue_destroy(TriloQueue* queue) {
+// Function to destroy the cqueue
+void trilo_xdata_queue_destroy(cqueue* queue) {
     if (queue != NULL) {
         // Free all nodes in the queue
         while (queue->front != NULL) {
-            TriloQueueNode* temp = queue->front;
+            cqueue_node* temp = queue->front;
             queue->front = queue->front->next;
             free(temp);
         } // end while
@@ -65,13 +65,13 @@ void trilo_xdata_queue_destroy(TriloQueue* queue) {
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-// Function to insert a TriloTofu data into the queue
-TofuError trilo_xdata_queue_insert(TriloQueue* queue, TriloTofu data) {
+// Function to insert a ctofu data into the queue
+ctofu_error trilo_xdata_queue_insert(cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloQueueNode* newNode = (TriloQueueNode*)malloc(sizeof(TriloQueueNode));
+    cqueue_node* newNode = (cqueue_node*)malloc(sizeof(cqueue_node));
     if (newNode == NULL) {
         return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
     } // end if
@@ -90,15 +90,15 @@ TofuError trilo_xdata_queue_insert(TriloQueue* queue, TriloTofu data) {
     return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
-// Function to remove a TriloTofu data from the queue
-TofuError trilo_xdata_queue_remove(TriloQueue* queue) {
+// Function to remove a ctofu data from the queue
+ctofu_error trilo_xdata_queue_remove(cqueue* queue) {
     // Check if the queue is NULL or empty
     if (queue == NULL || trilo_xdata_queue_is_empty(queue)) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
     // Save a reference to the front node
-    TriloQueueNode* frontNode = queue->front;
+    cqueue_node* frontNode = queue->front;
 
     // Update the front pointer to the next node
     queue->front = frontNode->next;
@@ -114,16 +114,16 @@ TofuError trilo_xdata_queue_remove(TriloQueue* queue) {
     return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
-// Function to search for a TriloTofu data in the queue
-TofuError trilo_xdata_queue_search(const TriloQueue* queue, TriloTofu data) {
+// Function to search for a ctofu data in the queue
+ctofu_error trilo_xdata_queue_search(const cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloQueueNode* current = queue->front;
+    cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             return TRILO_XDATA_TYPE_SUCCESS;
@@ -139,14 +139,14 @@ TofuError trilo_xdata_queue_search(const TriloQueue* queue, TriloTofu data) {
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-// Function to get the size of the TriloQueue
-size_t trilo_xdata_queue_size(const TriloQueue* queue) {
+// Function to get the size of the cqueue
+size_t trilo_xdata_queue_size(const cqueue* queue) {
     if (queue == NULL) {
         return 0;
     } // end if
 
     size_t size = 0;
-    TriloQueueNode* current = queue->front;
+    cqueue_node* current = queue->front;
 
     while (current != NULL) {
         size++;
@@ -156,16 +156,16 @@ size_t trilo_xdata_queue_size(const TriloQueue* queue) {
     return size;
 } // end of func
 
-// Function to insert a TriloTofu data into the queue
-TriloTofu* trilo_xdata_queue_getter(TriloQueue* queue, TriloTofu data) {
+// Function to insert a ctofu data into the queue
+ctofu* trilo_xdata_queue_getter(cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return NULL;
     } // end if
 
-    TriloQueueNode* current = queue->front;
+    cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             return &current->data;
@@ -177,16 +177,16 @@ TriloTofu* trilo_xdata_queue_getter(TriloQueue* queue, TriloTofu data) {
     return NULL;  // No matching data found
 } // end of func
 
-// Function to insert a TriloTofu data into the queue
-TofuError trilo_xdata_queue_setter(TriloQueue* queue, TriloTofu data) {
+// Function to insert a ctofu data into the queue
+ctofu_error trilo_xdata_queue_setter(cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
 
-    TriloQueueNode* current = queue->front;
+    cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        TofuError compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             // Data with the same value already exists
@@ -201,21 +201,21 @@ TofuError trilo_xdata_queue_setter(TriloQueue* queue, TriloTofu data) {
 } // end of func
 
 // Function to check if the queue is not empty
-bool trilo_xdata_queue_not_empty(const TriloQueue* queue) {
+bool trilo_xdata_queue_not_empty(const cqueue* queue) {
     return queue != NULL && queue->front != NULL;
 } // end of func
 
 // Function to check if the queue is not null
-bool trilo_xdata_queue_not_nullptr(const TriloQueue* queue) {
+bool trilo_xdata_queue_not_nullptr(const cqueue* queue) {
     return queue != NULL;
 } // end of func
 
 // Function to check if the queue is empty
-bool trilo_xdata_queue_is_empty(const TriloQueue* queue) {
+bool trilo_xdata_queue_is_empty(const cqueue* queue) {
     return queue == NULL || queue->front == NULL;
 } // end of func
 
 // Function to check if the queue is null
-bool trilo_xdata_queue_is_nullptr(const TriloQueue* queue) {
+bool trilo_xdata_queue_is_nullptr(const cqueue* queue) {
     return queue == NULL;
 } // end of func

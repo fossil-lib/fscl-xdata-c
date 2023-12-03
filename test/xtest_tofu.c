@@ -40,34 +40,34 @@
 // XUNIT TEST CASES
 //
 
-// Test case 1: Test TriloTofu creation and retrieval of integer value
+// Test case 1: Test ctofu creation and retrieval of integer value
 XTEST_CASE(xdata_let_tofu_create_and_get_integer) {
-    TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
     TEST_ASSERT_EQUAL_BOOL(INTEGER_TYPE, trilo_xdata_tofu_get_type(tofu));
     TEST_ASSERT_EQUAL_INT(42, trilo_xdata_tofu_get_integer(tofu));
 }
 
-// Test case 2: Test TriloTofu creation and retrieval of double value
+// Test case 2: Test ctofu creation and retrieval of double value
 XTEST_CASE(xdata_let_tofu_create_and_get_double) {
-    TriloTofu tofu = trilo_xdata_tofu_create_from_double(3.14);
+    ctofu tofu = trilo_xdata_tofu_create_from_double(3.14);
     TEST_ASSERT_EQUAL_BOOL(DOUBLE_TYPE, trilo_xdata_tofu_get_type(tofu));
     TEST_ASSERT_DOUBLE_EQUAL(3.14, trilo_xdata_tofu_get_double(tofu));
 }
 
-// Test case 3: Test TriloTofu equality
+// Test case 3: Test ctofu equality
 XTEST_CASE(xdata_let_tofu_equality) {
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(42);
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_integer(42);
-    TriloTofu tofu3 = trilo_xdata_tofu_create_from_double(3.14);
+    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(42);
+    ctofu tofu2 = trilo_xdata_tofu_create_from_integer(42);
+    ctofu tofu3 = trilo_xdata_tofu_create_from_double(3.14);
 
     TEST_ASSERT_TRUE_BOOL(trilo_xdata_tofu_equal(tofu1, tofu2));
     TEST_ASSERT_FALSE_BOOL(trilo_xdata_tofu_equal(tofu1, tofu3));
 }
 
-// Test case 4: Test TriloTofu copy
+// Test case 4: Test ctofu copy
 XTEST_CASE(xdata_let_tofu_copy) {
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(42);
-    TriloTofu tofu2 = trilo_xdata_tofu_copy(tofu1);
+    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(42);
+    ctofu tofu2 = trilo_xdata_tofu_copy(tofu1);
 
     TEST_ASSERT_TRUE_BOOL(trilo_xdata_tofu_equal(tofu1, tofu2));
 }

@@ -39,7 +39,7 @@
 //
 
 XTEST_CASE(xdata_let_vector_create_and_destroy) {
-    TriloVector vector = trilo_xdata_vector_create(INTEGER_TYPE);
+    cvector vector = trilo_xdata_vector_create(INTEGER_TYPE);
 
     TEST_ASSERT_EQUAL(INTEGER_TYPE, vector.expected_type);
     TEST_ASSERT_TRUE(trilo_xdata_vector_is_empty(&vector));
@@ -50,21 +50,21 @@ XTEST_CASE(xdata_let_vector_create_and_destroy) {
 }
 
 XTEST_CASE(xdata_let_vector_push_back_and_peek) {
-    TriloVector vector = trilo_xdata_vector_create(DOUBLE_TYPE);
+    cvector vector = trilo_xdata_vector_create(DOUBLE_TYPE);
 
     trilo_xdata_vector_push_back(&vector, trilo_xdata_tofu_create_from_double(3.14));
 
     TEST_ASSERT_FALSE(trilo_xdata_vector_is_empty(&vector));
     TEST_ASSERT_EQUAL(1, trilo_xdata_vector_size(&vector));
 
-    TriloTofu element = trilo_xdata_vector_getter(&vector, 0);
+    ctofu element = trilo_xdata_vector_getter(&vector, 0);
     TEST_ASSERT_DOUBLE_EQUAL(3.14, trilo_xdata_tofu_get_double(element));
 
     trilo_xdata_vector_destroy(&vector);
 }
 
 XTEST_CASE(xdata_let_vector_search) {
-    TriloVector vector = trilo_xdata_vector_create(STRING_TYPE);
+    cvector vector = trilo_xdata_vector_create(STRING_TYPE);
 
     trilo_xdata_vector_push_back(&vector, trilo_xdata_tofu_create_from_string("Hello"));
     trilo_xdata_vector_push_back(&vector, trilo_xdata_tofu_create_from_string("World"));
@@ -79,7 +79,7 @@ XTEST_CASE(xdata_let_vector_search) {
 }
 
 XTEST_CASE(xdata_let_vector_reverse) {
-    TriloVector vector = trilo_xdata_vector_create(BOOLEAN_TYPE);
+    cvector vector = trilo_xdata_vector_create(BOOLEAN_TYPE);
 
     trilo_xdata_vector_push_back(&vector, trilo_xdata_tofu_create_from_boolean(true));
     trilo_xdata_vector_push_back(&vector, trilo_xdata_tofu_create_from_boolean(false));

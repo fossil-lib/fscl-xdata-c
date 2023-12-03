@@ -38,57 +38,57 @@
 // XUNIT TEST CASES
 //
 
-// Test case 1: Test TriloDoublyList creation and destruction
+// Test case 1: Test cdlist creation and destruction
 XTEST_CASE(xdata_let_dlist_create_and_destroy) {
-    TriloDoublyList* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
     trilo_xdata_dlist_destroy(dlist);
     TEST_ASSERT_NULL_PTR(dlist);
 }
 
-// Test case 2: Test TriloDoublyList insertion and retrieval
+// Test case 2: Test cdlist insertion and retrieval
 XTEST_CASE(xdata_let_dlist_insert_and_get) {
-    TriloDoublyList* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    TofuError result = trilo_xdata_dlist_insert(dlist, tofu);
+    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    ctofu_error result = trilo_xdata_dlist_insert(dlist, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    TriloTofu* retrieved_tofu = trilo_xdata_dlist_getter(dlist, tofu);
+    ctofu* retrieved_tofu = trilo_xdata_dlist_getter(dlist, tofu);
     TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
     TEST_ASSERT_EQUAL_INT(42, trilo_xdata_tofu_get_integer(*retrieved_tofu));
 
     trilo_xdata_dlist_destroy(dlist);
 }
 
-// Test case 3: Test TriloDoublyList removal
+// Test case 3: Test cdlist removal
 XTEST_CASE(xdata_let_dlist_remove) {
-    TriloDoublyList* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    TofuError result = trilo_xdata_dlist_insert(dlist, tofu);
+    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    ctofu_error result = trilo_xdata_dlist_insert(dlist, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
     result = trilo_xdata_dlist_remove(dlist, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    TriloTofu* retrieved_tofu = trilo_xdata_dlist_getter(dlist, tofu);
+    ctofu* retrieved_tofu = trilo_xdata_dlist_getter(dlist, tofu);
     TEST_ASSERT_NULL_PTR(retrieved_tofu);
 
     trilo_xdata_dlist_destroy(dlist);
 }
 
-// Test case 4: Test TriloDoublyList size
+// Test case 4: Test cdlist size
 XTEST_CASE(xdata_let_dlist_size) {
-    TriloDoublyList* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    TriloTofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
-    TriloTofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
-    TriloTofu tofu3 = trilo_xdata_tofu_create_from_integer(3);
+    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
+    ctofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
+    ctofu tofu3 = trilo_xdata_tofu_create_from_integer(3);
 
     trilo_xdata_dlist_insert(dlist, tofu1);
     trilo_xdata_dlist_insert(dlist, tofu2);
@@ -100,15 +100,15 @@ XTEST_CASE(xdata_let_dlist_size) {
     trilo_xdata_dlist_destroy(dlist);
 }
 
-// Test case 5: Test TriloDoublyList empty check
+// Test case 5: Test cdlist empty check
 XTEST_CASE(xdata_let_dlist_empty_check) {
-    TriloDoublyList* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
     TEST_ASSERT_TRUE_BOOL(trilo_xdata_dlist_is_empty(dlist));
     TEST_ASSERT_FALSE_BOOL(trilo_xdata_dlist_not_empty(dlist));
 
-    TriloTofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
     trilo_xdata_dlist_insert(dlist, tofu);
 
     TEST_ASSERT_FALSE_BOOL(trilo_xdata_dlist_is_empty(dlist));
