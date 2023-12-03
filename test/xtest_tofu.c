@@ -96,13 +96,13 @@ XTEST_CASE(xdata_let_tofu_create_and_get_boolean_edge_cases) {
 }
 
 XTEST_CASE(xdata_let_tofu_create_and_get_null_edge_cases) {
-    ctofu null_tofu = trilo_xdata_tofu_create_nullptr();
-    TEST_ASSERT_EQUAL_BOOL(NULL_TYPE, trilo_xdata_tofu_get_type(null_tofu));
+    ctofu null_tofu = trilo_xdata_tofu_create_from_nullptr();
+    TEST_ASSERT_EQUAL_BOOL(NULLPTR_TYPE, trilo_xdata_tofu_get_type(null_tofu));
     TEST_ASSERT_TRUE_BOOL(trilo_xdata_tofu_is_null(null_tofu));
 }
 
 XTEST_CASE(xdata_let_tofu_create_and_get_array_edge_cases) {
-    ctofu empty_array_tofu = trilo_xdata_tofu_create_empty_array();
+    ctofu empty_array_tofu = trilo_xdata_tofu_create_from_empty_array();
     TEST_ASSERT_EQUAL_BOOL(ARRAY_TYPE, trilo_xdata_tofu_get_type(empty_array_tofu));
     TEST_ASSERT_TRUE_BOOL(trilo_xdata_tofu_is_empty_array(empty_array_tofu));
 
