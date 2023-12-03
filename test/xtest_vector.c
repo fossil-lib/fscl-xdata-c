@@ -37,7 +37,6 @@
 //
 // XUNIT TEST CASES
 //
-
 XTEST_CASE(xdata_let_vector_create_and_destroy) {
     cvector vector = trilo_xdata_vector_create(INTEGER_TYPE);
 
@@ -92,6 +91,28 @@ XTEST_CASE(xdata_let_vector_reverse) {
     trilo_xdata_vector_destroy(&vector);
 }
 
+XTEST_CASE(xdata_let_vector_create_and_destroy_with_types) {
+    cvector int_vector = trilo_xdata_vector_create(INTEGER_TYPE);
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, int_vector.expected_type);
+    trilo_xdata_vector_destroy(&int_vector);
+
+    cvector double_vector = trilo_xdata_vector_create(DOUBLE_TYPE);
+    TEST_ASSERT_EQUAL(DOUBLE_TYPE, double_vector.expected_type);
+    trilo_xdata_vector_destroy(&double_vector);
+
+    cvector string_vector = trilo_xdata_vector_create(STRING_TYPE);
+    TEST_ASSERT_EQUAL(STRING_TYPE, string_vector.expected_type);
+    trilo_xdata_vector_destroy(&string_vector);
+
+    cvector bool_vector = trilo_xdata_vector_create(BOOLEAN_TYPE);
+    TEST_ASSERT_EQUAL(BOOLEAN_TYPE, bool_vector.expected_type);
+    trilo_xdata_vector_destroy(&bool_vector);
+
+    // Test creating a vector with an invalid type
+    cvector invalid_vector = trilo_xdata_vector_create(INVALID_TYPE);
+    TEST_ASSERT_TRUE(trilo_xdata_vector_is_nullptr(&invalid_vector));
+}
+
 //
 // XUNIT-TEST RUNNER
 //
@@ -102,4 +123,5 @@ void xdata_test_vector_group(XUnitRunner *runner) {
     XTEST_RUN_UNIT(xdata_let_vector_push_back_and_peek, runner);
     XTEST_RUN_UNIT(xdata_let_vector_search,             runner);
     XTEST_RUN_UNIT(xdata_let_vector_reverse,            runner);
+    XTEST_RUN_UNIT(xdata_let_vector_create_and_destroy_with_types, runner);
 } // end of func

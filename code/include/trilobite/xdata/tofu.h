@@ -111,7 +111,8 @@ typedef enum {
     TRILO_XDATA_TYPE_WAS_BAD_RANGE  = -2,
     TRILO_XDATA_TYPE_WAS_NULLPTR    = -3,
     TRILO_XDATA_TYPE_WAS_BAD_MALLOC = -4,
-    TRILO_XDATA_TYPE_WAS_UNKNOWN    = -5
+    TRILO_XDATA_TYPE_WAS_UNKNOWN    = -5,
+    TRILO_XDATA_TYPE_NOT_FOUND      = -6
 } ctofu_error;
 
 //
@@ -123,6 +124,9 @@ enum ctofu_type {
     STRING_TYPE,
     CHAR_TYPE,
     BOOLEAN_TYPE,
+    ARRAY_TYPE,
+    NULLPTR_TYPE,
+    INVALID_TYPE,
     UNKNOWN_TYPE
 };
 
@@ -132,9 +136,13 @@ enum ctofu_type {
 typedef union {
     int integer_type;
     double double_type;
-    char string_type[MAX_SIZE_TOFU_STRING];
+    char* string_type;
     char char_type;
     bool boolean_type;
+    struct {
+        struct ctofu* elements;
+        size_t size;
+    } array_type;
 } ctofu_data;
 
 //
@@ -144,6 +152,14 @@ typedef struct {
     enum ctofu_type type;
     ctofu_data data;
 } ctofu;
+
+//
+// Define a struct to represent the iterator
+//
+typedef struct {
+    ctofu* current;
+    size_t index;
+} ctofu_iterator;
 
 // =======================
 // CREATE and DELETE
@@ -188,6 +204,27 @@ ctofu trilo_xdata_tofu_create_from_char(char value);
  * @return A ctofu instance containing the boolean value.
  */
 ctofu trilo_xdata_tofu_create_from_boolean(bool value);
+
+/**
+ * @brief Creates a new ctofu instance from a nullptr value.
+ *
+ * @return A ctofu instance containing the nullptr value.
+ */
+ctofu trilo_xdata_tofu_create_from_nullptr(void);
+
+/**
+ * @brief Creates a new ctofu instance from a empty array value.
+ *
+ * @return A ctofu instance containing the empty array value.
+ */
+ctofu trilo_xdata_tofu_create_from_empty_array(void);
+
+/**
+ * @barif: Function to free memory associated with a tofu instance.
+ *
+ * @param tofu: Pointer to the ctofu instance to be destroyed.
+ */
+void trilo_xdata_tofu_destroy(ctofu* tofu);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -248,6 +285,14 @@ int trilo_xdata_tofu_linear_search(const ctofu* arr, size_t n, ctofu target);
  * @param tofu The ctofu instance to be printed.
  */
 void trilo_xdata_tofu_print(ctofu tofu);
+
+/**
+ * @brief Checks if a ctofu instance represents a nullptr value.
+ *
+ * @param tofu Pointer to the ctofu instance to check.
+ * @return true if the ctofu instance represents a nullptr value, false otherwise.
+ */
+bool trilo_xdata_tofu_is_nullptr(const ctofu* tofu);
 
 /**
  * @brief Gets the integer data from a ctofu instance.

@@ -55,7 +55,8 @@ ctofu trilo_xdata_tofu_create_from_double(double value) {
 ctofu trilo_xdata_tofu_create_from_string(const char* value) {
     ctofu tofu;
     tofu.type = STRING_TYPE;
-    strncpy(tofu.data.string_type, value, sizeof(tofu.data.string_type));
+    tofu.data.string_type = (char*)malloc(strlen(value) + 1);
+    strcpy(tofu.data.string_type, value);
     return tofu;
 } // end of func
 
@@ -74,6 +75,30 @@ ctofu trilo_xdata_tofu_create_from_boolean(bool value) {
     tofu.data.boolean_type = value;
     return tofu;
 } // end of func
+
+ctofu trilo_xdata_tofu_create_from_nullptr(void) {
+    ctofu tofu;
+    tofu.type = NULLPTR_TYPE;
+    return tofu;
+} // end of func
+
+ctofu trilo_xdata_tofu_create_from_empty_array(void) {
+    ctofu tofu;
+    tofu.type = ARRAY_TYPE;
+    tofu.data.array_type.size = 0;
+    tofu.data.array_type.elements = NULL;
+    return tofu;
+} // end of func
+
+// Function to free memory associated with a tofu instance
+void trilo_xdata_tofu_destroy(ctofu* tofu) {
+    if (tofu->type == STRING_TYPE) {
+        free(tofu->data.string_type);
+    } else if (tofu->type == ARRAY_TYPE) {
+        free(tofu->data.array_type.elements);
+    }
+    // Add more cases if needed for other dynamic allocations
+}
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -193,6 +218,11 @@ void trilo_xdata_tofu_print(ctofu tofu) {
         default:
             puts("Unknown Data Type");
     } // end switch
+} // end of func
+
+// Function to check if a ctofu instance represents a nullptr value.
+bool trilo_xdata_tofu_is_nullptr(const ctofu* tofu) {
+    return (tofu->type == NULLPTR_TYPE);
 } // end of func
 
 // Function to get the integer data from a ctofu instance

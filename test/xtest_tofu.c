@@ -72,6 +72,29 @@ XTEST_CASE(xdata_let_tofu_copy) {
     TEST_ASSERT_TRUE_BOOL(trilo_xdata_tofu_equal(tofu1, tofu2));
 }
 
+XTEST_CASE(xdata_let_tofu_create_and_get_string_edge_cases) {
+    const char* empty_str = "";
+    const char* special_chars_str = "!@#$%^&*()";
+
+    ctofu empty_tofu = trilo_xdata_tofu_create_from_string(empty_str);
+    TEST_ASSERT_EQUAL_BOOL(STRING_TYPE, trilo_xdata_tofu_get_type(empty_tofu));
+    TEST_ASSERT_EQUAL_STRING(empty_str, trilo_xdata_tofu_get_string(empty_tofu));
+
+    ctofu special_chars_tofu = trilo_xdata_tofu_create_from_string(special_chars_str);
+    TEST_ASSERT_EQUAL_BOOL(STRING_TYPE, trilo_xdata_tofu_get_type(special_chars_tofu));
+    TEST_ASSERT_EQUAL_STRING(special_chars_str, trilo_xdata_tofu_get_string(special_chars_tofu));
+}
+
+XTEST_CASE(xdata_let_tofu_create_and_get_boolean_edge_cases) {
+    ctofu true_tofu = trilo_xdata_tofu_create_from_boolean(true);
+    TEST_ASSERT_EQUAL_BOOL(BOOLEAN_TYPE, trilo_xdata_tofu_get_type(true_tofu));
+    TEST_ASSERT_TRUE_BOOL(trilo_xdata_tofu_get_boolean(true_tofu));
+
+    ctofu false_tofu = trilo_xdata_tofu_create_from_boolean(false);
+    TEST_ASSERT_EQUAL_BOOL(BOOLEAN_TYPE, trilo_xdata_tofu_get_type(false_tofu));
+    TEST_ASSERT_FALSE_BOOL(trilo_xdata_tofu_get_boolean(false_tofu));
+}
+
 //
 // XUNIT-TEST RUNNER
 //
@@ -82,4 +105,6 @@ void xdata_test_tofu_group(XUnitRunner *runner) {
     XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_double,  runner);
     XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_integer, runner);
     XTEST_RUN_UNIT(xdata_let_tofu_equality,               runner);
+    XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_string_edge_cases,  runner);
+    XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_boolean_edge_cases, runner);
 } // end of func

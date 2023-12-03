@@ -82,6 +82,61 @@ XTEST_CASE(xdata_let_tree_insert_and_delete_tree) {
     trilo_xdata_tree_destroy(tree);
 }
 
+XTEST_CASE(xdata_let_tree_create_and_destroy_tree_with_types) {
+    ctree* double_tree = trilo_xdata_tree_create(DOUBLE_TYPE);
+    TEST_ASSERT_NOT_NULL_PTR(double_tree);
+    trilo_xdata_tree_destroy(double_tree);
+
+    ctree* string_tree = trilo_xdata_tree_create(STRING_TYPE);
+    TEST_ASSERT_NOT_NULL_PTR(string_tree);
+    trilo_xdata_tree_destroy(string_tree);
+
+    ctree* bool_tree = trilo_xdata_tree_create(BOOLEAN_TYPE);
+    TEST_ASSERT_NOT_NULL_PTR(bool_tree);
+    trilo_xdata_tree_destroy(bool_tree);
+
+    // Test creating a tree with an invalid type
+    ctree* invalid_tree = trilo_xdata_tree_create(INVALID_TYPE);
+    TEST_ASSERT_NULL_PTR(invalid_tree);
+}
+
+XTEST_CASE(xdata_let_tree_insert_and_search_tree_edge_cases) {
+    ctree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
+    TEST_ASSERT_NOT_NULL_PTR(tree);
+
+    // Test inserting nodes with various data types
+    ctofu int_data = trilo_xdata_tofu_create_from_integer(42);
+    ctofu double_data = trilo_xdata_tofu_create_from_double(3.14);
+    ctofu string_data = trilo_xdata_tofu_create_from_string("Hello");
+
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, trilo_xdata_tree_insert(tree, int_data));
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, trilo_xdata_tree_insert(tree, double_data));
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, trilo_xdata_tree_insert(tree, string_data));
+
+    // Test searching for a node that doesn't exist
+    ctofu not_found_data = trilo_xdata_tofu_create_from_integer(999);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_NOT_FOUND, trilo_xdata_tree_search(tree, not_found_data));
+
+    trilo_xdata_tree_destroy(tree);
+}
+
+XTEST_CASE(xdata_let_tree_insert_and_delete_tree_edge_cases) {
+    ctree* tree = trilo_xdata_tree_create(INTEGER_TYPE);
+    TEST_ASSERT_NOT_NULL_PTR(tree);
+
+    // Test deleting a node that doesn't exist
+    ctofu not_found_data = trilo_xdata_tofu_create_from_integer(999);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_NOT_FOUND, trilo_xdata_tree_remove(tree, not_found_data));
+
+    // Test deleting the root node
+    ctofu root_data = trilo_xdata_tofu_create_from_integer(42);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, trilo_xdata_tree_insert(tree, root_data));
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, trilo_xdata_tree_remove(tree, root_data));
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_NOT_FOUND, trilo_xdata_tree_search(tree, root_data));
+
+    trilo_xdata_tree_destroy(tree);
+}
+
 //
 // XUNIT-TEST RUNNER
 //
@@ -91,4 +146,7 @@ void xdata_test_tree_group(XUnitRunner *runner) {
     XTEST_RUN_UNIT(xdata_let_tree_create_and_destroy_tree, runner);
     XTEST_RUN_UNIT(xdata_let_tree_insert_and_search_tree,  runner);
     XTEST_RUN_UNIT(xdata_let_tree_insert_and_delete_tree,  runner);
+    XTEST_RUN_UNIT(xdata_let_tree_create_and_destroy_tree_with_types, runner);
+    XTEST_RUN_UNIT(xdata_let_tree_insert_and_search_tree_edge_cases,  runner);
+    XTEST_RUN_UNIT(xdata_let_tree_insert_and_delete_tree_edge_cases,  runner);
 } // end of func
