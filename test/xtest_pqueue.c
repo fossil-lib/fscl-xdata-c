@@ -119,6 +119,59 @@ XTEST_CASE(xdata_let_pqueue_empty_check) {
     trilo_xdata_pqueue_destroy(pqueue);
 }
 
+XTEST_CASE(xdata_let_pqueue_remove_edge_cases) {
+    cpqueue* empty_pqueue = trilo_xdata_pqueue_create(INTEGER_TYPE);
+    TEST_ASSERT_NOT_NULL_PTR(empty_pqueue);
+
+    // Test removing elements from an empty priority queue
+    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    int priority = 1;
+    ctofu_error result = trilo_xdata_pqueue_remove(empty_pqueue, tofu, priority);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, result);
+
+    trilo_xdata_pqueue_destroy(empty_pqueue);
+
+    // Test removing a large number of elements
+    cpqueue* pqueue = trilo_xdata_pqueue_create(DOUBLE_TYPE);
+    TEST_ASSERT_NOT_NULL_PTR(pqueue);
+
+    for (int i = 0; i < 1000; ++i) {
+        ctofu data = trilo_xdata_tofu_create_from_double(i * 0.1);
+        int priority = i % 5;  // Priorities 0, 1, 2, 3, 4
+        trilo_xdata_pqueue_insert(pqueue, data, priority);
+    }
+
+    for (int i = 0; i < 1000; ++i) {
+        ctofu data = trilo_xdata_tofu_create_from_double(i * 0.1);
+        int priority = i % 5;  // Priorities 0, 1, 2, 3, 4
+        result = trilo_xdata_pqueue_remove(pqueue, data, priority);
+        TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    }
+
+    trilo_xdata_pqueue_destroy(pqueue);
+}
+
+XTEST_CASE(xdata_let_pqueue_insert_and_get_edge_cases) {
+    cpqueue* pqueue = trilo_xdata_pqueue_create(DOUBLE_TYPE);
+    TEST_ASSERT_NOT_NULL_PTR(pqueue);
+
+    // Test inserting elements with different priorities
+    for (int i = 0; i < 10; ++i) {
+        ctofu data = trilo_xdata_tofu_create_from_double(i * 1.5);
+        int priority = i % 3;  // Priorities 0, 1, 2
+        trilo_xdata_pqueue_insert(pqueue, data, priority);
+    }
+
+    // Test inserting and retrieving a large number of elements
+    for (int i = 0; i < 1000; ++i) {
+        ctofu data = trilo_xdata_tofu_create_from_double(i * 0.1);
+        int priority = i % 5;  // Priorities 0, 1, 2, 3, 4
+        trilo_xdata_pqueue_insert(pqueue, data, priority);
+    }
+
+    trilo_xdata_pqueue_destroy(pqueue);
+}
+
 //
 // XUNIT-TEST RUNNER
 //
@@ -130,4 +183,6 @@ void xdata_test_pqueue_group(XUnitRunner *runner) {
     XTEST_RUN_UNIT(xdata_let_pqueue_insert_and_get,     runner);
     XTEST_RUN_UNIT(xdata_let_pqueue_remove,             runner);
     XTEST_RUN_UNIT(xdata_let_pqueue_size,               runner);
+    XTEST_RUN_UNIT(xdata_let_pqueue_size, runner);
+    XTEST_RUN_UNIT(xdata_let_pqueue_insert_and_get_edge_cases, runner);
 } // end of func

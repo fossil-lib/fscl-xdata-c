@@ -170,6 +170,50 @@ XTEST_CASE(xdata_let_stack_top) {
     trilo_xdata_stack_destroy(stack);
 }
 
+XTEST_CASE(xdata_let_stack_insert_and_size_edge_cases) {
+    cstack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+
+    // Test inserting a large number of elements
+    for (int i = 0; i < 1000; ++i) {
+        ctofu data = trilo_xdata_tofu_create_from_integer(i);
+        trilo_xdata_stack_insert(stack, data);
+    }
+    TEST_ASSERT_EQUAL_INT(1000, trilo_xdata_stack_size(stack));
+
+    // Test inserting elements of different types
+    ctofu double_data = trilo_xdata_tofu_create_from_double(3.14);
+    ctofu string_data = trilo_xdata_tofu_create_from_string("Hello");
+
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, trilo_xdata_stack_insert(stack, double_data));
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, trilo_xdata_stack_insert(stack, string_data));
+
+    TEST_ASSERT_EQUAL_INT(1002, trilo_xdata_stack_size(stack));
+
+    trilo_xdata_stack_destroy(stack);
+}
+
+XTEST_CASE(xdata_let_stack_remove_and_search_edge_cases) {
+    cstack* empty_stack = trilo_xdata_stack_create(INTEGER_TYPE);
+
+    // Test removing elements from an empty stack
+    ctofu data = trilo_xdata_tofu_create_from_integer(42);
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, trilo_xdata_stack_remove(empty_stack, data));
+
+    // Test searching for elements in an empty stack
+    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, trilo_xdata_stack_search(empty_stack, data));
+
+    trilo_xdata_stack_destroy(empty_stack);
+}
+
+XTEST_CASE(xdata_let_stack_top_edge_cases) {
+    cstack* empty_stack = trilo_xdata_stack_create(INTEGER_TYPE);
+
+    // Test getting the top element from an empty stack
+    TEST_ASSERT_NULL_PTR(trilo_xdata_stack_top(empty_stack));
+
+    trilo_xdata_stack_destroy(empty_stack);
+}
+
 //
 // XUNIT-TEST RUNNER
 //
@@ -185,4 +229,7 @@ void xdata_test_stack_group(XUnitRunner *runner) {
     XTEST_RUN_UNIT(xdata_let_stack_nullptr_check,      runner);
     XTEST_RUN_UNIT(xdata_let_stack_remove_and_search,  runner);
     XTEST_RUN_UNIT(xdata_let_stack_top,                runner);
+    XTEST_RUN_UNIT(xdata_let_stack_insert_and_size_edge_cases,   runner);
+    XTEST_RUN_UNIT(xdata_let_stack_remove_and_search_edge_cases, runner);
+    XTEST_RUN_UNIT(xdata_let_stack_top_edge_cases,               runner);
 } // end of func
