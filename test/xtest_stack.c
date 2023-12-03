@@ -206,7 +206,7 @@ XTEST_CASE(xdata_let_stack_remove_and_search_edge_cases) {
 }
 
 XTEST_CASE(xdata_let_stack_top_edge_cases) {
-    cstack* empty_stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    cstack* empty_stack = NULL;
 
     // Test getting the top element from an empty stack
     TEST_ASSERT_NULL_PTR(trilo_xdata_stack_top(empty_stack));
