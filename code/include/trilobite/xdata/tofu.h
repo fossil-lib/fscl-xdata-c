@@ -285,6 +285,14 @@ int trilo_xdata_tofu_linear_search(const ctofu* arr, size_t n, ctofu target);
 void trilo_xdata_tofu_print(ctofu tofu);
 
 /**
+ * @brief Checks if a ctofu instance represents a nullptr value.
+ *
+ * @param tofu Pointer to the ctofu instance to check.
+ * @return true if the ctofu instance represents a nullptr value, false otherwise.
+ */
+bool trilo_xdata_tofu_is_nullptr(const ctofu* tofu);
+
+/**
  * @brief Gets the integer data from a ctofu instance.
  *
  * @param tofu The ctofu instance to extract the integer data from.

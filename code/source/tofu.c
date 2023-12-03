@@ -220,6 +220,11 @@ void trilo_xdata_tofu_print(ctofu tofu) {
     } // end switch
 } // end of func
 
+// Function to check if a ctofu instance represents a nullptr value.
+bool trilo_xdata_tofu_is_nullptr(const ctofu* tofu) {
+    return (tofu->type == NULLPTR_TYPE);
+} // end of func
+
 // Function to get the integer data from a ctofu instance
 int trilo_xdata_tofu_get_integer(ctofu tofu) {
     if (tofu.type == INTEGER_TYPE) {

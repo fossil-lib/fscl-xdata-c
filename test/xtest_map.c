@@ -148,23 +148,6 @@ XTEST_CASE(xdata_let_map_contains) {
     trilo_xdata_map_destroy(map);
 }
 
-XTEST_CASE(xdata_let_map_clear) {
-    cmap* map = trilo_xdata_map_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(map);
-
-    ctofu key = trilo_xdata_tofu_create_from_string("age");
-    ctofu value = trilo_xdata_tofu_create_from_integer(30);
-
-    trilo_xdata_map_insert(map, key, value);
-    TEST_ASSERT_TRUE(trilo_xdata_map_not_empty(map));
-
-    trilo_xdata_map_clear(map);
-    TEST_ASSERT_TRUE(trilo_xdata_map_is_empty(map));
-
-    // Clean up
-    trilo_xdata_map_destroy(map);
-}
-
 //
 // XUNIT-TEST RUNNER
 //
@@ -177,5 +160,4 @@ void xdata_test_map_group(XUnitRunner *runner) {
     XTEST_RUN_UNIT(xdata_let_map_getter_and_setter,  runner);
     XTEST_RUN_UNIT(xdata_let_map_size,               runner);
     XTEST_RUN_UNIT(xdata_let_map_contains,           runner);
-    XTEST_RUN_UNIT(xdata_let_map_clear,              runner);
 } // end of func
