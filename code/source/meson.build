@@ -4,7 +4,7 @@ code = files(
     'set.c'  , 'stack.c' , 'map.c'   ,
     'vector.c', 'tofu.c')
 
-lib = library('trilo-xdata-c',
+lib = static_library('trilo-xdata-c',
     code,
     include_directories: dir)
 
