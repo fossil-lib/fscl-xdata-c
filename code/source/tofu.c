@@ -267,29 +267,32 @@ bool trilo_xdata_tofu_get_boolean(ctofu tofu) {
 } // end of func
 
 // Function to create a copy of a ctofu instance
-ctofu trilo_xdata_tofu_copy(ctofu tofu) {
-    ctofu copy;
-    copy.type = tofu.type;
-    switch (tofu.type) {
-        case INTEGER_TYPE:
-            copy.data.integer_type = tofu.data.integer_type;
-            break;
-        case DOUBLE_TYPE:
-            copy.data.double_type = tofu.data.double_type;
-            break;
-        case STRING_TYPE:
-            strncpy(copy.data.string_type, tofu.data.string_type, sizeof(copy.data.string_type));
-            break;
-        case CHAR_TYPE:
-            copy.data.char_type = tofu.data.char_type;
-            break;
-        case BOOLEAN_TYPE:
-            copy.data.boolean_type = tofu.data.boolean_type;
-            break;
-        default:
-            copy.type = UNKNOWN_TYPE;
-            break;
-    } // end switch
+ctofu trilo_xdata_tofu_copy(const ctofu *tofu) {
+    ctofu copy = { .type = tofu ? tofu->type : UNKNOWN_TYPE };
+
+    if (tofu) {
+        switch (tofu->type) {
+            case INTEGER_TYPE:
+                copy.data.integer_type = tofu->data.integer_type;
+                break;
+            case DOUBLE_TYPE:
+                copy.data.double_type = tofu->data.double_type;
+                break;
+            case STRING_TYPE:
+                strncpy(copy.data.string_type, tofu->data.string_type, sizeof(copy.data.string_type) - 1);
+                copy.data.string_type[sizeof(copy.data.string_type) - 1] = '\0';  // Ensure null-termination
+                break;
+            case CHAR_TYPE:
+                copy.data.char_type = tofu->data.char_type;
+                break;
+            case BOOLEAN_TYPE:
+                copy.data.boolean_type = tofu->data.boolean_type;
+                break;
+            default:
+                break;
+        }
+    }
+
     return copy;
 } // end of func
 
