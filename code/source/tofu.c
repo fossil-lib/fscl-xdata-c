@@ -279,7 +279,7 @@ ctofu trilo_xdata_tofu_copy(ctofu tofu) {
             break;
         case STRING_TYPE:
             if (tofu.data.string_type != NULL) {
-                strcpy(copy.data.string_type, tofu.data.string_type);
+                copy.data.string_type = tofu.data.string_type;
             } else {
                 // Handle the case when the source string is null
                 copy.type = UNKNOWN_TYPE;
