@@ -334,7 +334,7 @@ enum ctofu_type tofu_get_type(const ctofu tofu) {
  * @param index The index to set the iterator to.
  * @return A ctofu_iterator pointing to the specified index in the array.
  */
-ctofu_iterator tofu_iterator_at(const ctofu* arr, size_t n, size_t index) {
+ctofu_iterator tofu_iterator_at(ctofu* arr, size_t n, size_t index) {
     ctofu_iterator iterator;
     iterator.current = (index < n) ? &arr[index] : NULL;
     iterator.index = index;
