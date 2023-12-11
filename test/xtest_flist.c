@@ -40,81 +40,81 @@
 
 // Test case 1: Test cflist creation and destruction
 XTEST_CASE(xdata_let_flist_create_and_destroy) {
-    cflist* flist = trilo_xdata_flist_create(INTEGER_TYPE);
+    cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    trilo_xdata_flist_destroy(flist);
+    flist_erase(flist);
     TEST_ASSERT_NULL_PTR(flist);
 }
 
 // Test case 2: Test cflist insertion and retrieval
 XTEST_CASE(xdata_let_flist_insert_and_get) {
-    cflist* flist = trilo_xdata_flist_create(INTEGER_TYPE);
+    cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    ctofu_error result = trilo_xdata_flist_insert(flist, tofu);
+    ctofu tofu = tofu_create_from_integer(42);
+    ctofu_error result = flist_insert(flist, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    ctofu* retrieved_tofu = trilo_xdata_flist_getter(flist, tofu);
+    ctofu* retrieved_tofu = flist_getter(flist, tofu);
     TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
-    TEST_ASSERT_EQUAL_INT(42, trilo_xdata_tofu_get_integer(*retrieved_tofu));
+    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(*retrieved_tofu));
 
-    trilo_xdata_flist_destroy(flist);
+    flist_erase(flist);
 }
 
 // Test case 3: Test cflist removal
 XTEST_CASE(xdata_let_flist_remove) {
-    cflist* flist = trilo_xdata_flist_create(INTEGER_TYPE);
+    cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    ctofu_error result = trilo_xdata_flist_insert(flist, tofu);
+    ctofu tofu = tofu_create_from_integer(42);
+    ctofu_error result = flist_insert(flist, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    result = trilo_xdata_flist_remove(flist, tofu);
+    result = flist_remove(flist, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    ctofu* retrieved_tofu = trilo_xdata_flist_getter(flist, tofu);
+    ctofu* retrieved_tofu = flist_getter(flist, tofu);
     TEST_ASSERT_NULL_PTR(retrieved_tofu);
 
-    trilo_xdata_flist_destroy(flist);
+    flist_erase(flist);
 }
 
 // Test case 4: Test cflist size
 XTEST_CASE(xdata_let_flist_size) {
-    cflist* flist = trilo_xdata_flist_create(INTEGER_TYPE);
+    cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
-    ctofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
-    ctofu tofu3 = trilo_xdata_tofu_create_from_integer(3);
+    ctofu tofu1 = tofu_create_from_integer(1);
+    ctofu tofu2 = tofu_create_from_integer(2);
+    ctofu tofu3 = tofu_create_from_integer(3);
 
-    trilo_xdata_flist_insert(flist, tofu1);
-    trilo_xdata_flist_insert(flist, tofu2);
-    trilo_xdata_flist_insert(flist, tofu3);
+    flist_insert(flist, tofu1);
+    flist_insert(flist, tofu2);
+    flist_insert(flist, tofu3);
 
-    size_t size = trilo_xdata_flist_size(flist);
+    size_t size = flist_size(flist);
     TEST_ASSERT_EQUAL_INT(3, size);
 
-    trilo_xdata_flist_destroy(flist);
+    flist_erase(flist);
 }
 
 // Test case 5: Test cflist empty check
 XTEST_CASE(xdata_let_flist_empty_check) {
-    cflist* flist = trilo_xdata_flist_create(INTEGER_TYPE);
+    cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_flist_is_empty(flist));
-    TEST_ASSERT_FALSE_BOOL(trilo_xdata_flist_not_empty(flist));
+    TEST_ASSERT_TRUE_BOOL(flist_is_empty(flist));
+    TEST_ASSERT_FALSE_BOOL(flist_not_empty(flist));
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    trilo_xdata_flist_insert(flist, tofu);
+    ctofu tofu = tofu_create_from_integer(42);
+    flist_insert(flist, tofu);
 
-    TEST_ASSERT_FALSE_BOOL(trilo_xdata_flist_is_empty(flist));
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_flist_not_empty(flist));
+    TEST_ASSERT_FALSE_BOOL(flist_is_empty(flist));
+    TEST_ASSERT_TRUE_BOOL(flist_not_empty(flist));
 
-    trilo_xdata_flist_destroy(flist);
+    flist_erase(flist);
 }
 
 //

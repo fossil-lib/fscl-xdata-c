@@ -40,120 +40,120 @@
 
 // Test case 1: Test cset creation and destruction
 XTEST_CASE(xdata_let_set_create_and_destroy) {
-    cset* set = trilo_xdata_set_create(INTEGER_TYPE);
+    cset* set = set_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(set);
 
-    trilo_xdata_set_destroy(set);
+    set_erase(set);
     TEST_ASSERT_NULL_PTR(set);
 }
 
 // Test case 2: Test cset insertion and removal
 XTEST_CASE(xdata_let_set_insert_and_remove) {
-    cset* set = trilo_xdata_set_create(INTEGER_TYPE);
+    cset* set = set_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(set);
 
-    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
-    ctofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
-    ctofu tofu3 = trilo_xdata_tofu_create_from_integer(3);
+    ctofu tofu1 = tofu_create_from_integer(1);
+    ctofu tofu2 = tofu_create_from_integer(2);
+    ctofu tofu3 = tofu_create_from_integer(3);
 
-    ctofu_error result = trilo_xdata_set_insert(set, tofu1);
+    ctofu_error result = set_insert(set, tofu1);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    result = trilo_xdata_set_insert(set, tofu2);
+    result = set_insert(set, tofu2);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    result = trilo_xdata_set_insert(set, tofu3);
+    result = set_insert(set, tofu3);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    result = trilo_xdata_set_remove(set, tofu2);
+    result = set_remove(set, tofu2);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    ctofu_error found_tofu2 = trilo_xdata_set_search(set, tofu2);
+    ctofu_error found_tofu2 = set_search(set, tofu2);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, found_tofu2);
 
-    trilo_xdata_set_destroy(set);
+    set_erase(set);
 }
 
 // Test case 3: Test cset size
 XTEST_CASE(xdata_let_set_size) {
-    cset* set = trilo_xdata_set_create(INTEGER_TYPE);
+    cset* set = set_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(set);
 
-    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
-    ctofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
+    ctofu tofu1 = tofu_create_from_integer(1);
+    ctofu tofu2 = tofu_create_from_integer(2);
 
-    trilo_xdata_set_insert(set, tofu1);
-    trilo_xdata_set_insert(set, tofu2);
+    set_insert(set, tofu1);
+    set_insert(set, tofu2);
 
-    size_t size = trilo_xdata_set_size(set);
+    size_t size = set_size(set);
     TEST_ASSERT_EQUAL_INT(2, size);
 
-    trilo_xdata_set_destroy(set);
+    set_erase(set);
 }
 
 // Test case 4: Test cset empty check
 XTEST_CASE(xdata_let_set_empty_check) {
-    cset* set = trilo_xdata_set_create(INTEGER_TYPE);
+    cset* set = set_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(set);
 
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_set_is_empty(set));
-    TEST_ASSERT_FALSE_BOOL(trilo_xdata_set_not_empty(set));
+    TEST_ASSERT_TRUE_BOOL(set_is_empty(set));
+    TEST_ASSERT_FALSE_BOOL(set_not_empty(set));
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    trilo_xdata_set_insert(set, tofu);
+    ctofu tofu = tofu_create_from_integer(42);
+    set_insert(set, tofu);
 
-    TEST_ASSERT_FALSE_BOOL(trilo_xdata_set_is_empty(set));
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_set_not_empty(set));
+    TEST_ASSERT_FALSE_BOOL(set_is_empty(set));
+    TEST_ASSERT_TRUE_BOOL(set_not_empty(set));
 
-    trilo_xdata_set_destroy(set);
+    set_erase(set);
 }
 
 XTEST_CASE(xdata_let_set_insert_and_remove_edge_cases) {
-    cset* set = trilo_xdata_set_create(INTEGER_TYPE);
+    cset* set = set_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(set);
 
-    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
-    ctofu tofu2 = trilo_xdata_tofu_create_from_double(2.5);
-    ctofu tofu3 = trilo_xdata_tofu_create_from_string("Hello");
+    ctofu tofu1 = tofu_create_from_integer(1);
+    ctofu tofu2 = tofu_create_from_double(2.5);
+    ctofu tofu3 = tofu_create_from_string("Hello");
 
-    ctofu_error result = trilo_xdata_set_insert(set, tofu1);
+    ctofu_error result = set_insert(set, tofu1);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    result = trilo_xdata_set_insert(set, tofu2);
+    result = set_insert(set, tofu2);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    result = trilo_xdata_set_insert(set, tofu3);
+    result = set_insert(set, tofu3);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
     // Test removing an element that doesn't exist
-    ctofu tofu_not_in_set = trilo_xdata_tofu_create_from_integer(999);
-    result = trilo_xdata_set_remove(set, tofu_not_in_set);
+    ctofu tofu_not_in_set = tofu_create_from_integer(999);
+    result = set_remove(set, tofu_not_in_set);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, result);
 
-    trilo_xdata_set_destroy(set);
+    set_erase(set);
 }
 
 XTEST_CASE(xdata_let_set_size_edge_cases) {
-    cset* empty_set = trilo_xdata_set_create(INTEGER_TYPE);
+    cset* empty_set = set_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(empty_set);
 
-    size_t size = trilo_xdata_set_size(empty_set);
+    size_t size = set_size(empty_set);
     TEST_ASSERT_EQUAL_INT(0, size);
 
-    trilo_xdata_set_destroy(empty_set);
+    set_erase(empty_set);
 }
 
 XTEST_CASE(xdata_let_set_search_edge_cases) {
-    cset* empty_set = trilo_xdata_set_create(INTEGER_TYPE);
+    cset* empty_set = set_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(empty_set);
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    ctofu tofu = tofu_create_from_integer(42);
 
     // Test searching for an element in an empty set
-    ctofu_error result = trilo_xdata_set_search(empty_set, tofu);
+    ctofu_error result = set_search(empty_set, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, result);
 
-    trilo_xdata_set_destroy(empty_set);
+    set_erase(empty_set);
 }
 
 //

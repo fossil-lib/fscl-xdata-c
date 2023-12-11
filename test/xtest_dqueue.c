@@ -40,81 +40,81 @@
 
 // Test case 1: Test cdqueue creation and destruction
 XTEST_CASE(xdata_let_dqueue_create_and_destroy) {
-    cdqueue* dqueue = trilo_xdata_dqueue_create(INTEGER_TYPE);
+    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
 
-    trilo_xdata_dqueue_destroy(dqueue);
+    dqueue_erase(dqueue);
     TEST_ASSERT_NULL_PTR(dqueue);
 }
 
 // Test case 2: Test cdqueue insertion and retrieval
 XTEST_CASE(xdata_let_dqueue_insert_and_get) {
-    cdqueue* dqueue = trilo_xdata_dqueue_create(INTEGER_TYPE);
+    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    ctofu_error result = trilo_xdata_dqueue_insert(dqueue, tofu);
+    ctofu tofu = tofu_create_from_integer(42);
+    ctofu_error result = dqueue_insert(dqueue, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    ctofu* retrieved_tofu = trilo_xdata_dqueue_getter(dqueue, tofu);
+    ctofu* retrieved_tofu = dqueue_getter(dqueue, tofu);
     TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
-    TEST_ASSERT_EQUAL_INT(42, trilo_xdata_tofu_get_integer(*retrieved_tofu));
+    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(*retrieved_tofu));
 
-    trilo_xdata_dqueue_destroy(dqueue);
+    dqueue_erase(dqueue);
 }
 
 // Test case 3: Test cdqueue removal
 XTEST_CASE(xdata_let_dqueue_remove) {
-    cdqueue* dqueue = trilo_xdata_dqueue_create(INTEGER_TYPE);
+    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    ctofu_error result = trilo_xdata_dqueue_insert(dqueue, tofu);
+    ctofu tofu = tofu_create_from_integer(42);
+    ctofu_error result = dqueue_insert(dqueue, tofu);
     TEST_ASSERT_EQUAL_INT(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    result = trilo_xdata_dqueue_remove(dqueue, tofu);
+    result = dqueue_remove(dqueue, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    ctofu* retrieved_tofu = trilo_xdata_dqueue_getter(dqueue, tofu);
+    ctofu* retrieved_tofu = dqueue_getter(dqueue, tofu);
     TEST_ASSERT_NULL_PTR(retrieved_tofu);
 
-    trilo_xdata_dqueue_destroy(dqueue);
+    dqueue_erase(dqueue);
 }
 
 // Test case 4: Test cdqueue size
 XTEST_CASE(xdata_let_dqueue_size) {
-    cdqueue* dqueue = trilo_xdata_dqueue_create(INTEGER_TYPE);
+    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
 
-    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
-    ctofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
-    ctofu tofu3 = trilo_xdata_tofu_create_from_integer(3);
+    ctofu tofu1 = tofu_create_from_integer(1);
+    ctofu tofu2 = tofu_create_from_integer(2);
+    ctofu tofu3 = tofu_create_from_integer(3);
 
-    trilo_xdata_dqueue_insert(dqueue, tofu1);
-    trilo_xdata_dqueue_insert(dqueue, tofu2);
-    trilo_xdata_dqueue_insert(dqueue, tofu3);
+    dqueue_insert(dqueue, tofu1);
+    dqueue_insert(dqueue, tofu2);
+    dqueue_insert(dqueue, tofu3);
 
-    size_t size = trilo_xdata_dqueue_size(dqueue);
+    size_t size = dqueue_size(dqueue);
     TEST_ASSERT_EQUAL_INT(3, size);
 
-    trilo_xdata_dqueue_destroy(dqueue);
+    dqueue_erase(dqueue);
 }
 
 // Test case 5: Test cdqueue empty check
 XTEST_CASE(xdata_let_dqueue_empty_check) {
-    cdqueue* dqueue = trilo_xdata_dqueue_create(INTEGER_TYPE);
+    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
 
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_dqueue_is_empty(dqueue));
-    TEST_ASSERT_FALSE_BOOL(trilo_xdata_dqueue_not_empty(dqueue));
+    TEST_ASSERT_TRUE_BOOL(dqueue_is_empty(dqueue));
+    TEST_ASSERT_FALSE_BOOL(dqueue_not_empty(dqueue));
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    trilo_xdata_dqueue_insert(dqueue, tofu);
+    ctofu tofu = tofu_create_from_integer(42);
+    dqueue_insert(dqueue, tofu);
 
-    TEST_ASSERT_FALSE_BOOL(trilo_xdata_dqueue_is_empty(dqueue));
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_dqueue_not_empty(dqueue));
+    TEST_ASSERT_FALSE_BOOL(dqueue_is_empty(dqueue));
+    TEST_ASSERT_TRUE_BOOL(dqueue_not_empty(dqueue));
 
-    trilo_xdata_dqueue_destroy(dqueue);
+    dqueue_erase(dqueue);
 }
 
 //

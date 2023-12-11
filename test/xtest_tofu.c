@@ -42,57 +42,57 @@
 
 // Test case 1: Test ctofu creation and retrieval of integer value
 XTEST_CASE(xdata_let_tofu_create_and_get_integer) {
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    TEST_ASSERT_EQUAL_BOOL(INTEGER_TYPE, trilo_xdata_tofu_get_type(tofu));
-    TEST_ASSERT_EQUAL_INT(42, trilo_xdata_tofu_get_integer(tofu));
+    ctofu tofu = tofu_create_from_integer(42);
+    TEST_ASSERT_EQUAL_BOOL(INTEGER_TYPE, tofu_get_type(tofu));
+    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(tofu));
 }
 
 // Test case 2: Test ctofu creation and retrieval of double value
 XTEST_CASE(xdata_let_tofu_create_and_get_double) {
-    ctofu tofu = trilo_xdata_tofu_create_from_double(3.14);
-    TEST_ASSERT_EQUAL_BOOL(DOUBLE_TYPE, trilo_xdata_tofu_get_type(tofu));
-    TEST_ASSERT_DOUBLE_EQUAL(3.14, trilo_xdata_tofu_get_double(tofu));
+    ctofu tofu = tofu_create_from_double(3.14);
+    TEST_ASSERT_EQUAL_BOOL(DOUBLE_TYPE, tofu_get_type(tofu));
+    TEST_ASSERT_DOUBLE_EQUAL(3.14, tofu_get_double(tofu));
 }
 
 // Test case 3: Test ctofu equality
 XTEST_CASE(xdata_let_tofu_equality) {
-    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(42);
-    ctofu tofu2 = trilo_xdata_tofu_create_from_integer(42);
-    ctofu tofu3 = trilo_xdata_tofu_create_from_double(3.14);
+    ctofu tofu1 = tofu_create_from_integer(42);
+    ctofu tofu2 = tofu_create_from_integer(42);
+    ctofu tofu3 = tofu_create_from_double(3.14);
 
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_tofu_equal(tofu1, tofu2));
-    TEST_ASSERT_FALSE_BOOL(trilo_xdata_tofu_equal(tofu1, tofu3));
+    TEST_ASSERT_TRUE_BOOL(tofu_equal(tofu1, tofu2));
+    TEST_ASSERT_FALSE_BOOL(tofu_equal(tofu1, tofu3));
 }
 
 // Test case 4: Test ctofu copy
 XTEST_CASE(xdata_let_tofu_copy) {
-    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(42);
-    ctofu tofu2 = trilo_xdata_tofu_copy(tofu1);
+    ctofu tofu1 = tofu_create_from_integer(42);
+    ctofu tofu2 = tofu_copy(tofu1);
 
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_tofu_equal(tofu1, tofu2));
+    TEST_ASSERT_TRUE_BOOL(tofu_equal(tofu1, tofu2));
 }
 
 XTEST_CASE(xdata_let_tofu_create_and_get_string_edge_cases) {
     const char* empty_str = "";
     const char* special_chars_str = "!@#$%^&*()";
 
-    ctofu empty_tofu = trilo_xdata_tofu_create_from_string(empty_str);
-    TEST_ASSERT_EQUAL_BOOL(STRING_TYPE, trilo_xdata_tofu_get_type(empty_tofu));
-    TEST_ASSERT_EQUAL_STRING(empty_str, trilo_xdata_tofu_get_string(empty_tofu));
+    ctofu empty_tofu = tofu_create_from_string(empty_str);
+    TEST_ASSERT_EQUAL_BOOL(STRING_TYPE, tofu_get_type(empty_tofu));
+    TEST_ASSERT_EQUAL_STRING(empty_str, tofu_get_string(empty_tofu));
 
-    ctofu special_chars_tofu = trilo_xdata_tofu_create_from_string(special_chars_str);
-    TEST_ASSERT_EQUAL_BOOL(STRING_TYPE, trilo_xdata_tofu_get_type(special_chars_tofu));
-    TEST_ASSERT_EQUAL_STRING(special_chars_str, trilo_xdata_tofu_get_string(special_chars_tofu));
+    ctofu special_chars_tofu = tofu_create_from_string(special_chars_str);
+    TEST_ASSERT_EQUAL_BOOL(STRING_TYPE, tofu_get_type(special_chars_tofu));
+    TEST_ASSERT_EQUAL_STRING(special_chars_str, tofu_get_string(special_chars_tofu));
 }
 
 XTEST_CASE(xdata_let_tofu_create_and_get_boolean_edge_cases) {
-    ctofu true_tofu = trilo_xdata_tofu_create_from_boolean(true);
-    TEST_ASSERT_EQUAL_BOOL(BOOLEAN_TYPE, trilo_xdata_tofu_get_type(true_tofu));
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_tofu_get_boolean(true_tofu));
+    ctofu true_tofu = tofu_create_from_boolean(true);
+    TEST_ASSERT_EQUAL_BOOL(BOOLEAN_TYPE, tofu_get_type(true_tofu));
+    TEST_ASSERT_TRUE_BOOL(tofu_get_boolean(true_tofu));
 
-    ctofu false_tofu = trilo_xdata_tofu_create_from_boolean(false);
-    TEST_ASSERT_EQUAL_BOOL(BOOLEAN_TYPE, trilo_xdata_tofu_get_type(false_tofu));
-    TEST_ASSERT_FALSE_BOOL(trilo_xdata_tofu_get_boolean(false_tofu));
+    ctofu false_tofu = tofu_create_from_boolean(false);
+    TEST_ASSERT_EQUAL_BOOL(BOOLEAN_TYPE, tofu_get_type(false_tofu));
+    TEST_ASSERT_FALSE_BOOL(tofu_get_boolean(false_tofu));
 }
 
 //
