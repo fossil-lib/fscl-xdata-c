@@ -71,14 +71,14 @@ typedef struct cdlist {
  * @param list_type The data type for the cdlist (e.g., INTEGER_TYPE, DOUBLE_TYPE).
  * @return A pointer to the newly created cdlist instance.
  */
-cdlist* trilo_xdata_dlist_create(enum ctofu_type list_type);
+cdlist* dlist_create(enum ctofu_type list_type);
 
 /**
  * @brief Destroys the cdlist instance, freeing all associated memory.
  *
  * @param dlist The cdlist instance to be destroyed.
  */
-void trilo_xdata_dlist_destroy(cdlist* dlist);
+void dlist_erase(cdlist* dlist);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -91,7 +91,7 @@ void trilo_xdata_dlist_destroy(cdlist* dlist);
  * @param data   The ctofu data element to be inserted.
  * @return A ctofu_error value indicating the result of the insertion.
  */
-ctofu_error trilo_xdata_dlist_insert(cdlist* dlist, ctofu data);
+ctofu_error dlist_insert(cdlist* dlist, ctofu data);
 
 /**
  * @brief Removes a ctofu data element from the cdlist.
@@ -100,7 +100,7 @@ ctofu_error trilo_xdata_dlist_insert(cdlist* dlist, ctofu data);
  * @param data   The ctofu data element to be removed.
  * @return A ctofu_error value indicating the result of the removal.
  */
-ctofu_error trilo_xdata_dlist_remove(cdlist* dlist, ctofu data);
+ctofu_error dlist_remove(cdlist* dlist, ctofu data);
 
 /**
  * @brief Searches for a ctofu data element in the cdlist.
@@ -109,21 +109,21 @@ ctofu_error trilo_xdata_dlist_remove(cdlist* dlist, ctofu data);
  * @param data   The ctofu data element to search for.
  * @return A ctofu_error value indicating the result of the search.
  */
-ctofu_error trilo_xdata_dlist_search(const cdlist* dlist, ctofu data);
+ctofu_error dlist_search(const cdlist* dlist, ctofu data);
 
 /**
  * @brief Reverses the cdlist in the forward direction.
  *
  * @param dlist The cdlist to be reversed.
  */
-void trilo_xdata_dlist_reverse_forward(cdlist* dlist);
+void dlist_reverse_forward(cdlist* dlist);
 
 /**
  * @brief Reverses the cdlist in the backward direction.
  *
  * @param dlist The cdlist to be reversed.
  */
-void trilo_xdata_dlist_reverse_backward(cdlist* dlist);
+void dlist_reverse_backward(cdlist* dlist);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -135,7 +135,7 @@ void trilo_xdata_dlist_reverse_backward(cdlist* dlist);
  * @param dlist The cdlist for which the size will be determined.
  * @return The size of the cdlist.
  */
-size_t trilo_xdata_dlist_size(const cdlist* dlist);
+size_t dlist_size(const cdlist* dlist);
 
 /**
  * @brief Getter function to retrieve a ctofu data element from the cdlist.
@@ -144,7 +144,7 @@ size_t trilo_xdata_dlist_size(const cdlist* dlist);
  * @param data   The ctofu data element to retrieve.
  * @return A pointer to the ctofu data element in the cdlist (or NULL if not found).
  */
-ctofu* trilo_xdata_dlist_getter(cdlist* dlist, ctofu data);
+ctofu* dlist_getter(cdlist* dlist, ctofu data);
 
 /**
  * @brief Setter function to update a ctofu data element in the cdlist.
@@ -153,7 +153,7 @@ ctofu* trilo_xdata_dlist_getter(cdlist* dlist, ctofu data);
  * @param data   The ctofu data element to update.
  * @return A ctofu_error value indicating the result of the update.
  */
-ctofu_error trilo_xdata_dlist_setter(cdlist* dlist, ctofu data);
+ctofu_error dlist_setter(cdlist* dlist, ctofu data);
 
 /**
  * @brief Checks if the cdlist is not empty.
@@ -161,7 +161,7 @@ ctofu_error trilo_xdata_dlist_setter(cdlist* dlist, ctofu data);
  * @param dlist The cdlist to check.
  * @return true if the cdlist is not empty, false otherwise.
  */
-bool trilo_xdata_dlist_not_empty(const cdlist* dlist);
+bool dlist_not_empty(const cdlist* dlist);
 
 /**
  * @brief Checks if the cdlist is not a null pointer.
@@ -169,7 +169,7 @@ bool trilo_xdata_dlist_not_empty(const cdlist* dlist);
  * @param dlist The cdlist to check.
  * @return true if the cdlist is not a null pointer, false otherwise.
  */
-bool trilo_xdata_dlist_not_nullptr(const cdlist* dlist);
+bool dlist_not_cnullptr(const cdlist* dlist);
 
 /**
  * @brief Checks if the cdlist is empty.
@@ -177,7 +177,7 @@ bool trilo_xdata_dlist_not_nullptr(const cdlist* dlist);
  * @param dlist The cdlist to check.
  * @return true if the cdlist is empty, false otherwise.
  */
-bool trilo_xdata_dlist_is_empty(const cdlist* dlist);
+bool dlist_is_empty(const cdlist* dlist);
 
 /**
  * @brief Checks if the cdlist is a null pointer.
@@ -185,7 +185,7 @@ bool trilo_xdata_dlist_is_empty(const cdlist* dlist);
  * @param dlist The cdlist to check.
  * @return true if the cdlist is a null pointer, false otherwise.
  */
-bool trilo_xdata_dlist_is_nullptr(const cdlist* dlist);
+bool dlist_is_cnullptr(const cdlist* dlist);
 
 #ifdef __cplusplus
 }

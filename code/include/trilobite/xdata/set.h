@@ -69,14 +69,14 @@ typedef struct cset {
  * @param list_type The data type for the cset (e.g., INTEGER_TYPE, DOUBLE_TYPE).
  * @return A pointer to the newly created cset instance.
  */
-cset* trilo_xdata_set_create(enum ctofu_type list_type);
+cset* set_create(enum ctofu_type list_type);
 
 /**
  * @brief Destroys the cset instance, freeing all associated memory.
  *
  * @param set The cset instance to be destroyed.
  */
-void trilo_xdata_set_destroy(cset* set);
+void set_erase(cset* set);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -89,7 +89,7 @@ void trilo_xdata_set_destroy(cset* set);
  * @param data The ctofu data element to be inserted.
  * @return A ctofu_error value indicating the result of the insertion.
  */
-ctofu_error trilo_xdata_set_insert(cset* set, ctofu data);
+ctofu_error set_insert(cset* set, ctofu data);
 
 /**
  * @brief Removes a ctofu data element from the cset.
@@ -98,7 +98,7 @@ ctofu_error trilo_xdata_set_insert(cset* set, ctofu data);
  * @param data The ctofu data element to be removed.
  * @return A ctofu_error value indicating the result of the removal.
  */
-ctofu_error trilo_xdata_set_remove(cset* set, ctofu data);
+ctofu_error set_remove(cset* set, ctofu data);
 
 /**
  * @brief Searches for a ctofu data element in the cset.
@@ -107,7 +107,7 @@ ctofu_error trilo_xdata_set_remove(cset* set, ctofu data);
  * @param data The ctofu data element to search for.
  * @return A ctofu_error value indicating the result of the search.
  */
-ctofu_error trilo_xdata_set_search(const cset* set, ctofu data);
+ctofu_error set_search(const cset* set, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -119,7 +119,7 @@ ctofu_error trilo_xdata_set_search(const cset* set, ctofu data);
  * @param set The cset for which the size will be determined.
  * @return The size of the cset.
  */
-size_t trilo_xdata_set_size(const cset* set);
+size_t set_size(const cset* set);
 
 /**
  * @brief Getter function to retrieve a ctofu data element from the cset.
@@ -128,7 +128,7 @@ size_t trilo_xdata_set_size(const cset* set);
  * @param data The ctofu data element to retrieve.
  * @return A pointer to the ctofu data element in the cset (or NULL if not found).
  */
-ctofu* trilo_xdata_set_getter(cset* set, ctofu data);
+ctofu* set_getter(cset* set, ctofu data);
 
 /**
  * @brief Setter function to update a ctofu data element in the cset.
@@ -137,7 +137,7 @@ ctofu* trilo_xdata_set_getter(cset* set, ctofu data);
  * @param data The ctofu data element to update.
  * @return A ctofu_error value indicating the result of the update.
  */
-ctofu_error trilo_xdata_set_setter(cset* set, ctofu data);
+ctofu_error set_setter(cset* set, ctofu data);
 
 /**
  * @brief Checks if the cset is not empty.
@@ -145,7 +145,7 @@ ctofu_error trilo_xdata_set_setter(cset* set, ctofu data);
  * @param set The cset to check.
  * @return true if the cset is not empty, false otherwise.
  */
-bool trilo_xdata_set_not_empty(const cset* set);
+bool set_not_empty(const cset* set);
 
 /**
  * @brief Checks if the cset is not a null pointer.
@@ -153,7 +153,7 @@ bool trilo_xdata_set_not_empty(const cset* set);
  * @param set The cset to check.
  * @return true if the cset is not a null pointer, false otherwise.
  */
-bool trilo_xdata_set_not_nullptr(const cset* set);
+bool set_not_cnullptr(const cset* set);
 
 /**
  * @brief Checks if the cset is empty.
@@ -161,7 +161,7 @@ bool trilo_xdata_set_not_nullptr(const cset* set);
  * @param set The cset to check.
  * @return true if the cset is empty, false otherwise.
  */
-bool trilo_xdata_set_is_empty(const cset* set);
+bool set_is_empty(const cset* set);
 
 /**
  * @brief Checks if the cset is a null pointer.
@@ -169,7 +169,7 @@ bool trilo_xdata_set_is_empty(const cset* set);
  * @param set The cset to check.
  * @return true if the cset is a null pointer, false otherwise.
  */
-bool trilo_xdata_set_is_nullptr(const cset* set);
+bool set_is_cnullptr(const cset* set);
 
 /**
  * @brief Checks if a ctofu data element is present in the cset.
@@ -178,7 +178,7 @@ bool trilo_xdata_set_is_nullptr(const cset* set);
  * @param data The ctofu data element to search for.
  * @return true if the data element is present, false otherwise.
  */
-bool trilo_xdata_set_contains(const cset* set, ctofu data);
+bool set_contains(const cset* set, ctofu data);
 
 #ifdef __cplusplus
 }

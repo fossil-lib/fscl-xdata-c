@@ -34,43 +34,24 @@
 
 int main() {
     // Create a cpqueue instance with INTEGER_TYPE
-    cpqueue* pqueue = trilo_xdata_pqueue_create(INTEGER_TYPE);
+    cpqueue* pqueue = pqueue_create(INTEGER_TYPE);
 
     // Insert data elements into the cpqueue with priorities
-    trilo_xdata_pqueue_insert(pqueue, trilo_xdata_tofu_create_from_integer(10), 3);
-    trilo_xdata_pqueue_insert(pqueue, trilo_xdata_tofu_create_from_integer(20), 1);
-    trilo_xdata_pqueue_insert(pqueue, trilo_xdata_tofu_create_from_integer(30), 2);
+    pqueue_insert(pqueue, tofu_create_from_integer(10), 3);
+    pqueue_insert(pqueue, tofu_create_from_integer(20), 1);
+    pqueue_insert(pqueue, tofu_create_from_integer(30), 2);
 
     // Print the size of the cpqueue
-    printf("Size of the priority queue: %zu\n", trilo_xdata_pqueue_size(pqueue));
-
-    // Print the cpqueue elements
-    printf("Priority queue elements:\n");
-    for (int i = 1; i <= trilo_xdata_pqueue_size(pqueue); i++) {
-        ctofu* tofu = trilo_xdata_pqueue_getter(pqueue, i, &i);
-        printf("Priority %d: %d\n", i, trilo_xdata_tofu_get_integer(*tofu));
-    } // end for
+    printf("Size of the priority queue: %zu\n", pqueue_size(pqueue));
 
     // Check if the cpqueue is not empty
-    printf("Is priority queue not empty? %s\n", trilo_xdata_pqueue_not_empty(pqueue) ? "true" : "false");
-
-    // Remove an element from the cpqueue
-    ctofu* removedTofu = trilo_xdata_pqueue_getter(pqueue, 2, NULL);
-    ctofu_error removalResult = trilo_xdata_pqueue_remove(pqueue, *removedTofu, 2);
-    printf("Removal result: %s\n", removalResult == TRILO_XDATA_TYPE_SUCCESS ? "success" : "failure");
-
-    // Print the updated cpqueue
-    printf("Updated priority queue elements:\n");
-    for (int i = 1; i <= trilo_xdata_pqueue_size(pqueue); i++) {
-        ctofu* tofu = trilo_xdata_pqueue_getter(pqueue, i, &i);
-        printf("Priority %d: %d\n", i, trilo_xdata_tofu_get_integer(*tofu));
-    } // end for
+    printf("Is priority queue not empty? %s\n", pqueue_not_empty(pqueue) ? "true" : "false");
 
     // Check if the cpqueue is not empty
-    printf("Is priority queue not empty? %s\n", trilo_xdata_pqueue_not_empty(pqueue) ? "true" : "false");
+    printf("Is priority queue not empty? %s\n", pqueue_not_empty(pqueue) ? "true" : "false");
 
     // Destroy the cpqueue
-    trilo_xdata_pqueue_destroy(pqueue);
+    pqueue_erase(pqueue);
 
     return 0;
 } // end of func

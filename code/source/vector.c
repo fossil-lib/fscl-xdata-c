@@ -37,7 +37,7 @@
 // CREATE and DELETE
 // =======================
 
-cvector trilo_xdata_vector_create(enum ctofu_type expected_type) {
+cvector vector_create(enum ctofu_type expected_type) {
     cvector vector;
     vector.data = (ctofu*)malloc(INITIAL_CAPACITY * sizeof(ctofu));
     if (vector.data == NULL) {
@@ -50,7 +50,7 @@ cvector trilo_xdata_vector_create(enum ctofu_type expected_type) {
     return vector;
 } // end of func
 
-void trilo_xdata_vector_destroy(cvector* vector) {
+void vector_erase(cvector* vector) {
     free(vector->data);
     vector->data = NULL;
     vector->size = 0;
@@ -61,7 +61,7 @@ void trilo_xdata_vector_destroy(cvector* vector) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-void trilo_xdata_vector_push_back(cvector* vector, ctofu element) {
+void vector_push_back(cvector* vector, ctofu element) {
     if (vector->size == vector->capacity) {
         // Resize the vector if it reaches its capacity
         vector->capacity *= 2;
@@ -83,16 +83,16 @@ void trilo_xdata_vector_push_back(cvector* vector, ctofu element) {
 } // end of func
 
 
-int trilo_xdata_vector_search(const cvector* vector, ctofu target) {
+int vector_search(const cvector* vector, ctofu target) {
     for (size_t i = 0; i < vector->size; ++i) {
-        if (trilo_xdata_tofu_equal(vector->data[i], target)) {
+        if (tofu_equal(vector->data[i], target)) {
             return (int)i; // Return the index if the element is found
         }
     }
     return -1; // Return -1 if the element is not found
 } // end of func
 
-void trilo_xdata_vector_reverse(cvector* vector) {
+void vector_reverse(cvector* vector) {
     size_t left = 0;
     size_t right = vector->size - 1;
 
@@ -112,23 +112,23 @@ void trilo_xdata_vector_reverse(cvector* vector) {
 // UTILITY FUNCTIONS
 // =======================
 
-bool trilo_xdata_vector_is_nullptr(const cvector* vector) {
+bool vector_is_cnullptr(const cvector* vector) {
     return vector->data == NULL;
 } // end of func
 
-bool trilo_xdata_vector_not_nullptr(const cvector* vector) {
+bool vector_not_cnullptr(const cvector* vector) {
     return vector->data != NULL;
 } // end of func
 
-bool trilo_xdata_vector_is_empty(const cvector* vector) {
+bool vector_is_empty(const cvector* vector) {
     return vector->size == 0;
 } // end of func
 
-bool trilo_xdata_vector_not_empty(const cvector* vector) {
+bool vector_not_empty(const cvector* vector) {
     return vector->size != 0;
 } // end of func
 
-void trilo_xdata_vector_setter(cvector* vector, size_t index, ctofu element) {
+void vector_setter(cvector* vector, size_t index, ctofu element) {
     if (index < vector->size) {
         if (element.type == vector->expected_type || vector->expected_type == UNKNOWN_TYPE) {
             vector->data[index] = element;
@@ -144,7 +144,7 @@ void trilo_xdata_vector_setter(cvector* vector, size_t index, ctofu element) {
     }
 } // end of func
 
-ctofu trilo_xdata_vector_getter(const cvector* vector, size_t index) {
+ctofu vector_getter(const cvector* vector, size_t index) {
     if (index < vector->size) {
         return vector->data[index];
     } else {
@@ -154,13 +154,13 @@ ctofu trilo_xdata_vector_getter(const cvector* vector, size_t index) {
     }
 } // end of func
 
-size_t trilo_xdata_vector_size(const cvector* vector) {
+size_t vector_size(const cvector* vector) {
     return vector->size;
 } // end of func
 
-void trilo_xdata_vector_peek(const cvector* vector) {
+void vector_peek(const cvector* vector) {
     for (size_t i = 0; i < vector->size; ++i) {
-        trilo_xdata_tofu_print(vector->data[i]);
+        tofu_print(vector->data[i]);
         printf(" ");
     }
     printf("\n");

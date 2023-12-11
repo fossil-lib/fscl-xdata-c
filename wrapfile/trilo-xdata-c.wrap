@@ -1,0 +1,9 @@
+# ================#
+#  TSCL wrap file #
+# ================#
+[wrap-git]
+url = https://github.com/trilobite-stdlib/trilo-xdata-c.git
+revision = 0.3.0
+ 
+[provide]
+trilo-xdata-c = trilo_xdata_c_dep

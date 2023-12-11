@@ -34,29 +34,29 @@
 
 int main() {
     // Create a cdqueue instance with INTEGER_TYPE
-    cdqueue* dqueue = trilo_xdata_dqueue_create(INTEGER_TYPE);
+    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
 
     // Insert data elements into the cdqueue
-    trilo_xdata_dqueue_insert(dqueue, trilo_xdata_tofu_create_from_integer(10));
-    trilo_xdata_dqueue_insert(dqueue, trilo_xdata_tofu_create_from_integer(20));
-    trilo_xdata_dqueue_insert(dqueue, trilo_xdata_tofu_create_from_integer(30));
+    dqueue_insert(dqueue, tofu_create_from_integer(10));
+    dqueue_insert(dqueue, tofu_create_from_integer(20));
+    dqueue_insert(dqueue, tofu_create_from_integer(30));
 
     // Print the size of the cdqueue
-    printf("Size of the double-ended queue: %zu\n", trilo_xdata_dqueue_size(dqueue));
+    printf("Size of the double-ended queue: %zu\n", dqueue_size(dqueue));
 
     // Print the cdqueue elements
     printf("Double-ended queue elements:\n");
-    while (!trilo_xdata_dqueue_is_empty(dqueue)) {
-        ctofu* tofu = trilo_xdata_dqueue_get_front(dqueue);
-        printf("%d\n", trilo_xdata_tofu_get_integer(*tofu));
-        trilo_xdata_dqueue_remove_front(dqueue);
+    while (!dqueue_is_empty(dqueue)) {
+        ctofu* tofu = dqueue_get_front(dqueue);
+        printf("%d\n", tofu_get_integer(*tofu));
+        dqueue_remove_front(dqueue);
     } // end while
 
     // Check if the cdqueue is not empty
-    printf("Is double-ended queue not empty? %s\n", trilo_xdata_dqueue_not_empty(dqueue) ? "true" : "false");
+    printf("Is double-ended queue not empty? %s\n", dqueue_not_empty(dqueue) ? "true" : "false");
 
     // Destroy the cdqueue
-    trilo_xdata_dqueue_destroy(dqueue);
+    dqueue_erase(dqueue);
 
     return 0;
 } // end of func

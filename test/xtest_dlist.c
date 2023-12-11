@@ -40,81 +40,81 @@
 
 // Test case 1: Test cdlist creation and destruction
 XTEST_CASE(xdata_let_dlist_create_and_destroy) {
-    cdlist* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    trilo_xdata_dlist_destroy(dlist);
+    dlist_erase(dlist);
     TEST_ASSERT_NULL_PTR(dlist);
 }
 
 // Test case 2: Test cdlist insertion and retrieval
 XTEST_CASE(xdata_let_dlist_insert_and_get) {
-    cdlist* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    ctofu_error result = trilo_xdata_dlist_insert(dlist, tofu);
+    ctofu tofu = tofu_create_from_integer(42);
+    ctofu_error result = dlist_insert(dlist, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    ctofu* retrieved_tofu = trilo_xdata_dlist_getter(dlist, tofu);
+    ctofu* retrieved_tofu = dlist_getter(dlist, tofu);
     TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
-    TEST_ASSERT_EQUAL_INT(42, trilo_xdata_tofu_get_integer(*retrieved_tofu));
+    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(*retrieved_tofu));
 
-    trilo_xdata_dlist_destroy(dlist);
+    dlist_erase(dlist);
 }
 
 // Test case 3: Test cdlist removal
 XTEST_CASE(xdata_let_dlist_remove) {
-    cdlist* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    ctofu_error result = trilo_xdata_dlist_insert(dlist, tofu);
+    ctofu tofu = tofu_create_from_integer(42);
+    ctofu_error result = dlist_insert(dlist, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    result = trilo_xdata_dlist_remove(dlist, tofu);
+    result = dlist_remove(dlist, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
 
-    ctofu* retrieved_tofu = trilo_xdata_dlist_getter(dlist, tofu);
+    ctofu* retrieved_tofu = dlist_getter(dlist, tofu);
     TEST_ASSERT_NULL_PTR(retrieved_tofu);
 
-    trilo_xdata_dlist_destroy(dlist);
+    dlist_erase(dlist);
 }
 
 // Test case 4: Test cdlist size
 XTEST_CASE(xdata_let_dlist_size) {
-    cdlist* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
-    ctofu tofu2 = trilo_xdata_tofu_create_from_integer(2);
-    ctofu tofu3 = trilo_xdata_tofu_create_from_integer(3);
+    ctofu tofu1 = tofu_create_from_integer(1);
+    ctofu tofu2 = tofu_create_from_integer(2);
+    ctofu tofu3 = tofu_create_from_integer(3);
 
-    trilo_xdata_dlist_insert(dlist, tofu1);
-    trilo_xdata_dlist_insert(dlist, tofu2);
-    trilo_xdata_dlist_insert(dlist, tofu3);
+    dlist_insert(dlist, tofu1);
+    dlist_insert(dlist, tofu2);
+    dlist_insert(dlist, tofu3);
 
-    size_t size = trilo_xdata_dlist_size(dlist);
+    size_t size = dlist_size(dlist);
     TEST_ASSERT_EQUAL_INT(3, size);
 
-    trilo_xdata_dlist_destroy(dlist);
+    dlist_erase(dlist);
 }
 
 // Test case 5: Test cdlist empty check
 XTEST_CASE(xdata_let_dlist_empty_check) {
-    cdlist* dlist = trilo_xdata_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_dlist_is_empty(dlist));
-    TEST_ASSERT_FALSE_BOOL(trilo_xdata_dlist_not_empty(dlist));
+    TEST_ASSERT_TRUE_BOOL(dlist_is_empty(dlist));
+    TEST_ASSERT_FALSE_BOOL(dlist_not_empty(dlist));
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
-    trilo_xdata_dlist_insert(dlist, tofu);
+    ctofu tofu = tofu_create_from_integer(42);
+    dlist_insert(dlist, tofu);
 
-    TEST_ASSERT_FALSE_BOOL(trilo_xdata_dlist_is_empty(dlist));
-    TEST_ASSERT_TRUE_BOOL(trilo_xdata_dlist_not_empty(dlist));
+    TEST_ASSERT_FALSE_BOOL(dlist_is_empty(dlist));
+    TEST_ASSERT_TRUE_BOOL(dlist_not_empty(dlist));
 
-    trilo_xdata_dlist_destroy(dlist);
+    dlist_erase(dlist);
 }
 
 //

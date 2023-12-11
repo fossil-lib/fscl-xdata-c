@@ -66,14 +66,14 @@ typedef struct {
  * @param expected_type The expected data type for the vector.
  * @return A cvector instance with the specified expected data type.
  */
-cvector trilo_xdata_vector_create(enum ctofu_type expected_type);
+cvector vector_create(enum ctofu_type expected_type);
 
 /**
  * @brief Destroys a cvector instance and frees the associated memory.
  *
  * @param vector The cvector to be destroyed.
  */
-void trilo_xdata_vector_destroy(cvector* vector);
+void vector_erase(cvector* vector);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -85,7 +85,7 @@ void trilo_xdata_vector_destroy(cvector* vector);
  * @param vector The TriloXDataVector to which the element will be added.
  * @param element The ctofu element to add to the vector.
  */
-void trilo_xdata_vector_push_back(cvector* vector, ctofu element);
+void vector_push_back(cvector* vector, ctofu element);
 
 /**
  * @brief Searches for a target ctofu instance in a cvector.
@@ -94,14 +94,14 @@ void trilo_xdata_vector_push_back(cvector* vector, ctofu element);
  * @param target The ctofu instance to search for.
  * @return The index of the target if found, or -1 if not found.
  */
-int trilo_xdata_vector_search(const cvector* vector, ctofu target);
+int vector_search(const cvector* vector, ctofu target);
 
 /**
  * @brief Reverses the order of elements in a cvector.
  *
  * @param vector The cvector to be reversed.
  */
-void trilo_xdata_vector_reverse(cvector* vector);
+void vector_reverse(cvector* vector);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -113,7 +113,7 @@ void trilo_xdata_vector_reverse(cvector* vector);
  * @param vector The cvector to check.
  * @return true if the cvector is a nullptr, false otherwise.
  */
-bool trilo_xdata_vector_is_nullptr(const cvector* vector);
+bool vector_is_cnullptr(const cvector* vector);
 
 /**
  * @brief Checks if a cvector is not a nullptr.
@@ -121,7 +121,7 @@ bool trilo_xdata_vector_is_nullptr(const cvector* vector);
  * @param vector The cvector to check.
  * @return true if the cvector is not a nullptr, false otherwise.
  */
-bool trilo_xdata_vector_not_nullptr(const cvector* vector);
+bool vector_not_cnullptr(const cvector* vector);
 
 /**
  * @brief Checks if a cvector is empty.
@@ -129,7 +129,7 @@ bool trilo_xdata_vector_not_nullptr(const cvector* vector);
  * @param vector The cvector to check.
  * @return true if the cvector is empty, false otherwise.
  */
-bool trilo_xdata_vector_is_empty(const cvector* vector);
+bool vector_is_empty(const cvector* vector);
 
 /**
  * @brief Checks if a cvector is not empty.
@@ -137,7 +137,7 @@ bool trilo_xdata_vector_is_empty(const cvector* vector);
  * @param vector The cvector to check.
  * @return true if the cvector is not empty, false otherwise.
  */
-bool trilo_xdata_vector_not_empty(const cvector* vector);
+bool vector_not_empty(const cvector* vector);
 
 /**
  * @brief Sets the element at a specific index in a cvector.
@@ -146,7 +146,7 @@ bool trilo_xdata_vector_not_empty(const cvector* vector);
  * @param index The index at which to set the element.
  * @param element The ctofu element to set.
  */
-void trilo_xdata_vector_setter(cvector* vector, size_t index, ctofu element);
+void vector_setter(cvector* vector, size_t index, ctofu element);
 
 /**
  * @brief Gets the element at a specific index in a cvector.
@@ -155,7 +155,7 @@ void trilo_xdata_vector_setter(cvector* vector, size_t index, ctofu element);
  * @param index The index of the element to retrieve.
  * @return The ctofu element at the specified index.
  */
-ctofu trilo_xdata_vector_getter(const cvector* vector, size_t index);
+ctofu vector_getter(const cvector* vector, size_t index);
 
 /**
  * @brief Gets the size of a cvector.
@@ -163,14 +163,14 @@ ctofu trilo_xdata_vector_getter(const cvector* vector, size_t index);
  * @param vector The cvector to get the size of.
  * @return The size of the cvector.
  */
-size_t trilo_xdata_vector_size(const cvector* vector);
+size_t vector_size(const cvector* vector);
 
 /**
  * @brief Prints the elements of a cvector.
  *
  * @param vector The cvector to print.
  */
-void trilo_xdata_vector_peek(const cvector* vector);
+void vector_peek(const cvector* vector);
 
 #ifdef __cplusplus
 }

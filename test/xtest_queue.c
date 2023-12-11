@@ -40,115 +40,115 @@
 
 // Test case 1: Test cqueue creation and destruction
 XTEST_CASE(xdata_let_queue_create_destroy) {
-    cqueue* queue = trilo_xdata_queue_create(INTEGER_TYPE);
+    cqueue* queue = queue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(queue);
     
-    trilo_xdata_queue_destroy(queue);
+    queue_erase(queue);
     // Ensure queue is successfully destroyed
 }
 
 XTEST_CASE(xdata_let_queue_insert) {
-    cqueue* queue = trilo_xdata_queue_create(DOUBLE_TYPE);
+    cqueue* queue = queue_create(DOUBLE_TYPE);
     
-    ctofu data = trilo_xdata_tofu_create_from_double(42.5);
-    ctofu_error error = trilo_xdata_queue_insert(queue, data);
+    ctofu data = tofu_create_from_double(42.5);
+    ctofu_error error = queue_insert(queue, data);
     
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
     
-    trilo_xdata_queue_destroy(queue);
+    queue_erase(queue);
 }
 
 XTEST_CASE(xdata_let_queue_remove) {
-    cqueue* queue = trilo_xdata_queue_create(STRING_TYPE);
+    cqueue* queue = queue_create(STRING_TYPE);
     
-    ctofu data = trilo_xdata_tofu_create_from_string("Hello");
-    trilo_xdata_queue_insert(queue, data);
+    ctofu data = tofu_create_from_string("Hello");
+    queue_insert(queue, data);
     
-    ctofu_error error = trilo_xdata_queue_remove(queue);
+    ctofu_error error = queue_remove(queue);
     
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
     
-    trilo_xdata_queue_destroy(queue);
+    queue_erase(queue);
 }
 
 XTEST_CASE(xdata_let_queue_search) {
-    cqueue* queue = trilo_xdata_queue_create(CHAR_TYPE);
+    cqueue* queue = queue_create(CHAR_TYPE);
     
-    ctofu data = trilo_xdata_tofu_create_from_char('A');
-    trilo_xdata_queue_insert(queue, data);
+    ctofu data = tofu_create_from_char('A');
+    queue_insert(queue, data);
     
-    ctofu_error error = trilo_xdata_queue_search(queue, data);
+    ctofu_error error = queue_search(queue, data);
     
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
     
-    trilo_xdata_queue_destroy(queue);
+    queue_erase(queue);
 }
 
 XTEST_CASE(xdata_let_queue_insert_edge_cases) {
-    cqueue* queue = trilo_xdata_queue_create(INTEGER_TYPE);
+    cqueue* queue = queue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(queue);
 
-    ctofu tofu1 = trilo_xdata_tofu_create_from_integer(1);
-    ctofu tofu2 = trilo_xdata_tofu_create_from_double(2.5);
-    ctofu tofu3 = trilo_xdata_tofu_create_from_string("Hello");
+    ctofu tofu1 = tofu_create_from_integer(1);
+    ctofu tofu2 = tofu_create_from_double(2.5);
+    ctofu tofu3 = tofu_create_from_string("Hello");
 
-    ctofu_error error = trilo_xdata_queue_insert(queue, tofu1);
+    ctofu_error error = queue_insert(queue, tofu1);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
 
-    error = trilo_xdata_queue_insert(queue, tofu2);
+    error = queue_insert(queue, tofu2);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
 
-    error = trilo_xdata_queue_insert(queue, tofu3);
+    error = queue_insert(queue, tofu3);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
 
     // Test inserting a large number of elements
     for (int i = 0; i < 1000; ++i) {
-        ctofu data = trilo_xdata_tofu_create_from_integer(i);
-        error = trilo_xdata_queue_insert(queue, data);
+        ctofu data = tofu_create_from_integer(i);
+        error = queue_insert(queue, data);
         TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
     }
 
-    trilo_xdata_queue_destroy(queue);
+    queue_erase(queue);
 }
 
 XTEST_CASE(xdata_let_queue_remove_edge_cases) {
-    cqueue* empty_queue = trilo_xdata_queue_create(INTEGER_TYPE);
+    cqueue* empty_queue = queue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(empty_queue);
 
     // Test removing elements from an empty queue
-    ctofu_error error = trilo_xdata_queue_remove(empty_queue);
+    ctofu_error error = queue_remove(empty_queue);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, error);
 
-    trilo_xdata_queue_destroy(empty_queue);
+    queue_erase(empty_queue);
 
     // Test removing a large number of elements
-    cqueue* queue = trilo_xdata_queue_create(DOUBLE_TYPE);
+    cqueue* queue = queue_create(DOUBLE_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(queue);
 
     for (int i = 0; i < 1000; ++i) {
-        ctofu data = trilo_xdata_tofu_create_from_double(i);
-        trilo_xdata_queue_insert(queue, data);
+        ctofu data = tofu_create_from_double(i);
+        queue_insert(queue, data);
     }
 
     for (int i = 0; i < 1000; ++i) {
-        error = trilo_xdata_queue_remove(queue);
+        error = queue_remove(queue);
         TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
     }
 
-    trilo_xdata_queue_destroy(queue);
+    queue_erase(queue);
 }
 
 XTEST_CASE(xdata_let_queue_search_edge_cases) {
-    cqueue* empty_queue = trilo_xdata_queue_create(INTEGER_TYPE);
+    cqueue* empty_queue = queue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(empty_queue);
 
-    ctofu tofu = trilo_xdata_tofu_create_from_integer(42);
+    ctofu tofu = tofu_create_from_integer(42);
 
     // Test searching for an element in an empty queue
-    ctofu_error error = trilo_xdata_queue_search(empty_queue, tofu);
+    ctofu_error error = queue_search(empty_queue, tofu);
     TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, error);
 
-    trilo_xdata_queue_destroy(empty_queue);
+    queue_erase(empty_queue);
 }
 
 //

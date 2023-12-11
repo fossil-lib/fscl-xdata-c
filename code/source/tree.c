@@ -39,7 +39,7 @@
 // =======================
 
 // Function to create a new ctree
-ctree* trilo_xdata_tree_create(enum ctofu_type tree_type) {
+ctree* tree_create(enum ctofu_type tree_type) {
     ctree* tree = (ctree*)malloc(sizeof(ctree));
     if (tree != NULL) {
         tree->root = NULL;
@@ -49,20 +49,20 @@ ctree* trilo_xdata_tree_create(enum ctofu_type tree_type) {
 } // end of func
 
 // Helper function to destroy the tree recursively
-void trilo_xdata_tree_destroy_recursive(ctree_node* node) {
+void tree_erase_recursive(ctree_node* node) {
     if (node == NULL) {
         return;
     } // end if
 
-    trilo_xdata_tree_destroy_recursive(node->left);
-    trilo_xdata_tree_destroy_recursive(node->right);
+    tree_erase_recursive(node->left);
+    tree_erase_recursive(node->right);
     free(node);
 } // end of func
 
 // Function to destroy the ctree
-void trilo_xdata_tree_destroy(ctree* tree) {
+void tree_erase(ctree* tree) {
     if (tree != NULL) {
-        trilo_xdata_tree_destroy_recursive(tree->root);
+        tree_erase_recursive(tree->root);
         free(tree);
     } // end if
 } // end of func
@@ -72,7 +72,7 @@ void trilo_xdata_tree_destroy(ctree* tree) {
 // =======================
 
 // Function to insert a ctofu data into the tree
-ctofu_error trilo_xdata_tree_insert(ctree* tree, ctofu data) {
+ctofu_error tree_insert(ctree* tree, ctofu data) {
     if (tree == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -95,14 +95,14 @@ ctofu_error trilo_xdata_tree_insert(ctree* tree, ctofu data) {
     // Otherwise, insert the new node into the tree
     ctree_node* current = tree->root;
     while (1) {
-        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             free(newNode); // Data already exists, don't insert it again
             return TRILO_XDATA_TYPE_SUCCESS;
         } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
             // Determine whether to go left or right based on the comparison result
-            compareResult = trilo_xdata_tofu_compare(data, current->data);
+            compareResult = tofu_compare(data, current->data);
 
             if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
                 // Data with the same value already exists, don't insert it again
@@ -131,7 +131,7 @@ ctofu_error trilo_xdata_tree_insert(ctree* tree, ctofu data) {
 } // end of func
 
 // Function to remove a ctofu data from the tree
-ctofu_error trilo_xdata_tree_remove(ctree* tree, ctofu data) {
+ctofu_error tree_remove(ctree* tree, ctofu data) {
     if (tree == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -145,7 +145,7 @@ ctofu_error trilo_xdata_tree_remove(ctree* tree, ctofu data) {
     ctofu_error compareResult;
 
     while (current != NULL) {
-        compareResult = trilo_xdata_tofu_compare(current->data, data);
+        compareResult = tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             // Node with the matching data found, perform removal
@@ -215,7 +215,7 @@ ctofu_error trilo_xdata_tree_remove(ctree* tree, ctofu data) {
             }
         } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
             // Determine whether to go left or right based on the comparison result
-            compareResult = trilo_xdata_tofu_compare(data, current->data);
+            compareResult = tofu_compare(data, current->data);
 
             if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
                 // Data not found in the tree
@@ -236,7 +236,7 @@ ctofu_error trilo_xdata_tree_remove(ctree* tree, ctofu data) {
 } // end of func
 
 // Function to search for a ctofu data in the tree
-ctofu_error trilo_xdata_tree_search(const ctree* tree, ctofu data) {
+ctofu_error tree_search(const ctree* tree, ctofu data) {
     if (tree == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -245,14 +245,14 @@ ctofu_error trilo_xdata_tree_search(const ctree* tree, ctofu data) {
     ctofu_error compareResult;
 
     while (current != NULL) {
-        compareResult = trilo_xdata_tofu_compare(current->data, data);
+        compareResult = tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             // Data found in the tree
             return TRILO_XDATA_TYPE_SUCCESS;
         } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
             // Determine whether to go left or right based on the comparison result
-            compareResult = trilo_xdata_tofu_compare(data, current->data);
+            compareResult = tofu_compare(data, current->data);
 
             if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
                 // Data not found in the tree
@@ -284,7 +284,7 @@ static void count_nodes(const ctree_node* node, size_t* count) {
 } // end of func
 
 // Function to get the size of the ctree
-size_t trilo_xdata_tree_size(const ctree* tree) {
+size_t tree_size(const ctree* tree) {
     if (tree == NULL || tree->root == NULL) {
         return 0;
     } // end if
@@ -295,7 +295,7 @@ size_t trilo_xdata_tree_size(const ctree* tree) {
 } // end of func
 
 // Function to insert a ctofu data into the tree
-ctofu* trilo_xdata_tree_getter(const ctree* tree, ctofu data) {
+ctofu* tree_getter(const ctree* tree, ctofu data) {
     if (tree == NULL) {
         return NULL;
     } // end if
@@ -304,14 +304,14 @@ ctofu* trilo_xdata_tree_getter(const ctree* tree, ctofu data) {
     ctofu_error compareResult;
 
     while (current != NULL) {
-        compareResult = trilo_xdata_tofu_compare(current->data, data);
+        compareResult = tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             // Data found in the tree, return a pointer to it
             return &(current->data);
         } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
             // Determine whether to go left or right based on the comparison result
-            compareResult = trilo_xdata_tofu_compare(data, current->data);
+            compareResult = tofu_compare(data, current->data);
 
             if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
                 // Data not found in the tree
@@ -330,38 +330,38 @@ ctofu* trilo_xdata_tree_getter(const ctree* tree, ctofu data) {
 } // end of func
 
 // Function to insert a ctofu data into the tree
-ctofu_error trilo_xdata_tree_setter(ctree* tree, ctofu data) {
-    ctofu* existingData = trilo_xdata_tree_getter(tree, data);
+ctofu_error tree_setter(ctree* tree, ctofu data) {
+    ctofu* existingData = tree_getter(tree, data);
 
     if (existingData != NULL) {
         // Data with the same value already exists, don't insert it again
         return TRILO_XDATA_TYPE_SUCCESS;
     } // end if
 
-    return trilo_xdata_tree_insert(tree, data);
+    return tree_insert(tree, data);
 } // end of func
 
 // Function to check if the tree is empty
-bool trilo_xdata_tree_not_empty(const ctree* tree) {
+bool tree_not_empty(const ctree* tree) {
     return tree != NULL && tree->root != NULL;
 } // end of func
 
 // Function to check if the tree is not null
-bool trilo_xdata_tree_not_nullptr(const ctree* tree) {
+bool tree_not_cnullptr(const ctree* tree) {
     return tree != NULL;
 } // end of func
 
 // Function to check if the tree is empty
-bool trilo_xdata_tree_is_empty(const ctree* tree) {
+bool tree_is_empty(const ctree* tree) {
     return tree == NULL || tree->root == NULL;
 } // end of func
 
 // Function to check if the tree is null
-bool trilo_xdata_tree_is_nullptr(const ctree* tree) {
+bool tree_is_cnullptr(const ctree* tree) {
     return tree == NULL;
 } // end of func
 
 // Function to check if a ctofu data is in the tree
-bool trilo_xdata_tree_contains(const ctree* tree, ctofu data) {
-    return trilo_xdata_tree_getter(tree, data) != NULL;
+bool tree_contains(const ctree* tree, ctofu data) {
+    return tree_getter(tree, data) != NULL;
 } // end of func
