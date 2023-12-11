@@ -366,6 +366,38 @@ bool tofu_equal(const ctofu a, const ctofu b);
  */
 enum ctofu_type tofu_get_type(const ctofu tofu);
 
+// =======================
+// ITERATOR FUNCTIONS
+// =======================
+
+/**
+ * @brief Sets the iterator to point to a specific index in the array.
+ *
+ * @param arr The array of ctofu instances.
+ * @param n The number of elements in the array.
+ * @param index The index to set the iterator to.
+ * @return A ctofu_iterator pointing to the specified index in the array.
+ */
+ctofu_iterator tofu_iterator_at(const ctofu* arr, size_t n, size_t index);
+
+/**
+ * @brief Gets the iterator pointing to the beginning of the array.
+ *
+ * @param arr The array of ctofu instances.
+ * @param n The number of elements in the array.
+ * @return A ctofu_iterator pointing to the first element of the array.
+ */
+ctofu_iterator tofu_iterator_start(const ctofu* arr, size_t n);
+
+/**
+ * @brief Checks if the iterator has reached the end of the array.
+ *
+ * @param iterator The iterator to be checked.
+ * @param n The number of elements in the array.
+ * @return true if the iterator has reached the end, false otherwise.
+ */
+bool tofu_iterator_end(ctofu_iterator iterator, size_t n);
+
 #ifdef __cplusplus
 }
 #endif
