@@ -95,12 +95,48 @@ XTEST_CASE(xdata_let_tofu_create_and_get_boolean_edge_cases) {
     TEST_ASSERT_FALSE_BOOL(tofu_get_boolean(false_tofu));
 }
 
+// Test cases for ctofu functions
+XTEST_CASE(test_tofu_create_and_erase) {
+    // Test creating ctofu instances and erasing them
+    ctofu tofu1 = tofu_create_from_integer(42);
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, tofu1.type);
+    TEST_ASSERT_EQUAL(42, tofu_get_integer(tofu1));
+
+    ctofu tofu2 = tofu_create_from_string("Hello, Tofu!");
+    TEST_ASSERT_EQUAL(STRING_TYPE, tofu2.type);
+    TEST_ASSERT_EQUAL_STRING("Hello, Tofu!", tofu_get_string(tofu2));
+
+    ctofu tofu3 = tofu_create_from_double(3.14);
+    TEST_ASSERT_EQUAL(DOUBLE_TYPE, tofu3.type);
+    TEST_ASSERT_DOUBLE_EQUAL(3.14, tofu_get_double(tofu3));
+
+    tofu_erase(&tofu1);
+    tofu_erase(&tofu2);
+    tofu_erase(&tofu3);
+}
+
+XTEST_CASE(test_tofu_compare) {
+    // Test comparing ctofu instances
+    ctofu tofu1 = tofu_create_from_integer(42);
+    ctofu tofu2 = tofu_create_from_integer(42);
+    ctofu tofu3 = tofu_create_from_integer(100);
+
+    TEST_ASSERT_EQUAL(TRILO_XDATA_TYPE_SUCCESS, tofu_compare(tofu1, tofu2));
+    TEST_ASSERT_EQUAL(TRILO_XDATA_TYPE_WAS_MISMATCH, tofu_compare(tofu1, tofu3));
+
+    tofu_erase(&tofu1);
+    tofu_erase(&tofu2);
+    tofu_erase(&tofu3);
+}
+
 //
 // XUNIT-TEST RUNNER
 //
 void xdata_test_tofu_group(XUnitRunner *runner) {
     XTEST_NOTE("Running all test cases for tofu:");
 
+    XTEST_RUN_UNIT(test_tofu_create_and_erase,            runner);
+    XTEST_RUN_UNIT(test_tofu_compare,                     runner);
     XTEST_RUN_UNIT(xdata_let_tofu_copy,                   runner);
     XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_double,  runner);
     XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_integer, runner);
