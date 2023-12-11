@@ -387,7 +387,7 @@ ctofu_iterator tofu_iterator_at(ctofu* arr, size_t n, size_t index);
  * @param n The number of elements in the array.
  * @return A ctofu_iterator pointing to the first element of the array.
  */
-ctofu_iterator tofu_iterator_start(const ctofu* arr, size_t n);
+ctofu_iterator tofu_iterator_start(ctofu* arr, size_t n);
 
 /**
  * @brief Checks if the iterator has reached the end of the array.
