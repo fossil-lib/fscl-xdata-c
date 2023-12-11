@@ -67,14 +67,14 @@ typedef struct {
  * @param list_type The data type for the cmap (e.g., INTEGER_TYPE, DOUBLE_TYPE).
  * @return A pointer to the newly created cmap instance.
  */
-cmap* trilo_xdata_map_create(enum ctofu_type list_type);
+cmap* map_create(enum ctofu_type list_type);
 
 /**
  * @brief Destroys the cmap instance, freeing all associated memory.
  *
  * @param map The cmap instance to be destroyed.
  */
-void trilo_xdata_map_destroy(cmap* map);
+void map_erase(cmap* map);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -88,7 +88,7 @@ void trilo_xdata_map_destroy(cmap* map);
  * @param value The value in the key-value pair.
  * @return A ctofu_error value indicating the result of the insertion.
  */
-ctofu_error trilo_xdata_map_insert(cmap* map, ctofu key, ctofu value);
+ctofu_error map_insert(cmap* map, ctofu key, ctofu value);
 
 /**
  * @brief Removes a key-value pair from the cmap by key.
@@ -97,7 +97,7 @@ ctofu_error trilo_xdata_map_insert(cmap* map, ctofu key, ctofu value);
  * @param key The key of the key-value pair to be removed.
  * @return A ctofu_error value indicating the result of the removal.
  */
-ctofu_error trilo_xdata_map_remove(cmap* map, ctofu key);
+ctofu_error map_remove(cmap* map, ctofu key);
 
 /**
  * @brief Searches for a key in the cmap.
@@ -106,7 +106,7 @@ ctofu_error trilo_xdata_map_remove(cmap* map, ctofu key);
  * @param key The key to search for.
  * @return A ctofu_error value indicating the result of the search.
  */
-ctofu_error trilo_xdata_map_search(const cmap* map, ctofu key);
+ctofu_error map_search(const cmap* map, ctofu key);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -118,7 +118,7 @@ ctofu_error trilo_xdata_map_search(const cmap* map, ctofu key);
  * @param map The cmap for which the size will be determined.
  * @return The size of the cmap.
  */
-size_t trilo_xdata_map_size(const cmap* map);
+size_t map_size(const cmap* map);
 
 /**
  * @brief Getter function to retrieve a value by key from the cmap.
@@ -128,7 +128,7 @@ size_t trilo_xdata_map_size(const cmap* map);
  * @param value A pointer to store the retrieved value.
  * @return A ctofu_error value indicating the result of the retrieval.
  */
-ctofu_error trilo_xdata_map_getter(cmap* map, ctofu key, ctofu* value);
+ctofu_error map_getter(cmap* map, ctofu key, ctofu* value);
 
 /**
  * @brief Setter function to update a value by key in the cmap.
@@ -138,7 +138,7 @@ ctofu_error trilo_xdata_map_getter(cmap* map, ctofu key, ctofu* value);
  * @param value The new value to set.
  * @return A ctofu_error value indicating the result of the update.
  */
-ctofu_error trilo_xdata_map_setter(cmap* map, ctofu key, ctofu value);
+ctofu_error map_setter(cmap* map, ctofu key, ctofu value);
 
 /**
  * @brief Checks if the cmap is not empty.
@@ -146,7 +146,7 @@ ctofu_error trilo_xdata_map_setter(cmap* map, ctofu key, ctofu value);
  * @param map The cmap to check.
  * @return true if the cmap is not empty, false otherwise.
  */
-bool trilo_xdata_map_not_empty(const cmap* map);
+bool map_not_empty(const cmap* map);
 
 /**
  * @brief Checks if the cmap is not a null pointer.
@@ -154,7 +154,7 @@ bool trilo_xdata_map_not_empty(const cmap* map);
  * @param map The cmap to check.
  * @return true if the cmap is not a null pointer, false otherwise.
  */
-bool trilo_xdata_map_not_nullptr(const cmap* map);
+bool map_not_cnullptr(const cmap* map);
 
 /**
  * @brief Checks if the cmap is empty.
@@ -162,7 +162,7 @@ bool trilo_xdata_map_not_nullptr(const cmap* map);
  * @param map The cmap to check.
  * @return true if the cmap is empty, false otherwise.
  */
-bool trilo_xdata_map_is_empty(const cmap* map);
+bool map_is_empty(const cmap* map);
 
 /**
  * @brief Checks if the cmap is a null pointer.
@@ -170,7 +170,7 @@ bool trilo_xdata_map_is_empty(const cmap* map);
  * @param map The cmap to check.
  * @return true if the cmap is a null pointer, false otherwise.
  */
-bool trilo_xdata_map_is_nullptr(const cmap* map);
+bool map_is_cnullptr(const cmap* map);
 
 /**
  * @brief Checks if a key exists in the cmap.
@@ -179,7 +179,7 @@ bool trilo_xdata_map_is_nullptr(const cmap* map);
  * @param key The key to search for.
  * @return true if the key exists in the cmap, false otherwise.
  */
-bool trilo_xdata_map_contains(const cmap* map, ctofu key);
+bool map_contains(const cmap* map, ctofu key);
 
 #ifdef __cplusplus
 }

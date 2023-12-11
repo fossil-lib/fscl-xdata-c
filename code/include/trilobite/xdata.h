@@ -117,7 +117,9 @@ extern "C"
 // file for the cvector functions, which is assumed to be "xdata/vector.h".
 #include "xdata/vector.h"
 
-const char * const TRILOBITE_XDATA_STD = "Ptychopariida";
+inline const char* xdata_codename() {
+    return "Ptychopariida";
+}
 
 #ifdef __cplusplus
 }

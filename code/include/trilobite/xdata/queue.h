@@ -70,14 +70,14 @@ typedef struct cqueue {
  * @param list_type The data type for the cqueue (e.g., INTEGER_TYPE, DOUBLE_TYPE).
  * @return A pointer to the newly created cqueue instance.
  */
-cqueue* trilo_xdata_queue_create(enum ctofu_type list_type);
+cqueue* queue_create(enum ctofu_type list_type);
 
 /**
  * @brief Destroys the cqueue instance, freeing all associated memory.
  *
  * @param queue The cqueue instance to be destroyed.
  */
-void trilo_xdata_queue_destroy(cqueue* queue);
+void queue_erase(cqueue* queue);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -90,7 +90,7 @@ void trilo_xdata_queue_destroy(cqueue* queue);
  * @param data  The ctofu data element to be inserted.
  * @return A ctofu_error value indicating the result of the insertion.
  */
-ctofu_error trilo_xdata_queue_insert(cqueue* queue, ctofu data);
+ctofu_error queue_insert(cqueue* queue, ctofu data);
 
 /**
  * @brief Removes an element from the front of the cqueue.
@@ -100,7 +100,7 @@ ctofu_error trilo_xdata_queue_insert(cqueue* queue, ctofu data);
  * @param queue The cqueue from which the element will be removed.
  * @return A ctofu_error value indicating the result of the removal.
  */
-ctofu_error trilo_xdata_queue_remove(cqueue* queue);
+ctofu_error queue_remove(cqueue* queue);
 
 /**
  * @brief Searches for a ctofu data element in the cqueue.
@@ -109,7 +109,7 @@ ctofu_error trilo_xdata_queue_remove(cqueue* queue);
  * @param data  The ctofu data element to search for.
  * @return A ctofu_error value indicating the result of the search.
  */
-ctofu_error trilo_xdata_queue_search(const cqueue* queue, ctofu data);
+ctofu_error queue_search(const cqueue* queue, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -121,7 +121,7 @@ ctofu_error trilo_xdata_queue_search(const cqueue* queue, ctofu data);
  * @param queue The cqueue for which the size will be determined.
  * @return The size of the cqueue.
  */
-size_t trilo_xdata_queue_size(const cqueue* queue);
+size_t queue_size(const cqueue* queue);
 
 /**
  * @brief Getter function to retrieve a ctofu data element from the cqueue.
@@ -130,7 +130,7 @@ size_t trilo_xdata_queue_size(const cqueue* queue);
  * @param data  The ctofu data element to retrieve.
  * @return A pointer to the ctofu data element in the cqueue (or NULL if not found).
  */
-ctofu* trilo_xdata_queue_getter(cqueue* queue, ctofu data);
+ctofu* queue_getter(cqueue* queue, ctofu data);
 
 /**
  * @brief Setter function to update a ctofu data element in the cqueue.
@@ -139,7 +139,7 @@ ctofu* trilo_xdata_queue_getter(cqueue* queue, ctofu data);
  * @param data  The ctofu data element to update.
  * @return A ctofu_error value indicating the result of the update.
  */
-ctofu_error trilo_xdata_queue_setter(cqueue* queue, ctofu data);
+ctofu_error queue_setter(cqueue* queue, ctofu data);
 
 /**
  * @brief Checks if the cqueue is not empty.
@@ -147,7 +147,7 @@ ctofu_error trilo_xdata_queue_setter(cqueue* queue, ctofu data);
  * @param queue The cqueue to check.
  * @return true if the cqueue is not empty, false otherwise.
  */
-bool trilo_xdata_queue_not_empty(const cqueue* queue);
+bool queue_not_empty(const cqueue* queue);
 
 /**
  * @brief Checks if the cqueue is not a null pointer.
@@ -155,7 +155,7 @@ bool trilo_xdata_queue_not_empty(const cqueue* queue);
  * @param queue The cqueue to check.
  * @return true if the cqueue is not a null pointer, false otherwise.
  */
-bool trilo_xdata_queue_not_nullptr(const cqueue* queue);
+bool queue_not_cnullptr(const cqueue* queue);
 
 /**
  * @brief Checks if the cqueue is empty.
@@ -163,7 +163,7 @@ bool trilo_xdata_queue_not_nullptr(const cqueue* queue);
  * @param queue The cqueue to check.
  * @return true if the cqueue is empty, false otherwise.
  */
-bool trilo_xdata_queue_is_empty(const cqueue* queue);
+bool queue_is_empty(const cqueue* queue);
 
 /**
  * @brief Checks if the cqueue is a null pointer.
@@ -171,7 +171,7 @@ bool trilo_xdata_queue_is_empty(const cqueue* queue);
  * @param queue The cqueue to check.
  * @return true if the cqueue is a null pointer, false otherwise.
  */
-bool trilo_xdata_queue_is_nullptr(const cqueue* queue);
+bool queue_is_cnullptr(const cqueue* queue);
 
 #ifdef __cplusplus
 }

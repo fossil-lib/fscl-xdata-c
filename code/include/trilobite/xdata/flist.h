@@ -69,14 +69,14 @@ typedef struct cflist {
  * @param list_type The data type for the cflist (e.g., INTEGER_TYPE, DOUBLE_TYPE).
  * @return A pointer to the newly created cflist instance.
  */
-cflist* trilo_xdata_flist_create(enum ctofu_type list_type);
+cflist* flist_create(enum ctofu_type list_type);
 
 /**
  * @brief Destroys the cflist instance, freeing all associated memory.
  *
  * @param flist The cflist instance to be destroyed.
  */
-void trilo_xdata_flist_destroy(cflist* flist);
+void flist_erase(cflist* flist);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -89,7 +89,7 @@ void trilo_xdata_flist_destroy(cflist* flist);
  * @param data  The ctofu data element to be inserted.
  * @return A ctofu_error value indicating the result of the insertion.
  */
-ctofu_error trilo_xdata_flist_insert(cflist* flist, ctofu data);
+ctofu_error flist_insert(cflist* flist, ctofu data);
 
 /**
  * @brief Removes a ctofu data element from the cflist.
@@ -98,7 +98,7 @@ ctofu_error trilo_xdata_flist_insert(cflist* flist, ctofu data);
  * @param data  The ctofu data element to be removed.
  * @return A ctofu_error value indicating the result of the removal.
  */
-ctofu_error trilo_xdata_flist_remove(cflist* flist, ctofu data);
+ctofu_error flist_remove(cflist* flist, ctofu data);
 
 /**
  * @brief Searches for a ctofu data element in the cflist.
@@ -107,21 +107,21 @@ ctofu_error trilo_xdata_flist_remove(cflist* flist, ctofu data);
  * @param data  The ctofu data element to search for.
  * @return A ctofu_error value indicating the result of the search.
  */
-ctofu_error trilo_xdata_flist_search(const cflist* flist, ctofu data);
+ctofu_error flist_search(const cflist* flist, ctofu data);
 
 /**
  * @brief Reverses the cflist in the forward direction.
  *
  * @param flist The cflist to be reversed.
  */
-void trilo_xdata_flist_reverse_forward(cflist* flist);
+void flist_reverse_forward(cflist* flist);
 
 /**
  * @brief Reverses the cflist in the backward direction.
  *
  * @param flist The cflist to be reversed.
  */
-void trilo_xdata_flist_reverse_backward(cflist* flist);
+void flist_reverse_backward(cflist* flist);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -133,7 +133,7 @@ void trilo_xdata_flist_reverse_backward(cflist* flist);
  * @param flist The cflist for which the size will be determined.
  * @return The size of the cflist.
  */
-size_t trilo_xdata_flist_size(const cflist* flist);
+size_t flist_size(const cflist* flist);
 
 /**
  * @brief Getter function to retrieve a ctofu data element from the cflist.
@@ -142,7 +142,7 @@ size_t trilo_xdata_flist_size(const cflist* flist);
  * @param data  The ctofu data element to retrieve.
  * @return A pointer to the ctofu data element in the cflist (or NULL if not found).
  */
-ctofu* trilo_xdata_flist_getter(cflist* flist, ctofu data);
+ctofu* flist_getter(cflist* flist, ctofu data);
 
 /**
  * @brief Setter function to update a ctofu data element in the cflist.
@@ -151,7 +151,7 @@ ctofu* trilo_xdata_flist_getter(cflist* flist, ctofu data);
  * @param data  The ctofu data element to update.
  * @return A ctofu_error value indicating the result of the update.
  */
-ctofu_error trilo_xdata_flist_setter(cflist* flist, ctofu data);
+ctofu_error flist_setter(cflist* flist, ctofu data);
 
 /**
  * @brief Checks if the cflist is not empty.
@@ -159,7 +159,7 @@ ctofu_error trilo_xdata_flist_setter(cflist* flist, ctofu data);
  * @param flist The cflist to check.
  * @return true if the cflist is not empty, false otherwise.
  */
-bool trilo_xdata_flist_not_empty(const cflist* flist);
+bool flist_not_empty(const cflist* flist);
 
 /**
  * @brief Checks if the cflist is not a null pointer.
@@ -167,7 +167,7 @@ bool trilo_xdata_flist_not_empty(const cflist* flist);
  * @param flist The cflist to check.
  * @return true if the cflist is not a null pointer, false otherwise.
  */
-bool trilo_xdata_flist_not_nullptr(const cflist* flist);
+bool flist_not_cnullptr(const cflist* flist);
 
 /**
  * @brief Checks if the cflist is empty.
@@ -175,7 +175,7 @@ bool trilo_xdata_flist_not_nullptr(const cflist* flist);
  * @param flist The cflist to check.
  * @return true if the cflist is empty, false otherwise.
  */
-bool trilo_xdata_flist_is_empty(const cflist* flist);
+bool flist_is_empty(const cflist* flist);
 
 /**
  * @brief Checks if the cflist is a null pointer.
@@ -183,7 +183,7 @@ bool trilo_xdata_flist_is_empty(const cflist* flist);
  * @param flist The cflist to check.
  * @return true if the cflist is a null pointer, false otherwise.
  */
-bool trilo_xdata_flist_is_nullptr(const cflist* flist);
+bool flist_is_cnullptr(const cflist* flist);
 
 #ifdef __cplusplus
 }

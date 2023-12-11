@@ -171,7 +171,7 @@ typedef struct {
  * @param value The integer value to create the ctofu instance from.
  * @return A ctofu instance containing the integer value.
  */
-ctofu trilo_xdata_tofu_create_from_integer(int value);
+ctofu tofu_create_from_integer(int value);
 
 /**
  * @brief Creates a new ctofu instance from a double value.
@@ -179,7 +179,7 @@ ctofu trilo_xdata_tofu_create_from_integer(int value);
  * @param value The double value to create the ctofu instance from.
  * @return A ctofu instance containing the double value.
  */
-ctofu trilo_xdata_tofu_create_from_double(double value);
+ctofu tofu_create_from_double(double value);
 
 /**
  * @brief Creates a new ctofu instance from a string value.
@@ -187,7 +187,7 @@ ctofu trilo_xdata_tofu_create_from_double(double value);
  * @param value The string value to create the ctofu instance from.
  * @return A ctofu instance containing the string value.
  */
-ctofu trilo_xdata_tofu_create_from_string(const char* value);
+ctofu tofu_create_from_string(const char* value);
 
 /**
  * @brief Creates a new ctofu instance from a character value.
@@ -195,7 +195,7 @@ ctofu trilo_xdata_tofu_create_from_string(const char* value);
  * @param value The character value to create the ctofu instance from.
  * @return A ctofu instance containing the character value.
  */
-ctofu trilo_xdata_tofu_create_from_char(char value);
+ctofu tofu_create_from_char(char value);
 
 /**
  * @brief Creates a new ctofu instance from a boolean value.
@@ -203,28 +203,28 @@ ctofu trilo_xdata_tofu_create_from_char(char value);
  * @param value The boolean value to create the ctofu instance from.
  * @return A ctofu instance containing the boolean value.
  */
-ctofu trilo_xdata_tofu_create_from_boolean(bool value);
+ctofu tofu_create_from_boolean(bool value);
 
 /**
  * @brief Creates a new ctofu instance from a nullptr value.
  *
  * @return A ctofu instance containing the nullptr value.
  */
-ctofu trilo_xdata_tofu_create_from_nullptr(void);
+ctofu tofu_create_from_nullptr(void);
 
 /**
  * @brief Creates a new ctofu instance from a empty array value.
  *
  * @return A ctofu instance containing the empty array value.
  */
-ctofu trilo_xdata_tofu_create_from_empty_array(void);
+ctofu tofu_create_from_empty_array(void);
 
 /**
  * @barif: Function to free memory associated with a tofu instance.
  *
  * @param tofu: Pointer to the ctofu instance to be destroyed.
  */
-void trilo_xdata_tofu_destroy(ctofu* tofu);
+void tofu_erase(ctofu* tofu);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -237,7 +237,7 @@ void trilo_xdata_tofu_destroy(ctofu* tofu);
  * @param b The second ctofu instance for comparison.
  * @return A ctofu_error value indicating the comparison result.
  */
-ctofu_error trilo_xdata_tofu_compare(const ctofu a, const ctofu b);
+ctofu_error tofu_compare(const ctofu a, const ctofu b);
 
 /**
  * @brief Sorts an array of ctofu instances using the insertion sort algorithm.
@@ -245,7 +245,7 @@ ctofu_error trilo_xdata_tofu_compare(const ctofu a, const ctofu b);
  * @param arr The array of ctofu instances to be sorted.
  * @param n   The number of elements in the array.
  */
-void trilo_xdata_tofu_insertion_sort(ctofu* arr, size_t n);
+void tofu_insertion_sort(ctofu* arr, size_t n);
 
 /**
  * @brief Sorts an array of ctofu instances using the selection sort algorithm.
@@ -253,7 +253,7 @@ void trilo_xdata_tofu_insertion_sort(ctofu* arr, size_t n);
  * @param arr The array of ctofu instances to be sorted.
  * @param n   The number of elements in the array.
  */
-void trilo_xdata_tofu_selection_sort(ctofu* arr, size_t n);
+void tofu_selection_sort(ctofu* arr, size_t n);
 
 /**
  * @brief Searches for a target ctofu instance in a sorted array using binary search.
@@ -263,7 +263,7 @@ void trilo_xdata_tofu_selection_sort(ctofu* arr, size_t n);
  * @param target The ctofu instance to search for.
  * @return       The index of the target if found, or -1 if not found.
  */
-int trilo_xdata_tofu_binary_search(const ctofu* arr, size_t n, ctofu target);
+int tofu_binary_search(const ctofu* arr, size_t n, ctofu target);
 
 /**
  * @brief Searches for a target ctofu instance in an array using linear search.
@@ -273,7 +273,7 @@ int trilo_xdata_tofu_binary_search(const ctofu* arr, size_t n, ctofu target);
  * @param target The ctofu instance to search for.
  * @return       The index of the target if found, or -1 if not found.
  */
-int trilo_xdata_tofu_linear_search(const ctofu* arr, size_t n, ctofu target);
+int tofu_linear_search(const ctofu* arr, size_t n, ctofu target);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -284,7 +284,7 @@ int trilo_xdata_tofu_linear_search(const ctofu* arr, size_t n, ctofu target);
  *
  * @param tofu The ctofu instance to be printed.
  */
-void trilo_xdata_tofu_print(ctofu tofu);
+void tofu_print(ctofu tofu);
 
 /**
  * @brief Checks if a ctofu instance represents a nullptr value.
@@ -292,7 +292,7 @@ void trilo_xdata_tofu_print(ctofu tofu);
  * @param tofu Pointer to the ctofu instance to check.
  * @return true if the ctofu instance represents a nullptr value, false otherwise.
  */
-bool trilo_xdata_tofu_is_nullptr(const ctofu* tofu);
+bool tofu_is_cnullptr(const ctofu* tofu);
 
 /**
  * @brief Gets the integer data from a ctofu instance.
@@ -300,7 +300,7 @@ bool trilo_xdata_tofu_is_nullptr(const ctofu* tofu);
  * @param tofu The ctofu instance to extract the integer data from.
  * @return     The integer value from the ctofu instance.
  */
-int trilo_xdata_tofu_get_integer(ctofu tofu);
+int tofu_get_integer(ctofu tofu);
 
 /**
  * @brief Gets the double data from a ctofu instance.
@@ -308,7 +308,7 @@ int trilo_xdata_tofu_get_integer(ctofu tofu);
  * @param tofu The ctofu instance to extract the double data from.
  * @return     The double value from the ctofu instance.
  */
-double trilo_xdata_tofu_get_double(ctofu tofu);
+double tofu_get_double(ctofu tofu);
 
 /**
  * @brief Gets the string data from a ctofu instance.
@@ -316,7 +316,7 @@ double trilo_xdata_tofu_get_double(ctofu tofu);
  * @param tofu The ctofu instance to extract the string data from.
  * @return     A pointer to the string data in the ctofu instance.
  */
-const char* trilo_xdata_tofu_get_string(ctofu tofu);
+const char* tofu_get_string(ctofu tofu);
 
 /**
  * @brief Gets the character data from a ctofu instance.
@@ -324,7 +324,7 @@ const char* trilo_xdata_tofu_get_string(ctofu tofu);
  * @param tofu The ctofu instance to extract the character data from.
  * @return     The character value from the ctofu instance.
  */
-char trilo_xdata_tofu_get_char(ctofu tofu);
+char tofu_get_char(ctofu tofu);
 
 /**
  * @brief Gets the boolean data from a ctofu instance.
@@ -332,7 +332,7 @@ char trilo_xdata_tofu_get_char(ctofu tofu);
  * @param tofu The ctofu instance to extract the boolean data from.
  * @return     The boolean value from the ctofu instance.
  */
-bool trilo_xdata_tofu_get_boolean(ctofu tofu);
+bool tofu_get_boolean(ctofu tofu);
 
 /**
  * @brief Creates a copy of a ctofu instance.
@@ -345,7 +345,7 @@ bool trilo_xdata_tofu_get_boolean(ctofu tofu);
  * @param tofu The source ctofu instance to be copied.
  * @return A new ctofu instance that is a copy of the source.
  */
-ctofu trilo_xdata_tofu_copy(ctofu tofu);
+ctofu tofu_copy(ctofu tofu);
 
 /**
  * @brief Checks if two ctofu instances are equal.
@@ -354,7 +354,7 @@ ctofu trilo_xdata_tofu_copy(ctofu tofu);
  * @param b The second ctofu instance for comparison.
  * @return true if the instances are equal, false otherwise.
  */
-bool trilo_xdata_tofu_equal(const ctofu a, const ctofu b);
+bool tofu_equal(const ctofu a, const ctofu b);
 
 /**
  * @brief Gets the data type of a ctofu instance.
@@ -364,7 +364,7 @@ bool trilo_xdata_tofu_equal(const ctofu a, const ctofu b);
  * @param tofu The ctofu instance to get the data type from.
  * @return The data type of the ctofu instance.
  */
-enum ctofu_type trilo_xdata_tofu_get_type(const ctofu tofu);
+enum ctofu_type tofu_get_type(const ctofu tofu);
 
 #ifdef __cplusplus
 }

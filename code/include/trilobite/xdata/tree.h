@@ -70,14 +70,14 @@ typedef struct ctree {
  * @param list_type The data type for the ctree (e.g., INTEGER_TYPE, DOUBLE_TYPE).
  * @return A pointer to the newly created ctree instance.
  */
-ctree* trilo_xdata_tree_create(enum ctofu_type list_type);
+ctree* tree_create(enum ctofu_type list_type);
 
 /**
  * @brief Destroys the ctree instance, freeing all associated memory.
  *
  * @param tree The ctree instance to be destroyed.
  */
-void trilo_xdata_tree_destroy(ctree* tree);
+void tree_erase(ctree* tree);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -90,7 +90,7 @@ void trilo_xdata_tree_destroy(ctree* tree);
  * @param data The ctofu data element to be inserted.
  * @return A ctofu_error value indicating the result of the insertion.
  */
-ctofu_error trilo_xdata_tree_insert(ctree* tree, ctofu data);
+ctofu_error tree_insert(ctree* tree, ctofu data);
 
 /**
  * @brief Removes a ctofu data element from the ctree.
@@ -99,7 +99,7 @@ ctofu_error trilo_xdata_tree_insert(ctree* tree, ctofu data);
  * @param data The ctofu data element to be removed.
  * @return A ctofu_error value indicating the result of the removal.
  */
-ctofu_error trilo_xdata_tree_remove(ctree* tree, ctofu data);
+ctofu_error tree_remove(ctree* tree, ctofu data);
 
 /**
  * @brief Searches for a ctofu data element in the ctree.
@@ -108,7 +108,7 @@ ctofu_error trilo_xdata_tree_remove(ctree* tree, ctofu data);
  * @param data The ctofu data element to search for.
  * @return A ctofu_error value indicating the result of the search.
  */
-ctofu_error trilo_xdata_tree_search(const ctree* tree, ctofu data);
+ctofu_error tree_search(const ctree* tree, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -120,7 +120,7 @@ ctofu_error trilo_xdata_tree_search(const ctree* tree, ctofu data);
  * @param tree The ctree for which the size will be determined.
  * @return The size of the ctree.
  */
-size_t trilo_xdata_tree_size(const ctree* tree);
+size_t tree_size(const ctree* tree);
 
 /**
  * @brief Getter function to retrieve a ctofu data element from the ctree.
@@ -129,7 +129,7 @@ size_t trilo_xdata_tree_size(const ctree* tree);
  * @param data The ctofu data element to retrieve.
  * @return A pointer to the ctofu data element in the ctree (or NULL if not found).
  */
-ctofu* trilo_xdata_tree_getter(const ctree* tree, ctofu data);
+ctofu* tree_getter(const ctree* tree, ctofu data);
 
 /**
  * @brief Setter function to update a ctofu data element in the ctree.
@@ -138,7 +138,7 @@ ctofu* trilo_xdata_tree_getter(const ctree* tree, ctofu data);
  * @param data The ctofu data element to update.
  * @return A ctofu_error value indicating the result of the update.
  */
-ctofu_error trilo_xdata_tree_setter(ctree* tree, ctofu data);
+ctofu_error tree_setter(ctree* tree, ctofu data);
 
 /**
  * @brief Checks if the ctree is not empty.
@@ -146,7 +146,7 @@ ctofu_error trilo_xdata_tree_setter(ctree* tree, ctofu data);
  * @param tree The ctree to check.
  * @return true if the ctree is not empty, false otherwise.
  */
-bool trilo_xdata_tree_not_empty(const ctree* tree);
+bool tree_not_empty(const ctree* tree);
 
 /**
  * @brief Checks if the ctree is not a null pointer.
@@ -154,7 +154,7 @@ bool trilo_xdata_tree_not_empty(const ctree* tree);
  * @param tree The ctree to check.
  * @return true if the ctree is not a null pointer, false otherwise.
  */
-bool trilo_xdata_tree_not_nullptr(const ctree* tree);
+bool tree_not_cnullptr(const ctree* tree);
 
 /**
  * @brief Checks if the ctree is empty.
@@ -162,7 +162,7 @@ bool trilo_xdata_tree_not_nullptr(const ctree* tree);
  * @param tree The ctree to check.
  * @return true if the ctree is empty, false otherwise.
  */
-bool trilo_xdata_tree_is_empty(const ctree* tree);
+bool tree_is_empty(const ctree* tree);
 
 /**
  * @brief Checks if the ctree is a null pointer.
@@ -170,7 +170,7 @@ bool trilo_xdata_tree_is_empty(const ctree* tree);
  * @param tree The ctree to check.
  * @return true if the ctree is a null pointer, false otherwise.
  */
-bool trilo_xdata_tree_is_nullptr(const ctree* tree);
+bool tree_is_cnullptr(const ctree* tree);
 
 /**
  * @brief Checks if a ctofu data element is present in the ctree.
@@ -179,7 +179,7 @@ bool trilo_xdata_tree_is_nullptr(const ctree* tree);
  * @param data The ctofu data element to search for.
  * @return true if the data element is present, false otherwise.
  */
-bool trilo_xdata_tree_contains(const ctree* tree, ctofu data);
+bool tree_contains(const ctree* tree, ctofu data);
 
 #ifdef __cplusplus
 }

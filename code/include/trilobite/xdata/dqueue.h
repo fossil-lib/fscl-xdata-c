@@ -71,14 +71,14 @@ typedef struct cdqueue {
  * @param list_type The data type for the cdqueue (e.g., INTEGER_TYPE, DOUBLE_TYPE).
  * @return A pointer to the newly created cdqueue instance.
  */
-cdqueue* trilo_xdata_dqueue_create(enum ctofu_type list_type);
+cdqueue* dqueue_create(enum ctofu_type list_type);
 
 /**
  * @brief Destroys the cdqueue instance, freeing all associated memory.
  *
  * @param dqueue The cdqueue instance to be destroyed.
  */
-void trilo_xdata_dqueue_destroy(cdqueue* dqueue);
+void dqueue_erase(cdqueue* dqueue);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -91,7 +91,7 @@ void trilo_xdata_dqueue_destroy(cdqueue* dqueue);
  * @param data   The ctofu data element to be inserted.
  * @return A ctofu_error value indicating the result of the insertion.
  */
-ctofu_error trilo_xdata_dqueue_insert(cdqueue* dqueue, ctofu data);
+ctofu_error dqueue_insert(cdqueue* dqueue, ctofu data);
 
 /**
  * @brief Removes a ctofu data element from the cdqueue.
@@ -100,7 +100,7 @@ ctofu_error trilo_xdata_dqueue_insert(cdqueue* dqueue, ctofu data);
  * @param data   The ctofu data element to be removed.
  * @return A ctofu_error value indicating the result of the removal.
  */
-ctofu_error trilo_xdata_dqueue_remove(cdqueue* dqueue, ctofu data);
+ctofu_error dqueue_remove(cdqueue* dqueue, ctofu data);
 
 /**
  * @brief Searches for a ctofu data element in the cdqueue.
@@ -109,7 +109,7 @@ ctofu_error trilo_xdata_dqueue_remove(cdqueue* dqueue, ctofu data);
  * @param data   The ctofu data element to search for.
  * @return A ctofu_error value indicating the result of the search.
  */
-ctofu_error trilo_xdata_dqueue_search(const cdqueue* dqueue, ctofu data);
+ctofu_error dqueue_search(const cdqueue* dqueue, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -121,7 +121,7 @@ ctofu_error trilo_xdata_dqueue_search(const cdqueue* dqueue, ctofu data);
  * @param dqueue The cdqueue for which the size will be determined.
  * @return The size of the cdqueue.
  */
-size_t trilo_xdata_dqueue_size(const cdqueue* dqueue);
+size_t dqueue_size(const cdqueue* dqueue);
 
 /**
  * @brief Getter function to retrieve a ctofu data element from the cdqueue.
@@ -130,7 +130,7 @@ size_t trilo_xdata_dqueue_size(const cdqueue* dqueue);
  * @param data   The ctofu data element to retrieve.
  * @return A pointer to the ctofu data element in the cdqueue (or NULL if not found).
  */
-ctofu* trilo_xdata_dqueue_getter(cdqueue* dqueue, ctofu data);
+ctofu* dqueue_getter(cdqueue* dqueue, ctofu data);
 
 /**
  * @brief Setter function to update a ctofu data element in the cdqueue.
@@ -139,7 +139,7 @@ ctofu* trilo_xdata_dqueue_getter(cdqueue* dqueue, ctofu data);
  * @param data   The ctofu data element to update.
  * @return A ctofu_error value indicating the result of the update.
  */
-ctofu_error trilo_xdata_dqueue_setter(cdqueue* dqueue, ctofu data);
+ctofu_error dqueue_setter(cdqueue* dqueue, ctofu data);
 
 /**
  * @brief Checks if the cdqueue is not empty.
@@ -147,7 +147,7 @@ ctofu_error trilo_xdata_dqueue_setter(cdqueue* dqueue, ctofu data);
  * @param dqueue The cdqueue to check.
  * @return true if the cdqueue is not empty, false otherwise.
  */
-bool trilo_xdata_dqueue_not_empty(const cdqueue* dqueue);
+bool dqueue_not_empty(const cdqueue* dqueue);
 
 /**
  * @brief Checks if the cdqueue is not a null pointer.
@@ -155,7 +155,7 @@ bool trilo_xdata_dqueue_not_empty(const cdqueue* dqueue);
  * @param dqueue The cdqueue to check.
  * @return true if the cdqueue is not a null pointer, false otherwise.
  */
-bool trilo_xdata_dqueue_not_nullptr(const cdqueue* dqueue);
+bool dqueue_not_cnullptr(const cdqueue* dqueue);
 
 /**
  * @brief Checks if the cdqueue is empty.
@@ -163,7 +163,7 @@ bool trilo_xdata_dqueue_not_nullptr(const cdqueue* dqueue);
  * @param dqueue The cdqueue to check.
  * @return true if the cdqueue is empty, false otherwise.
  */
-bool trilo_xdata_dqueue_is_empty(const cdqueue* dqueue);
+bool dqueue_is_empty(const cdqueue* dqueue);
 
 /**
  * @brief Checks if the cdqueue is a null pointer.
@@ -171,7 +171,7 @@ bool trilo_xdata_dqueue_is_empty(const cdqueue* dqueue);
  * @param dqueue The cdqueue to check.
  * @return true if the cdqueue is a null pointer, false otherwise.
  */
-bool trilo_xdata_dqueue_is_nullptr(const cdqueue* dqueue);
+bool dqueue_is_cnullptr(const cdqueue* dqueue);
 
 #ifdef __cplusplus
 }

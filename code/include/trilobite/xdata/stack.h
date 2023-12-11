@@ -68,14 +68,14 @@ typedef struct cstack {
  * @param list_type The data type for the cstack (e.g., INTEGER_TYPE, DOUBLE_TYPE).
  * @return A pointer to the newly created cstack instance.
  */
-cstack* trilo_xdata_stack_create(enum ctofu_type list_type);
+cstack* stack_create(enum ctofu_type list_type);
 
 /**
  * @brief Destroys the cstack instance, freeing all associated memory.
  *
  * @param stack The cstack instance to be destroyed.
  */
-void trilo_xdata_stack_destroy(cstack* stack);
+void stack_erase(cstack* stack);
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -88,7 +88,7 @@ void trilo_xdata_stack_destroy(cstack* stack);
  * @param data  The ctofu data element to be inserted.
  * @return A ctofu_error value indicating the result of the insertion.
  */
-ctofu_error trilo_xdata_stack_insert(cstack* stack, ctofu data);
+ctofu_error stack_insert(cstack* stack, ctofu data);
 
 /**
  * @brief Removes a ctofu data element from the cstack.
@@ -97,7 +97,7 @@ ctofu_error trilo_xdata_stack_insert(cstack* stack, ctofu data);
  * @param data  The ctofu data element to be removed.
  * @return A ctofu_error value indicating the result of the removal.
  */
-ctofu_error trilo_xdata_stack_remove(cstack* stack, ctofu data);
+ctofu_error stack_remove(cstack* stack, ctofu data);
 
 /**
  * @brief Searches for a ctofu data element in the cstack.
@@ -106,7 +106,7 @@ ctofu_error trilo_xdata_stack_remove(cstack* stack, ctofu data);
  * @param data  The ctofu data element to search for.
  * @return A ctofu_error value indicating the result of the search.
  */
-ctofu_error trilo_xdata_stack_search(const cstack* stack, ctofu data);
+ctofu_error stack_search(const cstack* stack, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -118,7 +118,7 @@ ctofu_error trilo_xdata_stack_search(const cstack* stack, ctofu data);
  * @param stack The cstack for which the size will be determined.
  * @return The size of the cstack.
  */
-size_t trilo_xdata_stack_size(const cstack* stack);
+size_t stack_size(const cstack* stack);
 
 /**
  * @brief Getter function to retrieve a ctofu data element from the cstack.
@@ -127,7 +127,7 @@ size_t trilo_xdata_stack_size(const cstack* stack);
  * @param data  The ctofu data element to retrieve.
  * @return A pointer to the ctofu data element in the cstack (or NULL if not found).
  */
-ctofu* trilo_xdata_stack_getter(cstack* stack, ctofu data);
+ctofu* stack_getter(cstack* stack, ctofu data);
 
 /**
  * @brief Setter function to update a ctofu data element in the cstack.
@@ -136,7 +136,7 @@ ctofu* trilo_xdata_stack_getter(cstack* stack, ctofu data);
  * @param data  The ctofu data element to update.
  * @return A ctofu_error value indicating the result of the update.
  */
-ctofu_error trilo_xdata_stack_setter(cstack* stack, ctofu data);
+ctofu_error stack_setter(cstack* stack, ctofu data);
 
 /**
  * @brief Checks if the cstack is not empty.
@@ -144,7 +144,7 @@ ctofu_error trilo_xdata_stack_setter(cstack* stack, ctofu data);
  * @param stack The cstack to check.
  * @return true if the cstack is not empty, false otherwise.
  */
-bool trilo_xdata_stack_not_empty(const cstack* stack);
+bool stack_not_empty(const cstack* stack);
 
 /**
  * @brief Checks if the cstack is not a null pointer.
@@ -152,7 +152,7 @@ bool trilo_xdata_stack_not_empty(const cstack* stack);
  * @param stack The cstack to check.
  * @return true if the cstack is not a null pointer, false otherwise.
  */
-bool trilo_xdata_stack_not_nullptr(const cstack* stack);
+bool stack_not_cnullptr(const cstack* stack);
 
 /**
  * @brief Checks if the cstack is empty.
@@ -160,7 +160,7 @@ bool trilo_xdata_stack_not_nullptr(const cstack* stack);
  * @param stack The cstack to check.
  * @return true if the cstack is empty, false otherwise.
  */
-bool trilo_xdata_stack_is_empty(const cstack* stack);
+bool stack_is_empty(const cstack* stack);
 
 /**
  * @brief Checks if the cstack is a null pointer.
@@ -168,7 +168,7 @@ bool trilo_xdata_stack_is_empty(const cstack* stack);
  * @param stack The cstack to check.
  * @return true if the cstack is a null pointer, false otherwise.
  */
-bool trilo_xdata_stack_is_nullptr(const cstack* stack);
+bool stack_is_cnullptr(const cstack* stack);
 
 /**
  * @brief Gets the top element of the stack without removing it.
@@ -178,7 +178,7 @@ bool trilo_xdata_stack_is_nullptr(const cstack* stack);
  * @param stack The cstack instance to get the top element from.
  * @return A copy of the top element of the stack.
  */
-ctofu trilo_xdata_stack_top(cstack* stack);
+ctofu stack_top(cstack* stack);
 
 #ifdef __cplusplus
 }
