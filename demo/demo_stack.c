@@ -34,40 +34,40 @@
 
 int main() {
     // Create a cstack instance with INTEGER_TYPE
-    cstack* stack = trilo_xdata_stack_create(INTEGER_TYPE);
+    cstack* stack = stack_create(INTEGER_TYPE);
 
     // Insert data elements into the cstack
-    trilo_xdata_stack_insert(stack, trilo_xdata_tofu_create_from_integer(10));
-    trilo_xdata_stack_insert(stack, trilo_xdata_tofu_create_from_integer(20));
-    trilo_xdata_stack_insert(stack, trilo_xdata_tofu_create_from_integer(30));
+    stack_insert(stack, tofu_create_from_integer(10));
+    stack_insert(stack, tofu_create_from_integer(20));
+    stack_insert(stack, tofu_create_from_integer(30));
 
     // Print the size of the cstack
-    printf("Size of the stack: %zu\n", trilo_xdata_stack_size(stack));
+    printf("Size of the stack: %zu\n", stack_size(stack));
 
     // Print the cstack
     printf("Stack elements:\n");
-    for (size_t i = 0; i < trilo_xdata_stack_size(stack); i++) {
-        ctofu* tofu = trilo_xdata_stack_getter(stack, i);
-        printf("%d\n", trilo_xdata_tofu_get_integer(*tofu));
+    for (size_t i = 0; i < stack_size(stack); i++) {
+        ctofu* tofu = stack_getter(stack, i);
+        printf("%d\n", tofu_get_integer(*tofu));
     } // end for
 
     // Check if the cstack is not empty
-    printf("Is stack not empty? %s\n", trilo_xdata_stack_not_empty(stack) ? "true" : "false");
+    printf("Is stack not empty? %s\n", stack_not_empty(stack) ? "true" : "false");
 
     // Remove an element from the cstack
-    ctofu* removedTofu = trilo_xdata_stack_getter(stack, 1);
-    ctofu_error removalResult = trilo_xdata_stack_remove(stack, *removedTofu);
+    ctofu* removedTofu = stack_getter(stack, 1);
+    ctofu_error removalResult = stack_remove(stack, *removedTofu);
     printf("Removal result: %s\n", removalResult == TRILO_XDATA_TYPE_SUCCESS ? "success" : "failure");
 
     // Print the updated cstack
     printf("Updated stack elements:\n");
-    for (size_t i = 0; i < trilo_xdata_stack_size(stack); i++) {
-        ctofu* tofu = trilo_xdata_stack_getter(stack, i);
-        printf("%d\n", trilo_xdata_tofu_get_integer(*tofu));
+    for (size_t i = 0; i < stack_size(stack); i++) {
+        ctofu* tofu = stack_getter(stack, i);
+        printf("%d\n", tofu_get_integer(*tofu));
     } // end for
 
     // Destroy the cstack
-    trilo_xdata_stack_destroy(stack);
+    stack_erase(stack);
 
     return 0;
 } // end of func

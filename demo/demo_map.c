@@ -33,47 +33,47 @@
 #include <stdio.h>
 
 int main() {
-    cmap* map = trilo_xdata_map_create(STRING_TYPE);
+    cmap* map = map_create(STRING_TYPE);
 
     // Insert key-value pairs into the map
-    ctofu key1 = trilo_xdata_tofu_create_from_string("name");
-    ctofu value1 = trilo_xdata_tofu_create_from_string("John");
-    trilo_xdata_map_insert(map, key1, value1);
+    ctofu key1 = tofu_create_from_string("name");
+    ctofu value1 = tofu_create_from_string("John");
+    map_insert(map, key1, value1);
 
-    ctofu key2 = trilo_xdata_tofu_create_from_string("age");
-    ctofu value2 = trilo_xdata_tofu_create_from_integer(30);
-    trilo_xdata_map_insert(map, key2, value2);
+    ctofu key2 = tofu_create_from_string("age");
+    ctofu value2 = tofu_create_from_integer(30);
+    map_insert(map, key2, value2);
 
     // Lookup values by key
     ctofu result;
-    ctofu_error lookupResult = trilo_xdata_map_search(map, key1);
+    ctofu_error lookupResult = map_search(map, key1);
     if (lookupResult == TRILO_XDATA_TYPE_SUCCESS) {
-        trilo_xdata_map_getter(map, key1, &result);
-        printf("Name: %s\n", trilo_xdata_tofu_get_string(result));
+        map_getter(map, key1, &result);
+        printf("Name: %s\n", tofu_get_string(result));
     } // end if
 
-    lookupResult = trilo_xdata_map_search(map, key2);
+    lookupResult = map_search(map, key2);
     if (lookupResult == TRILO_XDATA_TYPE_SUCCESS) {
-        trilo_xdata_map_getter(map, key2, &result);
-        printf("Age: %d\n", trilo_xdata_tofu_get_integer(result));
+        map_getter(map, key2, &result);
+        printf("Age: %d\n", tofu_get_integer(result));
     } // end if
 
     // Remove a key-value pair
-    trilo_xdata_map_remove(map, key1);
+    map_remove(map, key1);
 
     // Check if a key exists
-    if (trilo_xdata_map_contains(map, key1)) {
+    if (map_contains(map, key1)) {
         printf("Key 'name' exists in the map.\n");
     } else {
         printf("Key 'name' does not exist in the map.\n");
     } // end if else
 
     // Get the number of key-value pairs in the map
-    size_t mapSize = trilo_xdata_map_size(map);
+    size_t mapSize = map_size(map);
     printf("Map size: %zu\n");
 
     // Destroy the map
-    trilo_xdata_map_destroy(map);
+    map_erase(map);
 
     return 0;
 }

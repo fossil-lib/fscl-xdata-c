@@ -35,43 +35,43 @@
 
 int main() {
     // Create a cqueue instance with INTEGER_TYPE
-    cqueue* queue = trilo_xdata_queue_create(INTEGER_TYPE);
+    cqueue* queue = queue_create(INTEGER_TYPE);
 
     // Insert data elements into the cqueue
-    trilo_xdata_queue_insert(queue, trilo_xdata_tofu_create_from_integer(10));
-    trilo_xdata_queue_insert(queue, trilo_xdata_tofu_create_from_integer(20));
-    trilo_xdata_queue_insert(queue, trilo_xdata_tofu_create_from_integer(30));
+    queue_insert(queue, tofu_create_from_integer(10));
+    queue_insert(queue, tofu_create_from_integer(20));
+    queue_insert(queue, tofu_create_from_integer(30));
 
     // Print the size of the cqueue
-    printf("Size of the queue: %zu\n", trilo_xdata_queue_size(queue));
+    printf("Size of the queue: %zu\n", queue_size(queue));
 
     // Print the cqueue elements
     printf("Queue elements:\n");
-    for (size_t i = 0; i < trilo_xdata_queue_size(queue); i++) {
-        ctofu* tofu = trilo_xdata_queue_getter(queue, i);
-        printf("%d\n", trilo_xdata_tofu_get_integer(*tofu));
+    for (size_t i = 0; i < queue_size(queue); i++) {
+        ctofu* tofu = queue_getter(queue, i);
+        printf("%d\n", tofu_get_integer(*tofu));
     } // end for
 
     // Check if the cqueue is not empty
-    printf("Is queue not empty? %s\n", trilo_xdata_queue_not_empty(queue) ? "true" : "false");
+    printf("Is queue not empty? %s\n", queue_not_empty(queue) ? "true" : "false");
 
     // Remove an element from the cqueue
-    ctofu* removedTofu = trilo_xdata_queue_getter(queue, 1);
-    ctofu_error removalResult = trilo_xdata_queue_remove(queue, *removedTofu);
+    ctofu* removedTofu = queue_getter(queue, 1);
+    ctofu_error removalResult = queue_remove(queue, *removedTofu);
     printf("Removal result: %s\n", removalResult == TRILO_XDATA_TYPE_SUCCESS ? "success" : "failure");
 
     // Print the updated cqueue
     printf("Updated queue elements:\n");
-    for (size_t i = 0; i < trilo_xdata_queue_size(queue); i++) {
-        ctofu* tofu = trilo_xdata_queue_getter(queue, i);
-        printf("%d\n", trilo_xdata_tofu_get_integer(*tofu));
+    for (size_t i = 0; i < queue_size(queue); i++) {
+        ctofu* tofu = queue_getter(queue, i);
+        printf("%d\n", tofu_get_integer(*tofu));
     } // end for
 
     // Check if the cqueue is not empty
-    printf("Is queue not empty? %s\n", trilo_xdata_queue_not_empty(queue) ? "true" : "false");
+    printf("Is queue not empty? %s\n", queue_not_empty(queue) ? "true" : "false");
 
     // Destroy the cqueue
-    trilo_xdata_queue_destroy(queue);
+    queue_erase(queue);
 
     return 0;
 } // end of func

@@ -34,45 +34,45 @@
 
 int main() {
     // Create a cset instance with INTEGER_TYPE
-    cset* set = trilo_xdata_set_create(INTEGER_TYPE);
+    cset* set = set_create(INTEGER_TYPE);
 
     // Insert data elements into the cset
-    trilo_xdata_set_insert(set, trilo_xdata_tofu_create_from_integer(10));
-    trilo_xdata_set_insert(set, trilo_xdata_tofu_create_from_integer(20));
-    trilo_xdata_set_insert(set, trilo_xdata_tofu_create_from_integer(30));
+    set_insert(set, tofu_create_from_integer(10));
+    set_insert(set, tofu_create_from_integer(20));
+    set_insert(set, tofu_create_from_integer(30));
 
     // Print the size of the cset
-    printf("Size of the set: %zu\n", trilo_xdata_set_size(set));
+    printf("Size of the set: %zu\n", set_size(set));
 
     // Print the cset
     printf("Set elements:\n");
-    for (size_t i = 0; i < trilo_xdata_set_size(set); i++) {
-        ctofu* tofu = trilo_xdata_set_getter(set, i);
-        printf("%d\n", trilo_xdata_tofu_get_integer(*tofu));
+    for (size_t i = 0; i < set_size(set); i++) {
+        ctofu* tofu = set_getter(set, i);
+        printf("%d\n", tofu_get_integer(*tofu));
     } // end for
 
     // Check if the cset is not empty
-    printf("Is set not empty? %s\n", trilo_xdata_set_not_empty(set) ? "true" : "false");
+    printf("Is set not empty? %s\n", set_not_empty(set) ? "true" : "false");
 
     // Remove an element from the cset
-    ctofu* removedTofu = trilo_xdata_set_getter(set, 1);
-    ctofu_error removalResult = trilo_xdata_set_remove(set, *removedTofu);
+    ctofu* removedTofu = set_getter(set, 1);
+    ctofu_error removalResult = set_remove(set, *removedTofu);
     printf("Removal result: %s\n", removalResult == TRILO_XDATA_TYPE_SUCCESS ? "success" : "failure");
 
     // Print the updated cset
     printf("Updated set elements:\n");
-    for (size_t i = 0; i < trilo_xdata_set_size(set); i++) {
-        ctofu* tofu = trilo_xdata_set_getter(set, i);
-        printf("%d\n", trilo_xdata_tofu_get_integer(*tofu));
+    for (size_t i = 0; i < set_size(set); i++) {
+        ctofu* tofu = set_getter(set, i);
+        printf("%d\n", tofu_get_integer(*tofu));
     } // end for
 
     // Check if the cset contains a specific element
-    ctofu targetTofu = trilo_xdata_tofu_create_from_integer(30);
-    printf("Does the set contain the element %d? %s\n", trilo_xdata_tofu_get_integer(targetTofu),
-           trilo_xdata_set_contains(set, targetTofu) ? "true" : "false");
+    ctofu targetTofu = tofu_create_from_integer(30);
+    printf("Does the set contain the element %d? %s\n", tofu_get_integer(targetTofu),
+           set_contains(set, targetTofu) ? "true" : "false");
 
     // Destroy the cset
-    trilo_xdata_set_destroy(set);
+    set_erase(set);
 
     return 0;
 } // end of func

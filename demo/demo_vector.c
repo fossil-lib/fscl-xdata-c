@@ -34,40 +34,40 @@
 
 int main() {
     // Example usage of the cvector structure
-    cvector intVector = trilo_xdata_vector_create(INTEGER_TYPE);
-    cvector stringVector = trilo_xdata_vector_create(STRING_TYPE);
+    cvector intVector = vector_create(INTEGER_TYPE);
+    cvector stringVector = vector_create(STRING_TYPE);
 
-    trilo_xdata_vector_push_back(&intVector, trilo_xdata_tofu_create_from_integer(42));
-    trilo_xdata_vector_push_back(&intVector, trilo_xdata_tofu_create_from_integer(23));
+    vector_push_back(&intVector, tofu_create_from_integer(42));
+    vector_push_back(&intVector, tofu_create_from_integer(23));
 
-    trilo_xdata_vector_push_back(&stringVector, trilo_xdata_tofu_create_from_string("Hello"));
-    trilo_xdata_vector_push_back(&stringVector, trilo_xdata_tofu_create_from_string("World"));
+    vector_push_back(&stringVector, tofu_create_from_string("Hello"));
+    vector_push_back(&stringVector, tofu_create_from_string("World"));
 
     printf("Int Vector elements: ");
-    trilo_xdata_vector_print(&intVector);
+    vector_print(&intVector);
 
     printf("String Vector elements: ");
-    trilo_xdata_vector_print(&stringVector);
+    vector_print(&stringVector);
 
-    printf("Int Vector is%s nullptr\n", trilo_xdata_vector_is_nullptr(&intVector) ? "" : " not");
-    printf("String Vector is%s nullptr\n", trilo_xdata_vector_is_nullptr(&stringVector) ? "" : " not");
+    printf("Int Vector is%s nullptr\n", vector_is_cnullptr(&intVector) ? "" : " not");
+    printf("String Vector is%s nullptr\n", vector_is_cnullptr(&stringVector) ? "" : " not");
 
-    printf("Int Vector is%s empty\n", trilo_xdata_vector_is_empty(&intVector) ? "" : " not");
-    printf("String Vector is%s empty\n", trilo_xdata_vector_is_empty(&stringVector) ? "" : " not");
+    printf("Int Vector is%s empty\n", vector_is_empty(&intVector) ? "" : " not");
+    printf("String Vector is%s empty\n", vector_is_empty(&stringVector) ? "" : " not");
 
-    printf("Int Vector size: %zu\n", trilo_xdata_vector_size(&intVector));
-    printf("String Vector size: %zu\n", trilo_xdata_vector_size(&stringVector));
+    printf("Int Vector size: %zu\n", vector_size(&intVector));
+    printf("String Vector size: %zu\n", vector_size(&stringVector));
 
-    printf("Searching for 'World' in String Vector: %d\n", trilo_xdata_vector_search(&stringVector, trilo_xdata_tofu_create_from_string("World")));
+    printf("Searching for 'World' in String Vector: %d\n", vector_search(&stringVector, tofu_create_from_string("World")));
 
     printf("Reversing Int Vector...\n");
-    trilo_xdata_vector_reverse(&intVector);
+    vector_reverse(&intVector);
     printf("Int Vector elements after reverse: ");
-    trilo_xdata_vector_print(&intVector);
+    vector_print(&intVector);
 
     // Cleanup
-    trilo_xdata_vector_destroy(&intVector);
-    trilo_xdata_vector_destroy(&stringVector);
+    vector_erase(&intVector);
+    vector_erase(&stringVector);
 
     return 0;
 } // end of func
