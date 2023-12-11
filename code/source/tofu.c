@@ -36,7 +36,7 @@
 #include <math.h>
 
 // Function to create a new ctofu instance from an integer
-ctofu trilo_xdata_tofu_create_from_integer(int value) {
+ctofu tofu_create_from_integer(int value) {
     ctofu tofu;
     tofu.type = INTEGER_TYPE;
     tofu.data.integer_type = value;
@@ -44,7 +44,7 @@ ctofu trilo_xdata_tofu_create_from_integer(int value) {
 } // end of func
 
 // Function to create a new ctofu instance from a double
-ctofu trilo_xdata_tofu_create_from_double(double value) {
+ctofu tofu_create_from_double(double value) {
     ctofu tofu;
     tofu.type = DOUBLE_TYPE;
     tofu.data.double_type = value;
@@ -52,7 +52,7 @@ ctofu trilo_xdata_tofu_create_from_double(double value) {
 } // end of func
 
 // Function to create a new ctofu instance from a string
-ctofu trilo_xdata_tofu_create_from_string(const char* value) {
+ctofu tofu_create_from_string(const char* value) {
     ctofu tofu;
     tofu.type = STRING_TYPE;
     tofu.data.string_type = (char*)malloc(strlen(value) + 1);
@@ -61,7 +61,7 @@ ctofu trilo_xdata_tofu_create_from_string(const char* value) {
 } // end of func
 
 // Function to create a new ctofu instance from a char
-ctofu trilo_xdata_tofu_create_from_char(char value) {
+ctofu tofu_create_from_char(char value) {
     ctofu tofu;
     tofu.type = CHAR_TYPE;
     tofu.data.char_type = value;
@@ -69,20 +69,20 @@ ctofu trilo_xdata_tofu_create_from_char(char value) {
 } // end of func
 
 // Function to create a new ctofu instance from a bool
-ctofu trilo_xdata_tofu_create_from_boolean(bool value) {
+ctofu tofu_create_from_boolean(bool value) {
     ctofu tofu;
     tofu.type = BOOLEAN_TYPE;
     tofu.data.boolean_type = value;
     return tofu;
 } // end of func
 
-ctofu trilo_xdata_tofu_create_from_nullptr(void) {
+ctofu tofu_create_from_nullptr(void) {
     ctofu tofu;
     tofu.type = NULLPTR_TYPE;
     return tofu;
 } // end of func
 
-ctofu trilo_xdata_tofu_create_from_empty_array(void) {
+ctofu tofu_create_from_empty_array(void) {
     ctofu tofu;
     tofu.type = ARRAY_TYPE;
     tofu.data.array_type.size = 0;
@@ -91,7 +91,7 @@ ctofu trilo_xdata_tofu_create_from_empty_array(void) {
 } // end of func
 
 // Function to free memory associated with a tofu instance
-void trilo_xdata_tofu_destroy(ctofu* tofu) {
+void tofu_erase(ctofu* tofu) {
     if (tofu->type == STRING_TYPE) {
         free(tofu->data.string_type);
     } else if (tofu->type == ARRAY_TYPE) {
@@ -104,7 +104,7 @@ void trilo_xdata_tofu_destroy(ctofu* tofu) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-ctofu_error trilo_xdata_tofu_compare(const ctofu a, const ctofu b) {
+ctofu_error tofu_compare(const ctofu a, const ctofu b) {
     if (a.type != b.type) {
         // Different data types, consider them not equal
         return TRILO_XDATA_TYPE_WAS_MISMATCH;
@@ -133,11 +133,11 @@ ctofu_error trilo_xdata_tofu_compare(const ctofu a, const ctofu b) {
 
 
 // Function to perform insertion sort on an array of ctofu instances
-void trilo_xdata_tofu_insertion_sort(ctofu* arr, size_t n) {
+void tofu_insertion_sort(ctofu* arr, size_t n) {
     for (size_t i = 1; i < n; i++) {
         ctofu key = arr[i];
         int j = i - 1;
-        while (j >= 0 && trilo_xdata_tofu_compare(arr[j], key) > 0) {
+        while (j >= 0 && tofu_compare(arr[j], key) > 0) {
             arr[j + 1] = arr[j];
             j = j - 1;
         } // end while
@@ -146,11 +146,11 @@ void trilo_xdata_tofu_insertion_sort(ctofu* arr, size_t n) {
 } // end of func
 
 // Function to perform selection sort on an array of ctofu instances
-void trilo_xdata_tofu_selection_sort(ctofu* arr, size_t n) {
+void tofu_selection_sort(ctofu* arr, size_t n) {
     for (size_t i = 0; i < n - 1; i++) {
         size_t min_index = i;
         for (size_t j = i + 1; j < n; j++) {
-            if (trilo_xdata_tofu_compare(arr[j], arr[min_index]) < 0) {
+            if (tofu_compare(arr[j], arr[min_index]) < 0) {
                 min_index = j;
             } // end if
         } // end for
@@ -163,11 +163,11 @@ void trilo_xdata_tofu_selection_sort(ctofu* arr, size_t n) {
 
 // Function to perform binary search for a ctofu instance in a sorted array
 // Returns the index of the target or -1 if not found
-int trilo_xdata_tofu_binary_search(const ctofu* arr, size_t n, ctofu target) {
+int tofu_binary_search(const ctofu* arr, size_t n, ctofu target) {
     int left = 0, right = n - 1;
     while (left <= right) {
         int mid = left + (right - left) / 2;
-        int comparison = trilo_xdata_tofu_compare(arr[mid], target);
+        int comparison = tofu_compare(arr[mid], target);
         if (comparison == 0) {
             return mid; // Target found at index mid
         } // end if
@@ -182,9 +182,9 @@ int trilo_xdata_tofu_binary_search(const ctofu* arr, size_t n, ctofu target) {
 
 // Function to perform linear search for a ctofu instance in an array
 // Returns the index of the first occurrence of the target or -1 if not found
-int trilo_xdata_tofu_linear_search(const ctofu* arr, size_t n, ctofu target) {
+int tofu_linear_search(const ctofu* arr, size_t n, ctofu target) {
     for (size_t i = 0; i < n; i++) {
-        if (trilo_xdata_tofu_compare(arr[i], target) == 0) {
+        if (tofu_compare(arr[i], target) == 0) {
             return i; // Target found at index i
         } // end if
     } // end for
@@ -197,7 +197,7 @@ int trilo_xdata_tofu_linear_search(const ctofu* arr, size_t n, ctofu target) {
 // =======================
 
 // Function to print the data in a ctofu instance
-void trilo_xdata_tofu_print(ctofu tofu) {
+void tofu_print(ctofu tofu) {
     switch (tofu.type) {
         case INTEGER_TYPE:
             printf("Data Type: int, Value: %d\n", tofu.data.integer_type);
@@ -221,12 +221,12 @@ void trilo_xdata_tofu_print(ctofu tofu) {
 } // end of func
 
 // Function to check if a ctofu instance represents a nullptr value.
-bool trilo_xdata_tofu_is_nullptr(const ctofu* tofu) {
+bool tofu_is_cnullptr(const ctofu* tofu) {
     return (tofu->type == NULLPTR_TYPE);
 } // end of func
 
 // Function to get the integer data from a ctofu instance
-int trilo_xdata_tofu_get_integer(ctofu tofu) {
+int tofu_get_integer(ctofu tofu) {
     if (tofu.type == INTEGER_TYPE) {
         return tofu.data.integer_type;
     } // end if
@@ -234,7 +234,7 @@ int trilo_xdata_tofu_get_integer(ctofu tofu) {
 } // end of func
 
 // Function to get the double data from a ctofu instance
-double trilo_xdata_tofu_get_double(ctofu tofu) {
+double tofu_get_double(ctofu tofu) {
     if (tofu.type == DOUBLE_TYPE) {
         return tofu.data.double_type;
     } // end if
@@ -242,7 +242,7 @@ double trilo_xdata_tofu_get_double(ctofu tofu) {
 } // end of func
 
 // Function to get the string data from a ctofu instance
-const char* trilo_xdata_tofu_get_string(ctofu tofu) {
+const char* tofu_get_string(ctofu tofu) {
     if (tofu.type == STRING_TYPE) {
         const char *value = tofu.data.string_type;
         return value;
@@ -251,7 +251,7 @@ const char* trilo_xdata_tofu_get_string(ctofu tofu) {
 } // end of func
 
 // Function to get the char data from a ctofu instance
-char trilo_xdata_tofu_get_char(ctofu tofu) {
+char tofu_get_char(ctofu tofu) {
     if (tofu.type == CHAR_TYPE) {
         return tofu.data.char_type;
     } // end if
@@ -259,7 +259,7 @@ char trilo_xdata_tofu_get_char(ctofu tofu) {
 } // end of func
 
 // Function to get the boolean data from a ctofu instance
-bool trilo_xdata_tofu_get_boolean(ctofu tofu) {
+bool tofu_get_boolean(ctofu tofu) {
     if (tofu.type == BOOLEAN_TYPE) {
         return tofu.data.boolean_type;
     } // end if
@@ -267,7 +267,7 @@ bool trilo_xdata_tofu_get_boolean(ctofu tofu) {
 } // end of func
 
 // Function to create a copy of a ctofu instance
-ctofu trilo_xdata_tofu_copy(ctofu tofu) {
+ctofu tofu_copy(ctofu tofu) {
     ctofu copy = { .type = tofu.type };
 
     switch (tofu.type) {
@@ -300,7 +300,7 @@ ctofu trilo_xdata_tofu_copy(ctofu tofu) {
 } // end of func
 
 // Checks if two ctofu instances are equal.
-bool trilo_xdata_tofu_equal(const ctofu a, const ctofu b) {
+bool tofu_equal(const ctofu a, const ctofu b) {
     if (a.type != b.type) {
         return false; // Types are different, not equal.
     } // end if
@@ -322,6 +322,6 @@ bool trilo_xdata_tofu_equal(const ctofu a, const ctofu b) {
 } // end of func
 
 // Gets the data type of a ctofu instance.
-enum ctofu_type trilo_xdata_tofu_get_type(const ctofu tofu) {
+enum ctofu_type tofu_get_type(const ctofu tofu) {
     return tofu.type;
 } // end of func

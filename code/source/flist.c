@@ -40,7 +40,7 @@
 // =======================
 
 // Function to create a new cflist
-cflist* trilo_xdata_flist_create(enum ctofu_type list_type) {
+cflist* flist_create(enum ctofu_type list_type) {
     cflist* flist = (cflist*)malloc(sizeof(cflist));
     if (flist == NULL) {
         exit(EXIT_FAILURE);
@@ -53,7 +53,7 @@ cflist* trilo_xdata_flist_create(enum ctofu_type list_type) {
 } // end of func
 
 // Function to destroy the cflist
-void trilo_xdata_flist_destroy(cflist* flist) {
+void flist_erase(cflist* flist) {
     cflist_node* current = flist->head;
     while (current != NULL) {
         cflist_node* temp = current;
@@ -69,7 +69,7 @@ void trilo_xdata_flist_destroy(cflist* flist) {
 // =======================
 
 // Function to insert a ctofu data into the list
-ctofu_error trilo_xdata_flist_insert(cflist* flist, ctofu data) {
+ctofu_error flist_insert(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -89,7 +89,7 @@ ctofu_error trilo_xdata_flist_insert(cflist* flist, ctofu data) {
 } // end of func
 
 // Function to remove a ctofu data from the list
-ctofu_error trilo_xdata_flist_remove(cflist* flist, ctofu data) {
+ctofu_error flist_remove(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -122,7 +122,7 @@ ctofu_error trilo_xdata_flist_remove(cflist* flist, ctofu data) {
 } // end of func
 
 // Function to search for a ctofu data in the list
-ctofu_error trilo_xdata_flist_search(const cflist* flist, ctofu data) {
+ctofu_error flist_search(const cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -147,7 +147,7 @@ ctofu_error trilo_xdata_flist_search(const cflist* flist, ctofu data) {
 } // end of func
 
 // Function to reverse the list in the forward direction
-void trilo_xdata_flist_reverse_forword(cflist* flist) {
+void flist_reverse_forword(cflist* flist) {
     cflist_node* prev = NULL;
     cflist_node* current = flist->head;
     cflist_node* next = NULL;
@@ -163,7 +163,7 @@ void trilo_xdata_flist_reverse_forword(cflist* flist) {
 } // end of func
 
 // Function to reverse the list in the backward direction
-void trilo_xdata_flist_reverse_backward(cflist* flist) {
+void flist_reverse_backward(cflist* flist) {
     // Assuming you want to reverse the list by using additional memory
     cflist_node* current = flist->head;
     cflist_node* reversed = NULL;
@@ -196,7 +196,7 @@ void trilo_xdata_flist_reverse_backward(cflist* flist) {
 // =======================
 
 // Function to get the size of the cflist
-size_t trilo_xdata_flist_size(const cflist* flist) {
+size_t flist_size(const cflist* flist) {
     if (flist == NULL) {
         return 0;
     } // end if
@@ -212,14 +212,14 @@ size_t trilo_xdata_flist_size(const cflist* flist) {
 } // end of func
 
 // Function to get a pointer to a ctofu data in the list
-ctofu* trilo_xdata_flist_getter(cflist* flist, ctofu data) {
+ctofu* flist_getter(cflist* flist, ctofu data) {
     if (flist == NULL || flist->list_type != data.type) {
         return NULL;
     } // end if
 
     cflist_node* current = flist->head;
     while (current != NULL) {
-        if (trilo_xdata_tofu_compare(current->data, data) == 0) {
+        if (tofu_compare(current->data, data) == 0) {
             // Found the matching data, return a pointer to the data
             return &(current->data);
         } // end if
@@ -230,7 +230,7 @@ ctofu* trilo_xdata_flist_getter(cflist* flist, ctofu data) {
 } // end of func
 
 // Function to set a ctofu data in the list
-ctofu_error trilo_xdata_flist_setter(cflist* flist, ctofu data) {
+ctofu_error flist_setter(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -239,34 +239,34 @@ ctofu_error trilo_xdata_flist_setter(cflist* flist, ctofu data) {
     } // end if
 
     // Check if the data already exists in the list
-    ctofu* existingData = trilo_xdata_flist_getter(flist, data);
+    ctofu* existingData = flist_getter(flist, data);
 
     if (existingData != NULL) {
         // Data already exists, update the existing data
         *existingData = data;
     } else {
         // Data doesn't exist, insert a new node with the provided data
-        trilo_xdata_flist_insert(flist, data);
+        flist_insert(flist, data);
     } // end if else
     return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
 // Function to check if the list is not empty
-bool trilo_xdata_flist_not_empty(const cflist* flist) {
-    return trilo_xdata_flist_size(flist) > 0;
+bool flist_not_empty(const cflist* flist) {
+    return flist_size(flist) > 0;
 } // end of func
 
 // Function to check if the list is not null
-bool trilo_xdata_flist_not_nullptr(const cflist* flist) {
+bool flist_not_cnullptr(const cflist* flist) {
     return flist != NULL;
 } // end of func
 
 // Function to check if the list is empty
-bool trilo_xdata_flist_is_empty(const cflist* flist) {
-    return !trilo_xdata_flist_not_empty(flist);
+bool flist_is_empty(const cflist* flist) {
+    return !flist_not_empty(flist);
 } // end of func
 
 // Function to check if the list is null
-bool trilo_xdata_flist_is_nullptr(const cflist* flist) {
-    return !trilo_xdata_flist_not_nullptr(flist);
+bool flist_is_cnullptr(const cflist* flist) {
+    return !flist_not_cnullptr(flist);
 } // end of func

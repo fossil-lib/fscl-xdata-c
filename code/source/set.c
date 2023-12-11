@@ -39,7 +39,7 @@
 // =======================
 
 // Function to create a new cset
-cset* trilo_xdata_set_create(enum ctofu_type set_type) {
+cset* set_create(enum ctofu_type set_type) {
     cset* set = (cset*)malloc(sizeof(cset));
     if (set != NULL) {
         set->head = NULL;
@@ -49,7 +49,7 @@ cset* trilo_xdata_set_create(enum ctofu_type set_type) {
 } // end of func
 
 // Function to destroy the cset
-void trilo_xdata_set_destroy(cset* set) {
+void set_erase(cset* set) {
     if (set != NULL) {
         // Free all nodes in the set
         while (set->head != NULL) {
@@ -66,7 +66,7 @@ void trilo_xdata_set_destroy(cset* set) {
 // =======================
 
 // Function to insert a ctofu data into the set
-ctofu_error trilo_xdata_set_insert(cset* set, ctofu data) {
+ctofu_error set_insert(cset* set, ctofu data) {
     if (set == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -82,7 +82,7 @@ ctofu_error trilo_xdata_set_insert(cset* set, ctofu data) {
     // Check if the data already exists in the set
     cset_node* current = set->head;
     while (current != NULL) {
-        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = tofu_compare(current->data, data);
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             free(newNode); // Data already exists, don't insert it again
             return TRILO_XDATA_TYPE_SUCCESS;
@@ -97,7 +97,7 @@ ctofu_error trilo_xdata_set_insert(cset* set, ctofu data) {
 } // end of func
 
 // Function to remove a ctofu data from the set
-ctofu_error trilo_xdata_set_remove(cset* set, ctofu data) {
+ctofu_error set_remove(cset* set, ctofu data) {
     if (set == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -106,7 +106,7 @@ ctofu_error trilo_xdata_set_remove(cset* set, ctofu data) {
     cset_node* prev = NULL;
 
     while (current != NULL) {
-        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             if (prev == NULL) {
@@ -127,7 +127,7 @@ ctofu_error trilo_xdata_set_remove(cset* set, ctofu data) {
 } // end of func
 
 // Function to search for a ctofu data in the set
-ctofu_error trilo_xdata_set_search(const cset* set, ctofu data) {
+ctofu_error set_search(const cset* set, ctofu data) {
     if (set == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -135,7 +135,7 @@ ctofu_error trilo_xdata_set_search(const cset* set, ctofu data) {
     cset_node* current = set->head;
 
     while (current != NULL) {
-        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             return TRILO_XDATA_TYPE_SUCCESS;
@@ -153,7 +153,7 @@ ctofu_error trilo_xdata_set_search(const cset* set, ctofu data) {
 // =======================
 
 // Function to get the size of the cset
-size_t trilo_xdata_set_size(const cset* set) {
+size_t set_size(const cset* set) {
     if (set == NULL) {
         return 0;
     } // end if
@@ -170,7 +170,7 @@ size_t trilo_xdata_set_size(const cset* set) {
 } // end of func
 
 // Function to insert a ctofu data into the set
-ctofu* trilo_xdata_set_getter(cset* set, ctofu data) {
+ctofu* set_getter(cset* set, ctofu data) {
     if (set == NULL) {
         return NULL;
     } // end if
@@ -178,7 +178,7 @@ ctofu* trilo_xdata_set_getter(cset* set, ctofu data) {
     cset_node* current = set->head;
 
     while (current != NULL) {
-        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             return &current->data;
@@ -191,7 +191,7 @@ ctofu* trilo_xdata_set_getter(cset* set, ctofu data) {
 } // end of func
 
 // Function to insert a ctofu data into the set
-ctofu_error trilo_xdata_set_setter(cset* set, ctofu data) {
+ctofu_error set_setter(cset* set, ctofu data) {
     if (set == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -199,7 +199,7 @@ ctofu_error trilo_xdata_set_setter(cset* set, ctofu data) {
     cset_node* current = set->head;
 
     while (current != NULL) {
-        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             // Data with the same value already exists
@@ -214,27 +214,27 @@ ctofu_error trilo_xdata_set_setter(cset* set, ctofu data) {
 } // end of func
 
 // Function to check if the set is not empty
-bool trilo_xdata_set_not_empty(const cset* set) {
+bool set_not_empty(const cset* set) {
     return set != NULL && set->head != NULL;
 } // end of func
 
 // Function to check if the set is not null
-bool trilo_xdata_set_not_nullptr(const cset* set) {
+bool set_not_cnullptr(const cset* set) {
     return set != NULL;
 } // end of func
 
 // Function to check if the set is empty
-bool trilo_xdata_set_is_empty(const cset* set) {
+bool set_is_empty(const cset* set) {
     return set == NULL || set->head == NULL;
 } // end of func
 
 // Function to check if the set is null
-bool trilo_xdata_set_is_nullptr(const cset* set) {
+bool set_is_cnullptr(const cset* set) {
     return set == NULL;
 } // end of func
 
 // Function to check if a ctofu data is in the set
-bool trilo_xdata_set_contains(const cset* set, ctofu data) {
+bool set_contains(const cset* set, ctofu data) {
     if (set == NULL) {
         return false;
     } // end if
@@ -242,7 +242,7 @@ bool trilo_xdata_set_contains(const cset* set, ctofu data) {
     cset_node* current = set->head;
 
     while (current != NULL) {
-        ctofu_error compareResult = trilo_xdata_tofu_compare(current->data, data);
+        ctofu_error compareResult = tofu_compare(current->data, data);
 
         if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
             return true;

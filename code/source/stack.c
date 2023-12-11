@@ -37,7 +37,7 @@
 // CREATE and DELETE
 // =======================
 
-cstack* trilo_xdata_stack_create(enum ctofu_type stack_type) {
+cstack* stack_create(enum ctofu_type stack_type) {
     cstack* stack = (cstack*)malloc(sizeof(cstack));
     if (stack != NULL) {
         stack->top = NULL;
@@ -46,7 +46,7 @@ cstack* trilo_xdata_stack_create(enum ctofu_type stack_type) {
     return stack;
 } // end of func
 
-void trilo_xdata_stack_destroy(cstack* stack) {
+void stack_erase(cstack* stack) {
     if (stack != NULL) {
         while (stack->top != NULL) {
             cstack_node* temp = stack->top;
@@ -61,7 +61,7 @@ void trilo_xdata_stack_destroy(cstack* stack) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-ctofu_error trilo_xdata_stack_insert(cstack* stack, ctofu data) {
+ctofu_error stack_insert(cstack* stack, ctofu data) {
     if (stack == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -78,7 +78,7 @@ ctofu_error trilo_xdata_stack_insert(cstack* stack, ctofu data) {
     return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
-ctofu_error trilo_xdata_stack_remove(cstack* stack, ctofu data) {
+ctofu_error stack_remove(cstack* stack, ctofu data) {
     if (stack == NULL || stack->top == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -87,7 +87,7 @@ ctofu_error trilo_xdata_stack_remove(cstack* stack, ctofu data) {
     cstack_node* prev = NULL;
 
     while (current != NULL) {
-        if (trilo_xdata_tofu_compare(current->data, data) == 0) {
+        if (tofu_compare(current->data, data) == 0) {
             if (prev != NULL) {
                 prev->next = current->next;
             } else {
@@ -103,7 +103,7 @@ ctofu_error trilo_xdata_stack_remove(cstack* stack, ctofu data) {
     return TRILO_XDATA_TYPE_SUCCESS;
 } // end of func
 
-ctofu_error trilo_xdata_stack_search(const cstack* stack, ctofu data) {
+ctofu_error stack_search(const cstack* stack, ctofu data) {
     if (stack == NULL || stack->top == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -111,7 +111,7 @@ ctofu_error trilo_xdata_stack_search(const cstack* stack, ctofu data) {
     cstack_node* current = stack->top;
 
     while (current != NULL) {
-        if (trilo_xdata_tofu_compare(current->data, data) == 0) {
+        if (tofu_compare(current->data, data) == 0) {
             return TRILO_XDATA_TYPE_SUCCESS;
         } // end if
         current = current->next;
@@ -124,7 +124,7 @@ ctofu_error trilo_xdata_stack_search(const cstack* stack, ctofu data) {
 // UTILITY FUNCTIONS
 // =======================
 
-size_t trilo_xdata_stack_size(const cstack* stack) {
+size_t stack_size(const cstack* stack) {
     if (stack == NULL) {
         return 0;
     } // end if
@@ -140,7 +140,7 @@ size_t trilo_xdata_stack_size(const cstack* stack) {
     return count;
 } // end of func
 
-ctofu* trilo_xdata_stack_getter(cstack* stack, ctofu data) {
+ctofu* stack_getter(cstack* stack, ctofu data) {
     if (stack == NULL || stack->top == NULL) {
         return NULL;
     } // end if
@@ -148,7 +148,7 @@ ctofu* trilo_xdata_stack_getter(cstack* stack, ctofu data) {
     cstack_node* current = stack->top;
 
     while (current != NULL) {
-        if (trilo_xdata_tofu_compare(current->data, data) == 0) {
+        if (tofu_compare(current->data, data) == 0) {
             return &(current->data);
         } // end if
         current = current->next;
@@ -157,8 +157,8 @@ ctofu* trilo_xdata_stack_getter(cstack* stack, ctofu data) {
     return NULL;
 } // end of func
 
-ctofu_error trilo_xdata_stack_setter(cstack* stack, ctofu data) {
-    ctofu* existingData = trilo_xdata_stack_getter(stack, data);
+ctofu_error stack_setter(cstack* stack, ctofu data) {
+    ctofu* existingData = stack_getter(stack, data);
     if (existingData != NULL) {
         *existingData = data;
         return TRILO_XDATA_TYPE_SUCCESS;
@@ -167,24 +167,24 @@ ctofu_error trilo_xdata_stack_setter(cstack* stack, ctofu data) {
     } // end if else
 } // end of func
 
-bool trilo_xdata_stack_not_empty(const cstack* stack) {
+bool stack_not_empty(const cstack* stack) {
     return stack != NULL && stack->top != NULL;
 } // end of func
 
-bool trilo_xdata_stack_not_nullptr(const cstack* stack) {
+bool stack_not_cnullptr(const cstack* stack) {
     return stack != NULL;
 } // end of func
 
-bool trilo_xdata_stack_is_empty(const cstack* stack) {
+bool stack_is_empty(const cstack* stack) {
     return stack == NULL || stack->top == NULL;
 } // end of func
 
-bool trilo_xdata_stack_is_nullptr(const cstack* stack) {
+bool stack_is_cnullptr(const cstack* stack) {
     return stack == NULL;
 } // end of func
 
 // This function returns a copy of the top element of the stack without removing it.
-ctofu trilo_xdata_stack_top(cstack* stack) {
+ctofu stack_top(cstack* stack) {
     if (stack == NULL || stack->top == NULL) {
         ctofu empty_tofu;
         empty_tofu.type = UNKNOWN_TYPE; // Set the data type to indicate an error

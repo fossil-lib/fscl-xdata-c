@@ -39,7 +39,7 @@
 // =======================
 
 // Function to create a new cdlist
-cdlist* trilo_xdata_dlist_create(enum ctofu_type list_type) {
+cdlist* dlist_create(enum ctofu_type list_type) {
     cdlist* dlist = (cdlist*)malloc(sizeof(cdlist));
     if (dlist == NULL) {
         fprintf(stderr, "Memory allocation failed!\n");
@@ -51,7 +51,7 @@ cdlist* trilo_xdata_dlist_create(enum ctofu_type list_type) {
 } // end of func
 
 // Function to destroy the cdlist
-void trilo_xdata_dlist_destroy(cdlist* dlist) {
+void dlist_erase(cdlist* dlist) {
     cdlist_node* current = dlist->head;
     while (current != NULL) {
         cdlist_node* temp = current;
@@ -66,7 +66,7 @@ void trilo_xdata_dlist_destroy(cdlist* dlist) {
 // =======================
 
 // Function to insert a ctofu data into the list
-ctofu_error trilo_xdata_dlist_insert(cdlist* dlist, ctofu data) {
+ctofu_error dlist_insert(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -94,7 +94,7 @@ ctofu_error trilo_xdata_dlist_insert(cdlist* dlist, ctofu data) {
 } // end of func
 
 // Function to remove a ctofu data from the list
-ctofu_error trilo_xdata_dlist_remove(cdlist* dlist, ctofu data) {
+ctofu_error dlist_remove(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -105,7 +105,7 @@ ctofu_error trilo_xdata_dlist_remove(cdlist* dlist, ctofu data) {
 
     cdlist_node* current = dlist->head;
     while (current != NULL) {
-        if (trilo_xdata_tofu_compare(current->data, data) == 0) {
+        if (tofu_compare(current->data, data) == 0) {
             // Found the data to remove
             if (current->prev != NULL) {
                 current->prev->next = current->next;
@@ -125,7 +125,7 @@ ctofu_error trilo_xdata_dlist_remove(cdlist* dlist, ctofu data) {
 } // end of func
 
 // Function to search for a ctofu data in the list
-ctofu_error trilo_xdata_dlist_search(const cdlist* dlist, ctofu data) {
+ctofu_error dlist_search(const cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -136,7 +136,7 @@ ctofu_error trilo_xdata_dlist_search(const cdlist* dlist, ctofu data) {
 
     cdlist_node* current = dlist->head;
     while (current != NULL) {
-        if (trilo_xdata_tofu_compare(current->data, data) == 0) {
+        if (tofu_compare(current->data, data) == 0) {
             return TRILO_XDATA_TYPE_SUCCESS; // Data found
         } // end if
         current = current->next;
@@ -146,7 +146,7 @@ ctofu_error trilo_xdata_dlist_search(const cdlist* dlist, ctofu data) {
 } // end of func
 
 // Function to reverse the list in the forward direction
-void trilo_xdata_dlist_reverse_forword(cdlist* dlist) {
+void dlist_reverse_forword(cdlist* dlist) {
     if (dlist == NULL || dlist->head == NULL) {
         return;
     } // end if
@@ -166,7 +166,7 @@ void trilo_xdata_dlist_reverse_forword(cdlist* dlist) {
 } // end of func
 
 // Function to reverse the list in the backward direction
-void trilo_xdata_dlist_reverse_backward(cdlist* dlist) {
+void dlist_reverse_backward(cdlist* dlist) {
     if (dlist == NULL || dlist->head == NULL) {
         return;
     } // end if
@@ -191,7 +191,7 @@ void trilo_xdata_dlist_reverse_backward(cdlist* dlist) {
 // UTILITY FUNCTIONS
 // =======================
 // Function to get the size of the cdlist
-size_t trilo_xdata_dlist_size(const cdlist* dlist) {
+size_t dlist_size(const cdlist* dlist) {
     size_t count = 0;
     cdlist_node* current = dlist->head;
     while (current != NULL) {
@@ -202,14 +202,14 @@ size_t trilo_xdata_dlist_size(const cdlist* dlist) {
 } // end of func
 
 // Function to insert a ctofu data into the list
-ctofu* trilo_xdata_dlist_getter(cdlist* dlist, ctofu data) {
+ctofu* dlist_getter(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return NULL;
     } // end if
 
     cdlist_node* current = dlist->head;
     while (current != NULL) {
-        if (trilo_xdata_tofu_compare(current->data, data) == 0) {
+        if (tofu_compare(current->data, data) == 0) {
             return &(current->data); // Data found, return a pointer to it
         } // end if
         current = current->next;
@@ -219,7 +219,7 @@ ctofu* trilo_xdata_dlist_getter(cdlist* dlist, ctofu data) {
 } // end of func
 
 // Function to insert a ctofu data into the list
-ctofu_error trilo_xdata_dlist_setter(cdlist* dlist, ctofu data) {
+ctofu_error dlist_setter(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TRILO_XDATA_TYPE_WAS_NULLPTR;
     } // end if
@@ -247,21 +247,21 @@ ctofu_error trilo_xdata_dlist_setter(cdlist* dlist, ctofu data) {
 } // end of func
 
 // Function to check if the list is empty
-bool trilo_xdata_dlist_not_empty(const cdlist* dlist) {
+bool dlist_not_empty(const cdlist* dlist) {
     return dlist != NULL && dlist->head != NULL;
 } // end of func
 
 // Function to check if the list is null
-bool trilo_xdata_dlist_not_nullptr(const cdlist* dlist) {
+bool dlist_not_cnullptr(const cdlist* dlist) {
     return dlist != NULL;
 } // end of func
 
 // Function to check if the list is empty
-bool trilo_xdata_dlist_is_empty(const cdlist* dlist) {
+bool dlist_is_empty(const cdlist* dlist) {
     return dlist == NULL || dlist->head == NULL;
 } // end of func
 
 // Function to check if the list is null
-bool trilo_xdata_dlist_is_nullptr(const cdlist* dlist) {
+bool dlist_is_cnullptr(const cdlist* dlist) {
     return dlist == NULL;
 } // end of func
