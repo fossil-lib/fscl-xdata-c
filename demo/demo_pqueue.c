@@ -44,27 +44,8 @@ int main() {
     // Print the size of the cpqueue
     printf("Size of the priority queue: %zu\n", pqueue_size(pqueue));
 
-    // Print the cpqueue elements
-    printf("Priority queue elements:\n");
-    for (int i = 1; i <= pqueue_size(pqueue); i++) {
-        ctofu* tofu = pqueue_getter(pqueue, i, &i);
-        printf("Priority %d: %d\n", i, tofu_get_integer(*tofu));
-    } // end for
-
     // Check if the cpqueue is not empty
     printf("Is priority queue not empty? %s\n", pqueue_not_empty(pqueue) ? "true" : "false");
-
-    // Remove an element from the cpqueue
-    ctofu* removedTofu = pqueue_getter(pqueue, 2, NULL);
-    ctofu_error removalResult = pqueue_remove(pqueue, *removedTofu, 2);
-    printf("Removal result: %s\n", removalResult == TRILO_XDATA_TYPE_SUCCESS ? "success" : "failure");
-
-    // Print the updated cpqueue
-    printf("Updated priority queue elements:\n");
-    for (int i = 1; i <= pqueue_size(pqueue); i++) {
-        ctofu* tofu = pqueue_getter(pqueue, i, &i);
-        printf("Priority %d: %d\n", i, tofu_get_integer(*tofu));
-    } // end for
 
     // Check if the cpqueue is not empty
     printf("Is priority queue not empty? %s\n", pqueue_not_empty(pqueue) ? "true" : "false");

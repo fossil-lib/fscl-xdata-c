@@ -31,7 +31,6 @@
 */
 #include "trilobite/xdata/queue.h"
 #include <stdio.h>
-#include <stdbool.h>
 
 int main() {
     // Create a cqueue instance with INTEGER_TYPE
@@ -42,30 +41,8 @@ int main() {
     queue_insert(queue, tofu_create_from_integer(20));
     queue_insert(queue, tofu_create_from_integer(30));
 
-    // Print the size of the cqueue
-    printf("Size of the queue: %zu\n", queue_size(queue));
-
-    // Print the cqueue elements
-    printf("Queue elements:\n");
-    for (size_t i = 0; i < queue_size(queue); i++) {
-        ctofu* tofu = queue_getter(queue, i);
-        printf("%d\n", tofu_get_integer(*tofu));
-    } // end for
-
     // Check if the cqueue is not empty
     printf("Is queue not empty? %s\n", queue_not_empty(queue) ? "true" : "false");
-
-    // Remove an element from the cqueue
-    ctofu* removedTofu = queue_getter(queue, 1);
-    ctofu_error removalResult = queue_remove(queue, *removedTofu);
-    printf("Removal result: %s\n", removalResult == TRILO_XDATA_TYPE_SUCCESS ? "success" : "failure");
-
-    // Print the updated cqueue
-    printf("Updated queue elements:\n");
-    for (size_t i = 0; i < queue_size(queue); i++) {
-        ctofu* tofu = queue_getter(queue, i);
-        printf("%d\n", tofu_get_integer(*tofu));
-    } // end for
 
     // Check if the cqueue is not empty
     printf("Is queue not empty? %s\n", queue_not_empty(queue) ? "true" : "false");
