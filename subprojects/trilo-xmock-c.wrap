@@ -1,6 +1,0 @@
-[wrap-git]
-url = https://github.com/trilobite-stdlib/trilo-xmock-c.git
-revision = main
-
-[provide]
-trilo-xmock-c = trilo_xmock_c_dep
