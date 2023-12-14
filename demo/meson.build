@@ -6,6 +6,6 @@ if get_option('with_demo').enabled()
         'vector', 'tofu']
 
     foreach iter : demo_srcs
-        executable('demo_' + iter, 'demo_' + iter + '.c', dependencies : [trilo_xdata_c_dep])
+        executable('demo_' + iter, 'demo_' + iter + '.c', dependencies : [tscl_xdata_c_dep])
     endforeach
 endif
