@@ -12,5 +12,5 @@ if get_option('with_test').enabled()
 
     test('Execute project Xunit tests', 
         executable('xrunner', test_src,
-        dependencies : [test_deps, trilo_xdata_c_dep]))
+        dependencies : [test_deps, tscl_xdata_c_dep]))
 endif
