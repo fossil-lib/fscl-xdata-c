@@ -1,16 +1,18 @@
 if get_option('with_test').enabled()
     test_deps = [
-        dependency('trilo-xtest-c'),
-        dependency('trilo-xmock-c')
+        dependency('tscl-xtest-c'),
+        dependency('tscl-xmock-c')
     ]
 
-    test_src = files(
-        'xtest_queue.c', 'xtest_pqueue.c', 'xtest_dqueue.c',
-        'xtest_flist.c', 'xtest_dlist.c' , 'xtest_tree.c'  ,
-        'xtest_set.c'  , 'xtest_stack.c' , 'xtest_tofu.c'  ,
-        'xtest_map.c'  , 'xtest_vector.c', 'xunit_runner.c')
+    test_src = ['xunit_runner.c']
+    test_cubes = [
+        'queue', 'pqueue', 'dqueue', 'flist', 'dlist',
+        'tree', 'set', 'stack', 'tofu', 'map', 'vector']
 
-    test('Execute project Xunit tests', 
-        executable('xrunner', test_src,
-        dependencies : [test_deps, tscl_xdata_c_dep]))
+    foreach cube : test_cubes
+        test_src += ['xtest_' + cube + '.c']
+    endforeach
+
+    pizza = executable('xcli', test_src, include_directories: dir, dependencies: [test_deps, tscl_xdata_c_dep])
+    test('xunit_tests', pizza)  # Renamed the test target for clarity
 endif
