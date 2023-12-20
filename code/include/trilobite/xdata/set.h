@@ -37,8 +37,8 @@
 
    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
 */
-#ifndef TRILOBITE_XDATA_SET_H
-#define TRILOBITE_XDATA_SET_H
+#ifndef TSCL_SET_H
+#define TSCL_SET_H
 
 #ifdef __cplusplus
 extern "C"

@@ -37,8 +37,8 @@
 
    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
 */
-#ifndef TRILOBITE_XDATA_VECTOR_H
-#define TRILOBITE_XDATA_VECTOR_H
+#ifndef TSCL_VECTOR_H
+#define TSCL_VECTOR_H
 
 #ifdef __cplusplus
 extern "C"

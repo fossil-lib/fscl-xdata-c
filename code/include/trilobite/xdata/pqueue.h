@@ -37,8 +37,8 @@
 
    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
 */
-#ifndef TRILOBITE_XDATA_PQUEUE_H
-#define TRILOBITE_XDATA_PQUEUE_H
+#ifndef TSCL_PQUEUE_H
+#define TSCL_PQUEUE_H
 
 #ifdef __cplusplus
 extern "C"
