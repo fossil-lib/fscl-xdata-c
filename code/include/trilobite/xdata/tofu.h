@@ -37,13 +37,15 @@
 
    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
 */
-#ifndef TRILOBITE_XDATA_TOFU_H
-#define TRILOBITE_XDATA_TOFU_H
+#ifndef TSCL_TOFU_H
+#define TSCL_TOFU_H
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+
+#include <stdbool.h>
 
 /**
     Once upon a time in a small village nestled between rolling green hills,
@@ -99,26 +101,19 @@ extern "C"
     power of sharing one's passion with the world.
 */
 
-#include <stdbool.h> // Include the header for bool data type
-#include <stddef.h>
-
-enum {MAX_SIZE_TOFU_STRING = 100};
-
 // Define error constants for tofu operations
 typedef enum {
-    TRILO_XDATA_TYPE_SUCCESS        = 0,
-    TRILO_XDATA_TYPE_WAS_MISMATCH   = -1,
-    TRILO_XDATA_TYPE_WAS_BAD_RANGE  = -2,
-    TRILO_XDATA_TYPE_WAS_NULLPTR    = -3,
-    TRILO_XDATA_TYPE_WAS_BAD_MALLOC = -4,
-    TRILO_XDATA_TYPE_WAS_UNKNOWN    = -5,
-    TRILO_XDATA_TYPE_NOT_FOUND      = -6
+    TOFU_SUCCESS        = 0,
+    TOFU_WAS_MISMATCH   = -1,
+    TOFU_WAS_BAD_RANGE  = -2,
+    TOFU_WAS_NULLPTR    = -3,
+    TOFU_WAS_BAD_MALLOC = -4,
+    TOFU_WAS_UNKNOWN    = -5,
+    TOFU_NOT_FOUND      = -6
 } ctofu_error;
 
-//
 // Generic and secure flavorless data type.
-//
-enum ctofu_type {
+typedef enum {
     INTEGER_TYPE,
     DOUBLE_TYPE,
     STRING_TYPE,
@@ -128,11 +123,9 @@ enum ctofu_type {
     NULLPTR_TYPE,
     INVALID_TYPE,
     UNKNOWN_TYPE
-};
+} ctofu_type;
 
-//
 // Define a union to hold data of different types
-//
 typedef union {
     int integer_type;
     double double_type;
@@ -146,14 +139,6 @@ typedef union {
 } ctofu_data;
 
 //
-// Define a struct to represent the data and its type
-//
-typedef struct {
-    enum ctofu_type type;
-    ctofu_data data;
-} ctofu;
-
-//
 // Define a struct to represent the iterator
 //
 typedef struct {
@@ -161,242 +146,42 @@ typedef struct {
     size_t index;
 } ctofu_iterator;
 
-// =======================
-// CREATE and DELETE
-// =======================
+// Define a struct to represent the data and its type
+typedef struct {
+    ctofu_type type;
+    ctofu_data data;
+} ctofu;
 
-/**
- * @brief Creates a new ctofu instance from an integer value.
- *
- * @param value The integer value to create the ctofu instance from.
- * @return A ctofu instance containing the integer value.
- */
-ctofu tofu_create_from_integer(int value);
-
-/**
- * @brief Creates a new ctofu instance from a double value.
- *
- * @param value The double value to create the ctofu instance from.
- * @return A ctofu instance containing the double value.
- */
-ctofu tofu_create_from_double(double value);
-
-/**
- * @brief Creates a new ctofu instance from a string value.
- *
- * @param value The string value to create the ctofu instance from.
- * @return A ctofu instance containing the string value.
- */
-ctofu tofu_create_from_string(const char* value);
-
-/**
- * @brief Creates a new ctofu instance from a character value.
- *
- * @param value The character value to create the ctofu instance from.
- * @return A ctofu instance containing the character value.
- */
-ctofu tofu_create_from_char(char value);
-
-/**
- * @brief Creates a new ctofu instance from a boolean value.
- *
- * @param value The boolean value to create the ctofu instance from.
- * @return A ctofu instance containing the boolean value.
- */
-ctofu tofu_create_from_boolean(bool value);
-
-/**
- * @brief Creates a new ctofu instance from a nullptr value.
- *
- * @return A ctofu instance containing the nullptr value.
- */
-ctofu tofu_create_from_nullptr(void);
-
-/**
- * @brief Creates a new ctofu instance from a empty array value.
- *
- * @return A ctofu instance containing the empty array value.
- */
-ctofu tofu_create_from_empty_array(void);
-
-/**
- * @barif: Function to free memory associated with a tofu instance.
- *
- * @param tofu: Pointer to the ctofu instance to be destroyed.
- */
-void tofu_erase(ctofu* tofu);
+// create and erase
+ctofu_error tofu_create(ctofu_type type, ctofu_data* value, ctofu** result);
+void tofu_erase(ctofu* value);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-
-/**
- * @brief Compares two ctofu instances and returns the result.
- *
- * @param a The first ctofu instance for comparison.
- * @param b The second ctofu instance for comparison.
- * @return A ctofu_error value indicating the comparison result.
- */
-ctofu_error tofu_compare(const ctofu a, const ctofu b);
-
-/**
- * @brief Sorts an array of ctofu instances using the insertion sort algorithm.
- *
- * @param arr The array of ctofu instances to be sorted.
- * @param n   The number of elements in the array.
- */
-void tofu_insertion_sort(ctofu* arr, size_t n);
-
-/**
- * @brief Sorts an array of ctofu instances using the selection sort algorithm.
- *
- * @param arr The array of ctofu instances to be sorted.
- * @param n   The number of elements in the array.
- */
-void tofu_selection_sort(ctofu* arr, size_t n);
-
-/**
- * @brief Searches for a target ctofu instance in a sorted array using binary search.
- *
- * @param arr    The sorted array of ctofu instances.
- * @param n      The number of elements in the array.
- * @param target The ctofu instance to search for.
- * @return       The index of the target if found, or -1 if not found.
- */
-int tofu_binary_search(const ctofu* arr, size_t n, ctofu target);
-
-/**
- * @brief Searches for a target ctofu instance in an array using linear search.
- *
- * @param arr    The array of ctofu instances.
- * @param n      The number of elements in the array.
- * @param target The ctofu instance to search for.
- * @return       The index of the target if found, or -1 if not found.
- */
-int tofu_linear_search(const ctofu* arr, size_t n, ctofu target);
+ctofu_error tofu_sort_insertion(ctofu* array, size_t num);
+ctofu_error tofu_sort_selection(ctofu* array, size_t num);
+ctofu_error tofu_reverse(ctofu* array, size_t num);
+ctofu_error tofu_compare(const ctofu* a, const ctofu* b, int* result);
+size_t tofu_search_linear(ctofu* array, size_t num, ctofu* key);
+size_t tofu_search_binary(ctofu* array, size_t num, ctofu* key);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-
-/**
- * @brief Prints the data in a ctofu instance.
- *
- * @param tofu The ctofu instance to be printed.
- */
-void tofu_print(ctofu tofu);
-
-/**
- * @brief Checks if a ctofu instance represents a nullptr value.
- *
- * @param tofu Pointer to the ctofu instance to check.
- * @return true if the ctofu instance represents a nullptr value, false otherwise.
- */
-bool tofu_is_cnullptr(const ctofu* tofu);
-
-/**
- * @brief Gets the integer data from a ctofu instance.
- *
- * @param tofu The ctofu instance to extract the integer data from.
- * @return     The integer value from the ctofu instance.
- */
-int tofu_get_integer(ctofu tofu);
-
-/**
- * @brief Gets the double data from a ctofu instance.
- *
- * @param tofu The ctofu instance to extract the double data from.
- * @return     The double value from the ctofu instance.
- */
-double tofu_get_double(ctofu tofu);
-
-/**
- * @brief Gets the string data from a ctofu instance.
- *
- * @param tofu The ctofu instance to extract the string data from.
- * @return     A pointer to the string data in the ctofu instance.
- */
-const char* tofu_get_string(ctofu tofu);
-
-/**
- * @brief Gets the character data from a ctofu instance.
- *
- * @param tofu The ctofu instance to extract the character data from.
- * @return     The character value from the ctofu instance.
- */
-char tofu_get_char(ctofu tofu);
-
-/**
- * @brief Gets the boolean data from a ctofu instance.
- *
- * @param tofu The ctofu instance to extract the boolean data from.
- * @return     The boolean value from the ctofu instance.
- */
-bool tofu_get_boolean(ctofu tofu);
-
-/**
- * @brief Creates a copy of a ctofu instance.
- *
- * This function creates a new ctofu instance that is a deep copy of the
- * provided source ctofu. The copy includes both the data type and data
- * content, ensuring that any modifications to the copy do not affect the
- * original source.
- *
- * @param tofu The source ctofu instance to be copied.
- * @return A new ctofu instance that is a copy of the source.
- */
-ctofu tofu_copy(ctofu tofu);
-
-/**
- * @brief Checks if two ctofu instances are equal.
- *
- * @param a The first ctofu instance for comparison.
- * @param b The second ctofu instance for comparison.
- * @return true if the instances are equal, false otherwise.
- */
-bool tofu_equal(const ctofu a, const ctofu b);
-
-/**
- * @brief Gets the data type of a ctofu instance.
- *
- * This function returns the data type of the provided ctofu instance.
- *
- * @param tofu The ctofu instance to get the data type from.
- * @return The data type of the ctofu instance.
- */
-enum ctofu_type tofu_get_type(const ctofu tofu);
+ctofu_error tofu_value_copy(const ctofu* source, ctofu* dest);
+void tofu_value_setter(const ctofu* source, ctofu* dest);
+ctofu_data tofu_value_getter(const ctofu* current);
+ctofu_type tofu_type_getter(const ctofu* current);
+bool tofu_not_cnullptr(const ctofu* value);
+bool tofu_its_cnullptr(const ctofu* value);
 
 // =======================
 // ITERATOR FUNCTIONS
 // =======================
-
-/**
- * @brief Sets the iterator to point to a specific index in the array.
- *
- * @param arr The array of ctofu instances.
- * @param n The number of elements in the array.
- * @param index The index to set the iterator to.
- * @return A ctofu_iterator pointing to the specified index in the array.
- */
-ctofu_iterator tofu_iterator_at(ctofu* arr, size_t n, size_t index);
-
-/**
- * @brief Gets the iterator pointing to the beginning of the array.
- *
- * @param arr The array of ctofu instances.
- * @param n The number of elements in the array.
- * @return A ctofu_iterator pointing to the first element of the array.
- */
-ctofu_iterator tofu_iterator_start(ctofu* arr, size_t n);
-
-/**
- * @brief Checks if the iterator has reached the end of the array.
- *
- * @param iterator The iterator to be checked.
- * @param n The number of elements in the array.
- * @return true if the iterator has reached the end, false otherwise.
- */
-bool tofu_iterator_end(ctofu_iterator iterator, size_t n);
+ctofu_iterator tofu_iterator_at(ctofu* array, size_t num, size_t at);
+ctofu_iterator tofu_iterator_start(ctofu* array, size_t num);
+ctofu_iterator tofu_iterator_end(ctofu* array, size_t num);
 
 #ifdef __cplusplus
 }

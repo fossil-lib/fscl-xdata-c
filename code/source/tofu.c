@@ -33,313 +33,401 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
-// Function to create a new ctofu instance from an integer
-ctofu tofu_create_from_integer(int value) {
-    ctofu tofu;
-    tofu.type = INTEGER_TYPE;
-    tofu.data.integer_type = value;
-    return tofu;
-} // end of func
-
-// Function to create a new ctofu instance from a double
-ctofu tofu_create_from_double(double value) {
-    ctofu tofu;
-    tofu.type = DOUBLE_TYPE;
-    tofu.data.double_type = value;
-    return tofu;
-} // end of func
-
-// Function to create a new ctofu instance from a string
-ctofu tofu_create_from_string(const char* value) {
-    ctofu tofu;
-    tofu.type = STRING_TYPE;
-    tofu.data.string_type = (char*)malloc(strlen(value) + 1);
-    strcpy(tofu.data.string_type, value);
-    return tofu;
-} // end of func
-
-// Function to create a new ctofu instance from a char
-ctofu tofu_create_from_char(char value) {
-    ctofu tofu;
-    tofu.type = CHAR_TYPE;
-    tofu.data.char_type = value;
-    return tofu;
-} // end of func
-
-// Function to create a new ctofu instance from a bool
-ctofu tofu_create_from_boolean(bool value) {
-    ctofu tofu;
-    tofu.type = BOOLEAN_TYPE;
-    tofu.data.boolean_type = value;
-    return tofu;
-} // end of func
-
-ctofu tofu_create_from_nullptr(void) {
-    ctofu tofu;
-    tofu.type = NULLPTR_TYPE;
-    return tofu;
-} // end of func
-
-ctofu tofu_create_from_empty_array(void) {
-    ctofu tofu;
-    tofu.type = ARRAY_TYPE;
-    tofu.data.array_type.size = 0;
-    tofu.data.array_type.elements = NULL;
-    return tofu;
-} // end of func
-
-// Function to free memory associated with a tofu instance
-void tofu_erase(ctofu* tofu) {
-    if (tofu->type == STRING_TYPE) {
-        free(tofu->data.string_type);
-    } else if (tofu->type == ARRAY_TYPE) {
-        free(tofu->data.array_type.elements);
+// create and erase
+ctofu_error tofu_create(ctofu_type type, ctofu_data* value, ctofu** result) {
+    *result = (ctofu*)malloc(sizeof(ctofu));
+    if (*result == NULL) {
+        return TOFU_WAS_BAD_MALLOC;
     }
-    // Add more cases if needed for other dynamic allocations
+    
+    (*result)->type = type;
+
+    switch(type) {
+        case INTEGER_TYPE:
+            (*result)->data.integer_type = value->integer_type;
+            break;
+        case DOUBLE_TYPE:
+            (*result)->data.double_type = value->double_type;
+            break;
+        case STRING_TYPE:
+            (*result)->data.string_type = value->string_type;
+            break;
+        case CHAR_TYPE:
+            (*result)->data.char_type = value->char_type;
+            break;
+        case BOOLEAN_TYPE:
+            (*result)->data.boolean_type = value->boolean_type;
+            break;
+        case ARRAY_TYPE:
+            (*result)->data.array_type = value->array_type;
+            break;
+        default:
+            // Handle other cases if needed
+            break;
+    }
+
+    return TOFU_SUCCESS;
+}
+
+void tofu_erase(ctofu* value) {
+    if (value != NULL) {
+        free(value);
+    }
 }
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
+ctofu_error tofu_sort_insertion(ctofu* array, size_t num) {
+    if (array == NULL || num == 0) {
+        return TOFU_WAS_NULLPTR;
+    }
 
-ctofu_error tofu_compare(const ctofu a, const ctofu b) {
-    if (a.type != b.type) {
-        // Different data types, consider them not equal
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end of
+    for (size_t i = 1; i < num; ++i) {
+        ctofu key = array[i];
+        size_t j = i;
 
-    switch (a.type) {
-        case INTEGER_TYPE:
-            return a.data.integer_type - b.data.integer_type;
-        case DOUBLE_TYPE:
-            // Compare double values with some tolerance for precision issues
-            if (fabs(a.data.double_type - b.data.double_type) < 1e-6) {
-                return 0;  // Approximately equal
+        while (j > 0) {
+            int cmpResult;
+            ctofu_error compareError = tofu_compare(&array[j - 1], &key, &cmpResult);
+            if (compareError != TOFU_SUCCESS) {
+                return compareError;
+            }
+
+            if (cmpResult > 0) {
+                array[j] = array[j - 1];
+                --j;
             } else {
-                return a.data.double_type < b.data.double_type ? -1 : 1;
-            } // end if else
-        case STRING_TYPE:
-            return strcmp(a.data.string_type, b.data.string_type);
-        case CHAR_TYPE:
-            return a.data.char_type - b.data.char_type;
-        case BOOLEAN_TYPE:
-            return (int)a.data.boolean_type - (int)b.data.boolean_type;
-        default:
-            return TRILO_XDATA_TYPE_WAS_UNKNOWN;  // Unsupported data type
-    } // end switch
-} // end of func
+                break;
+            }
+        }
 
+        array[j] = key;
+    }
 
-// Function to perform insertion sort on an array of ctofu instances
-void tofu_insertion_sort(ctofu* arr, size_t n) {
-    for (size_t i = 1; i < n; i++) {
-        ctofu key = arr[i];
-        int j = i - 1;
-        while (j >= 0 && tofu_compare(arr[j], key) > 0) {
-            arr[j + 1] = arr[j];
-            j = j - 1;
-        } // end while
-        arr[j + 1] = key;
-    } // end for
-} // end of func
+    return TOFU_SUCCESS;
+}
 
-// Function to perform selection sort on an array of ctofu instances
-void tofu_selection_sort(ctofu* arr, size_t n) {
-    for (size_t i = 0; i < n - 1; i++) {
+ctofu_error tofu_sort_selection(ctofu* array, size_t num) {
+    if (array == NULL || num == 0) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    for (size_t i = 0; i < num - 1; ++i) {
         size_t min_index = i;
-        for (size_t j = i + 1; j < n; j++) {
-            if (tofu_compare(arr[j], arr[min_index]) < 0) {
+
+        for (size_t j = i + 1; j < num; ++j) {
+            int cmpResult;
+            ctofu_error compareError = tofu_compare(&array[j], &array[min_index], &cmpResult);
+            if (compareError != TOFU_SUCCESS) {
+                return compareError;
+            }
+
+            if (cmpResult < 0) {
                 min_index = j;
-            } // end if
-        } // end for
-        // Swap arr[i] and arr[min_index]
-        ctofu temp = arr[i];
-        arr[i] = arr[min_index];
-        arr[min_index] = temp;
-    } // end for
-} // end of func
+            }
+        }
 
-// Function to perform binary search for a ctofu instance in a sorted array
-// Returns the index of the target or -1 if not found
-int tofu_binary_search(const ctofu* arr, size_t n, ctofu target) {
-    int left = 0, right = n - 1;
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        int comparison = tofu_compare(arr[mid], target);
-        if (comparison == 0) {
-            return mid; // Target found at index mid
-        } // end if
-        if (comparison < 0) {
-            left = mid + 1; // Target is in the right half
+        if (min_index != i) {
+            ctofu temp = array[i];
+            array[i] = array[min_index];
+            array[min_index] = temp;
+        }
+    }
+
+    return TOFU_SUCCESS;
+}
+
+size_t tofu_search_linear(ctofu* array, size_t num, ctofu* key) {
+    if (array == NULL || num == 0 || key == NULL) {
+        return num; // Not found
+    }
+
+    for (size_t i = 0; i < num; ++i) {
+        int cmpResult;
+        ctofu_error compareError = tofu_compare(&array[i], key, &cmpResult);
+        if (compareError != TOFU_SUCCESS) {
+            // Handle comparison error
+            return num; // Not found
+        }
+
+        if (cmpResult == 0) {
+            return i; // Found
+        }
+    }
+
+    return num; // Not found
+}
+
+size_t tofu_search_binary(ctofu* array, size_t num, ctofu* key) {
+    if (array == NULL || num == 0 || key == NULL) {
+        return num; // Not found
+    }
+
+    size_t low = 0, high = num - 1;
+
+    while (low <= high) {
+        size_t mid = low + (high - low) / 2;
+
+        int cmpResult;
+        ctofu_error compareError = tofu_compare(&array[mid], key, &cmpResult);
+        if (compareError != TOFU_SUCCESS) {
+            // Handle comparison error
+            return num; // Not found
+        }
+
+        if (cmpResult == 0) {
+            return mid; // Found
+        } else if (cmpResult < 0) {
+            low = mid + 1;
         } else {
-            right = mid - 1; // Target is in the left half
-        } // end if else
-    } // end while
-    return -1; // Target not found in the sorted array
-} // end of func
+            high = mid - 1;
+        }
+    }
 
-// Function to perform linear search for a ctofu instance in an array
-// Returns the index of the first occurrence of the target or -1 if not found
-int tofu_linear_search(const ctofu* arr, size_t n, ctofu target) {
-    for (size_t i = 0; i < n; i++) {
-        if (tofu_compare(arr[i], target) == 0) {
-            return i; // Target found at index i
-        } // end if
-    } // end for
-    return -1; // Target not found in the array
-} // end of func
+    return num; // Not found
+}
 
+ctofu_error tofu_reverse(ctofu* array, size_t num) {
+    if (array == NULL || num == 0) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    size_t start = 0;
+    size_t end = num - 1;
+
+    while (start < end) {
+        // Swap elements at start and end indices
+        ctofu temp = array[start];
+        array[start] = array[end];
+        array[end] = temp;
+
+        // Move indices towards each other
+        ++start;
+        --end;
+    }
+
+    return TOFU_SUCCESS;
+}
+
+ctofu_error tofu_compare(const ctofu* a, const ctofu* b, int* result) {
+    if (a == NULL || b == NULL || result == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    switch (a->type) {
+        case INTEGER_TYPE:
+            *result = a->data.integer_type - b->data.integer_type;
+            break;
+
+        case DOUBLE_TYPE:
+            if (a->data.double_type < b->data.double_type) {
+                *result = -1;
+            } else if (a->data.double_type > b->data.double_type) {
+                *result = 1;
+            } else {
+                *result = 0;
+            }
+            break;
+
+        case STRING_TYPE:
+            // Assuming string comparison for demonstration purposes
+            *result = strcmp(a->data.string_type, b->data.string_type);
+            break;
+
+        // Add cases for other types as needed
+
+        default:
+            // Handle unsupported types
+            printf("Unsupported type for comparison\n");
+            return TOFU_WAS_UNKNOWN;
+    }
+
+    return TOFU_SUCCESS;
+}
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
-// Function to print the data in a ctofu instance
-void tofu_print(ctofu tofu) {
-    switch (tofu.type) {
-        case INTEGER_TYPE:
-            printf("Data Type: int, Value: %d\n", tofu.data.integer_type);
-            break;
-        case DOUBLE_TYPE:
-            printf("Data Type: double, Value: %lf\n", tofu.data.double_type);
-            break;
-        case STRING_TYPE:
-            printf("Data Type: string, Value: %s\n", tofu.data.string_type);
-            break;
-        case CHAR_TYPE:
-            printf("Data Type: char, Value: %c\n", tofu.data.char_type);
-            break;
-        case BOOLEAN_TYPE:
-            printf("Data Type: bool, Value: %s\n", tofu.data.boolean_type ? "true" : "false");
-            break;
-        // Add cases for more data types as needed
-        default:
-            puts("Unknown Data Type");
-    } // end switch
-} // end of func
-
-// Function to check if a ctofu instance represents a nullptr value.
-bool tofu_is_cnullptr(const ctofu* tofu) {
-    return (tofu->type == NULLPTR_TYPE);
-} // end of func
-
-// Function to get the integer data from a ctofu instance
-int tofu_get_integer(ctofu tofu) {
-    if (tofu.type == INTEGER_TYPE) {
-        return tofu.data.integer_type;
-    } // end if
-    return 0; // Return a default value or handle the error as needed
-} // end of func
-
-// Function to get the double data from a ctofu instance
-double tofu_get_double(ctofu tofu) {
-    if (tofu.type == DOUBLE_TYPE) {
-        return tofu.data.double_type;
-    } // end if
-    return 0.0; // Return a default value or handle the error as needed
-} // end of func
-
-// Function to get the string data from a ctofu instance
-const char* tofu_get_string(ctofu tofu) {
-    if (tofu.type == STRING_TYPE) {
-        const char *value = tofu.data.string_type;
-        return value;
-    } // end if
-    return ""; // Return a default value or handle the error as needed
-} // end of func
-
-// Function to get the char data from a ctofu instance
-char tofu_get_char(ctofu tofu) {
-    if (tofu.type == CHAR_TYPE) {
-        return tofu.data.char_type;
-    } // end if
-    return '\0'; // Return a default value or handle the error as needed
-} // end of func
-
-// Function to get the boolean data from a ctofu instance
-bool tofu_get_boolean(ctofu tofu) {
-    if (tofu.type == BOOLEAN_TYPE) {
-        return tofu.data.boolean_type;
-    } // end if
-    return false; // Return a default value or handle the error as needed
-} // end of func
-
-// Function to create a copy of a ctofu instance
-ctofu tofu_copy(ctofu tofu) {
-    ctofu copy = { .type = tofu.type };
-
-    switch (tofu.type) {
-        case INTEGER_TYPE:
-            copy.data.integer_type = tofu.data.integer_type;
-            break;
-        case DOUBLE_TYPE:
-            copy.data.double_type = tofu.data.double_type;
-            break;
-        case STRING_TYPE:
-            if (tofu.data.string_type != NULL) {
-                copy.data.string_type = tofu.data.string_type;
-            } else {
-                // Handle the case when the source string is null
-                copy.type = UNKNOWN_TYPE;
-            }
-            break;
-        case CHAR_TYPE:
-            copy.data.char_type = tofu.data.char_type;
-            break;
-        case BOOLEAN_TYPE:
-            copy.data.boolean_type = tofu.data.boolean_type;
-            break;
-        default:
-            copy.type = UNKNOWN_TYPE;
-            break;
+ctofu_error tofu_value_copy(const ctofu* source, ctofu* dest) {
+    if (source == NULL || dest == NULL) {
+        return TOFU_WAS_NULLPTR;
     }
 
-    return copy;
-} // end of func
+    dest->type = source->type;
 
-// Checks if two ctofu instances are equal.
-bool tofu_equal(const ctofu a, const ctofu b) {
-    if (a.type != b.type) {
-        return false; // Types are different, not equal.
-    } // end if
-
-    switch (a.type) {
+    switch (source->type) {
         case INTEGER_TYPE:
-            return a.data.integer_type == b.data.integer_type;
+            dest->data.integer_type = source->data.integer_type;
+            break;
+
         case DOUBLE_TYPE:
-            return a.data.double_type == b.data.double_type;
+            dest->data.double_type = source->data.double_type;
+            break;
+
         case STRING_TYPE:
-            return strcmp(a.data.string_type, b.data.string_type) == 0;
+            // Using strncpy for string copy
+            strncpy(dest->data.string_type, source->data.string_type, sizeof(dest->data.string_type) - 1);
+            dest->data.string_type[sizeof(dest->data.string_type) - 1] = '\0';
+            break;
+
         case CHAR_TYPE:
-            return a.data.char_type == b.data.char_type;
+            dest->data.char_type = source->data.char_type;
+            break;
+
         case BOOLEAN_TYPE:
-            return a.data.boolean_type == b.data.boolean_type;
+            dest->data.boolean_type = source->data.boolean_type;
+            break;
+
+        case ARRAY_TYPE:
+            // Copying array type may require a more complex logic
+            // You might want to iterate through the array elements and copy each one
+            return TOFU_WAS_UNKNOWN;
+
+        // Add cases for other types as needed
+
         default:
-            return false; // Unknown type, not equal.
-    } // end switch
-} // end of func
+            // Handle unsupported types
+            printf("Unsupported type for value copy\n");
+            return TOFU_WAS_UNKNOWN;
+    }
 
-// Gets the data type of a ctofu instance.
-enum ctofu_type tofu_get_type(const ctofu tofu) {
-    return tofu.type;
-} // end of func
+    return TOFU_SUCCESS;
+}
 
-// Sets the iterator to point to a specific index in the array.
-ctofu_iterator tofu_iterator_at(ctofu* arr, size_t n, size_t index) {
+void tofu_value_setter(const ctofu* source, ctofu* dest) {
+    if (source == NULL || dest == NULL) {
+        return;
+    }
+
+    dest->type = source->type;
+
+    switch (source->type) {
+        case INTEGER_TYPE:
+            dest->data.integer_type = source->data.integer_type;
+            break;
+
+        case DOUBLE_TYPE:
+            dest->data.double_type = source->data.double_type;
+            break;
+
+        case STRING_TYPE:
+            // Using strncpy for string copy
+            strncpy(dest->data.string_type, source->data.string_type, sizeof(dest->data.string_type) - 1);
+            dest->data.string_type[sizeof(dest->data.string_type) - 1] = '\0';
+            break;
+
+        case CHAR_TYPE:
+            dest->data.char_type = source->data.char_type;
+            break;
+
+        case BOOLEAN_TYPE:
+            dest->data.boolean_type = source->data.boolean_type;
+            break;
+
+        case ARRAY_TYPE:
+            // Copying array type may require a more complex logic
+            // You might want to iterate through the array elements and copy each one
+            break;
+
+        // Add cases for other types as needed
+
+        default:
+            // Handle unsupported types
+            printf("Unsupported type for value setter\n");
+    }
+}
+
+ctofu_data tofu_value_getter(const ctofu* current) {
+    ctofu_data result;
+
+    if (current == NULL) {
+        // You might want to handle this case differently based on your requirements
+        result.integer_type = 0;
+        return result;
+    }
+
+    switch (current->type) {
+        case INTEGER_TYPE:
+            result.integer_type = current->data.integer_type;
+            break;
+
+        case DOUBLE_TYPE:
+            result.double_type = current->data.double_type;
+            break;
+
+        case STRING_TYPE:
+            // Using strncpy for string copy
+            strncpy(result.string_type, current->data.string_type, sizeof(result.string_type) - 1);
+            result.string_type[sizeof(result.string_type) - 1] = '\0';
+            break;
+
+        case CHAR_TYPE:
+            result.char_type = current->data.char_type;
+            break;
+
+        case BOOLEAN_TYPE:
+            result.boolean_type = current->data.boolean_type;
+            break;
+
+        case ARRAY_TYPE:
+            // Copying array type may require a more complex logic
+            // You might want to iterate through the array elements and copy each one
+            break;
+
+        // Add cases for other types as needed
+
+        default:
+            // Handle unsupported types
+            printf("Unsupported type for value getter\n");
+            // You might want to set a default value or handle this case differently
+            result.integer_type = 0;
+    }
+
+    return result;
+}
+
+ctofu_type tofu_type_getter(const ctofu* current) {
+    if (current == NULL) {
+        // You might want to handle this case differently based on your requirements
+        return INVALID_TYPE;
+    }
+
+    return current->type;
+}
+
+bool tofu_not_cnullptr(const ctofu* value) {
+    return value != NULL;
+}
+
+bool tofu_its_cnullptr(const ctofu* value) {
+    return value == NULL;
+}
+
+// =======================
+// ITERATOR FUNCTIONS
+// =======================
+ctofu_iterator tofu_iterator_at(ctofu* array, size_t num, size_t at) {
     ctofu_iterator iterator;
-    iterator.current = (index < n) ? &arr[index] : NULL;
-    iterator.index = index;
+
+    if (array == NULL || num == 0 || at >= num) {
+        iterator.current = NULL;
+        iterator.index = num;
+        return iterator;
+    }
+
+    iterator.current = &array[at];
+    iterator.index = at;
+
     return iterator;
-} // end of func
+}
 
-// Gets the iterator pointing to the beginning of the array.
-ctofu_iterator tofu_iterator_start(ctofu* arr, size_t n) {
-    return tofu_iterator_at(arr, n, 0);
-} // end of func
+ctofu_iterator tofu_iterator_start(ctofu* array, size_t num) {
+    return tofu_iterator_at(array, num, 0);
+}
 
-// Checks if the iterator has reached the end of the array.
-bool tofu_iterator_end(ctofu_iterator iterator, size_t n) {
-    return iterator.index >= n;
-} // end of func
+ctofu_iterator tofu_iterator_end(ctofu* array, size_t num) {
+    return tofu_iterator_at(array, num, num);
+}
