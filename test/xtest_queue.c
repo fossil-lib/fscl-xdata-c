@@ -62,7 +62,7 @@ XTEST_CASE(test_queue_insert_and_remove) {
     ctofu removed_element;
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, queue_remove(queue, &removed_element));
     TEST_ASSERT_EQUAL(0, queue_size(queue));
-    TEST_ASSERT_EQUAL(element.integer_type, removed_element.integer_type);
+    TEST_ASSERT_EQUAL(element.data.integer_type, removed_element.data.integer_type);
 
     queue_erase(queue);
 

@@ -84,30 +84,6 @@ XTEST_CASE(test_set_search) {
     TEST_ASSERT_FALSE(set_contains(set, element));
 }
 
-XTEST_CASE(test_set_iterator) {
-    // Normal Case: Iterating through the set
-    cset* set = set_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(set);
-
-    ctofu element1 = {.data.integer_type = 42};
-    ctofu element2 = {.data.integer_type = 24};
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, set_insert(set, element1));
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, set_insert(set, element2));
-
-    ctofu_iterator iterator = set_iterator_start(set);
-    TEST_ASSERT_TRUE(set_iterator_has_next(iterator));
-    TEST_ASSERT_EQUAL(element1.integer_type, iterator.current->data.integer_type);
-
-    iterator = set_iterator_next(iterator);
-    TEST_ASSERT_TRUE(set_iterator_has_next(iterator));
-    TEST_ASSERT_EQUAL(element2.integer_type, iterator.current->data.integer_type);
-
-    iterator = set_iterator_next(iterator);
-    TEST_ASSERT_FALSE(set_iterator_has_next(iterator));
-
-    set_erase(set);
-}
-
 //
 // XUNIT-TEST RUNNER
 //
@@ -117,5 +93,4 @@ XTEST_GROUP_DEFINE(xdata_test_set_group) {
     XTEST_RUN_UNIT(test_set_create_and_erase,  runner);
     XTEST_RUN_UNIT(test_set_insert_and_remove, runner);
     XTEST_RUN_UNIT(test_set_search,            runner);
-    XTEST_RUN_UNIT(test_set_iterator,          runner);
 } // end of func

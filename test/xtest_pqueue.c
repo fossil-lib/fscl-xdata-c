@@ -104,7 +104,7 @@ XTEST_CASE(test_pqueue_setter_and_getter) {
 
     ctofu* retrieved_element = pqueue_getter(pqueue, element1, 1);
     TEST_ASSERT_NOT_NULL_PTR(retrieved_element);
-    TEST_ASSERT_EQUAL(element2.integer_type, retrieved_->data.integer_type );
+    TEST_ASSERT_EQUAL(element2.data.integer_type, retrieved_->data.integer_type );
 
     pqueue_erase(pqueue);
 
