@@ -250,7 +250,6 @@ ctofu_error tofu_compare(const ctofu* a, const ctofu* b, int* result) {
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-
 ctofu_error tofu_value_copy(const ctofu* source, ctofu* dest) {
     if (source == NULL || dest == NULL) {
         return TOFU_WAS_NULLPTR;
@@ -413,12 +412,12 @@ ctofu_iterator tofu_iterator_at(ctofu* array, size_t num, size_t at) {
     ctofu_iterator iterator;
 
     if (array == NULL || num == 0 || at >= num) {
-        iterator.current = NULL;
+        iterator.current_value = NULL;
         iterator.index = num;
         return iterator;
     }
 
-    iterator.current = &array[at];
+    iterator.current_value = &array[at];
     iterator.index = at;
 
     return iterator;

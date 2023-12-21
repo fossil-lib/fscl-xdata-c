@@ -38,218 +38,229 @@
 // CREATE and DELETE
 // =======================
 
-// Function to create a new cset
-cset* set_create(enum ctofu_type set_type) {
-    cset* set = (cset*)malloc(sizeof(cset));
-    if (set != NULL) {
-        set->head = NULL;
-        set->set_type = set_type;
-    } // end if
-    return set;
-} // end of func
+cset* set_create(ctofu_type set_type) {
+    cset* new_set = (cset*)malloc(sizeof(cset));
+    if (new_set == NULL) {
+        // Handle memory allocation failure
+        return NULL;
+    }
 
-// Function to destroy the cset
+    new_set->head = NULL;
+    new_set->set_type = set_type;
+
+    return new_set;
+}
+
 void set_erase(cset* set) {
-    if (set != NULL) {
-        // Free all nodes in the set
-        while (set->head != NULL) {
-            cset_node* temp = set->head;
-            set->head = set->head->next;
-            free(temp);
-        } // end while
-        free(set);
-    } // end if
-} // end of func
+    if (set == NULL) {
+        return;
+    }
+
+    // Remove all nodes
+    cset_node* current = set->head;
+    while (current != NULL) {
+        cset_node* next = current->next;
+        free(current);
+        current = next;
+    }
+
+    free(set);
+}
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
-// Function to insert a ctofu data into the set
 ctofu_error set_insert(cset* set, ctofu data) {
     if (set == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    cset_node* newNode = (cset_node*)malloc(sizeof(cset_node));
-    if (newNode == NULL) {
-        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
-    } // end if
-
-    newNode->data = data;
-    newNode->next = NULL;
-
-    // Check if the data already exists in the set
+    // Check if the element already exists
     cset_node* current = set->head;
     while (current != NULL) {
-        ctofu_error compareResult = tofu_compare(current->data, data);
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            free(newNode); // Data already exists, don't insert it again
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } // end if
+        if (tofu_compare(&current->data, &data, NULL) == 0) {
+            return TOFU_WAS_MISMATCH; // Duplicate element
+        }
         current = current->next;
-    } // end while
+    }
 
-    // Insert the new data into the set
-    newNode->next = set->head;
-    set->head = newNode;
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
+    // Create a new node
+    cset_node* new_node = (cset_node*)malloc(sizeof(cset_node));
+    if (new_node == NULL) {
+        // Handle memory allocation failure
+        return TOFU_WAS_BAD_MALLOC;
+    }
 
-// Function to remove a ctofu data from the set
+    new_node->data = data;
+    new_node->next = set->head;
+    set->head = new_node;
+
+    return TOFU_SUCCESS;
+}
+
 ctofu_error set_remove(cset* set, ctofu data) {
     if (set == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
     cset_node* current = set->head;
     cset_node* prev = NULL;
 
+    // Find the node to remove
     while (current != NULL) {
-        ctofu_error compareResult = tofu_compare(current->data, data);
-
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
+        if (tofu_compare(&current->data, &data, NULL) == 0) {
             if (prev == NULL) {
-                set->head = current->next;
+                set->head = current->next; // Remove the head node
             } else {
-                prev->next = current->next;
-            } // end if else
+                prev->next = current->next; // Remove a non-head node
+            }
 
             free(current);
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } // end if
+            return TOFU_SUCCESS;
+        }
 
         prev = current;
         current = current->next;
-    } // end while
+    }
 
-    return TRILO_XDATA_TYPE_SUCCESS;  // No matching data found
-} // end of func
+    return TOFU_NOT_FOUND; // Element not found
+}
 
-// Function to search for a ctofu data in the set
 ctofu_error set_search(const cset* set, ctofu data) {
     if (set == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
     cset_node* current = set->head;
 
+    // Search for the element
     while (current != NULL) {
-        ctofu_error compareResult = tofu_compare(current->data, data);
-
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } // end if
-
+        if (tofu_compare(&current->data, &data, NULL) == 0) {
+            return TOFU_SUCCESS; // Element found
+        }
         current = current->next;
-    } // end while
+    }
 
-    return TRILO_XDATA_TYPE_SUCCESS;  // No matching data found
-} // end of func
-
+    return TOFU_NOT_FOUND; // Element not found
+}
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
-// Function to get the size of the cset
 size_t set_size(const cset* set) {
     if (set == NULL) {
         return 0;
-    } // end if
+    }
 
     size_t size = 0;
     cset_node* current = set->head;
 
+    // Count the number of elements
     while (current != NULL) {
         size++;
         current = current->next;
-    } // end while
+    }
 
     return size;
-} // end of func
+}
 
-// Function to insert a ctofu data into the set
 ctofu* set_getter(cset* set, ctofu data) {
     if (set == NULL) {
         return NULL;
-    } // end if
+    }
 
     cset_node* current = set->head;
 
+    // Search for the element
     while (current != NULL) {
-        ctofu_error compareResult = tofu_compare(current->data, data);
-
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            return &current->data;
-        } // end if
-
+        if (tofu_compare(&current->data, &data, NULL) == 0) {
+            return &current->data; // Return a pointer to the element
+        }
         current = current->next;
-    } // end while
+    }
 
-    return NULL;  // No matching data found
-} // end of func
+    return NULL; // Element not found
+}
 
-// Function to insert a ctofu data into the set
 ctofu_error set_setter(cset* set, ctofu data) {
     if (set == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
     cset_node* current = set->head;
 
+    // Search for the element
     while (current != NULL) {
-        ctofu_error compareResult = tofu_compare(current->data, data);
-
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            // Data with the same value already exists
-            current->data = data;
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } // end if
-
+        if (tofu_compare(&current->data, &data, NULL) == 0) {
+            current->data = data; // Update the element
+            return TOFU_SUCCESS;
+        }
         current = current->next;
-    } // end while
+    }
 
-    return TRILO_XDATA_TYPE_SUCCESS;  // No matching data found, insert as a new node
-} // end of func
+    return TOFU_NOT_FOUND; // Element not found
+}
 
-// Function to check if the set is not empty
 bool set_not_empty(const cset* set) {
     return set != NULL && set->head != NULL;
-} // end of func
+}
 
-// Function to check if the set is not null
 bool set_not_cnullptr(const cset* set) {
     return set != NULL;
-} // end of func
+}
 
-// Function to check if the set is empty
 bool set_is_empty(const cset* set) {
     return set == NULL || set->head == NULL;
-} // end of func
+}
 
-// Function to check if the set is null
 bool set_is_cnullptr(const cset* set) {
     return set == NULL;
-} // end of func
+}
 
-// Function to check if a ctofu data is in the set
 bool set_contains(const cset* set, ctofu data) {
     if (set == NULL) {
         return false;
-    } // end if
+    }
 
     cset_node* current = set->head;
 
+    // Check if the element exists
     while (current != NULL) {
-        ctofu_error compareResult = tofu_compare(current->data, data);
-
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            return true;
-        } // end if
-
+        if (tofu_compare(&current->data, &data, NULL) == 0) {
+            return true; // Element found
+        }
         current = current->next;
-    } // end while
+    }
 
-    return false;  // No matching data found
-} // end of func
+    return false; // Element not found
+}
+
+// =======================
+// ITERATOR FUNCTIONS
+// =======================
+
+ctofu_iterator set_iterator_start(cset* set) {
+    ctofu_iterator iterator;
+    iterator.current_value = set->head;
+
+    return iterator;
+}
+
+ctofu_iterator set_iterator_end(cset* set) {
+    ctofu_iterator iterator;
+    iterator.current_value = NULL;
+
+    return iterator;
+}
+
+ctofu_iterator set_iterator_next(ctofu_iterator iterator) {
+    iterator.current_value = iterator.current_value->next;
+
+    return iterator;
+}
+
+bool set_iterator_has_next(ctofu_iterator iterator) {
+    return iterator.current_value != NULL;
+}

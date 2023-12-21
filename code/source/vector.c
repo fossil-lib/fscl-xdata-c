@@ -37,33 +37,43 @@
 // CREATE and DELETE
 // =======================
 
-cvector vector_create(enum ctofu_type expected_type) {
-    cvector vector;
-    vector.data = (ctofu*)malloc(INITIAL_CAPACITY * sizeof(ctofu));
-    if (vector.data == NULL) {
+cvector vector_create(ctofu_type expected_type) {
+    cvector new_vector;
+    new_vector.data = (ctofu*)malloc(INITIAL_CAPACITY * sizeof(ctofu));
+    if (new_vector.data == NULL) {
         // Handle memory allocation failure
         exit(EXIT_FAILURE);
     }
-    vector.size = 0;
-    vector.capacity = INITIAL_CAPACITY;
-    vector.expected_type = expected_type;
-    return vector;
-} // end of func
+
+    new_vector.size = 0;
+    new_vector.capacity = INITIAL_CAPACITY;
+    new_vector.expected_type = expected_type;
+
+    return new_vector;
+}
 
 void vector_erase(cvector* vector) {
+    if (vector == NULL) {
+        return;
+    }
+
     free(vector->data);
     vector->data = NULL;
     vector->size = 0;
     vector->capacity = 0;
-} // end of func
+}
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
 void vector_push_back(cvector* vector, ctofu element) {
+    if (vector == NULL) {
+        return;
+    }
+
+    // Check if the vector needs to be resized
     if (vector->size == vector->capacity) {
-        // Resize the vector if it reaches its capacity
         vector->capacity *= 2;
         vector->data = (ctofu*)realloc(vector->data, vector->capacity * sizeof(ctofu));
         if (vector->data == NULL) {
@@ -72,96 +82,160 @@ void vector_push_back(cvector* vector, ctofu element) {
         }
     }
 
-    if (element.type == vector->expected_type || vector->expected_type == UNKNOWN_TYPE) {
-        vector->data[vector->size] = element;
-        vector->size++;
-    } else {
-        // Handle data type mismatch
-        fprintf(stderr, "Data type mismatch. Expected: %d, Actual: %d\n", vector->expected_type, element.type);
+    // Check if the type matches the expected type
+    if (element.type != vector->expected_type) {
+        // Handle type mismatch
         exit(EXIT_FAILURE);
     }
-} // end of func
 
+    // Add the element to the vector
+    vector->data[vector->size++] = element;
+}
 
 int vector_search(const cvector* vector, ctofu target) {
+    if (vector == NULL) {
+        return -1;
+    }
+
     for (size_t i = 0; i < vector->size; ++i) {
-        if (tofu_equal(vector->data[i], target)) {
-            return (int)i; // Return the index if the element is found
+        if (tofu_compare(&target, &vector->data[i], NULL) == TOFU_SUCCESS) {
+            return i; // Element found at index i
         }
     }
-    return -1; // Return -1 if the element is not found
-} // end of func
+
+    return -1; // Element not found
+}
 
 void vector_reverse(cvector* vector) {
-    size_t left = 0;
-    size_t right = vector->size - 1;
-
-    while (left < right) {
-        // Swap elements at left and right indices
-        ctofu temp = vector->data[left];
-        vector->data[left] = vector->data[right];
-        vector->data[right] = temp;
-
-        // Move indices towards the center
-        ++left;
-        --right;
+    if (vector == NULL) {
+        return;
     }
-} // end of func
+
+    for (size_t i = 0, j = vector->size - 1; i < j; ++i, --j) {
+        // Swap elements at positions i and j
+        ctofu temp = vector->data[i];
+        vector->data[i] = vector->data[j];
+        vector->data[j] = temp;
+    }
+}
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
 bool vector_is_cnullptr(const cvector* vector) {
-    return vector->data == NULL;
-} // end of func
+    return vector == NULL;
+}
 
 bool vector_not_cnullptr(const cvector* vector) {
-    return vector->data != NULL;
-} // end of func
+    return vector != NULL;
+}
 
 bool vector_is_empty(const cvector* vector) {
-    return vector->size == 0;
-} // end of func
+    return vector == NULL || vector->size == 0;
+}
 
 bool vector_not_empty(const cvector* vector) {
-    return vector->size != 0;
-} // end of func
+    return vector != NULL && vector->size != 0;
+}
 
 void vector_setter(cvector* vector, size_t index, ctofu element) {
-    if (index < vector->size) {
-        if (element.type == vector->expected_type || vector->expected_type == UNKNOWN_TYPE) {
-            vector->data[index] = element;
-        } else {
-            // Handle data type mismatch
-            fprintf(stderr, "Data type mismatch. Expected: %d, Actual: %d\n", vector->expected_type, element.type);
-            exit(EXIT_FAILURE);
-        }
-    } else {
-        // Handle index out of bounds
-        fprintf(stderr, "Index out of bounds\n");
+    if (vector == NULL || index >= vector->size) {
+        return;
+    }
+
+    // Check if the type matches the expected type
+    if (element.type != vector->expected_type) {
+        // Handle type mismatch
         exit(EXIT_FAILURE);
     }
-} // end of func
+
+    vector->data[index] = element;
+}
 
 ctofu vector_getter(const cvector* vector, size_t index) {
-    if (index < vector->size) {
-        return vector->data[index];
-    } else {
-        // Handle index out of bounds
-        fprintf(stderr, "Index out of bounds\n");
-        exit(EXIT_FAILURE);
+    if (vector == NULL || index >= vector->size) {
+        return (ctofu){.type = INVALID_TYPE}; // Invalid or out-of-bounds access
     }
-} // end of func
+
+    return vector->data[index];
+}
 
 size_t vector_size(const cvector* vector) {
-    return vector->size;
-} // end of func
+    return vector != NULL ? vector->size : 0;
+}
+
+// Print ctofu value based on its type
+void print_ctofu_value(const ctofu value) {
+    switch (value.type) {
+        case INTEGER_TYPE:
+            printf("%d", value.data.integer_type);
+            break;
+        case DOUBLE_TYPE:
+            printf("%f", value.data.double_type);
+            break;
+        case STRING_TYPE:
+            printf("%s", value.data.string_type);
+            break;
+        case CHAR_TYPE:
+            printf("%c", value.data.char_type);
+            break;
+        case BOOLEAN_TYPE:
+            printf("%s", value.data.boolean_type ? "true" : "false");
+            break;
+        case NULLPTR_TYPE:
+            printf("cnullptr");
+            break;
+        case INVALID_TYPE:
+        case UNKNOWN_TYPE:
+            printf("[Invalid or Unknown Type]");
+            break;
+    }
+}
 
 void vector_peek(const cvector* vector) {
-    for (size_t i = 0; i < vector->size; ++i) {
-        tofu_print(vector->data[i]);
-        printf(" ");
+    if (vector == NULL) {
+        return;
     }
-    printf("\n");
-} // end of func
+
+    printf("Vector contents: [");
+    for (size_t i = 0; i < vector->size; ++i) {
+        if (i > 0) {
+            printf(", ");
+        }
+        print_ctofu_value(vector->data[i]);
+    }
+    printf("]\n");
+}
+
+// =======================
+// ITERATOR FUNCTIONS
+// =======================
+
+ctofu_iterator vector_iterator_start(const cvector* vector) {
+    if (vector == NULL || vector->size == 0) {
+        return (ctofu_iterator){.current_value = NULL, .index = 0};
+    }
+
+    return (ctofu_iterator){.current_value = &vector->data[0], .index = 0};
+}
+
+ctofu_iterator vector_iterator_end(const cvector* vector) {
+    if (vector == NULL || vector->size == 0) {
+        return (ctofu_iterator){.current_value = NULL, .index = vector->size};
+    }
+
+    return (ctofu_iterator){.current_value = &vector->data[vector->size - 1], .index = vector->size - 1};
+}
+
+ctofu_iterator vector_iterator_next(const cvector* vector, ctofu_iterator iterator) {
+    if (vector == NULL || iterator.index >= vector->size - 1) {
+        return (ctofu_iterator){.current_value = NULL, .index = iterator.index + 1};
+    }
+
+    return (ctofu_iterator){.current_value = &vector->data[iterator.index + 1], .index = iterator.index + 1};
+}
+
+bool vector_iterator_has_next(const cvector* vector, ctofu_iterator iterator) {
+    return vector != NULL && iterator.index < vector->size - 1;
+}

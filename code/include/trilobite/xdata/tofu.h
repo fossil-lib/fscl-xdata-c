@@ -141,8 +141,10 @@ typedef union {
 //
 // Define a struct to represent the iterator
 //
+// Define a struct to represent the iterator
 typedef struct {
-    ctofu* current;
+    ctofu* current_key;
+    ctofu* current_value;
     size_t index;
 } ctofu_iterator;
 
