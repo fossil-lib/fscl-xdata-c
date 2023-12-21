@@ -101,6 +101,8 @@ extern "C"
     power of sharing one's passion with the world.
 */
 
+#include <stddef.h>
+
 // Define error constants for tofu operations
 typedef enum {
     TOFU_SUCCESS        = 0,
