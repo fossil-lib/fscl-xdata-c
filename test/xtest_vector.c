@@ -53,7 +53,11 @@ XTEST_CASE(test_vector_push_back) {
     cvector vector = vector_create(INTEGER_TYPE);
     vector_push_back(&vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 42});
     TEST_ASSERT_EQUAL(1, vector_size(&vector));
-    TEST_ASSERT_EQUAL(42, vector_getter(&vector, 0).data.integer_type);
+    
+    // Use vector_getter for validation
+    ctofu retrieved_data = vector_getter(&vector, 0);
+    TEST_ASSERT_EQUAL(42, retrieved_data.data.integer_type);
+    
     vector_erase(&vector);
 
     // Edge Case: Pushing back into a NULL vector

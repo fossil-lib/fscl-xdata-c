@@ -101,18 +101,17 @@ XTEST_CASE(test_dqueue_setter_and_getter) {
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_insert(dqueue, data1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_setter(dqueue, data1));
 
-    ctofu* retrieved_data = malloc(sizeof(ctofu));
+    // Use dqueue_getter for validation
+    ctofu* retrieved_data = dqueue_getter(dqueue, data1);
     TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_getter(dqueue, data1, retrieved_data));
-    TEST_ASSERT_EQUAL(data1.integer_type, retrieved_data->integer_type);
+    TEST_ASSERT_EQUAL(data1.integer_type, retrieved_data->data.integer_type);
 
     free(retrieved_data);
     dqueue_erase(dqueue);
 
     // Edge Case: Getting from an empty double-ended queue
-    retrieved_data = malloc(sizeof(ctofu));
-    TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
-    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, dqueue_getter(dqueue, data1, retrieved_data));
+    retrieved_data = dqueue_getter(dqueue, data1);
+    TEST_ASSERT_NULL_PTR(retrieved_data);
     free(retrieved_data);
 }
 

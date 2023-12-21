@@ -79,6 +79,11 @@ XTEST_CASE(test_dlist_search) {
     TEST_ASSERT_FALSE(dlist_is_empty(dlist));
     TEST_ASSERT_FALSE(dlist_is_cnullptr(dlist));
 
+    // Use dlist_getter for validation
+    ctofu* retrieved_data = dlist_getter(dlist, data);
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
+    TEST_ASSERT_EQUAL(data.integer_type, retrieved_data->data.integer_type);
+
     dlist_erase(dlist);
 
     // Edge Case: Searching in an empty doubly-linked list
@@ -86,6 +91,7 @@ XTEST_CASE(test_dlist_search) {
     TEST_ASSERT_FALSE(dlist_not_empty(dlist));
     TEST_ASSERT_TRUE(dlist_is_empty(dlist));
     TEST_ASSERT_TRUE(dlist_is_cnullptr(dlist));
+    free(retrieved_data);
 }
 
 XTEST_CASE(test_dlist_setter_and_getter) {
@@ -99,18 +105,17 @@ XTEST_CASE(test_dlist_setter_and_getter) {
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_insert(dlist, data1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_setter(dlist, data1));
 
-    ctofu* retrieved_data = malloc(sizeof(ctofu));
+    // Use dlist_getter for validation
+    ctofu* retrieved_data = dlist_getter(dlist, data1);
     TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_getter(dlist, data1, retrieved_data));
-    TEST_ASSERT_EQUAL(data1.integer_type, retrieved_data->integer_type);
+    TEST_ASSERT_EQUAL(data1.integer_type, retrieved_data->data.integer_type);
 
     free(retrieved_data);
     dlist_erase(dlist);
 
     // Edge Case: Getting from an empty doubly-linked list
-    retrieved_data = malloc(sizeof(ctofu));
-    TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
-    TEST_ASSERT_EQUAL(CTOFU_ERROR_NOT_FOUND, dlist_getter(dlist, data1, retrieved_data));
+    retrieved_data = dlist_getter(dlist, data1);
+    TEST_ASSERT_NULL_PTR(retrieved_data);
     free(retrieved_data);
 }
 
