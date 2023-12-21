@@ -71,7 +71,7 @@ void dlist_erase(cdlist* dlist);
 // ALGORITHM FUNCTIONS
 // =======================
 ctofu_error dlist_insert(cdlist* dlist, ctofu data);
-ctofu_error dlist_remove(cdlist* dlist, ctofu data);
+ctofu_error dlist_remove(cdlist* dlist, ctofu* data);
 ctofu_error dlist_search(const cdlist* dlist, ctofu data);
 void dlist_reverse_forward(cdlist* dlist);
 void dlist_reverse_backward(cdlist* dlist);
