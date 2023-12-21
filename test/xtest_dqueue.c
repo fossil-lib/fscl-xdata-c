@@ -55,7 +55,7 @@ XTEST_CASE(test_dqueue_insert_and_remove) {
     cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
 
-    ctofu data = {.integer_type = 42};
+    ctofu data = {.data.integer_type = 42};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_insert(dqueue, data));
     TEST_ASSERT_EQUAL(1, dqueue_size(dqueue));
 
@@ -73,7 +73,7 @@ XTEST_CASE(test_dqueue_search) {
     cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
 
-    ctofu data = {.integer_type = 42};
+    ctofu data = {.data.integer_type = 42};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_insert(dqueue, data));
 
     TEST_ASSERT_TRUE(dqueue_not_cnullptr(dqueue));
@@ -95,8 +95,8 @@ XTEST_CASE(test_dqueue_setter_and_getter) {
     cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
 
-    ctofu data1 = {.integer_type = 42};
-    ctofu data2 = {.integer_type = 24};
+    ctofu data1 = {.data.integer_type = 42};
+    ctofu data2 = {.data.integer_type = 24};
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_insert(dqueue, data1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_setter(dqueue, data1));

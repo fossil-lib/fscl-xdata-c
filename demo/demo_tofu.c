@@ -38,7 +38,7 @@ int main() {
     ctofu array[5];
 
     // Populate the array with some data
-    tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = 42}, &array[0]);
+    tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = 42}, &array[0]);
     tofu_create(DOUBLE_TYPE, &(ctofu_data){.double_type = 3.14}, &array[1]);
     tofu_create(STRING_TYPE, &(ctofu_data){.string_type = "Hello"}, &array[2]);
     tofu_create(BOOLEAN_TYPE, &(ctofu_data){.boolean_type = true}, &array[3]);
@@ -76,7 +76,7 @@ int main() {
 
     // Search for a specific element in the array
     ctofu key;
-    tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = 42}, &key);
+    tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = 42}, &key);
     size_t index = tofu_search_linear(array, 5, &key);
 
     // Print the result of the search

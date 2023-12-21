@@ -39,8 +39,8 @@ int main() {
     // Insert key-value pairs into the map
     for (int i = 1; i <= 3; ++i) {
         ctofu key, value;
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i}, &key);
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i * 10}, &value);
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = i}, &key);
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = i * 10}, &value);
         map_insert(int_map, key, value);
     }
 

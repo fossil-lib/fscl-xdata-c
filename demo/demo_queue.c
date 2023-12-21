@@ -39,7 +39,7 @@ int main() {
     // Insert integers into the queue using a for loop
     for (int i = 1; i <= 3; ++i) {
         ctofu data;
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i * 10}, &data);
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = i * 10}, &data);
         queue_insert(int_queue, data);
     }
 

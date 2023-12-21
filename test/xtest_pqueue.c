@@ -53,7 +53,7 @@ XTEST_CASE(test_pqueue_insert_and_remove) {
     cpqueue* pqueue = pqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(pqueue);
 
-    ctofu element = {.integer_type = 42};
+    ctofu element = {.data.integer_type = 42};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, pqueue_insert(pqueue, element, 1));
     TEST_ASSERT_EQUAL(1, pqueue_size(pqueue));
 
@@ -74,7 +74,7 @@ XTEST_CASE(test_pqueue_search) {
     cpqueue* pqueue = pqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(pqueue);
 
-    ctofu element = {.integer_type = 42};
+    ctofu element = {.data.integer_type = 42};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, pqueue_insert(pqueue, element, 1));
 
     TEST_ASSERT_TRUE(pqueue_not_cnullptr(pqueue));
@@ -96,15 +96,15 @@ XTEST_CASE(test_pqueue_setter_and_getter) {
     cpqueue* pqueue = pqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(pqueue);
 
-    ctofu element1 = {.integer_type = 42};
-    ctofu element2 = {.integer_type = 24};
+    ctofu element1 = {.data.integer_type = 42};
+    ctofu element2 = {.data.integer_type = 24};
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, pqueue_insert(pqueue, element1, 1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, pqueue_setter(pqueue, element2, 2));
 
     ctofu* retrieved_element = pqueue_getter(pqueue, element1, 1);
     TEST_ASSERT_NOT_NULL_PTR(retrieved_element);
-    TEST_ASSERT_EQUAL(element2.integer_type, retrieved_element->integer_type);
+    TEST_ASSERT_EQUAL(element2.integer_type, retrieved_->data.integer_type );
 
     pqueue_erase(pqueue);
 

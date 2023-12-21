@@ -53,8 +53,8 @@ XTEST_CASE(test_map_insert_and_remove) {
     cmap* map = map_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(map);
 
-    ctofu key = {.integer_type = 42};
-    ctofu value = {.integer_type = 24};
+    ctofu key = {.data.integer_type = 42};
+    ctofu value = {.data.integer_type = 24};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_insert(map, key, value));
     TEST_ASSERT_EQUAL(1, map_size(map));
 
@@ -72,8 +72,8 @@ XTEST_CASE(test_map_search) {
     cmap* map = map_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(map);
 
-    ctofu key = {.integer_type = 42};
-    ctofu value = {.integer_type = 24};
+    ctofu key = {.data.integer_type = 42};
+    ctofu value = {.data.integer_type = 24};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_insert(map, key, value));
 
     TEST_ASSERT_TRUE(map_not_cnullptr(map));
@@ -95,9 +95,9 @@ XTEST_CASE(test_map_setter_and_getter) {
     cmap* map = map_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(map);
 
-    ctofu key = {.integer_type = 42};
-    ctofu value1 = {.integer_type = 24};
-    ctofu value2 = {.integer_type = 12};
+    ctofu key = {.data.integer_type = 42};
+    ctofu value1 = {.data.integer_type = 24};
+    ctofu value2 = {.data.integer_type = 12};
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_insert(map, key, value1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_setter(map, key, value2));

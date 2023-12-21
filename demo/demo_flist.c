@@ -39,7 +39,7 @@ int main() {
     // Insert integers into the linked list
     for (int i = 1; i <= 5; ++i) {
         ctofu data;
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i}, &data);
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = i}, &data);
         flist_insert(int_flist, data);
     }
 

@@ -54,7 +54,7 @@ XTEST_CASE(test_stack_insert_and_remove) {
     cstack* stack = stack_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(stack);
 
-    ctofu element = {.integer_type = 42};
+    ctofu element = {.data.integer_type = 42};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, stack_insert(stack, element));
     TEST_ASSERT_EQUAL(1, stack_size(stack));
 
@@ -69,7 +69,7 @@ XTEST_CASE(test_stack_insert_and_remove) {
     TEST_ASSERT_EQUAL(TOFU_WAS_UNKNOWN
     TEST_ASSERT_NOT_NULL_PTR(stack);
 
-    ctofu element = {.integer_type = 42};
+    ctofu element = {.data.integer_type = 42};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, stack_insert(stack, element));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, stack_insert(stack, element));
 

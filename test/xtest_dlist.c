@@ -53,7 +53,7 @@ XTEST_CASE(test_dlist_insert_and_remove) {
     cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    ctofu data = {.integer_type = 42};
+    ctofu data = {.data.integer_type = 42};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_insert(dlist, data));
     TEST_ASSERT_EQUAL(1, dlist_size(dlist));
 
@@ -71,7 +71,7 @@ XTEST_CASE(test_dlist_search) {
     cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    ctofu data = {.integer_type = 42};
+    ctofu data = {.data.integer_type = 42};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_insert(dlist, data));
 
     TEST_ASSERT_TRUE(dlist_not_cnullptr(dlist));
@@ -93,8 +93,8 @@ XTEST_CASE(test_dlist_setter_and_getter) {
     cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    ctofu data1 = {.integer_type = 42};
-    ctofu data2 = {.integer_type = 24};
+    ctofu data1 = {.data.integer_type = 42};
+    ctofu data2 = {.data.integer_type = 24};
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_insert(dlist, data1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_setter(dlist, data1));

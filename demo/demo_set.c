@@ -37,10 +37,10 @@ int main() {
     cset* int_set = set_create(INTEGER_TYPE);
 
     // Insert some integers into the set
-    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 10}});
-    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 20}});
-    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 30}});
-    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 20}});  // Duplicates are not allowed
+    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 10}});
+    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 20}});
+    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 30}});
+    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 20}});  // Duplicates are not allowed
 
     // Print the size of the set
     printf("Set size: %zu\n", set_size(int_set));

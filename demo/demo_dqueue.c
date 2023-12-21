@@ -39,7 +39,7 @@ int main() {
     // Insert integers into the front of the deque
     for (int i = 1; i <= 5; ++i) {
         ctofu data;
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i}, &data);
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = i}, &data);
         dqueue_insert(int_dqueue, data);
     }
 

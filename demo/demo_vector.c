@@ -37,9 +37,9 @@ int main() {
     cvector int_vector = vector_create(INTEGER_TYPE);
 
     // Push some integers into the vector
-    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 10}});
-    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 20}});
-    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 30}});
+    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 10}});
+    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 20}});
+    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 30}});
 
     // Print the size of the vector
     printf("Vector size: %zu\n", vector_size(&int_vector));
@@ -51,7 +51,7 @@ int main() {
     }
 
     // Search for a value in the vector
-    ctofu search_key = (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 20}};
+    ctofu search_key = (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 20}};
     int search_result = vector_search(&int_vector, search_key);
     if (search_result != -1) {
         printf("Value found at index %d in the vector!\n", search_result);

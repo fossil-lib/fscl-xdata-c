@@ -43,7 +43,7 @@
 // Test case 1: Test ctofu creation and retrieval of integer value
 XTEST_CASE(test_tofu_create_and_erase) {
     // Normal Case: Creating and erasing a tofu value
-    ctofu_data value = {.integer_type = 42};
+    ctofu_data value = {.data.integer_type = 42};
     ctofu* result;
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, tofu_create(INTEGER_TYPE, &value, &result));
     TEST_ASSERT_NOT_NULL_PTR(result);

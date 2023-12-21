@@ -39,7 +39,7 @@ int main() {
     // Insert integers with priorities into the priority queue using a for loop
     for (int i = 1; i <= 3; ++i) {
         ctofu data;
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i * 10}, &data);
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = i * 10}, &data);
         pqueue_insert(int_pqueue, data, i);  // Priority: i
     }
 

@@ -41,7 +41,7 @@ int main() {
 
     for (size_t i = 0; i < sizeof(values) / sizeof(values[0]); ++i) {
         ctofu data;
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = values[i]}, &data);
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = values[i]}, &data);
         tree_insert(int_tree, data);
     }
 
@@ -50,7 +50,7 @@ int main() {
 
     // Search for a value in the tree
     ctofu search_key;
-    tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = 30}, &search_key);
+    tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = 30}, &search_key);
 
     ctofu_error search_result = tree_search(int_tree, search_key);
     if (search_result == TOFU_SUCCESS) {
