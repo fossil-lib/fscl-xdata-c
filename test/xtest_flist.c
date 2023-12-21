@@ -53,7 +53,7 @@ XTEST_CASE(test_flist_insert_and_remove) {
     cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    ctofu data = {.integer_type = 42};
+    ctofu data = {.type.integer_type = 42};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_insert(flist, data));
     TEST_ASSERT_EQUAL(1, flist_size(flist));
 
@@ -63,7 +63,7 @@ XTEST_CASE(test_flist_insert_and_remove) {
     flist_erase(flist);
 
     // Edge Case: Removing from an empty forward list
-    TEST_ASSERT_EQUAL(CTOFU_ERROR_NOT_FOUND, flist_remove(flist, &data));
+    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, flist_remove(flist, &data));
 }
 
 XTEST_CASE(test_flist_search) {
@@ -71,7 +71,7 @@ XTEST_CASE(test_flist_search) {
     cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    ctofu data = {.integer_type = 42};
+    ctofu data = {.type.integer_type = 42};
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_insert(flist, data));
 
     TEST_ASSERT_TRUE(flist_not_cnullptr(flist));
@@ -93,8 +93,8 @@ XTEST_CASE(test_flist_setter_and_getter) {
     cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    ctofu data1 = {.integer_type = 42};
-    ctofu data2 = {.integer_type = 24};
+    ctofu data1 = {.type.integer_type = 42};
+    ctofu data2 = {.type.integer_type = 24};
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_insert(flist, data1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_setter(flist, data1));
@@ -102,7 +102,7 @@ XTEST_CASE(test_flist_setter_and_getter) {
     ctofu* retrieved_data = malloc(sizeof(ctofu));
     TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_getter(flist, data1, retrieved_data));
-    TEST_ASSERT_EQUAL(data1.integer_type, retrieved_data->integer_type);
+    TEST_ASSERT_EQUAL(data1.type.integer_type, retrieved_data->integer_type);
 
     free(retrieved_data);
     flist_erase(flist);
@@ -119,8 +119,8 @@ XTEST_CASE(test_flist_reverse_forward_and_backward) {
     cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    ctofu data1 = {.integer_type = 42};
-    ctofu data2 = {.integer_type = 24};
+    ctofu data1 = {.type.integer_type = 42};
+    ctofu data2 = {.type.integer_type = 24};
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_insert(flist, data1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_insert(flist, data2));
@@ -129,15 +129,15 @@ XTEST_CASE(test_flist_reverse_forward_and_backward) {
     flist_reverse_forward(flist);
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_getter(flist, data1, &data1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_getter(flist, data2, &data2));
-    TEST_ASSERT_EQUAL(24, data1.integer_type);
-    TEST_ASSERT_EQUAL(42, data2.integer_type);
+    TEST_ASSERT_EQUAL(24, data1.type.integer_type);
+    TEST_ASSERT_EQUAL(42, data2.type.integer_type);
 
     // Reverse backward
     flist_reverse_backward(flist);
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_getter(flist, data1, &data1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_getter(flist, data2, &data2));
-    TEST_ASSERT_EQUAL(42, data1.integer_type);
-    TEST_ASSERT_EQUAL(24, data2.integer_type);
+    TEST_ASSERT_EQUAL(42, data1.type.integer_type);
+    TEST_ASSERT_EQUAL(24, data2.type.integer_type);
 
     flist_erase(flist);
 }
