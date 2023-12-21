@@ -90,7 +90,7 @@ ctofu_error map_remove(cmap* map, ctofu key) {
         return TOFU_WAS_NULLPTR;
     }
 
-    size_t index = SIZE_MAX;
+    size_t index = MAX_MAP_SIZE;
 
     // Find the index of the key
     for (size_t i = 0; i < map->size; ++i) {
@@ -100,7 +100,7 @@ ctofu_error map_remove(cmap* map, ctofu key) {
         }
     }
 
-    if (index == SIZE_MAX) {
+    if (index == MAX_MAP_SIZE) {
         return TOFU_NOT_FOUND; // Key not found
     }
 

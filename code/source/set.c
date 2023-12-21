@@ -256,7 +256,7 @@ ctofu_iterator set_iterator_end(cset* set) {
 }
 
 ctofu_iterator set_iterator_next(ctofu_iterator iterator) {
-    iterator.current_value = iterator.current_value->next;
+    iterator = iterator.next;
 
     return iterator;
 }

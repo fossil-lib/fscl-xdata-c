@@ -359,7 +359,7 @@ ctofu_data tofu_value_getter(const ctofu* current) {
 
         case STRING_TYPE:
             // Using strncpy for string copy
-            strncpy(result.string_type, current->data.string_type, sizeof(result.string_type) - 1);
+            strcpy(result.string_type, current->data.string_type);
             result.string_type[sizeof(result.string_type) - 1] = '\0';
             break;
 

@@ -151,6 +151,7 @@ typedef struct {
     ctofu* current_key;
     ctofu* current_value;
     size_t index;
+    ctofu_iterator *next
 } ctofu_iterator;
 
 // create and erase
