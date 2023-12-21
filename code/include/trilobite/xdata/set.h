@@ -88,7 +88,7 @@ bool set_contains(const cset* set, ctofu data);
 // ITERATOR FUNCTIONS
 // =======================
 ctofu_iterator set_iterator_start(cset* set);
-ctofu_iterator set_iterator_end(cset* set);
+ctofu_iterator set_iterator_end();
 ctofu_iterator set_iterator_next(ctofu_iterator iterator);
 bool set_iterator_has_next(ctofu_iterator iterator);
 

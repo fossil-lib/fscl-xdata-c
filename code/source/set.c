@@ -240,23 +240,34 @@ bool set_contains(const cset* set, ctofu data) {
 // =======================
 // ITERATOR FUNCTIONS
 // =======================
-
 ctofu_iterator set_iterator_start(cset* set) {
     ctofu_iterator iterator;
-    iterator.current_value = set->head;
+    iterator.current_key = NULL;
+    iterator.current_value = NULL;
+    iterator.index = 0;
+
+    if (set->head != NULL) {
+        iterator.current_key = &set->head->data;
+        iterator.current_value = &set->head->data;
+    }
 
     return iterator;
 }
 
-ctofu_iterator set_iterator_end(cset* set) {
+ctofu_iterator set_iterator_end() {
     ctofu_iterator iterator;
+    iterator.current_key = NULL;
     iterator.current_value = NULL;
-
+    iterator.index = 0;
     return iterator;
 }
 
 ctofu_iterator set_iterator_next(ctofu_iterator iterator) {
-    iterator = iterator.next;
+    if (iterator.current_value != NULL) {
+        iterator.current_key = &iterator.current_value[1];
+        iterator.current_value = &iterator.current_value[1];
+        iterator.index++;
+    }
 
     return iterator;
 }
