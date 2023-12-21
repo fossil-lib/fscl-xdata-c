@@ -108,7 +108,7 @@ XTEST_CASE(test_dlist_setter_and_getter) {
     // Use dlist_getter for validation
     ctofu* retrieved_data = dlist_getter(dlist, data1);
     TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
-    TEST_ASSERT_EQUAL(data1.integer_type, retrieved_data->data.integer_type);
+    TEST_ASSERT_EQUAL(data1.data.integer_type, retrieved_data->data.integer_type);
 
     free(retrieved_data);
     dlist_erase(dlist);

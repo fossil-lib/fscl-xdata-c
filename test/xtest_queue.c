@@ -110,7 +110,7 @@ XTEST_CASE(test_queue_setter_and_getter) {
 
     ctofu* retrieved_element = queue_getter(queue, element1);
     TEST_ASSERT_NOT_NULL_PTR(retrieved_element);
-    TEST_ASSERT_EQUAL(element2.integer_type, retrieved_->data.integer_type );
+    TEST_ASSERT_EQUAL(element2.data.integer_type, retrieved_->data.integer_type );
 
     queue_erase(queue);
 

@@ -104,7 +104,7 @@ XTEST_CASE(test_dqueue_setter_and_getter) {
     // Use dqueue_getter for validation
     ctofu* retrieved_data = dqueue_getter(dqueue, data1);
     TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
-    TEST_ASSERT_EQUAL(data1.integer_type, retrieved_data->data.integer_type);
+    TEST_ASSERT_EQUAL(data1.data.integer_type, retrieved_data->data.integer_type);
 
     free(retrieved_data);
     dqueue_erase(dqueue);
