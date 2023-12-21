@@ -54,131 +54,34 @@ typedef struct cstack_node {
 } cstack_node;
 
 typedef struct cstack {
-    enum ctofu_type stack_type; // Type of the stack
+    ctofu_type stack_type; // Type of the stack
     cstack_node* top; // Pointer to the top node of the stack
 } cstack;
 
 // =======================
 // CREATE and DELETE
 // =======================
-
-/**
- * @brief Creates a new cstack instance with the specified list type.
- *
- * @param list_type The data type for the cstack (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created cstack instance.
- */
-cstack* stack_create(enum ctofu_type list_type);
-
-/**
- * @brief Destroys the cstack instance, freeing all associated memory.
- *
- * @param stack The cstack instance to be destroyed.
- */
+cstack* stack_create(ctofu_type list_type);
 void stack_erase(cstack* stack);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-
-/**
- * @brief Inserts a ctofu data element into the cstack.
- *
- * @param stack The cstack where the data will be inserted.
- * @param data  The ctofu data element to be inserted.
- * @return A ctofu_error value indicating the result of the insertion.
- */
 ctofu_error stack_insert(cstack* stack, ctofu data);
-
-/**
- * @brief Removes a ctofu data element from the cstack.
- *
- * @param stack The cstack from which the data will be removed.
- * @param data  The ctofu data element to be removed.
- * @return A ctofu_error value indicating the result of the removal.
- */
-ctofu_error stack_remove(cstack* stack, ctofu data);
-
-/**
- * @brief Searches for a ctofu data element in the cstack.
- *
- * @param stack The cstack to search within.
- * @param data  The ctofu data element to search for.
- * @return A ctofu_error value indicating the result of the search.
- */
+ctofu_error stack_remove(cstack* stack, ctofu* data);
 ctofu_error stack_search(const cstack* stack, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-
-/**
- * @brief Gets the size of the cstack.
- *
- * @param stack The cstack for which the size will be determined.
- * @return The size of the cstack.
- */
 size_t stack_size(const cstack* stack);
-
-/**
- * @brief Getter function to retrieve a ctofu data element from the cstack.
- *
- * @param stack The cstack from which the data will be retrieved.
- * @param data  The ctofu data element to retrieve.
- * @return A pointer to the ctofu data element in the cstack (or NULL if not found).
- */
 ctofu* stack_getter(cstack* stack, ctofu data);
-
-/**
- * @brief Setter function to update a ctofu data element in the cstack.
- *
- * @param stack The cstack in which the data will be updated.
- * @param data  The ctofu data element to update.
- * @return A ctofu_error value indicating the result of the update.
- */
 ctofu_error stack_setter(cstack* stack, ctofu data);
-
-/**
- * @brief Checks if the cstack is not empty.
- *
- * @param stack The cstack to check.
- * @return true if the cstack is not empty, false otherwise.
- */
 bool stack_not_empty(const cstack* stack);
-
-/**
- * @brief Checks if the cstack is not a null pointer.
- *
- * @param stack The cstack to check.
- * @return true if the cstack is not a null pointer, false otherwise.
- */
 bool stack_not_cnullptr(const cstack* stack);
-
-/**
- * @brief Checks if the cstack is empty.
- *
- * @param stack The cstack to check.
- * @return true if the cstack is empty, false otherwise.
- */
 bool stack_is_empty(const cstack* stack);
-
-/**
- * @brief Checks if the cstack is a null pointer.
- *
- * @param stack The cstack to check.
- * @return true if the cstack is a null pointer, false otherwise.
- */
 bool stack_is_cnullptr(const cstack* stack);
-
-/**
- * @brief Gets the top element of the stack without removing it.
- *
- * This function returns a copy of the top element of the stack without removing it.
- *
- * @param stack The cstack instance to get the top element from.
- * @return A copy of the top element of the stack.
- */
-ctofu stack_top(cstack* stack);
+ctofu stack_top(cstack* stack, ctofu default_value);
 
 #ifdef __cplusplus
 }
