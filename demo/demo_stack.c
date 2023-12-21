@@ -33,41 +33,28 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cstack instance with INTEGER_TYPE
-    cstack* stack = stack_create(INTEGER_TYPE);
+    cstack* myStack = stack_create(INTEGER_TYPE);
 
-    // Insert data elements into the cstack
-    stack_insert(stack, tofu_create_from_integer(10));
-    stack_insert(stack, tofu_create_from_integer(20));
-    stack_insert(stack, tofu_create_from_integer(30));
+    // Example usage
+    ctofu data1;
+    data1.type = INTEGER_TYPE;
+    data1.data.integer_type = 42;
 
-    // Print the size of the cstack
-    printf("Size of the stack: %zu\n", stack_size(stack));
+    ctofu data2;
+    data2.type = INTEGER_TYPE;
+    data2.data.integer_type = 24;
 
-    // Print the cstack
-    printf("Stack elements:\n");
-    for (size_t i = 0; i < stack_size(stack); i++) {
-        ctofu* tofu = stack_getter(stack, i);
-        printf("%d\n", tofu_get_integer(*tofu));
-    } // end for
+    stack_insert(myStack, data1);
+    stack_insert(myStack, data2);
 
-    // Check if the cstack is not empty
-    printf("Is stack not empty? %s\n", stack_not_empty(stack) ? "true" : "false");
+    printf("Stack size: %zu\n", stack_size(myStack));
 
-    // Remove an element from the cstack
-    ctofu* removedTofu = stack_getter(stack, 1);
-    ctofu_error removalResult = stack_remove(stack, *removedTofu);
-    printf("Removal result: %s\n", removalResult == TRILO_XDATA_TYPE_SUCCESS ? "success" : "failure");
+    ctofu removedData;
+    stack_remove(myStack, &removedData);
 
-    // Print the updated cstack
-    printf("Updated stack elements:\n");
-    for (size_t i = 0; i < stack_size(stack); i++) {
-        ctofu* tofu = stack_getter(stack, i);
-        printf("%d\n", tofu_get_integer(*tofu));
-    } // end for
+    printf("Removed data: %d\n", removedData.data.integer_type);
 
-    // Destroy the cstack
-    stack_erase(stack);
+    stack_erase(myStack);
 
     return 0;
 } // end of func
