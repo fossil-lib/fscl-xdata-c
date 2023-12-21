@@ -140,21 +140,18 @@ typedef union {
     } array_type;
 } ctofu_data;
 
-//
-// Define a struct to represent the iterator
-//
+// Define a struct to represent the data and its type
+typedef struct {
+    ctofu_type type;
+    ctofu_data data;
+} ctofu;
+
 // Define a struct to represent the iterator
 typedef struct {
     ctofu* current_key;
     ctofu* current_value;
     size_t index;
 } ctofu_iterator;
-
-// Define a struct to represent the data and its type
-typedef struct {
-    ctofu_type type;
-    ctofu_data data;
-} ctofu;
 
 // create and erase
 ctofu_error tofu_create(ctofu_type type, ctofu_data* value, ctofu** result);
