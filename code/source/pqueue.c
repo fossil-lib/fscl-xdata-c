@@ -37,37 +37,32 @@
 // =======================
 // CREATE and DELETE
 // =======================
-
-// Function to create a new cpqueue
-cpqueue* pqueue_create(enum ctofu_type queue_type) {
-    cpqueue* pqueue = (cpqueue*)malloc(sizeof(cpqueue));
-    if (pqueue == NULL) {
+cpqueue* pqueue_create(ctofu_type queue_type) {
+    cpqueue* new_pqueue = (cpqueue*)malloc(sizeof(cpqueue));
+    if (new_pqueue == NULL) {
         // Handle memory allocation failure
         return NULL;
-    } // end if
+    }
 
-    pqueue->front = NULL;
-    pqueue->queue_type = queue_type;
-    return pqueue;
-} // end of func
+    new_pqueue->queue_type = queue_type;
+    new_pqueue->front = NULL;
 
-// Function to destroy the cpqueue
+    return new_pqueue;
+}
+
 void pqueue_erase(cpqueue* pqueue) {
     if (pqueue == NULL) {
         return;
-    } // end if
+    }
 
-    // Free nodes and their data
-    cpqueue_node* current = pqueue->front;
-    while (current != NULL) {
-        cpqueue_node* temp = current;
-        current = current->next;
-        free(temp);
-    } // end while
+    while (pqueue->front != NULL) {
+        ctofu data;
+        int priority;
+        pqueue_remove(pqueue, &data, &priority);
+    }
 
-    // Free the queue structure
     free(pqueue);
-} // end of func
+}
 
 // =======================
 // ALGORITHM FUNCTIONS
@@ -75,155 +70,73 @@ void pqueue_erase(cpqueue* pqueue) {
 
 ctofu_error pqueue_insert(cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    cpqueue_node* newNode = (cpqueue_node*)malloc(sizeof(cpqueue_node));
-    if (newNode == NULL) {
-        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
-    } // end if
+    cpqueue_node* new_node = (cpqueue_node*)malloc(sizeof(cpqueue_node));
+    if (new_node == NULL) {
+        // Handle memory allocation failure
+        return TOFU_WAS_BAD_MALLOC;
+    }
 
-    newNode->data = data;
-    newNode->priority = priority;
-    newNode->next = NULL;
+    new_node->data = data;
+    new_node->priority = priority;
+    new_node->next = NULL;
 
-    // Insert at appropriate position based on priority
     if (pqueue->front == NULL || priority > pqueue->front->priority) {
-        newNode->next = pqueue->front;
-        pqueue->front = newNode;
+        // Insert at the beginning
+        new_node->next = pqueue->front;
+        pqueue->front = new_node;
     } else {
         cpqueue_node* current = pqueue->front;
-        while (current->next != NULL && current->next->priority >= priority) {
+
+        while (current->next != NULL && priority <= current->next->priority) {
             current = current->next;
-        } // end while
-        newNode->next = current->next;
-        current->next = newNode;
-    } // end if else
+        }
 
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
+        new_node->next = current->next;
+        current->next = new_node;
+    }
 
-ctofu_error pqueue_remove(cpqueue* pqueue, ctofu data, int priority) {
-    if (pqueue == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+    return TOFU_SUCCESS;
+}
+
+ctofu_error pqueue_remove(cpqueue* pqueue, ctofu* data, int* priority) {
+    if (pqueue == NULL || data == NULL || priority == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
 
     if (pqueue->front == NULL) {
-        return TRILO_XDATA_TYPE_SUCCESS;  // Queue is empty, nothing to remove
-    } // end if
+        return TOFU_NOT_FOUND; // Queue is empty
+    }
 
-    // Remove the node with matching data and priority
-    cpqueue_node* current = pqueue->front;
-    cpqueue_node* prev = NULL;
+    cpqueue_node* temp = pqueue->front;
+    *data = temp->data;
+    *priority = temp->priority;
 
-    while (current != NULL) {
-        if (current->priority == priority) {
-            // Check data match based on type
-            switch (current->data.type) {
-                case INTEGER_TYPE:
-                    if (current->data.data.integer_type == data.data.integer_type) {
-                        break;
-                    } else {
-                        prev = current;
-                        current = current->next;
-                        continue;
-                    }
-                case DOUBLE_TYPE:
-                    if (current->data.data.double_type == data.data.double_type) {
-                        break;
-                    } else {
-                        prev = current;
-                        current = current->next;
-                        continue;
-                    }
-                case STRING_TYPE:
-                    if (strcmp(current->data.data.string_type, data.data.string_type) == 0) {
-                        break;
-                    } else {
-                        prev = current;
-                        current = current->next;
-                        continue;
-                    }
-                case CHAR_TYPE:
-                    if (current->data.data.char_type == data.data.char_type) {
-                        break;
-                    } else {
-                        prev = current;
-                        current = current->next;
-                        continue;
-                    }
-                case BOOLEAN_TYPE:
-                    if (current->data.data.boolean_type == data.data.boolean_type) {
-                        break;
-                    } else {
-                        prev = current;
-                        current = current->next;
-                        continue;
-                    }
-                default:
-                    return TRILO_XDATA_TYPE_WAS_UNKNOWN;  // Unsupported data type
-            } // end switch
+    pqueue->front = pqueue->front->next;
+    free(temp);
 
-            // Found matching node, remove it
-            if (prev == NULL) {
-                pqueue->front = current->next;
-            } else {
-                prev->next = current->next;
-            } // end if else
-            free(current);
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } // end if
-        prev = current;
-        current = current->next;
-    } // end while
-
-    return TRILO_XDATA_TYPE_SUCCESS;  // No matching data and priority found
-} // end of func
+    return TOFU_SUCCESS;
+}
 
 ctofu_error pqueue_search(const cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
     cpqueue_node* current = pqueue->front;
-    while (current != NULL) {
-        if (current->priority == priority) {
-            // Check data match based on type
-            switch (current->data.type) {
-                case INTEGER_TYPE:
-                    if (current->data.data.integer_type == data.data.integer_type) {
-                        return TRILO_XDATA_TYPE_SUCCESS;
-                    }
-                    break;
-                case DOUBLE_TYPE:
-                    if (current->data.data.double_type == data.data.double_type) {
-                        return TRILO_XDATA_TYPE_SUCCESS;
-                    }
-                    break;
-                case STRING_TYPE:
-                    if (strcmp(current->data.data.string_type, data.data.string_type) == 0) {
-                        return TRILO_XDATA_TYPE_SUCCESS;
-                    }
-                    break;
-                case CHAR_TYPE:
-                    if (current->data.data.char_type == data.data.char_type) {
-                        return TRILO_XDATA_TYPE_SUCCESS;
-                    }
-                    break;
-                case BOOLEAN_TYPE:
-                    if (current->data.data.boolean_type == data.data.boolean_type) {
-                        return TRILO_XDATA_TYPE_SUCCESS;
-                    }
-                    break;
-                default:
-                    return TRILO_XDATA_TYPE_WAS_UNKNOWN;  // Unsupported data type
-            } // end switch
-        } // end if
-        current = current->next;
-    } // end while
 
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
+    while (current != NULL) {
+        if (tofu_compare(&current->data, &data, NULL) == 0 && current->priority == priority) {
+            return TOFU_SUCCESS; // Found
+        }
+
+        current = current->next;
+    }
+
+    return TOFU_NOT_FOUND; // Not found
+}
 
 // =======================
 // UTILITY FUNCTIONS
@@ -232,89 +145,69 @@ ctofu_error pqueue_search(const cpqueue* pqueue, ctofu data, int priority) {
 size_t pqueue_size(const cpqueue* pqueue) {
     if (pqueue == NULL) {
         return 0;
-    } // end if
+    }
 
     size_t size = 0;
     cpqueue_node* current = pqueue->front;
+
     while (current != NULL) {
-        size++;
+        ++size;
         current = current->next;
-    } // end while
+    }
 
     return size;
-} // end of func
+}
 
 ctofu* pqueue_getter(cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
         return NULL;
-    } // end if
+    }
 
     cpqueue_node* current = pqueue->front;
-    while (current != NULL) {
-        if (current->priority == priority) {
-            // Check data match based on type
-            switch (current->data.type) {
-                case INTEGER_TYPE:
-                    if (current->data.data.integer_type == data.data.integer_type) {
-                        return &(current->data);
-                    }
-                    break;
-                case DOUBLE_TYPE:
-                    if (current->data.data.double_type == data.data.double_type) {
-                        return &(current->data);
-                    }
-                    break;
-                case STRING_TYPE:
-                    if (strcmp(current->data.data.string_type, data.data.string_type) == 0) {
-                        return &(current->data);
-                    }
-                    break;
-                case CHAR_TYPE:
-                    if (current->data.data.char_type == data.data.char_type) {
-                        return &(current->data);
-                    }
-                    break;
-                case BOOLEAN_TYPE:
-                    if (current->data.data.boolean_type == data.data.boolean_type) {
-                        return &(current->data);
-                    }
-                    break;
-                default:
-                    return NULL;  // Unsupported data type
-            } // end switch
-        } // end if
-        current = current->next;
-    } // end while
 
-    return NULL;  // No matching data and priority found
-} // end of func
+    while (current != NULL) {
+        if (tofu_compare(&current->data, &data, NULL) == 0 && current->priority == priority) {
+            return &current->data; // Found
+        }
+
+        current = current->next;
+    }
+
+    return NULL; // Not found
+}
 
 ctofu_error pqueue_setter(cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    ctofu* existingData = pqueue_getter(pqueue, data, priority);
-    if (existingData != NULL) {
-        *existingData = data;
-        return TRILO_XDATA_TYPE_SUCCESS;
-    } // end if
+    cpqueue_node* current = pqueue->front;
 
-    return TRILO_XDATA_TYPE_WAS_MISMATCH;  // Data and priority not found
-} // end of func
+    while (current != NULL) {
+        if (tofu_compare(&current->data, &data, NULL) == 0 && current->priority == priority) {
+            // Found, update the data
+            current->data = data;
+            return TOFU_SUCCESS;
+        }
+
+        current = current->next;
+    }
+
+    return TOFU_NOT_FOUND; // Not found
+}
 
 bool pqueue_not_empty(const cpqueue* pqueue) {
     return pqueue != NULL && pqueue->front != NULL;
-} // end of func
+}
 
 bool pqueue_not_cnullptr(const cpqueue* pqueue) {
     return pqueue != NULL;
-} // end of func
+}
 
 bool pqueue_is_empty(const cpqueue* pqueue) {
     return pqueue == NULL || pqueue->front == NULL;
-} // end of func
+}
 
 bool pqueue_is_cnullptr(const cpqueue* pqueue) {
     return pqueue == NULL;
-} // end of func
+}

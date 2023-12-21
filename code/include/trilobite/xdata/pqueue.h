@@ -55,124 +55,31 @@ typedef struct cpqueue_node {
 
 typedef struct cpqueue {
     cpqueue_node* front;
-    enum ctofu_type queue_type;
+    ctofu_type queue_type;
 } cpqueue;
 
 // =======================
 // CREATE and DELETE
 // =======================
-
-/**
- * @brief Creates a new cpqueue instance with the specified queue type.
- *
- * @param queue_type The data type for the cpqueue (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created cpqueue instance.
- */
-cpqueue* pqueue_create(enum ctofu_type queue_type);
-
-/**
- * @brief Destroys the cpqueue instance, freeing all associated memory.
- *
- * @param pqueue The cpqueue instance to be destroyed.
- */
+cpqueue* pqueue_create(ctofu_type queue_type);
 void pqueue_erase(cpqueue* pqueue);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-
-/**
- * @brief Inserts a ctofu data element with a given priority into the cpqueue.
- *
- * @param pqueue   The cpqueue where the data will be inserted.
- * @param data     The ctofu data element to be inserted.
- * @param priority The priority of the data element.
- * @return A ctofu_error value indicating the result of the insertion.
- */
 ctofu_error pqueue_insert(cpqueue* pqueue, ctofu data, int priority);
-
-/**
- * @brief Removes a ctofu data element with a given priority from the cpqueue.
- *
- * @param pqueue   The cpqueue from which the data will be removed.
- * @param data     The ctofu data element to be removed.
- * @param priority The priority of the data element to remove.
- * @return A ctofu_error value indicating the result of the removal.
- */
-ctofu_error pqueue_remove(cpqueue* pqueue, ctofu data, int priority);
-
-/**
- * @brief Searches for a ctofu data element with a given priority in the cpqueue.
- *
- * @param pqueue   The cpqueue to search within.
- * @param data     The ctofu data element to search for.
- * @param priority The priority of the data element to search for.
- * @return A ctofu_error value indicating the result of the search.
- */
+ctofu_error pqueue_remove(cpqueue* pqueue, ctofu* data, int* priority);
 ctofu_error pqueue_search(const cpqueue* pqueue, ctofu data, int priority);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-
-/**
- * @brief Gets the size of the cpqueue.
- *
- * @param pqueue The cpqueue for which the size will be determined.
- * @return The size of the cpqueue.
- */
 size_t pqueue_size(const cpqueue* pqueue);
-
-/**
- * @brief Getter function to retrieve a ctofu data element with a given priority from the cpqueue.
- *
- * @param pqueue   The cpqueue from which the data will be retrieved.
- * @param data     The ctofu data element to retrieve.
- * @param priority The priority of the data element to retrieve.
- * @return A pointer to the ctofu data element in the cpqueue (or NULL if not found).
- */
 ctofu* pqueue_getter(cpqueue* pqueue, ctofu data, int priority);
-
-/**
- * @brief Setter function to update a ctofu data element with a given priority in the cpqueue.
- *
- * @param pqueue   The cpqueue in which the data will be updated.
- * @param data     The ctofu data element to update.
- * @param priority The priority of the data element to update.
- * @return A ctofu_error value indicating the result of the update.
- */
 ctofu_error pqueue_setter(cpqueue* pqueue, ctofu data, int priority);
-
-/**
- * @brief Checks if the cpqueue is not empty.
- *
- * @param pqueue The cpqueue to check.
- * @return true if the cpqueue is not empty, false otherwise.
- */
 bool pqueue_not_empty(const cpqueue* pqueue);
-
-/**
- * @brief Checks if the cpqueue is not a null pointer.
- *
- * @param pqueue The cpqueue to check.
- * @return true if the cpqueue is not a null pointer, false otherwise.
- */
 bool pqueue_not_cnullptr(const cpqueue* pqueue);
-
-/**
- * @brief Checks if the cpqueue is empty.
- *
- * @param pqueue The cpqueue to check.
- * @return true if the cpqueue is empty, false otherwise.
- */
 bool pqueue_is_empty(const cpqueue* pqueue);
-
-/**
- * @brief Checks if the cpqueue is a null pointer.
- *
- * @param pqueue The cpqueue to check.
- * @return true if the cpqueue is a null pointer, false otherwise.
- */
 bool pqueue_is_cnullptr(const cpqueue* pqueue);
 
 #ifdef __cplusplus
