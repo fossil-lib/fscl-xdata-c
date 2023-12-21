@@ -63,27 +63,27 @@ typedef struct {
 // =======================
 // CREATE and DELETE
 // =======================
-ctree* tree_create(ctofu_type tree);
-void tree_erase(ctree* tree);
+ctree* tscl_tree_create(ctofu_type tree);
+void tscl_tree_erase(ctree* tree);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error tree_insert(ctree* tree, ctofu data);
-ctofu_error tree_remove(ctree* tree, ctofu data);
-ctofu_error tree_search(const ctree* tree, ctofu data);
+ctofu_error tscl_tree_insert(ctree* tree, ctofu data);
+ctofu_error tscl_tree_remove(ctree* tree, ctofu data);
+ctofu_error tscl_tree_search(const ctree* tree, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t tree_size(const ctree* tree);
-ctofu* tree_getter(const ctree* tree, ctofu data);
-ctofu_error tree_setter(ctree* tree, ctofu data);
-bool tree_not_empty(const ctree* tree);
-bool tree_not_cnullptr(const ctree* tree);
-bool tree_is_empty(const ctree* tree);
-bool tree_is_cnullptr(const ctree* tree);
-bool tree_contains(const ctree* tree, ctofu data);
+size_t tscl_tree_size(const ctree* tree);
+ctofu* tscl_tree_getter(const ctree* tree, ctofu data);
+ctofu_error tscl_tree_setter(ctree* tree, ctofu data);
+bool tscl_tree_not_empty(const ctree* tree);
+bool tscl_tree_not_cnullptr(const ctree* tree);
+bool tscl_tree_is_empty(const ctree* tree);
+bool tscl_tree_is_cnullptr(const ctree* tree);
+bool tscl_tree_contains(const ctree* tree, ctofu data);
 
 #ifdef __cplusplus
 }

@@ -38,7 +38,7 @@
 // CREATE and DELETE
 // =======================
 
-cqueue* queue_create(ctofu_type queue_type) {
+cqueue* tscl_queue_create(ctofu_type queue_type) {
     cqueue* new_queue = (cqueue*)malloc(sizeof(cqueue));
     if (new_queue == NULL) {
         // Handle memory allocation failure
@@ -52,14 +52,14 @@ cqueue* queue_create(ctofu_type queue_type) {
     return new_queue;
 }
 
-void queue_erase(cqueue* queue) {
+void tscl_queue_erase(cqueue* queue) {
     if (queue == NULL) {
         return;
     }
 
     while (queue->front != NULL) {
         ctofu data;
-        queue_remove(queue, &data);
+        tscl_queue_remove(queue, &data);
     }
 
     free(queue);
@@ -69,7 +69,7 @@ void queue_erase(cqueue* queue) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-ctofu_error queue_insert(cqueue* queue, ctofu data) {
+ctofu_error tscl_queue_insert(cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -95,7 +95,7 @@ ctofu_error queue_insert(cqueue* queue, ctofu data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error queue_remove(cqueue* queue, ctofu* data) {
+ctofu_error tscl_queue_remove(cqueue* queue, ctofu* data) {
     if (queue == NULL || data == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -120,7 +120,7 @@ ctofu_error queue_remove(cqueue* queue, ctofu* data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error queue_search(const cqueue* queue, ctofu data) {
+ctofu_error tscl_queue_search(const cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -128,7 +128,7 @@ ctofu_error queue_search(const cqueue* queue, ctofu data) {
     cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_SUCCESS; // Found
         }
 
@@ -142,7 +142,7 @@ ctofu_error queue_search(const cqueue* queue, ctofu data) {
 // UTILITY FUNCTIONS
 // =======================
 
-size_t queue_size(const cqueue* queue) {
+size_t tscl_queue_size(const cqueue* queue) {
     if (queue == NULL) {
         return 0;
     }
@@ -158,7 +158,7 @@ size_t queue_size(const cqueue* queue) {
     return size;
 }
 
-ctofu* queue_getter(cqueue* queue, ctofu data) {
+ctofu* tscl_queue_getter(cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return NULL;
     }
@@ -166,7 +166,7 @@ ctofu* queue_getter(cqueue* queue, ctofu data) {
     cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return &current->data; // Found
         }
 
@@ -176,7 +176,7 @@ ctofu* queue_getter(cqueue* queue, ctofu data) {
     return NULL; // Not found
 }
 
-ctofu_error queue_setter(cqueue* queue, ctofu data) {
+ctofu_error tscl_queue_setter(cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -184,7 +184,7 @@ ctofu_error queue_setter(cqueue* queue, ctofu data) {
     cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             // Found, update the data
             current->data = data;
             return TOFU_SUCCESS;
@@ -196,18 +196,18 @@ ctofu_error queue_setter(cqueue* queue, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-bool queue_not_empty(const cqueue* queue) {
+bool tscl_queue_not_empty(const cqueue* queue) {
     return queue != NULL && queue->front != NULL;
 }
 
-bool queue_not_cnullptr(const cqueue* queue) {
+bool tscl_queue_not_cnullptr(const cqueue* queue) {
     return queue != NULL;
 }
 
-bool queue_is_empty(const cqueue* queue) {
+bool tscl_queue_is_empty(const cqueue* queue) {
     return queue == NULL || queue->front == NULL;
 }
 
-bool queue_is_cnullptr(const cqueue* queue) {
+bool tscl_queue_is_cnullptr(const cqueue* queue) {
     return queue == NULL;
 }

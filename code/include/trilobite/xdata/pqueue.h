@@ -61,26 +61,26 @@ typedef struct cpqueue {
 // =======================
 // CREATE and DELETE
 // =======================
-cpqueue* pqueue_create(ctofu_type queue_type);
-void pqueue_erase(cpqueue* pqueue);
+cpqueue* tscl_pqueue_create(ctofu_type queue_type);
+void tscl_pqueue_erase(cpqueue* pqueue);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error pqueue_insert(cpqueue* pqueue, ctofu data, int priority);
-ctofu_error pqueue_remove(cpqueue* pqueue, ctofu* data, int* priority);
-ctofu_error pqueue_search(const cpqueue* pqueue, ctofu data, int priority);
+ctofu_error tscl_pqueue_insert(cpqueue* pqueue, ctofu data, int priority);
+ctofu_error tscl_pqueue_remove(cpqueue* pqueue, ctofu* data, int* priority);
+ctofu_error tscl_pqueue_search(const cpqueue* pqueue, ctofu data, int priority);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t pqueue_size(const cpqueue* pqueue);
-ctofu* pqueue_getter(cpqueue* pqueue, ctofu data, int priority);
-ctofu_error pqueue_setter(cpqueue* pqueue, ctofu data, int priority);
-bool pqueue_not_empty(const cpqueue* pqueue);
-bool pqueue_not_cnullptr(const cpqueue* pqueue);
-bool pqueue_is_empty(const cpqueue* pqueue);
-bool pqueue_is_cnullptr(const cpqueue* pqueue);
+size_t tscl_pqueue_size(const cpqueue* pqueue);
+ctofu* tscl_pqueue_getter(cpqueue* pqueue, ctofu data, int priority);
+ctofu_error tscl_pqueue_setter(cpqueue* pqueue, ctofu data, int priority);
+bool tscl_pqueue_not_empty(const cpqueue* pqueue);
+bool tscl_pqueue_not_cnullptr(const cpqueue* pqueue);
+bool tscl_pqueue_is_empty(const cpqueue* pqueue);
+bool tscl_pqueue_is_cnullptr(const cpqueue* pqueue);
 
 #ifdef __cplusplus
 }

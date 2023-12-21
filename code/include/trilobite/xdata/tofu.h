@@ -154,35 +154,35 @@ typedef struct {
 } ctofu_iterator;
 
 // create and erase
-ctofu_error tofu_create(ctofu_type type, ctofu_data* value, ctofu** result);
-void tofu_erase(ctofu* value);
+ctofu_error tscl_tofu_create(ctofu_type type, ctofu_data* value, ctofu** result);
+void tscl_tofu_erase(ctofu* value);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error tofu_sort_insertion(ctofu* array, size_t num);
-ctofu_error tofu_sort_selection(ctofu* array, size_t num);
-ctofu_error tofu_reverse(ctofu* array, size_t num);
-ctofu_error tofu_compare(const ctofu* a, const ctofu* b, int* result);
-size_t tofu_search_linear(ctofu* array, size_t num, ctofu* key);
-size_t tofu_search_binary(ctofu* array, size_t num, ctofu* key);
+ctofu_error tscl_tofu_sort_insertion(ctofu* array, size_t num);
+ctofu_error tscl_tofu_sort_selection(ctofu* array, size_t num);
+ctofu_error tscl_tofu_reverse(ctofu* array, size_t num);
+ctofu_error tscl_tofu_compare(const ctofu* a, const ctofu* b, int* result);
+size_t tscl_tofu_search_linear(ctofu* array, size_t num, ctofu* key);
+size_t tscl_tofu_search_binary(ctofu* array, size_t num, ctofu* key);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-ctofu_error tofu_value_copy(const ctofu* source, ctofu* dest);
-void tofu_value_setter(const ctofu* source, ctofu* dest);
-ctofu_data tofu_value_getter(const ctofu* current);
-ctofu_type tofu_type_getter(const ctofu* current);
-bool tofu_not_cnullptr(const ctofu* value);
-bool tofu_its_cnullptr(const ctofu* value);
+ctofu_error tscl_tofu_value_copy(const ctofu* source, ctofu* dest);
+void tscl_tofu_value_setter(const ctofu* source, ctofu* dest);
+ctofu_data tscl_tofu_value_getter(const ctofu* current);
+ctofu_type tscl_tofu_type_getter(const ctofu* current);
+bool tscl_tofu_not_cnullptr(const ctofu* value);
+bool tscl_tofu_its_cnullptr(const ctofu* value);
 
 // =======================
 // ITERATOR FUNCTIONS
 // =======================
-ctofu_iterator tofu_iterator_at(ctofu* array, size_t num, size_t at);
-ctofu_iterator tofu_iterator_start(ctofu* array, size_t num);
-ctofu_iterator tofu_iterator_end(ctofu* array, size_t num);
+ctofu_iterator tscl_tofu_iterator_at(ctofu* array, size_t num, size_t at);
+ctofu_iterator tscl_tofu_iterator_start(ctofu* array, size_t num);
+ctofu_iterator tscl_tofu_iterator_end(ctofu* array, size_t num);
 
 #ifdef __cplusplus
 }

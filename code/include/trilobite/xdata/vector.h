@@ -59,27 +59,27 @@ typedef struct {
 // =======================
 // CREATE and DELETE
 // =======================
-cvector vector_create(ctofu_type expected_type);
-void vector_erase(cvector* vector);
+cvector tscl_vector_create(ctofu_type expected_type);
+void tscl_vector_erase(cvector* vector);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-void vector_push_back(cvector* vector, ctofu element);
-int vector_search(const cvector* vector, ctofu target);
-void vector_reverse(cvector* vector);
+void tscl_vector_push_back(cvector* vector, ctofu element);
+int tscl_vector_search(const cvector* vector, ctofu target);
+void tscl_vector_reverse(cvector* vector);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-bool vector_is_cnullptr(const cvector* vector);
-bool vector_not_cnullptr(const cvector* vector);
-bool vector_is_empty(const cvector* vector);
-bool vector_not_empty(const cvector* vector);
-void vector_setter(cvector* vector, size_t index, ctofu element);
-ctofu vector_getter(const cvector* vector, size_t index);
-size_t vector_size(const cvector* vector);
-void vector_peek(const cvector* vector);
+bool tscl_vector_is_cnullptr(const cvector* vector);
+bool tscl_vector_not_cnullptr(const cvector* vector);
+bool tscl_vector_is_empty(const cvector* vector);
+bool tscl_vector_not_empty(const cvector* vector);
+void tscl_vector_setter(cvector* vector, size_t index, ctofu element);
+ctofu tscl_vector_getter(const cvector* vector, size_t index);
+size_t tscl_vector_size(const cvector* vector);
+void tscl_vector_peek(const cvector* vector);
 
 #ifdef __cplusplus
 }

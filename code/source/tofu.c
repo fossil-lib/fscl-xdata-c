@@ -35,7 +35,7 @@
 #include <string.h>
 
 // create and erase
-ctofu_error tofu_create(ctofu_type type, ctofu_data* value, ctofu** result) {
+ctofu_error tscl_tofu_create(ctofu_type type, ctofu_data* value, ctofu** result) {
     *result = (ctofu*)malloc(sizeof(ctofu));
     if (*result == NULL) {
         return TOFU_WAS_BAD_MALLOC;
@@ -70,7 +70,7 @@ ctofu_error tofu_create(ctofu_type type, ctofu_data* value, ctofu** result) {
     return TOFU_SUCCESS;
 }
 
-void tofu_erase(ctofu* value) {
+void tscl_tofu_erase(ctofu* value) {
     if (value != NULL) {
         free(value);
     }
@@ -79,7 +79,7 @@ void tofu_erase(ctofu* value) {
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error tofu_sort_insertion(ctofu* array, size_t num) {
+ctofu_error tscl_tofu_sort_insertion(ctofu* array, size_t num) {
     if (array == NULL || num == 0) {
         return TOFU_WAS_NULLPTR;
     }
@@ -90,7 +90,7 @@ ctofu_error tofu_sort_insertion(ctofu* array, size_t num) {
 
         while (j > 0) {
             int cmpResult;
-            ctofu_error compareError = tofu_compare(&array[j - 1], &key, &cmpResult);
+            ctofu_error compareError = tscl_tofu_compare(&array[j - 1], &key, &cmpResult);
             if (compareError != TOFU_SUCCESS) {
                 return compareError;
             }
@@ -109,7 +109,7 @@ ctofu_error tofu_sort_insertion(ctofu* array, size_t num) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tofu_sort_selection(ctofu* array, size_t num) {
+ctofu_error tscl_tofu_sort_selection(ctofu* array, size_t num) {
     if (array == NULL || num == 0) {
         return TOFU_WAS_NULLPTR;
     }
@@ -119,7 +119,7 @@ ctofu_error tofu_sort_selection(ctofu* array, size_t num) {
 
         for (size_t j = i + 1; j < num; ++j) {
             int cmpResult;
-            ctofu_error compareError = tofu_compare(&array[j], &array[min_index], &cmpResult);
+            ctofu_error compareError = tscl_tofu_compare(&array[j], &array[min_index], &cmpResult);
             if (compareError != TOFU_SUCCESS) {
                 return compareError;
             }
@@ -139,14 +139,14 @@ ctofu_error tofu_sort_selection(ctofu* array, size_t num) {
     return TOFU_SUCCESS;
 }
 
-size_t tofu_search_linear(ctofu* array, size_t num, ctofu* key) {
+size_t tscl_tofu_search_linear(ctofu* array, size_t num, ctofu* key) {
     if (array == NULL || num == 0 || key == NULL) {
         return num; // Not found
     }
 
     for (size_t i = 0; i < num; ++i) {
         int cmpResult;
-        ctofu_error compareError = tofu_compare(&array[i], key, &cmpResult);
+        ctofu_error compareError = tscl_tofu_compare(&array[i], key, &cmpResult);
         if (compareError != TOFU_SUCCESS) {
             // Handle comparison error
             return num; // Not found
@@ -160,7 +160,7 @@ size_t tofu_search_linear(ctofu* array, size_t num, ctofu* key) {
     return num; // Not found
 }
 
-size_t tofu_search_binary(ctofu* array, size_t num, ctofu* key) {
+size_t tscl_tofu_search_binary(ctofu* array, size_t num, ctofu* key) {
     if (array == NULL || num == 0 || key == NULL) {
         return num; // Not found
     }
@@ -171,7 +171,7 @@ size_t tofu_search_binary(ctofu* array, size_t num, ctofu* key) {
         size_t mid = low + (high - low) / 2;
 
         int cmpResult;
-        ctofu_error compareError = tofu_compare(&array[mid], key, &cmpResult);
+        ctofu_error compareError = tscl_tofu_compare(&array[mid], key, &cmpResult);
         if (compareError != TOFU_SUCCESS) {
             // Handle comparison error
             return num; // Not found
@@ -189,7 +189,7 @@ size_t tofu_search_binary(ctofu* array, size_t num, ctofu* key) {
     return num; // Not found
 }
 
-ctofu_error tofu_reverse(ctofu* array, size_t num) {
+ctofu_error tscl_tofu_reverse(ctofu* array, size_t num) {
     if (array == NULL || num == 0) {
         return TOFU_WAS_NULLPTR;
     }
@@ -211,7 +211,7 @@ ctofu_error tofu_reverse(ctofu* array, size_t num) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tofu_compare(const ctofu* a, const ctofu* b, int* result) {
+ctofu_error tscl_tofu_compare(const ctofu* a, const ctofu* b, int* result) {
     if (a == NULL || b == NULL || result == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -250,7 +250,7 @@ ctofu_error tofu_compare(const ctofu* a, const ctofu* b, int* result) {
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-ctofu_error tofu_value_copy(const ctofu* source, ctofu* dest) {
+ctofu_error tscl_tofu_value_copy(const ctofu* source, ctofu* dest) {
     if (source == NULL || dest == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -295,7 +295,7 @@ ctofu_error tofu_value_copy(const ctofu* source, ctofu* dest) {
     return TOFU_SUCCESS;
 }
 
-void tofu_value_setter(const ctofu* source, ctofu* dest) {
+void tscl_tofu_value_setter(const ctofu* source, ctofu* dest) {
     if (source == NULL || dest == NULL) {
         return;
     }
@@ -337,7 +337,7 @@ void tofu_value_setter(const ctofu* source, ctofu* dest) {
     }
 }
 
-ctofu_data tofu_value_getter(const ctofu* current) {
+ctofu_data tscl_tofu_value_getter(const ctofu* current) {
     ctofu_data result;
 
     if (current == NULL) {
@@ -384,7 +384,7 @@ ctofu_data tofu_value_getter(const ctofu* current) {
     return result;
 }
 
-ctofu_type tofu_type_getter(const ctofu* current) {
+ctofu_type tscl_tofu_type_getter(const ctofu* current) {
     if (current == NULL) {
         // You might want to handle this case differently based on your requirements
         return INVALID_TYPE;
@@ -393,18 +393,18 @@ ctofu_type tofu_type_getter(const ctofu* current) {
     return current->type;
 }
 
-bool tofu_not_cnullptr(const ctofu* value) {
+bool tscl_tofu_not_cnullptr(const ctofu* value) {
     return value != NULL;
 }
 
-bool tofu_its_cnullptr(const ctofu* value) {
+bool tscl_tofu_its_cnullptr(const ctofu* value) {
     return value == NULL;
 }
 
 // =======================
 // ITERATOR FUNCTIONS
 // =======================
-ctofu_iterator tofu_iterator_at(ctofu* array, size_t num, size_t at) {
+ctofu_iterator tscl_tofu_iterator_at(ctofu* array, size_t num, size_t at) {
     ctofu_iterator iterator;
 
     if (array == NULL || num == 0 || at >= num) {
@@ -419,10 +419,10 @@ ctofu_iterator tofu_iterator_at(ctofu* array, size_t num, size_t at) {
     return iterator;
 }
 
-ctofu_iterator tofu_iterator_start(ctofu* array, size_t num) {
-    return tofu_iterator_at(array, num, 0);
+ctofu_iterator tscl_tofu_iterator_start(ctofu* array, size_t num) {
+    return tscl_tofu_iterator_at(array, num, 0);
 }
 
-ctofu_iterator tofu_iterator_end(ctofu* array, size_t num) {
-    return tofu_iterator_at(array, num, num);
+ctofu_iterator tscl_tofu_iterator_end(ctofu* array, size_t num) {
+    return tscl_tofu_iterator_at(array, num, num);
 }

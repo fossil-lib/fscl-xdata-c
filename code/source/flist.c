@@ -38,7 +38,7 @@
 // CREATE and DELETE
 // =======================
 
-cflist* flist_create(ctofu_type list_type) {
+cflist* tscl_flist_create(ctofu_type list_type) {
     cflist* new_flist = (cflist*)malloc(sizeof(cflist));
     if (new_flist == NULL) {
         // Handle memory allocation failure
@@ -51,14 +51,14 @@ cflist* flist_create(ctofu_type list_type) {
     return new_flist;
 }
 
-void flist_erase(cflist* flist) {
+void tscl_flist_erase(cflist* flist) {
     if (flist == NULL) {
         return;
     }
 
     while (flist->head != NULL) {
         ctofu data;
-        flist_remove(flist, &data);
+        tscl_flist_remove(flist, &data);
     }
 
     free(flist);
@@ -68,7 +68,7 @@ void flist_erase(cflist* flist) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-ctofu_error flist_insert(cflist* flist, ctofu data) {
+ctofu_error tscl_flist_insert(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -86,7 +86,7 @@ ctofu_error flist_insert(cflist* flist, ctofu data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error flist_remove(cflist* flist, ctofu* data) {
+ctofu_error tscl_flist_remove(cflist* flist, ctofu* data) {
     if (flist == NULL || data == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -104,7 +104,7 @@ ctofu_error flist_remove(cflist* flist, ctofu* data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error flist_search(const cflist* flist, ctofu data) {
+ctofu_error tscl_flist_search(const cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -112,7 +112,7 @@ ctofu_error flist_search(const cflist* flist, ctofu data) {
     cflist_node* current = flist->head;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_SUCCESS; // Found
         }
 
@@ -122,7 +122,7 @@ ctofu_error flist_search(const cflist* flist, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-void flist_reverse_forward(cflist* flist) {
+void tscl_flist_reverse_forward(cflist* flist) {
     if (flist == NULL || flist->head == NULL) {
         return;
     }
@@ -141,7 +141,7 @@ void flist_reverse_forward(cflist* flist) {
     flist->head = prev;
 }
 
-void flist_reverse_backward(cflist* flist) {
+void tscl_flist_reverse_backward(cflist* flist) {
     if (flist == NULL || flist->head == NULL) {
         return;
     }
@@ -163,7 +163,7 @@ void flist_reverse_backward(cflist* flist) {
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t flist_size(const cflist* flist) {
+size_t tscl_flist_size(const cflist* flist) {
     if (flist == NULL) {
         return 0;
     }
@@ -179,7 +179,7 @@ size_t flist_size(const cflist* flist) {
     return size;
 }
 
-ctofu* flist_getter(cflist* flist, ctofu data) {
+ctofu* tscl_flist_getter(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return NULL;
     }
@@ -187,7 +187,7 @@ ctofu* flist_getter(cflist* flist, ctofu data) {
     cflist_node* current = flist->head;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return &current->data; // Found
         }
 
@@ -197,7 +197,7 @@ ctofu* flist_getter(cflist* flist, ctofu data) {
     return NULL; // Not found
 }
 
-ctofu_error flist_setter(cflist* flist, ctofu data) {
+ctofu_error tscl_flist_setter(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -205,7 +205,7 @@ ctofu_error flist_setter(cflist* flist, ctofu data) {
     cflist_node* current = flist->head;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             // Found, update the data
             current->data = data;
             return TOFU_SUCCESS;
@@ -217,18 +217,18 @@ ctofu_error flist_setter(cflist* flist, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-bool flist_not_empty(const cflist* flist) {
+bool tscl_flist_not_empty(const cflist* flist) {
     return flist != NULL && flist->head != NULL;
 }
 
-bool flist_not_cnullptr(const cflist* flist) {
+bool tscl_flist_not_cnullptr(const cflist* flist) {
     return flist != NULL;
 }
 
-bool flist_is_empty(const cflist* flist) {
+bool tscl_flist_is_empty(const cflist* flist) {
     return flist == NULL || flist->head == NULL;
 }
 
-bool flist_is_cnullptr(const cflist* flist) {
+bool tscl_flist_is_cnullptr(const cflist* flist) {
     return flist == NULL;
 }

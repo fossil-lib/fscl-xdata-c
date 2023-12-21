@@ -37,7 +37,7 @@
 // CREATE and DELETE
 // =======================
 
-cvector vector_create(ctofu_type expected_type) {
+cvector tscl_vector_create(ctofu_type expected_type) {
     cvector new_vector;
     new_vector.data = (ctofu*)malloc(INITIAL_CAPACITY * sizeof(ctofu));
     if (new_vector.data == NULL) {
@@ -52,7 +52,7 @@ cvector vector_create(ctofu_type expected_type) {
     return new_vector;
 }
 
-void vector_erase(cvector* vector) {
+void tscl_vector_erase(cvector* vector) {
     if (vector == NULL) {
         return;
     }
@@ -67,7 +67,7 @@ void vector_erase(cvector* vector) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-void vector_push_back(cvector* vector, ctofu element) {
+void tscl_vector_push_back(cvector* vector, ctofu element) {
     if (vector == NULL) {
         return;
     }
@@ -92,13 +92,13 @@ void vector_push_back(cvector* vector, ctofu element) {
     vector->data[vector->size++] = element;
 }
 
-int vector_search(const cvector* vector, ctofu target) {
+int tscl_vector_search(const cvector* vector, ctofu target) {
     if (vector == NULL) {
         return -1;
     }
 
     for (size_t i = 0; i < vector->size; ++i) {
-        if (tofu_compare(&target, &vector->data[i], NULL) == TOFU_SUCCESS) {
+        if (tscl_tofu_compare(&target, &vector->data[i], NULL) == TOFU_SUCCESS) {
             return i; // Element found at index i
         }
     }
@@ -106,7 +106,7 @@ int vector_search(const cvector* vector, ctofu target) {
     return -1; // Element not found
 }
 
-void vector_reverse(cvector* vector) {
+void tscl_vector_reverse(cvector* vector) {
     if (vector == NULL) {
         return;
     }
@@ -123,23 +123,23 @@ void vector_reverse(cvector* vector) {
 // UTILITY FUNCTIONS
 // =======================
 
-bool vector_is_cnullptr(const cvector* vector) {
+bool tscl_vector_is_cnullptr(const cvector* vector) {
     return vector == NULL;
 }
 
-bool vector_not_cnullptr(const cvector* vector) {
+bool tscl_vector_not_cnullptr(const cvector* vector) {
     return vector != NULL;
 }
 
-bool vector_is_empty(const cvector* vector) {
+bool tscl_vector_is_empty(const cvector* vector) {
     return vector == NULL || vector->size == 0;
 }
 
-bool vector_not_empty(const cvector* vector) {
+bool tscl_vector_not_empty(const cvector* vector) {
     return vector != NULL && vector->size != 0;
 }
 
-void vector_setter(cvector* vector, size_t index, ctofu element) {
+void tscl_vector_setter(cvector* vector, size_t index, ctofu element) {
     if (vector == NULL || index >= vector->size) {
         return;
     }
@@ -153,7 +153,7 @@ void vector_setter(cvector* vector, size_t index, ctofu element) {
     vector->data[index] = element;
 }
 
-ctofu vector_getter(const cvector* vector, size_t index) {
+ctofu tscl_vector_getter(const cvector* vector, size_t index) {
     if (vector == NULL || index >= vector->size) {
         return (ctofu){.type = INVALID_TYPE}; // Invalid or out-of-bounds access
     }
@@ -161,7 +161,7 @@ ctofu vector_getter(const cvector* vector, size_t index) {
     return vector->data[index];
 }
 
-size_t vector_size(const cvector* vector) {
+size_t tscl_vector_size(const cvector* vector) {
     return vector != NULL ? vector->size : 0;
 }
 
@@ -194,7 +194,7 @@ void print_ctofu_value(const ctofu value) {
     }
 }
 
-void vector_peek(const cvector* vector) {
+void tscl_vector_peek(const cvector* vector) {
     if (vector == NULL) {
         return;
     }
@@ -213,7 +213,7 @@ void vector_peek(const cvector* vector) {
 // ITERATOR FUNCTIONS
 // =======================
 
-ctofu_iterator vector_iterator_start(const cvector* vector) {
+ctofu_iterator tscl_vector_iterator_start(const cvector* vector) {
     if (vector == NULL || vector->size == 0) {
         return (ctofu_iterator){.current_value = NULL, .index = 0};
     }
@@ -221,7 +221,7 @@ ctofu_iterator vector_iterator_start(const cvector* vector) {
     return (ctofu_iterator){.current_value = &vector->data[0], .index = 0};
 }
 
-ctofu_iterator vector_iterator_end(const cvector* vector) {
+ctofu_iterator tscl_vector_iterator_end(const cvector* vector) {
     if (vector == NULL || vector->size == 0) {
         return (ctofu_iterator){.current_value = NULL, .index = vector->size};
     }
@@ -229,7 +229,7 @@ ctofu_iterator vector_iterator_end(const cvector* vector) {
     return (ctofu_iterator){.current_value = &vector->data[vector->size - 1], .index = vector->size - 1};
 }
 
-ctofu_iterator vector_iterator_next(const cvector* vector, ctofu_iterator iterator) {
+ctofu_iterator tscl_vector_iterator_next(const cvector* vector, ctofu_iterator iterator) {
     if (vector == NULL || iterator.index >= vector->size - 1) {
         return (ctofu_iterator){.current_value = NULL, .index = iterator.index + 1};
     }
@@ -237,6 +237,6 @@ ctofu_iterator vector_iterator_next(const cvector* vector, ctofu_iterator iterat
     return (ctofu_iterator){.current_value = &vector->data[iterator.index + 1], .index = iterator.index + 1};
 }
 
-bool vector_iterator_has_next(const cvector* vector, ctofu_iterator iterator) {
+bool tscl_vector_iterator_has_next(const cvector* vector, ctofu_iterator iterator) {
     return vector != NULL && iterator.index < vector->size - 1;
 }

@@ -37,7 +37,7 @@
 // CREATE and DELETE
 // =======================
 
-cstack* stack_create(ctofu_type stack_type) {
+cstack* tscl_stack_create(ctofu_type stack_type) {
     cstack* new_stack = (cstack*)malloc(sizeof(cstack));
     if (new_stack == NULL) {
         return NULL; // Handle memory allocation failure
@@ -49,14 +49,14 @@ cstack* stack_create(ctofu_type stack_type) {
     return new_stack;
 }
 
-void stack_erase(cstack* stack) {
+void tscl_stack_erase(cstack* stack) {
     if (stack == NULL) {
         return;
     }
 
-    while (stack_not_empty(stack)) {
+    while (tscl_stack_not_empty(stack)) {
         ctofu removedData;
-        stack_remove(stack, &removedData);
+        tscl_stack_remove(stack, &removedData);
     }
 
     free(stack);
@@ -65,7 +65,7 @@ void stack_erase(cstack* stack) {
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error stack_insert(cstack* stack, ctofu data) {
+ctofu_error tscl_stack_insert(cstack* stack, ctofu data) {
     if (stack == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -83,7 +83,7 @@ ctofu_error stack_insert(cstack* stack, ctofu data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error stack_remove(cstack* stack, ctofu* data) {
+ctofu_error tscl_stack_remove(cstack* stack, ctofu* data) {
     if (stack == NULL || data == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -101,7 +101,7 @@ ctofu_error stack_remove(cstack* stack, ctofu* data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error stack_search(const cstack* stack, ctofu data) {
+ctofu_error tscl_stack_search(const cstack* stack, ctofu data) {
     if (stack == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -109,7 +109,7 @@ ctofu_error stack_search(const cstack* stack, ctofu data) {
     cstack_node* current = stack->top;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_SUCCESS; // Found
         }
 
@@ -123,7 +123,7 @@ ctofu_error stack_search(const cstack* stack, ctofu data) {
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t stack_size(const cstack* stack) {
+size_t tscl_stack_size(const cstack* stack) {
     if (stack == NULL) {
         return 0;
     }
@@ -139,7 +139,7 @@ size_t stack_size(const cstack* stack) {
     return size;
 }
 
-ctofu* stack_getter(cstack* stack, ctofu data) {
+ctofu* tscl_stack_getter(cstack* stack, ctofu data) {
     if (stack == NULL) {
         return NULL;
     }
@@ -147,7 +147,7 @@ ctofu* stack_getter(cstack* stack, ctofu data) {
     cstack_node* current = stack->top;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return &current->data; // Found
         }
 
@@ -157,7 +157,7 @@ ctofu* stack_getter(cstack* stack, ctofu data) {
     return NULL; // Not found
 }
 
-ctofu_error stack_setter(cstack* stack, ctofu data) {
+ctofu_error tscl_stack_setter(cstack* stack, ctofu data) {
     if (stack == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -165,7 +165,7 @@ ctofu_error stack_setter(cstack* stack, ctofu data) {
     cstack_node* current = stack->top;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             // Found, update the data
             current->data = data;
             return TOFU_SUCCESS;
@@ -177,23 +177,23 @@ ctofu_error stack_setter(cstack* stack, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-bool stack_not_empty(const cstack* stack) {
+bool tscl_stack_not_empty(const cstack* stack) {
     return stack != NULL && stack->top != NULL;
 }
 
-bool stack_not_cnullptr(const cstack* stack) {
+bool tscl_stack_not_cnullptr(const cstack* stack) {
     return stack != NULL;
 }
 
-bool stack_is_empty(const cstack* stack) {
+bool tscl_stack_is_empty(const cstack* stack) {
     return stack == NULL || stack->top == NULL;
 }
 
-bool stack_is_cnullptr(const cstack* stack) {
+bool tscl_stack_is_cnullptr(const cstack* stack) {
     return stack == NULL;
 }
 
-ctofu stack_top(cstack* stack, ctofu default_value) {
+ctofu tscl_stack_top(cstack* stack, ctofu default_value) {
     if (stack == NULL || stack->top == NULL) {
         return default_value; // Return default value if the stack is empty
     }

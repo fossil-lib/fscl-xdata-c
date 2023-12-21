@@ -37,7 +37,7 @@
 // =======================
 // CREATE and DELETE
 // =======================
-cdqueue* dqueue_create(ctofu_type list_type) {
+cdqueue* tscl_dqueue_create(ctofu_type list_type) {
     cdqueue* new_dqueue = (cdqueue*)malloc(sizeof(cdqueue));
     if (new_dqueue == NULL) {
         // Handle memory allocation failure
@@ -51,14 +51,14 @@ cdqueue* dqueue_create(ctofu_type list_type) {
     return new_dqueue;
 }
 
-void dqueue_erase(cdqueue* dqueue) {
+void tscl_dqueue_erase(cdqueue* dqueue) {
     if (dqueue == NULL) {
         return;
     }
 
     while (dqueue->front != NULL) {
         ctofu data;
-        dqueue_remove(dqueue, &data);
+        tscl_dqueue_remove(dqueue, &data);
     }
 
     free(dqueue);
@@ -68,7 +68,7 @@ void dqueue_erase(cdqueue* dqueue) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-ctofu_error dqueue_insert(cdqueue* dqueue, ctofu data) {
+ctofu_error tscl_dqueue_insert(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -96,7 +96,7 @@ ctofu_error dqueue_insert(cdqueue* dqueue, ctofu data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error dqueue_remove(cdqueue* dqueue, ctofu* data) {
+ctofu_error tscl_dqueue_remove(cdqueue* dqueue, ctofu* data) {
     if (dqueue == NULL || data == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -122,7 +122,7 @@ ctofu_error dqueue_remove(cdqueue* dqueue, ctofu* data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error dqueue_search(const cdqueue* dqueue, ctofu data) {
+ctofu_error tscl_dqueue_search(const cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -130,7 +130,7 @@ ctofu_error dqueue_search(const cdqueue* dqueue, ctofu data) {
     cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_SUCCESS; // Found
         }
 
@@ -144,7 +144,7 @@ ctofu_error dqueue_search(const cdqueue* dqueue, ctofu data) {
 // UTILITY FUNCTIONS
 // =======================
 
-size_t dqueue_size(const cdqueue* dqueue) {
+size_t tscl_dqueue_size(const cdqueue* dqueue) {
     if (dqueue == NULL) {
         return 0;
     }
@@ -160,7 +160,7 @@ size_t dqueue_size(const cdqueue* dqueue) {
     return size;
 }
 
-ctofu* dqueue_getter(cdqueue* dqueue, ctofu data) {
+ctofu* tscl_dqueue_getter(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
         return NULL;
     }
@@ -168,7 +168,7 @@ ctofu* dqueue_getter(cdqueue* dqueue, ctofu data) {
     cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return &current->data; // Found
         }
 
@@ -178,7 +178,7 @@ ctofu* dqueue_getter(cdqueue* dqueue, ctofu data) {
     return NULL; // Not found
 }
 
-ctofu_error dqueue_setter(cdqueue* dqueue, ctofu data) {
+ctofu_error tscl_dqueue_setter(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -186,7 +186,7 @@ ctofu_error dqueue_setter(cdqueue* dqueue, ctofu data) {
     cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             // Found, update the data
             current->data = data;
             return TOFU_SUCCESS;
@@ -198,18 +198,18 @@ ctofu_error dqueue_setter(cdqueue* dqueue, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-bool dqueue_not_empty(const cdqueue* dqueue) {
+bool tscl_dqueue_not_empty(const cdqueue* dqueue) {
     return dqueue != NULL && dqueue->front != NULL;
 }
 
-bool dqueue_not_cnullptr(const cdqueue* dqueue) {
+bool tscl_dqueue_not_cnullptr(const cdqueue* dqueue) {
     return dqueue != NULL;
 }
 
-bool dqueue_is_empty(const cdqueue* dqueue) {
+bool tscl_dqueue_is_empty(const cdqueue* dqueue) {
     return dqueue == NULL || dqueue->front == NULL;
 }
 
-bool dqueue_is_cnullptr(const cdqueue* dqueue) {
+bool tscl_dqueue_is_cnullptr(const cdqueue* dqueue) {
     return dqueue == NULL;
 }

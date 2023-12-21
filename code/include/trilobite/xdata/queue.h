@@ -63,26 +63,26 @@ typedef struct cqueue {
 // =======================
 // CREATE and DELETE
 // =======================
-cqueue* queue_create(ctofu_type list_type);
-void queue_erase(cqueue* queue);
+cqueue* tscl_queue_create(ctofu_type list_type);
+void tscl_queue_erase(cqueue* queue);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error queue_insert(cqueue* queue, ctofu data);
-ctofu_error queue_remove(cqueue* queue, ctofu* data);
-ctofu_error queue_search(const cqueue* queue, ctofu data);
+ctofu_error tscl_queue_insert(cqueue* queue, ctofu data);
+ctofu_error tscl_queue_remove(cqueue* queue, ctofu* data);
+ctofu_error tscl_queue_search(const cqueue* queue, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t queue_size(const cqueue* queue);
-ctofu* queue_getter(cqueue* queue, ctofu data);
-ctofu_error queue_setter(cqueue* queue, ctofu data);
-bool queue_not_empty(const cqueue* queue);
-bool queue_not_cnullptr(const cqueue* queue);
-bool queue_is_empty(const cqueue* queue);
-bool queue_is_cnullptr(const cqueue* queue);
+size_t tscl_queue_size(const cqueue* queue);
+ctofu* tscl_queue_getter(cqueue* queue, ctofu data);
+ctofu_error tscl_queue_setter(cqueue* queue, ctofu data);
+bool tscl_queue_not_empty(const cqueue* queue);
+bool tscl_queue_not_cnullptr(const cqueue* queue);
+bool tscl_queue_is_empty(const cqueue* queue);
+bool tscl_queue_is_cnullptr(const cqueue* queue);
 
 #ifdef __cplusplus
 }

@@ -61,27 +61,27 @@ typedef struct cstack {
 // =======================
 // CREATE and DELETE
 // =======================
-cstack* stack_create(ctofu_type list_type);
-void stack_erase(cstack* stack);
+cstack* tscl_stack_create(ctofu_type list_type);
+void tscl_stack_erase(cstack* stack);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error stack_insert(cstack* stack, ctofu data);
-ctofu_error stack_remove(cstack* stack, ctofu* data);
-ctofu_error stack_search(const cstack* stack, ctofu data);
+ctofu_error tscl_stack_insert(cstack* stack, ctofu data);
+ctofu_error tscl_stack_remove(cstack* stack, ctofu* data);
+ctofu_error tscl_stack_search(const cstack* stack, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t stack_size(const cstack* stack);
-ctofu* stack_getter(cstack* stack, ctofu data);
-ctofu_error stack_setter(cstack* stack, ctofu data);
-bool stack_not_empty(const cstack* stack);
-bool stack_not_cnullptr(const cstack* stack);
-bool stack_is_empty(const cstack* stack);
-bool stack_is_cnullptr(const cstack* stack);
-ctofu stack_top(cstack* stack, ctofu default_value);
+size_t tscl_stack_size(const cstack* stack);
+ctofu* tscl_stack_getter(cstack* stack, ctofu data);
+ctofu_error tscl_stack_setter(cstack* stack, ctofu data);
+bool tscl_stack_not_empty(const cstack* stack);
+bool tscl_stack_not_cnullptr(const cstack* stack);
+bool tscl_stack_is_empty(const cstack* stack);
+bool tscl_stack_is_cnullptr(const cstack* stack);
+ctofu tscl_stack_top(cstack* stack, ctofu default_value);
 
 #ifdef __cplusplus
 }

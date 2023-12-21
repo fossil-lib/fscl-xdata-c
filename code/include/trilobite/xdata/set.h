@@ -62,35 +62,35 @@ typedef struct cset {
 // =======================
 // CREATE and DELETE
 // =======================
-cset* set_create(ctofu_type list_type);
-void set_erase(cset* set);
+cset* tscl_set_create(ctofu_type list_type);
+void tscl_set_erase(cset* set);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error set_insert(cset* set, ctofu data);
-ctofu_error set_remove(cset* set, ctofu data);
-ctofu_error set_search(const cset* set, ctofu data);
+ctofu_error tscl_set_insert(cset* set, ctofu data);
+ctofu_error tscl_set_remove(cset* set, ctofu data);
+ctofu_error tscl_set_search(const cset* set, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t set_size(const cset* set);
-ctofu* set_getter(cset* set, ctofu data);
-ctofu_error set_setter(cset* set, ctofu data);
-bool set_not_empty(const cset* set);
-bool set_not_cnullptr(const cset* set);
-bool set_is_empty(const cset* set);
-bool set_is_cnullptr(const cset* set);
-bool set_contains(const cset* set, ctofu data);
+size_t tscl_set_size(const cset* set);
+ctofu* tscl_set_getter(cset* set, ctofu data);
+ctofu_error tscl_set_setter(cset* set, ctofu data);
+bool tscl_set_not_empty(const cset* set);
+bool tscl_set_not_cnullptr(const cset* set);
+bool tscl_set_is_empty(const cset* set);
+bool tscl_set_is_cnullptr(const cset* set);
+bool tscl_set_contains(const cset* set, ctofu data);
 
 // =======================
 // ITERATOR FUNCTIONS
 // =======================
-ctofu_iterator set_iterator_start(cset* set);
-ctofu_iterator set_iterator_end();
-ctofu_iterator set_iterator_next(ctofu_iterator iterator);
-bool set_iterator_has_next(ctofu_iterator iterator);
+ctofu_iterator tscl_set_iterator_start(cset* set);
+ctofu_iterator tscl_set_iterator_end(void);
+ctofu_iterator tscl_set_iterator_next(ctofu_iterator iterator);
+bool tscl_set_iterator_has_next(ctofu_iterator iterator);
 
 #ifdef __cplusplus
 }

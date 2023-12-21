@@ -64,26 +64,26 @@ typedef struct cdqueue {
 // =======================
 // CREATE and DELETE
 // =======================
-cdqueue* dqueue_create(ctofu_type list_type);
-void dqueue_erase(cdqueue* dqueue);
+cdqueue* tscl_dqueue_create(ctofu_type list_type);
+void tscl_dqueue_erase(cdqueue* dqueue);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error dqueue_insert(cdqueue* dqueue, ctofu data);
-ctofu_error dqueue_remove(cdqueue* dqueue, ctofu* data);
-ctofu_error dqueue_search(const cdqueue* dqueue, ctofu data);
+ctofu_error tscl_dqueue_insert(cdqueue* dqueue, ctofu data);
+ctofu_error tscl_dqueue_remove(cdqueue* dqueue, ctofu* data);
+ctofu_error tscl_dqueue_search(const cdqueue* dqueue, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t dqueue_size(const cdqueue* dqueue);
-ctofu* dqueue_getter(cdqueue* dqueue, ctofu data);
-ctofu_error dqueue_setter(cdqueue* dqueue, ctofu data);
-bool dqueue_not_empty(const cdqueue* dqueue);
-bool dqueue_not_cnullptr(const cdqueue* dqueue);
-bool dqueue_is_empty(const cdqueue* dqueue);
-bool dqueue_is_cnullptr(const cdqueue* dqueue);
+size_t tscl_dqueue_size(const cdqueue* dqueue);
+ctofu* tscl_dqueue_getter(cdqueue* dqueue, ctofu data);
+ctofu_error tscl_dqueue_setter(cdqueue* dqueue, ctofu data);
+bool tscl_dqueue_not_empty(const cdqueue* dqueue);
+bool tscl_dqueue_not_cnullptr(const cdqueue* dqueue);
+bool tscl_dqueue_is_empty(const cdqueue* dqueue);
+bool tscl_dqueue_is_cnullptr(const cdqueue* dqueue);
 
 #ifdef __cplusplus
 }

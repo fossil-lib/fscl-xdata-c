@@ -60,35 +60,35 @@ typedef struct {
 // =======================
 // CREATE and DELETE
 // =======================
-cmap* map_create(ctofu_type list_type);
-void map_erase(cmap* map);
+cmap* tscl_map_create(ctofu_type list_type);
+void tscl_map_erase(cmap* map);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error map_insert(cmap* map, ctofu key, ctofu value);
-ctofu_error map_remove(cmap* map, ctofu key);
-ctofu_error map_search(const cmap* map, ctofu key);
+ctofu_error tscl_map_insert(cmap* map, ctofu key, ctofu value);
+ctofu_error tscl_map_remove(cmap* map, ctofu key);
+ctofu_error tscl_map_search(const cmap* map, ctofu key);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t map_size(const cmap* map);
-ctofu_error map_getter(cmap* map, ctofu key, ctofu* value);
-ctofu_error map_setter(cmap* map, ctofu key, ctofu value);
-bool map_not_empty(const cmap* map);
-bool map_not_cnullptr(const cmap* map);
-bool map_is_empty(const cmap* map);
-bool map_is_cnullptr(const cmap* map);
-bool map_contains(const cmap* map, ctofu key);
+size_t tscl_map_size(const cmap* map);
+ctofu_error tscl_map_getter(cmap* map, ctofu key, ctofu* value);
+ctofu_error tscl_map_setter(cmap* map, ctofu key, ctofu value);
+bool tscl_map_not_empty(const cmap* map);
+bool tscl_map_not_cnullptr(const cmap* map);
+bool tscl_map_is_empty(const cmap* map);
+bool tscl_map_is_cnullptr(const cmap* map);
+bool tscl_map_contains(const cmap* map, ctofu key);
 
 // =======================
 // ITERATOR FUNCTIONS
 // =======================
-ctofu_iterator map_iterator_start(cmap* map);
-ctofu_iterator map_iterator_end(cmap* map);
-ctofu_iterator map_iterator_next(ctofu_iterator iterator);
-bool map_iterator_has_next(ctofu_iterator iterator);
+ctofu_iterator tscl_map_iterator_start(cmap* map);
+ctofu_iterator tscl_map_iterator_end(cmap* map);
+ctofu_iterator tscl_map_iterator_next(ctofu_iterator iterator);
+bool tscl_map_iterator_has_next(ctofu_iterator iterator);
 
 #ifdef __cplusplus
 }

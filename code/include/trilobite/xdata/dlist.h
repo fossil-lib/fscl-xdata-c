@@ -64,28 +64,28 @@ typedef struct cdlist {
 // =======================
 // CREATE and DELETE
 // =======================
-cdlist* dlist_create(ctofu_type list_type);
-void dlist_erase(cdlist* dlist);
+cdlist* tscl_dlist_create(ctofu_type list_type);
+void tscl_dlist_erase(cdlist* dlist);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error dlist_insert(cdlist* dlist, ctofu data);
-ctofu_error dlist_remove(cdlist* dlist, ctofu* data);
-ctofu_error dlist_search(const cdlist* dlist, ctofu data);
-void dlist_reverse_forward(cdlist* dlist);
-void dlist_reverse_backward(cdlist* dlist);
+ctofu_error tscl_dlist_insert(cdlist* dlist, ctofu data);
+ctofu_error tscl_dlist_remove(cdlist* dlist, ctofu* data);
+ctofu_error tscl_dlist_search(const cdlist* dlist, ctofu data);
+void tscl_dlist_reverse_forward(cdlist* dlist);
+void tscl_dlist_reverse_backward(cdlist* dlist);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t dlist_size(const cdlist* dlist);
-ctofu* dlist_getter(cdlist* dlist, ctofu data);
-ctofu_error dlist_setter(cdlist* dlist, ctofu data);
-bool dlist_not_empty(const cdlist* dlist);
-bool dlist_not_cnullptr(const cdlist* dlist);
-bool dlist_is_empty(const cdlist* dlist);
-bool dlist_is_cnullptr(const cdlist* dlist);
+size_t tscl_dlist_size(const cdlist* dlist);
+ctofu* tscl_dlist_getter(cdlist* dlist, ctofu data);
+ctofu_error tscl_dlist_setter(cdlist* dlist, ctofu data);
+bool tscl_dlist_not_empty(const cdlist* dlist);
+bool tscl_dlist_not_cnullptr(const cdlist* dlist);
+bool tscl_dlist_is_empty(const cdlist* dlist);
+bool tscl_dlist_is_cnullptr(const cdlist* dlist);
 
 #ifdef __cplusplus
 }

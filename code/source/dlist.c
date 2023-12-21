@@ -37,7 +37,7 @@
 // =======================
 // CREATE and DELETE
 // =======================
-cdlist* dlist_create(ctofu_type list_type) {
+cdlist* tscl_dlist_create(ctofu_type list_type) {
     cdlist* new_dlist = (cdlist*)malloc(sizeof(cdlist));
     if (new_dlist == NULL) {
         // Handle memory allocation failure
@@ -51,14 +51,14 @@ cdlist* dlist_create(ctofu_type list_type) {
     return new_dlist;
 }
 
-void dlist_erase(cdlist* dlist) {
+void tscl_dlist_erase(cdlist* dlist) {
     if (dlist == NULL) {
         return;
     }
 
     while (dlist->head != NULL) {
         ctofu data;
-        dlist_remove(dlist, &data);
+        tscl_dlist_remove(dlist, &data);
     }
 
     free(dlist);
@@ -67,7 +67,7 @@ void dlist_erase(cdlist* dlist) {
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error dlist_insert(cdlist* dlist, ctofu data) {
+ctofu_error tscl_dlist_insert(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -95,7 +95,7 @@ ctofu_error dlist_insert(cdlist* dlist, ctofu data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error dlist_remove(cdlist* dlist, ctofu* data) {
+ctofu_error tscl_dlist_remove(cdlist* dlist, ctofu* data) {
     if (dlist == NULL || data == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -121,7 +121,7 @@ ctofu_error dlist_remove(cdlist* dlist, ctofu* data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error dlist_search(const cdlist* dlist, ctofu data) {
+ctofu_error tscl_dlist_search(const cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -129,7 +129,7 @@ ctofu_error dlist_search(const cdlist* dlist, ctofu data) {
     cdlist_node* current = dlist->head;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_SUCCESS; // Found
         }
 
@@ -139,7 +139,7 @@ ctofu_error dlist_search(const cdlist* dlist, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-void dlist_reverse_forward(cdlist* dlist) {
+void tscl_dlist_reverse_forward(cdlist* dlist) {
     if (dlist == NULL || dlist->head == NULL || dlist->head == dlist->tail) {
         return;
     }
@@ -159,7 +159,7 @@ void dlist_reverse_forward(cdlist* dlist) {
     dlist->tail = temp;
 }
 
-void dlist_reverse_backward(cdlist* dlist) {
+void tscl_dlist_reverse_backward(cdlist* dlist) {
     if (dlist == NULL || dlist->head == NULL || dlist->head == dlist->tail) {
         return;
     }
@@ -183,7 +183,7 @@ void dlist_reverse_backward(cdlist* dlist) {
 // UTILITY FUNCTIONS
 // =======================
 
-size_t dlist_size(const cdlist* dlist) {
+size_t tscl_dlist_size(const cdlist* dlist) {
     if (dlist == NULL) {
         return 0;
     }
@@ -199,7 +199,7 @@ size_t dlist_size(const cdlist* dlist) {
     return size;
 }
 
-ctofu* dlist_getter(cdlist* dlist, ctofu data) {
+ctofu* tscl_dlist_getter(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return NULL;
     }
@@ -207,7 +207,7 @@ ctofu* dlist_getter(cdlist* dlist, ctofu data) {
     cdlist_node* current = dlist->head;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return &current->data; // Found
         }
 
@@ -217,7 +217,7 @@ ctofu* dlist_getter(cdlist* dlist, ctofu data) {
     return NULL; // Not found
 }
 
-ctofu_error dlist_setter(cdlist* dlist, ctofu data) {
+ctofu_error tscl_dlist_setter(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -225,7 +225,7 @@ ctofu_error dlist_setter(cdlist* dlist, ctofu data) {
     cdlist_node* current = dlist->head;
 
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             // Found, update the data
             current->data = data;
             return TOFU_SUCCESS;
@@ -237,18 +237,18 @@ ctofu_error dlist_setter(cdlist* dlist, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-bool dlist_not_empty(const cdlist* dlist) {
+bool tscl_dlist_not_empty(const cdlist* dlist) {
     return dlist != NULL && dlist->head != NULL;
 }
 
-bool dlist_not_cnullptr(const cdlist* dlist) {
+bool tscl_dlist_not_cnullptr(const cdlist* dlist) {
     return dlist != NULL;
 }
 
-bool dlist_is_empty(const cdlist* dlist) {
+bool tscl_dlist_is_empty(const cdlist* dlist) {
     return dlist == NULL || dlist->head == NULL;
 }
 
-bool dlist_is_cnullptr(const cdlist* dlist) {
+bool tscl_dlist_is_cnullptr(const cdlist* dlist) {
     return dlist == NULL;
 }

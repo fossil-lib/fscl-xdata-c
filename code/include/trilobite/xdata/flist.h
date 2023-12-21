@@ -62,28 +62,28 @@ typedef struct cflist {
 // =======================
 // CREATE and DELETE
 // =======================
-cflist* flist_create(ctofu_type list_type);
-void flist_erase(cflist* flist);
+cflist* tscl_flist_create(ctofu_type list_type);
+void tscl_flist_erase(cflist* flist);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error flist_insert(cflist* flist, ctofu data);
-ctofu_error flist_remove(cflist* flist, ctofu* data);
-ctofu_error flist_search(const cflist* flist, ctofu data);
-void flist_reverse_forward(cflist* flist);
-void flist_reverse_backward(cflist* flist);
+ctofu_error tscl_flist_insert(cflist* flist, ctofu data);
+ctofu_error tscl_flist_remove(cflist* flist, ctofu* data);
+ctofu_error tscl_flist_search(const cflist* flist, ctofu data);
+void tscl_flist_reverse_forward(cflist* flist);
+void tscl_flist_reverse_backward(cflist* flist);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t flist_size(const cflist* flist);
-ctofu* flist_getter(cflist* flist, ctofu data);
-ctofu_error flist_setter(cflist* flist, ctofu data);
-bool flist_not_empty(const cflist* flist);
-bool flist_not_cnullptr(const cflist* flist);
-bool flist_is_empty(const cflist* flist);
-bool flist_is_cnullptr(const cflist* flist);
+size_t tscl_flist_size(const cflist* flist);
+ctofu* tscl_flist_getter(cflist* flist, ctofu data);
+ctofu_error tscl_flist_setter(cflist* flist, ctofu data);
+bool tscl_flist_not_empty(const cflist* flist);
+bool tscl_flist_not_cnullptr(const cflist* flist);
+bool tscl_flist_is_empty(const cflist* flist);
+bool tscl_flist_is_cnullptr(const cflist* flist);
 
 #ifdef __cplusplus
 }

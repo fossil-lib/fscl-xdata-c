@@ -38,7 +38,7 @@
 // CREATE and DELETE
 // =======================
 
-cset* set_create(ctofu_type set_type) {
+cset* tscl_set_create(ctofu_type set_type) {
     cset* new_set = (cset*)malloc(sizeof(cset));
     if (new_set == NULL) {
         // Handle memory allocation failure
@@ -51,7 +51,7 @@ cset* set_create(ctofu_type set_type) {
     return new_set;
 }
 
-void set_erase(cset* set) {
+void tscl_set_erase(cset* set) {
     if (set == NULL) {
         return;
     }
@@ -71,7 +71,7 @@ void set_erase(cset* set) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-ctofu_error set_insert(cset* set, ctofu data) {
+ctofu_error tscl_set_insert(cset* set, ctofu data) {
     if (set == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -79,7 +79,7 @@ ctofu_error set_insert(cset* set, ctofu data) {
     // Check if the element already exists
     cset_node* current = set->head;
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_WAS_MISMATCH; // Duplicate element
         }
         current = current->next;
@@ -99,7 +99,7 @@ ctofu_error set_insert(cset* set, ctofu data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error set_remove(cset* set, ctofu data) {
+ctofu_error tscl_set_remove(cset* set, ctofu data) {
     if (set == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -109,7 +109,7 @@ ctofu_error set_remove(cset* set, ctofu data) {
 
     // Find the node to remove
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             if (prev == NULL) {
                 set->head = current->next; // Remove the head node
             } else {
@@ -127,7 +127,7 @@ ctofu_error set_remove(cset* set, ctofu data) {
     return TOFU_NOT_FOUND; // Element not found
 }
 
-ctofu_error set_search(const cset* set, ctofu data) {
+ctofu_error tscl_set_search(const cset* set, ctofu data) {
     if (set == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -136,7 +136,7 @@ ctofu_error set_search(const cset* set, ctofu data) {
 
     // Search for the element
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_SUCCESS; // Element found
         }
         current = current->next;
@@ -149,7 +149,7 @@ ctofu_error set_search(const cset* set, ctofu data) {
 // UTILITY FUNCTIONS
 // =======================
 
-size_t set_size(const cset* set) {
+size_t tscl_set_size(const cset* set) {
     if (set == NULL) {
         return 0;
     }
@@ -166,7 +166,7 @@ size_t set_size(const cset* set) {
     return size;
 }
 
-ctofu* set_getter(cset* set, ctofu data) {
+ctofu* tscl_set_getter(cset* set, ctofu data) {
     if (set == NULL) {
         return NULL;
     }
@@ -175,7 +175,7 @@ ctofu* set_getter(cset* set, ctofu data) {
 
     // Search for the element
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return &current->data; // Return a pointer to the element
         }
         current = current->next;
@@ -184,7 +184,7 @@ ctofu* set_getter(cset* set, ctofu data) {
     return NULL; // Element not found
 }
 
-ctofu_error set_setter(cset* set, ctofu data) {
+ctofu_error tscl_set_setter(cset* set, ctofu data) {
     if (set == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -193,7 +193,7 @@ ctofu_error set_setter(cset* set, ctofu data) {
 
     // Search for the element
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             current->data = data; // Update the element
             return TOFU_SUCCESS;
         }
@@ -203,23 +203,23 @@ ctofu_error set_setter(cset* set, ctofu data) {
     return TOFU_NOT_FOUND; // Element not found
 }
 
-bool set_not_empty(const cset* set) {
+bool tscl_set_not_empty(const cset* set) {
     return set != NULL && set->head != NULL;
 }
 
-bool set_not_cnullptr(const cset* set) {
+bool tscl_set_not_cnullptr(const cset* set) {
     return set != NULL;
 }
 
-bool set_is_empty(const cset* set) {
+bool tscl_set_is_empty(const cset* set) {
     return set == NULL || set->head == NULL;
 }
 
-bool set_is_cnullptr(const cset* set) {
+bool tscl_set_is_cnullptr(const cset* set) {
     return set == NULL;
 }
 
-bool set_contains(const cset* set, ctofu data) {
+bool tscl_set_contains(const cset* set, ctofu data) {
     if (set == NULL) {
         return false;
     }
@@ -228,7 +228,7 @@ bool set_contains(const cset* set, ctofu data) {
 
     // Check if the element exists
     while (current != NULL) {
-        if (tofu_compare(&current->data, &data, NULL) == 0) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return true; // Element found
         }
         current = current->next;
@@ -240,7 +240,7 @@ bool set_contains(const cset* set, ctofu data) {
 // =======================
 // ITERATOR FUNCTIONS
 // =======================
-ctofu_iterator set_iterator_start(cset* set) {
+ctofu_iterator tscl_set_iterator_start(cset* set) {
     ctofu_iterator iterator;
     iterator.current_key = NULL;
     iterator.current_value = NULL;
@@ -254,7 +254,7 @@ ctofu_iterator set_iterator_start(cset* set) {
     return iterator;
 }
 
-ctofu_iterator set_iterator_end() {
+ctofu_iterator tscl_set_iterator_end() {
     ctofu_iterator iterator;
     iterator.current_key = NULL;
     iterator.current_value = NULL;
@@ -262,7 +262,7 @@ ctofu_iterator set_iterator_end() {
     return iterator;
 }
 
-ctofu_iterator set_iterator_next(ctofu_iterator iterator) {
+ctofu_iterator tscl_set_iterator_next(ctofu_iterator iterator) {
     if (iterator.current_value != NULL) {
         iterator.current_key = &iterator.current_value[1];
         iterator.current_value = &iterator.current_value[1];
@@ -272,6 +272,6 @@ ctofu_iterator set_iterator_next(ctofu_iterator iterator) {
     return iterator;
 }
 
-bool set_iterator_has_next(ctofu_iterator iterator) {
+bool tscl_set_iterator_has_next(ctofu_iterator iterator) {
     return iterator.current_value != NULL;
 }
