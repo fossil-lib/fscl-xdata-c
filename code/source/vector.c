@@ -186,6 +186,7 @@ void print_ctofu_value(const ctofu value) {
         case NULLPTR_TYPE:
             printf("cnullptr");
             break;
+        case ARRAY_TYPE:
         case INVALID_TYPE:
         case UNKNOWN_TYPE:
             printf("[Invalid or Unknown Type]");
