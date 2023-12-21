@@ -356,9 +356,7 @@ ctofu_data tofu_value_getter(const ctofu* current) {
             break;
 
         case STRING_TYPE:
-            // Initialize string_type before using strcpy
-            result.string_type[0] = '\0';
-            strcpy(result.string_type, current->data.string_type);
+            result.string_type = current->data.string_type;
             break;
 
         case CHAR_TYPE:
