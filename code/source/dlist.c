@@ -37,231 +37,218 @@
 // =======================
 // CREATE and DELETE
 // =======================
+cdlist* dlist_create(ctofu_type list_type) {
+    cdlist* new_dlist = (cdlist*)malloc(sizeof(cdlist));
+    if (new_dlist == NULL) {
+        // Handle memory allocation failure
+        return NULL;
+    }
 
-// Function to create a new cdlist
-cdlist* dlist_create(enum ctofu_type list_type) {
-    cdlist* dlist = (cdlist*)malloc(sizeof(cdlist));
-    if (dlist == NULL) {
-        fprintf(stderr, "Memory allocation failed!\n");
-        exit(EXIT_FAILURE);
-    } // end if
-    dlist->head = NULL;
-    dlist->list_type = list_type;
-    return dlist;
-} // end of func
+    new_dlist->list_type = list_type;
+    new_dlist->head = NULL;
+    new_dlist->tail = NULL;
 
-// Function to destroy the cdlist
+    return new_dlist;
+}
+
 void dlist_erase(cdlist* dlist) {
-    cdlist_node* current = dlist->head;
-    while (current != NULL) {
-        cdlist_node* temp = current;
-        current = current->next;
-        free(temp);
-    } // end while
+    if (dlist == NULL) {
+        return;
+    }
+
+    while (dlist->head != NULL) {
+        ctofu data;
+        dlist_remove(dlist, &data);
+    }
+
     free(dlist);
-} // end of func
+}
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-
-// Function to insert a ctofu data into the list
 ctofu_error dlist_insert(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    if (data.type != dlist->list_type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
+    cdlist_node* new_node = (cdlist_node*)malloc(sizeof(cdlist_node));
+    if (new_node == NULL) {
+        // Handle memory allocation failure
+        return TOFU_WAS_BAD_MALLOC;
+    }
 
-    cdlist_node* newNode = (cdlist_node*)malloc(sizeof(cdlist_node));
-    if (newNode == NULL) {
-        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
-    } // end of
+    new_node->data = data;
+    new_node->prev = NULL;
+    new_node->next = NULL;
 
-    newNode->data = data;
-    newNode->prev = NULL;
-    newNode->next = dlist->head;
+    if (dlist->head == NULL) {
+        // List is empty
+        dlist->head = new_node;
+        dlist->tail = new_node;
+    } else {
+        new_node->next = dlist->head;
+        dlist->head->prev = new_node;
+        dlist->head = new_node;
+    }
 
-    if (dlist->head != NULL) {
-        dlist->head->prev = newNode;
-    } // end if
+    return TOFU_SUCCESS;
+}
 
-    dlist->head = newNode;
+ctofu_error dlist_remove(cdlist* dlist, ctofu* data) {
+    if (dlist == NULL || data == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
 
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
+    if (dlist->head == NULL) {
+        return TOFU_NOT_FOUND; // List is empty
+    }
 
-// Function to remove a ctofu data from the list
-ctofu_error dlist_remove(cdlist* dlist, ctofu data) {
-    if (dlist == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+    cdlist_node* temp = dlist->head;
+    *data = temp->data;
 
-    if (data.type != dlist->list_type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
+    if (dlist->head == dlist->tail) {
+        // Only one element in the list
+        free(temp);
+        dlist->head = NULL;
+        dlist->tail = NULL;
+    } else {
+        dlist->head = dlist->head->next;
+        dlist->head->prev = NULL;
+        free(temp);
+    }
 
-    cdlist_node* current = dlist->head;
-    while (current != NULL) {
-        if (tofu_compare(current->data, data) == 0) {
-            // Found the data to remove
-            if (current->prev != NULL) {
-                current->prev->next = current->next;
-            } else {
-                dlist->head = current->next;
-            } // end if else
-            if (current->next != NULL) {
-                current->next->prev = current->prev;
-            } // end if
-            free(current);
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } // end if
-        current = current->next;
-    } // end while
+    return TOFU_SUCCESS;
+}
 
-    return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Data not found
-} // end of func
-
-// Function to search for a ctofu data in the list
 ctofu_error dlist_search(const cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
-
-    if (data.type != dlist->list_type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
     cdlist_node* current = dlist->head;
+
     while (current != NULL) {
-        if (tofu_compare(current->data, data) == 0) {
-            return TRILO_XDATA_TYPE_SUCCESS; // Data found
-        } // end if
+        if (tofu_compare(&current->data, &data, NULL) == 0) {
+            return TOFU_SUCCESS; // Found
+        }
+
         current = current->next;
-    } // end while
+    }
 
-    return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Data not found
-} // end of func
+    return TOFU_NOT_FOUND; // Not found
+}
 
-// Function to reverse the list in the forward direction
-void dlist_reverse_forword(cdlist* dlist) {
-    if (dlist == NULL || dlist->head == NULL) {
+void dlist_reverse_forward(cdlist* dlist) {
+    if (dlist == NULL || dlist->head == NULL || dlist->head == dlist->tail) {
         return;
-    } // end if
+    }
 
     cdlist_node* current = dlist->head;
-    cdlist_node* prev = NULL;
+    cdlist_node* temp = NULL;
 
     while (current != NULL) {
-        cdlist_node* next = current->next;
-        current->next = prev;
-        current->prev = next;
-        prev = current;
-        current = next;
-    } // end while
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+        current = current->prev;
+    }
 
-    dlist->head = prev;
-} // end of func
+    temp = dlist->head;
+    dlist->head = dlist->tail;
+    dlist->tail = temp;
+}
 
-// Function to reverse the list in the backward direction
 void dlist_reverse_backward(cdlist* dlist) {
-    if (dlist == NULL || dlist->head == NULL) {
+    if (dlist == NULL || dlist->head == NULL || dlist->head == dlist->tail) {
         return;
-    } // end if
+    }
 
-    cdlist_node* current = dlist->head;
-
-    while (current->next != NULL) {
-        current = current->next;
-    } // end while
-
-    dlist->head = current;
+    cdlist_node* current = dlist->tail;
+    cdlist_node* temp = NULL;
 
     while (current != NULL) {
-        cdlist_node* temp = current->next;
+        temp = current->next;
         current->next = current->prev;
         current->prev = temp;
-        current = temp;
-    } // end while
-} // end of func
+        current = current->next;
+    }
+
+    temp = dlist->head;
+    dlist->head = dlist->tail;
+    dlist->tail = temp;
+}
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-// Function to get the size of the cdlist
-size_t dlist_size(const cdlist* dlist) {
-    size_t count = 0;
-    cdlist_node* current = dlist->head;
-    while (current != NULL) {
-        count++;
-        current = current->next;
-    } // end while
-    return count;
-} // end of func
 
-// Function to insert a ctofu data into the list
+size_t dlist_size(const cdlist* dlist) {
+    if (dlist == NULL) {
+        return 0;
+    }
+
+    size_t size = 0;
+    cdlist_node* current = dlist->head;
+
+    while (current != NULL) {
+        ++size;
+        current = current->next;
+    }
+
+    return size;
+}
+
 ctofu* dlist_getter(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return NULL;
-    } // end if
+    }
 
     cdlist_node* current = dlist->head;
+
     while (current != NULL) {
-        if (tofu_compare(current->data, data) == 0) {
-            return &(current->data); // Data found, return a pointer to it
-        } // end if
+        if (tofu_compare(&current->data, &data, NULL) == 0) {
+            return &current->data; // Found
+        }
+
         current = current->next;
-    } // end while
+    }
 
-    return NULL; // Data not found
-} // end of func
+    return NULL; // Not found
+}
 
-// Function to insert a ctofu data into the list
 ctofu_error dlist_setter(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    if (data.type != dlist->list_type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
+    cdlist_node* current = dlist->head;
 
-    cdlist_node* newNode = (cdlist_node*)malloc(sizeof(cdlist_node));
-    if (newNode == NULL) {
-        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
-    } // end if
+    while (current != NULL) {
+        if (tofu_compare(&current->data, &data, NULL) == 0) {
+            // Found, update the data
+            current->data = data;
+            return TOFU_SUCCESS;
+        }
 
-    newNode->data = data;
-    newNode->prev = NULL;
-    newNode->next = dlist->head;
+        current = current->next;
+    }
 
-    if (dlist->head != NULL) {
-        dlist->head->prev = newNode;
-    } // end if
+    return TOFU_NOT_FOUND; // Not found
+}
 
-    dlist->head = newNode;
-
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
-
-// Function to check if the list is empty
 bool dlist_not_empty(const cdlist* dlist) {
     return dlist != NULL && dlist->head != NULL;
-} // end of func
+}
 
-// Function to check if the list is null
 bool dlist_not_cnullptr(const cdlist* dlist) {
     return dlist != NULL;
-} // end of func
+}
 
-// Function to check if the list is empty
 bool dlist_is_empty(const cdlist* dlist) {
     return dlist == NULL || dlist->head == NULL;
-} // end of func
+}
 
-// Function to check if the list is null
 bool dlist_is_cnullptr(const cdlist* dlist) {
     return dlist == NULL;
-} // end of func
+}

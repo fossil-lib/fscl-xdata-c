@@ -58,133 +58,33 @@ typedef struct cdlist_node {
 typedef struct cdlist {
     cdlist_node* head;
     cdlist_node* tail;
-    enum ctofu_type list_type;  // Type of the linked list
+    ctofu_type list_type;  // Type of the linked list
 } cdlist;
 
 // =======================
 // CREATE and DELETE
 // =======================
-
-/**
- * @brief Creates a new cdlist instance with the specified list type.
- *
- * @param list_type The data type for the cdlist (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created cdlist instance.
- */
-cdlist* dlist_create(enum ctofu_type list_type);
-
-/**
- * @brief Destroys the cdlist instance, freeing all associated memory.
- *
- * @param dlist The cdlist instance to be destroyed.
- */
+cdlist* dlist_create(ctofu_type list_type);
 void dlist_erase(cdlist* dlist);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-
-/**
- * @brief Inserts a ctofu data element into the cdlist.
- *
- * @param dlist The cdlist where the data will be inserted.
- * @param data   The ctofu data element to be inserted.
- * @return A ctofu_error value indicating the result of the insertion.
- */
 ctofu_error dlist_insert(cdlist* dlist, ctofu data);
-
-/**
- * @brief Removes a ctofu data element from the cdlist.
- *
- * @param dlist The cdlist from which the data will be removed.
- * @param data   The ctofu data element to be removed.
- * @return A ctofu_error value indicating the result of the removal.
- */
 ctofu_error dlist_remove(cdlist* dlist, ctofu data);
-
-/**
- * @brief Searches for a ctofu data element in the cdlist.
- *
- * @param dlist The cdlist to search within.
- * @param data   The ctofu data element to search for.
- * @return A ctofu_error value indicating the result of the search.
- */
 ctofu_error dlist_search(const cdlist* dlist, ctofu data);
-
-/**
- * @brief Reverses the cdlist in the forward direction.
- *
- * @param dlist The cdlist to be reversed.
- */
 void dlist_reverse_forward(cdlist* dlist);
-
-/**
- * @brief Reverses the cdlist in the backward direction.
- *
- * @param dlist The cdlist to be reversed.
- */
 void dlist_reverse_backward(cdlist* dlist);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-
-/**
- * @brief Gets the size of the cdlist.
- *
- * @param dlist The cdlist for which the size will be determined.
- * @return The size of the cdlist.
- */
 size_t dlist_size(const cdlist* dlist);
-
-/**
- * @brief Getter function to retrieve a ctofu data element from the cdlist.
- *
- * @param dlist The cdlist from which the data will be retrieved.
- * @param data   The ctofu data element to retrieve.
- * @return A pointer to the ctofu data element in the cdlist (or NULL if not found).
- */
 ctofu* dlist_getter(cdlist* dlist, ctofu data);
-
-/**
- * @brief Setter function to update a ctofu data element in the cdlist.
- *
- * @param dlist The cdlist in which the data will be updated.
- * @param data   The ctofu data element to update.
- * @return A ctofu_error value indicating the result of the update.
- */
 ctofu_error dlist_setter(cdlist* dlist, ctofu data);
-
-/**
- * @brief Checks if the cdlist is not empty.
- *
- * @param dlist The cdlist to check.
- * @return true if the cdlist is not empty, false otherwise.
- */
 bool dlist_not_empty(const cdlist* dlist);
-
-/**
- * @brief Checks if the cdlist is not a null pointer.
- *
- * @param dlist The cdlist to check.
- * @return true if the cdlist is not a null pointer, false otherwise.
- */
 bool dlist_not_cnullptr(const cdlist* dlist);
-
-/**
- * @brief Checks if the cdlist is empty.
- *
- * @param dlist The cdlist to check.
- * @return true if the cdlist is empty, false otherwise.
- */
 bool dlist_is_empty(const cdlist* dlist);
-
-/**
- * @brief Checks if the cdlist is a null pointer.
- *
- * @param dlist The cdlist to check.
- * @return true if the cdlist is a null pointer, false otherwise.
- */
 bool dlist_is_cnullptr(const cdlist* dlist);
 
 #ifdef __cplusplus
