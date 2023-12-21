@@ -33,30 +33,49 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cdqueue instance with INTEGER_TYPE
-    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
+    // Create a doubly-ended queue for integers
+    cdqueue* int_dqueue = dqueue_create(INTEGER_TYPE);
 
-    // Insert data elements into the cdqueue
-    dqueue_insert(dqueue, tofu_create_from_integer(10));
-    dqueue_insert(dqueue, tofu_create_from_integer(20));
-    dqueue_insert(dqueue, tofu_create_from_integer(30));
+    // Insert integers into the front of the deque
+    for (int i = 1; i <= 5; ++i) {
+        ctofu data;
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i}, &data);
+        dqueue_insert(int_dqueue, data);
+    }
 
-    // Print the size of the cdqueue
-    printf("Size of the double-ended queue: %zu\n", dqueue_size(dqueue));
+    // Print the size of the deque
+    printf("Deque size: %zu\n", dqueue_size(int_dqueue));
 
-    // Print the cdqueue elements
-    printf("Double-ended queue elements:\n");
-    while (!dqueue_is_empty(dqueue)) {
-        ctofu* tofu = dqueue_get_front(dqueue);
-        printf("%d\n", tofu_get_integer(*tofu));
-        dqueue_remove_front(dqueue);
-    } // end while
+    // Print the elements of the deque using a for loop
+    printf("Deque elements:\n");
+    for (size_t i = 0; i < dqueue_size(int_dqueue); ++i) {
+        ctofu current = *dqueue_getter(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
+        printf("%d ", current.data.integer_type);
+    }
+    printf("\n");
 
-    // Check if the cdqueue is not empty
-    printf("Is double-ended queue not empty? %s\n", dqueue_not_empty(dqueue) ? "true" : "false");
+    // Remove an element from the front of the deque
+    ctofu removed_element;
+    dqueue_remove(int_dqueue, &removed_element);
 
-    // Destroy the cdqueue
-    dqueue_erase(dqueue);
+    // Print the updated size and elements of the deque
+    printf("Updated Deque size: %zu\n", dqueue_size(int_dqueue));
+    printf("Updated Deque elements:\n");
+    for (size_t i = 0; i < dqueue_size(int_dqueue); ++i) {
+        ctofu current = *dqueue_getter(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
+        printf("%d ", current.data.integer_type);
+    }
+    printf("\n");
+
+    // Check if the deque is not empty
+    if (dqueue_not_empty(int_dqueue)) {
+        printf("Deque is not empty.\n");
+    } else {
+        printf("Deque is empty.\n");
+    }
+
+    // Clean up the memory
+    dqueue_erase(int_dqueue);
 
     return 0;
 } // end of func

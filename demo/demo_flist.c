@@ -33,46 +33,54 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cflist instance with INTEGER_TYPE
-    cflist* flist = flist_create(INTEGER_TYPE);
+    // Create a singly linked list for integers
+    cflist* int_flist = flist_create(INTEGER_TYPE);
 
-    // Insert data elements into the cflist
-    flist_insert(flist, tofu_create_from_integer(10));
-    flist_insert(flist, tofu_create_from_integer(20));
-    flist_insert(flist, tofu_create_from_integer(30));
+    // Insert integers into the linked list
+    for (int i = 1; i <= 5; ++i) {
+        ctofu data;
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i}, &data);
+        flist_insert(int_flist, data);
+    }
 
-    // Print the size of the cflist
-    printf("Size of the forward list: %zu\n", flist_size(flist));
+    // Print the size of the linked list
+    printf("Linked List size: %zu\n", flist_size(int_flist));
 
-    // Print the cflist elements
-    printf("Forward list elements:\n");
-    cflist_node* current = flist_get_head(flist);
-    while (current != NULL) {
-        ctofu* tofu = flist_get_node_data(current);
-        printf("%d\n", tofu_get_integer(*tofu));
-        current = flist_get_next(current);
-    } // end while
+    // Print the elements of the linked list using a for loop
+    printf("Linked List elements:\n");
+    for (size_t i = 0; i < flist_size(int_flist); ++i) {
+        ctofu current = *flist_getter(int_flist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
+        printf("%d ", current.data.integer_type);
+    }
+    printf("\n");
 
-    // Check if the cflist is not empty
-    printf("Is forward list not empty? %s\n", flist_not_empty(flist) ? "true" : "false");
+    // Reverse the linked list forward and print the reversed elements
+    flist_reverse_forward(int_flist);
+    printf("Reversed Linked List elements (forward):\n");
+    for (size_t i = 0; i < flist_size(int_flist); ++i) {
+        ctofu current = *flist_getter(int_flist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
+        printf("%d ", current.data.integer_type);
+    }
+    printf("\n");
 
-    // Reverse the cflist in the forward direction
-    flist_reverse_forward(flist);
+    // Reverse the linked list backward and print the reversed elements
+    flist_reverse_backward(int_flist);
+    printf("Reversed Linked List elements (backward):\n");
+    for (size_t i = 0; i < flist_size(int_flist); ++i) {
+        ctofu current = *flist_getter(int_flist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
+        printf("%d ", current.data.integer_type);
+    }
+    printf("\n");
 
-    // Print the reversed cflist elements
-    printf("Reversed forward list elements:\n");
-    current = flist_get_head(flist);
-    while (current != NULL) {
-        ctofu* tofu = flist_get_node_data(current);
-        printf("%d\n", tofu_get_integer(*tofu));
-        current = flist_get_next(current);
-    } // end while
+    // Check if the linked list is empty
+    if (flist_is_empty(int_flist)) {
+        printf("Linked List is empty.\n");
+    } else {
+        printf("Linked List is not empty.\n");
+    }
 
-    // Check if the cflist is not empty
-    printf("Is forward list not empty? %s\n", flist_not_empty(flist) ? "true" : "false");
-
-    // Destroy the cflist
-    flist_erase(flist);
+    // Clean up the memory
+    flist_erase(int_flist);
 
     return 0;
 } // end of func

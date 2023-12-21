@@ -33,47 +33,37 @@
 #include <stdio.h>
 
 int main() {
-    cmap* map = map_create(STRING_TYPE);
+    // Create a map for integers
+    cmap* int_map = map_create(INTEGER_TYPE);
 
     // Insert key-value pairs into the map
-    ctofu key1 = tofu_create_from_string("name");
-    ctofu value1 = tofu_create_from_string("John");
-    map_insert(map, key1, value1);
+    for (int i = 1; i <= 3; ++i) {
+        ctofu key, value;
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i}, &key);
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i * 10}, &value);
+        map_insert(int_map, key, value);
+    }
 
-    ctofu key2 = tofu_create_from_string("age");
-    ctofu value2 = tofu_create_from_integer(30);
-    map_insert(map, key2, value2);
+    // Print the size of the map
+    printf("Map size: %zu\n", map_size(int_map));
 
-    // Lookup values by key
-    ctofu result;
-    ctofu_error lookupResult = map_search(map, key1);
-    if (lookupResult == TRILO_XDATA_TYPE_SUCCESS) {
-        map_getter(map, key1, &result);
-        printf("Name: %s\n", tofu_get_string(result));
-    } // end if
+    // Print the elements of the map using an iterator
+    printf("Map elements:\n");
+    ctofu_iterator iterator = map_iterator_start(int_map);
+    while (map_iterator_has_next(iterator)) {
+        ctofu_iterator current = map_iterator_next(iterator);
+        printf("Key: %d, Value: %d\n", current.current_key, current.current_value);
+    }
 
-    lookupResult = map_search(map, key2);
-    if (lookupResult == TRILO_XDATA_TYPE_SUCCESS) {
-        map_getter(map, key2, &result);
-        printf("Age: %d\n", tofu_get_integer(result));
-    } // end if
-
-    // Remove a key-value pair
-    map_remove(map, key1);
-
-    // Check if a key exists
-    if (map_contains(map, key1)) {
-        printf("Key 'name' exists in the map.\n");
+    // Check if the map is empty
+    if (map_is_empty(int_map)) {
+        printf("Map is empty.\n");
     } else {
-        printf("Key 'name' does not exist in the map.\n");
-    } // end if else
+        printf("Map is not empty.\n");
+    }
 
-    // Get the number of key-value pairs in the map
-    size_t mapSize = map_size(map);
-    printf("Map size: %zu\n");
-
-    // Destroy the map
-    map_erase(map);
+    // Clean up the memory
+    map_erase(int_map);
 
     return 0;
 }

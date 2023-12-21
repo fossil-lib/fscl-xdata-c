@@ -33,46 +33,35 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cset instance with INTEGER_TYPE
-    cset* set = set_create(INTEGER_TYPE);
+    // Create a set for integers
+    cset* int_set = set_create(INTEGER_TYPE);
 
-    // Insert data elements into the cset
-    set_insert(set, tofu_create_from_integer(10));
-    set_insert(set, tofu_create_from_integer(20));
-    set_insert(set, tofu_create_from_integer(30));
+    // Insert some integers into the set
+    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 10}});
+    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 20}});
+    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 30}});
+    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 20}});  // Duplicates are not allowed
 
-    // Print the size of the cset
-    printf("Size of the set: %zu\n", set_size(set));
+    // Print the size of the set
+    printf("Set size: %zu\n", set_size(int_set));
 
-    // Print the cset
+    // Print the elements of the set
     printf("Set elements:\n");
-    for (size_t i = 0; i < set_size(set); i++) {
-        ctofu* tofu = set_getter(set, i);
-        printf("%d\n", tofu_get_integer(*tofu));
-    } // end for
+    ctofu_iterator iterator = set_iterator_start(int_set);
+    while (set_iterator_has_next(iterator)) {
+        ctofu_iterator current = set_iterator_next(iterator);
+        printf("Element: %d\n", current.current_value);
+    }
 
-    // Check if the cset is not empty
-    printf("Is set not empty? %s\n", set_not_empty(set) ? "true" : "false");
+    // Check if the set is empty
+    if (set_is_empty(int_set)) {
+        printf("Set is empty.\n");
+    } else {
+        printf("Set is not empty.\n");
+    }
 
-    // Remove an element from the cset
-    ctofu* removedTofu = set_getter(set, 1);
-    ctofu_error removalResult = set_remove(set, *removedTofu);
-    printf("Removal result: %s\n", removalResult == TRILO_XDATA_TYPE_SUCCESS ? "success" : "failure");
-
-    // Print the updated cset
-    printf("Updated set elements:\n");
-    for (size_t i = 0; i < set_size(set); i++) {
-        ctofu* tofu = set_getter(set, i);
-        printf("%d\n", tofu_get_integer(*tofu));
-    } // end for
-
-    // Check if the cset contains a specific element
-    ctofu targetTofu = tofu_create_from_integer(30);
-    printf("Does the set contain the element %d? %s\n", tofu_get_integer(targetTofu),
-           set_contains(set, targetTofu) ? "true" : "false");
-
-    // Destroy the cset
-    set_erase(set);
+    // Clean up the memory
+    set_erase(int_set);
 
     return 0;
 } // end of func

@@ -33,25 +33,37 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cpqueue instance with INTEGER_TYPE
-    cpqueue* pqueue = pqueue_create(INTEGER_TYPE);
+    // Create a priority queue for integers
+    cpqueue* int_pqueue = pqueue_create(INTEGER_TYPE);
 
-    // Insert data elements into the cpqueue with priorities
-    pqueue_insert(pqueue, tofu_create_from_integer(10), 3);
-    pqueue_insert(pqueue, tofu_create_from_integer(20), 1);
-    pqueue_insert(pqueue, tofu_create_from_integer(30), 2);
+    // Insert integers with priorities into the priority queue using a for loop
+    for (int i = 1; i <= 3; ++i) {
+        ctofu data;
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i * 10}, &data);
+        pqueue_insert(int_pqueue, data, i);  // Priority: i
+    }
 
-    // Print the size of the cpqueue
-    printf("Size of the priority queue: %zu\n", pqueue_size(pqueue));
+    // Print the size of the priority queue
+    printf("Priority Queue size: %zu\n", pqueue_size(int_pqueue));
 
-    // Check if the cpqueue is not empty
-    printf("Is priority queue not empty? %s\n", pqueue_not_empty(pqueue) ? "true" : "false");
+    // Print the elements of the priority queue using a for loop
+    printf("Priority Queue elements:\n");
+    for (size_t i = 0; i < pqueue_size(int_pqueue); ++i) {
+        ctofu current;
+        int priority;
+        pqueue_remove(int_pqueue, &current, &priority);
+        printf("Element with Priority %d: %d\n", priority, current.data.integer_type);
+    }
 
-    // Check if the cpqueue is not empty
-    printf("Is priority queue not empty? %s\n", pqueue_not_empty(pqueue) ? "true" : "false");
+    // Check if the priority queue is empty
+    if (pqueue_is_empty(int_pqueue)) {
+        printf("Priority Queue is empty.\n");
+    } else {
+        printf("Priority Queue is not empty.\n");
+    }
 
-    // Destroy the cpqueue
-    pqueue_erase(pqueue);
+    // Clean up the memory
+    pqueue_erase(int_pqueue);
 
     return 0;
 } // end of func

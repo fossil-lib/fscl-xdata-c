@@ -33,34 +33,35 @@
 #include <stdio.h>
 
 int main() {
-    // Create a new ctree instance to hold integer values
-    ctree* intTree = tree_create(INTEGER_TYPE);
+    // Create a binary search tree for integers
+    ctree* int_tree = tree_create(INTEGER_TYPE);
 
-    // Insert some integer values into the ctree
-    tree_insert(intTree, tofu_create_from_integer(42));
-    tree_insert(intTree, tofu_create_from_integer(10));
-    tree_insert(intTree, tofu_create_from_integer(73));
+    // Insert integers into the tree using a for loop
+    int values[] = {50, 30, 70, 20, 40};
 
-    // Check if the ctree is not empty
-    if (tree_not_empty(intTree)) {
-        printf("The ctree is not empty.\n");
-    } // end if
+    for (size_t i = 0; i < sizeof(values) / sizeof(values[0]); ++i) {
+        ctofu data;
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = values[i]}, &data);
+        tree_insert(int_tree, data);
+    }
 
-    // Get the size of the ctree
-    size_t intTreeSize = tree_size(intTree);
-    printf("Size of the ctree: %zu\n", intTreeSize);
+    // Print the size of the tree
+    printf("Tree size: %zu\n", tree_size(int_tree));
 
-    // Search for a specific integer value
-    ctofu searchValue = tofu_create_from_integer(10);
-    ctofu_error searchResult = tree_search(intTree, searchValue);
-    if (searchResult == TRILO_XDATA_TYPE_SUCCESS) {
-        printf("The value 10 is found in the ctree.\n");
+    // Search for a value in the tree
+    ctofu search_key;
+    tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = 30}, &search_key);
+
+    ctofu_error search_result = tree_search(int_tree, search_key);
+    if (search_result == TOFU_SUCCESS) {
+        printf("Value found in the tree!\n");
     } else {
-        printf("The value 10 is not found in the ctree.\n");
-    } // end if else
+        printf("Value not found in the tree.\n");
+    }
 
-    // Destroy the ctree to free memory
-    tree_erase(intTree);
+    // Clean up the memory
+    tree_erase(int_tree);
+    tofu_erase(&search_key);
 
     return 0;
 } // end of func

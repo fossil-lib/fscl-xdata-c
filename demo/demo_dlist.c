@@ -33,43 +33,62 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cdlist instance with INTEGER_TYPE
-    cdlist* dlist = dlist_create(INTEGER_TYPE);
+    // Create a doubly linked list for strings
+    cdlist* string_dlist = dlist_create(STRING_TYPE);
 
-    // Insert data elements into the cdlist
-    dlist_insert(dlist, tofu_create_from_integer(10));
-    dlist_insert(dlist, tofu_create_from_integer(20));
-    dlist_insert(dlist, tofu_create_from_integer(30));
+    // Insert strings into the list
+    for (int i = 1; i <= 5; ++i) {
+        char str[10];
+        sprintf(str, "Str%d", i);
 
-    // Print the size of the cdlist
-    printf("Size of the doubly list: %zu\n", dlist_size(dlist));
+        ctofu data;
+        tofu_create(STRING_TYPE, &(ctofu_data){.string_type = str}, &data);
 
-    // Print the cdlist elements in forward order
-    printf("Doubly list elements in forward order:\n");
-    cdlist_node* current = dlist_get_head(dlist);
-    while (current != NULL) {
-        ctofu* tofu = dlist_get_node_data(current);
-        printf("%d\n", tofu_get_integer(*tofu));
-        current = dlist_get_next(current);
-    } // end while
+        dlist_insert(string_dlist, data);
+    }
 
-    // Reverse the cdlist in the forward direction
-    dlist_reverse_forward(dlist);
+    // Print the size of the list
+    printf("Doubly Linked List size: %zu\n", dlist_size(string_dlist));
 
-    // Print the reversed cdlist elements
-    printf("Reversed doubly list elements in forward order:\n");
-    current = dlist_get_head(dlist);
-    while (current != NULL) {
-        ctofu* tofu = dlist_get_node_data(current);
-        printf("%d\n", tofu_get_integer(*tofu));
-        current = dlist_get_next(current);
-    } // end while
+    // Print the elements of the list using a for loop
+    printf("Doubly Linked List elements:\n");
+    for (size_t i = 0; i < dlist_size(string_dlist); ++i) {
+        ctofu current = *dlist_getter(string_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
+        printf("%s ", current.data.string_type);
+    }
+    printf("\n");
 
-    // Check if the cdlist is not empty
-    printf("Is doubly list not empty? %s\n", dlist_not_empty(dlist) ? "true" : "false");
+    // Reverse the list forward
+    dlist_reverse_forward(string_dlist);
 
-    // Destroy the cdlist
-    dlist_erase(dlist);
+    // Print the reversed elements of the list
+    printf("Reversed Doubly Linked List elements (forward):\n");
+    for (size_t i = 0; i < dlist_size(string_dlist); ++i) {
+        ctofu current = *dlist_getter(string_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
+        printf("%s ", current.data.string_type);
+    }
+    printf("\n");
+
+    // Reverse the list backward
+    dlist_reverse_backward(string_dlist);
+
+    // Print the reversed elements of the list
+    printf("Reversed Doubly Linked List elements (backward):\n");
+    for (size_t i = 0; i < dlist_size(string_dlist); ++i) {
+        ctofu current = *dlist_getter(string_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
+        printf("%s ", current.data.string_type);
+    }
+    printf("\n");
+
+    // Check if the list is not empty
+    if (dlist_not_empty(string_dlist)) {
+        printf("Doubly Linked List is not empty.\n");
+    } else {
+        printf("Doubly Linked List is empty.\n");
+    }
+
+    // Clean up the memory
+    dlist_erase(string_dlist);
 
     return 0;
 } // end of func

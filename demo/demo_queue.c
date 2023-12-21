@@ -33,22 +33,36 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cqueue instance with INTEGER_TYPE
-    cqueue* queue = queue_create(INTEGER_TYPE);
+    // Create a queue for integers
+    cqueue* int_queue = queue_create(INTEGER_TYPE);
 
-    // Insert data elements into the cqueue
-    queue_insert(queue, tofu_create_from_integer(10));
-    queue_insert(queue, tofu_create_from_integer(20));
-    queue_insert(queue, tofu_create_from_integer(30));
+    // Insert integers into the queue using a for loop
+    for (int i = 1; i <= 3; ++i) {
+        ctofu data;
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i * 10}, &data);
+        queue_insert(int_queue, data);
+    }
 
-    // Check if the cqueue is not empty
-    printf("Is queue not empty? %s\n", queue_not_empty(queue) ? "true" : "false");
+    // Print the size of the queue
+    printf("Queue size: %zu\n", queue_size(int_queue));
 
-    // Check if the cqueue is not empty
-    printf("Is queue not empty? %s\n", queue_not_empty(queue) ? "true" : "false");
+    // Print the elements of the queue using a for loop
+    printf("Queue elements:\n");
+    for (size_t i = 0; i < queue_size(int_queue); ++i) {
+        ctofu current;
+        queue_remove(int_queue, &current);
+        printf("Element %zu: %d\n", i, current.data.integer_type);
+    }
 
-    // Destroy the cqueue
-    queue_erase(queue);
+    // Check if the queue is empty
+    if (queue_is_empty(int_queue)) {
+        printf("Queue is empty.\n");
+    } else {
+        printf("Queue is not empty.\n");
+    }
+
+    // Clean up the memory
+    queue_erase(int_queue);
 
     return 0;
 } // end of func

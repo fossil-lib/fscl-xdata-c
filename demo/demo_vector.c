@@ -33,41 +33,43 @@
 #include <stdio.h>
 
 int main() {
-    // Example usage of the cvector structure
-    cvector intVector = vector_create(INTEGER_TYPE);
-    cvector stringVector = vector_create(STRING_TYPE);
+    // Create a vector for integers
+    cvector int_vector = vector_create(INTEGER_TYPE);
 
-    vector_push_back(&intVector, tofu_create_from_integer(42));
-    vector_push_back(&intVector, tofu_create_from_integer(23));
+    // Push some integers into the vector
+    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 10}});
+    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 20}});
+    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 30}});
 
-    vector_push_back(&stringVector, tofu_create_from_string("Hello"));
-    vector_push_back(&stringVector, tofu_create_from_string("World"));
+    // Print the size of the vector
+    printf("Vector size: %zu\n", vector_size(&int_vector));
 
-    printf("Int Vector elements: ");
-    vector_print(&intVector);
+    // Print the elements of the vector
+    printf("Vector elements:\n");
+    for (size_t i = 0; i < vector_size(&int_vector); ++i) {
+        printf("Element %zu: %d\n", i, vector_getter(&int_vector, i).data.integer_type);
+    }
 
-    printf("String Vector elements: ");
-    vector_print(&stringVector);
+    // Search for a value in the vector
+    ctofu search_key = (ctofu){.type = INTEGER_TYPE, .data = {.integer_type = 20}};
+    int search_result = vector_search(&int_vector, search_key);
+    if (search_result != -1) {
+        printf("Value found at index %d in the vector!\n", search_result);
+    } else {
+        printf("Value not found in the vector.\n");
+    }
 
-    printf("Int Vector is%s nullptr\n", vector_is_cnullptr(&intVector) ? "" : " not");
-    printf("String Vector is%s nullptr\n", vector_is_cnullptr(&stringVector) ? "" : " not");
+    // Reverse the vector
+    vector_reverse(&int_vector);
 
-    printf("Int Vector is%s empty\n", vector_is_empty(&intVector) ? "" : " not");
-    printf("String Vector is%s empty\n", vector_is_empty(&stringVector) ? "" : " not");
+    // Print the reversed vector
+    printf("\nReversed Vector:\n");
+    for (size_t i = 0; i < vector_size(&int_vector); ++i) {
+        printf("Element %zu: %d\n", i, vector_getter(&int_vector, i).data.integer_type);
+    }
 
-    printf("Int Vector size: %zu\n", vector_size(&intVector));
-    printf("String Vector size: %zu\n", vector_size(&stringVector));
-
-    printf("Searching for 'World' in String Vector: %d\n", vector_search(&stringVector, tofu_create_from_string("World")));
-
-    printf("Reversing Int Vector...\n");
-    vector_reverse(&intVector);
-    printf("Int Vector elements after reverse: ");
-    vector_print(&intVector);
-
-    // Cleanup
-    vector_erase(&intVector);
-    vector_erase(&stringVector);
+    // Clean up the memory
+    vector_erase(&int_vector);
 
     return 0;
-} // end of func
+}  // end of func

@@ -34,41 +34,63 @@
 #include <stdbool.h>
 
 int main() {
-    // Create ctofu instances from different data types
-    ctofu intTofu = tofu_create_from_integer(42);
-    ctofu doubleTofu = tofu_create_from_double(3.14159);
-    ctofu stringTofu = tofu_create_from_string("Hello, World!");
-    ctofu charTofu = tofu_create_from_char('A');
-    ctofu boolTofu = tofu_create_from_boolean(true);
+    // Create an array of ctofu elements
+    ctofu array[5];
 
-    // Print the data stored in each ctofu instance
-    printf("Integer Value: %d\n", tofu_get_integer(intTofu));
-    printf("Double Value: %lf\n", tofu_get_double(doubleTofu));
-    printf("String Value: %s\n", tofu_get_string(stringTofu));
-    printf("Character Value: %c\n", tofu_get_char(charTofu));
-    printf("Boolean Value: %s\n", tofu_get_boolean(boolTofu) ? "true" : "false");
+    // Populate the array with some data
+    tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = 42}, &array[0]);
+    tofu_create(DOUBLE_TYPE, &(ctofu_data){.double_type = 3.14}, &array[1]);
+    tofu_create(STRING_TYPE, &(ctofu_data){.string_type = "Hello"}, &array[2]);
+    tofu_create(BOOLEAN_TYPE, &(ctofu_data){.boolean_type = true}, &array[3]);
+    tofu_create(NULLPTR_TYPE, NULL, &array[4]);
 
-    // Create an array of ctofu instances and perform sorting and searching
-    ctofu arr[] = {intTofu, doubleTofu, stringTofu, charTofu, boolTofu};
-    size_t arrSize = sizeof(arr) / sizeof(arr[0]);
+    // Print the original array
+    printf("Original Array:\n");
+    for (size_t i = 0; i < 5; ++i) {
+        printf("Element %zu: ", i);
+        print_ctofu_value(&array[i]);
+        printf("\n");
+    }
 
     // Sort the array using insertion sort
-    tofu_insertion_sort(arr, arrSize);
+    tofu_sort_insertion(array, 5);
 
     // Print the sorted array
     printf("\nSorted Array:\n");
-    for (size_t i = 0; i < arrSize; i++) {
-        tofu_print(arr[i]);
-    } // end for
+    for (size_t i = 0; i < 5; ++i) {
+        printf("Element %zu: ", i);
+        print_ctofu_value(&array[i]);
+        printf("\n");
+    }
 
-    // Perform a binary search for a specific ctofu instance
-    ctofu targetTofu = tofu_create_from_double(3.14159);
-    int result = tofu_binary_search(arr, arrSize, targetTofu);
-    if (result != -1) {
-        printf("\nTarget Value Found at Index: %d\n", result);
+    // Reverse the array
+    tofu_reverse(array, 5);
+
+    // Print the reversed array
+    printf("\nReversed Array:\n");
+    for (size_t i = 0; i < 5; ++i) {
+        printf("Element %zu: ", i);
+        print_ctofu_value(&array[i]);
+        printf("\n");
+    }
+
+    // Search for a specific element in the array
+    ctofu key;
+    tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = 42}, &key);
+    size_t index = tofu_search_linear(array, 5, &key);
+
+    // Print the result of the search
+    printf("\nSearch Result:\n");
+    if (index != -1) {
+        printf("Element found at index %zu\n", index);
     } else {
-        printf("\nTarget Value Not Found\n");
-    } // end if else
+        printf("Element not found\n");
+    }
+
+    // Clean up the memory
+    for (size_t i = 0; i < 5; ++i) {
+        tofu_erase(&array[i]);
+    }
 
     return 0;
 } // end of func

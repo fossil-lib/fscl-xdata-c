@@ -33,28 +33,36 @@
 #include <stdio.h>
 
 int main() {
-    cstack* myStack = stack_create(INTEGER_TYPE);
+    // Create a stack for integers
+    cstack* int_stack = stack_create(INTEGER_TYPE);
 
-    // Example usage
-    ctofu data1;
-    data1.type = INTEGER_TYPE;
-    data1.data.integer_type = 42;
+    // Push integers onto the stack using a for loop
+    for (int i = 1; i <= 5; ++i) {
+        ctofu data;
+        tofu_create(INTEGER_TYPE, &(ctofu_data){.integer_type = i * 10}, &data);
+        stack_insert(int_stack, data);
+    }
 
-    ctofu data2;
-    data2.type = INTEGER_TYPE;
-    data2.data.integer_type = 24;
+    // Print the size of the stack
+    printf("Stack size: %zu\n", stack_size(int_stack));
 
-    stack_insert(myStack, data1);
-    stack_insert(myStack, data2);
+    // Print the elements of the stack using a for loop
+    printf("Stack elements:\n");
+    for (size_t i = 0; i < stack_size(int_stack); ++i) {
+        ctofu current = stack_top(int_stack, (ctofu){.type = INVALID_TYPE});
+        printf("Element %zu: %d\n", i, current.data.integer_type);
+        stack_remove(int_stack, NULL);  // Remove the top element
+    }
 
-    printf("Stack size: %zu\n", stack_size(myStack));
+    // Check if the stack is empty
+    if (stack_is_empty(int_stack)) {
+        printf("Stack is empty.\n");
+    } else {
+        printf("Stack is not empty.\n");
+    }
 
-    ctofu removedData;
-    stack_remove(myStack, &removedData);
-
-    printf("Removed data: %d\n", removedData.data.integer_type);
-
-    stack_erase(myStack);
+    // Clean up the memory
+    stack_erase(int_stack);
 
     return 0;
 } // end of func
