@@ -267,9 +267,8 @@ ctofu_error tofu_value_copy(const ctofu* source, ctofu* dest) {
             break;
 
         case STRING_TYPE:
-            // Using strncpy for string copy
-            strncpy(dest->data.string_type, source->data.string_type, sizeof(dest->data.string_type) - 1);
-            dest->data.string_type[sizeof(dest->data.string_type) - 1] = '\0';
+            // Using strcpy for string copy
+            strcpy(dest->data.string_type, source->data.string_type);
             break;
 
         case CHAR_TYPE:
@@ -313,9 +312,8 @@ void tofu_value_setter(const ctofu* source, ctofu* dest) {
             break;
 
         case STRING_TYPE:
-            // Using strncpy for string copy
-            strncpy(dest->data.string_type, source->data.string_type, sizeof(dest->data.string_type) - 1);
-            dest->data.string_type[sizeof(dest->data.string_type) - 1] = '\0';
+            // Using strcpy for string copy
+            strcpy(dest->data.string_type, source->data.string_type);
             break;
 
         case CHAR_TYPE:
@@ -358,9 +356,8 @@ ctofu_data tofu_value_getter(const ctofu* current) {
             break;
 
         case STRING_TYPE:
-            // Using strncpy for string copy
-            strncpy(result.string_type, current->data.string_type, sizeof(result.string_type) - 1);
-            result.string_type[sizeof(result.string_type) - 1] = '\0';
+            // Using strcpy for string copy
+            strcpy(result.string_type, current->data.string_type);
             break;
 
         case CHAR_TYPE:
