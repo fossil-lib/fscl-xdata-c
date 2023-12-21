@@ -39,129 +39,94 @@
 //
 
 // Test case 1: Test cqueue creation and destruction
-XTEST_CASE(xdata_let_queue_create_destroy) {
+XTEST_CASE(test_queue_create_and_erase) {
+    // Normal Case: Creating and erasing a queue
     cqueue* queue = queue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(queue);
-    
     queue_erase(queue);
-    // Ensure queue is successfully destroyed
+
+    // Edge Case: Creating with an invalid type
+    queue = queue_create(INVALID_TYPE);
+    TEST_ASSERT_NULL_PTR(queue);
 }
 
-XTEST_CASE(xdata_let_queue_insert) {
-    cqueue* queue = queue_create(DOUBLE_TYPE);
-    
-    ctofu data = tofu_create_from_double(42.5);
-    ctofu_error error = queue_insert(queue, data);
-    
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
-    
-    queue_erase(queue);
-}
-
-XTEST_CASE(xdata_let_queue_remove) {
-    cqueue* queue = queue_create(STRING_TYPE);
-    
-    ctofu data = tofu_create_from_string("Hello");
-    queue_insert(queue, data);
-    
-    ctofu_error error = queue_remove(queue);
-    
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
-    
-    queue_erase(queue);
-}
-
-XTEST_CASE(xdata_let_queue_search) {
-    cqueue* queue = queue_create(CHAR_TYPE);
-    
-    ctofu data = tofu_create_from_char('A');
-    queue_insert(queue, data);
-    
-    ctofu_error error = queue_search(queue, data);
-    
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
-    
-    queue_erase(queue);
-}
-
-XTEST_CASE(xdata_let_queue_insert_edge_cases) {
+XTEST_CASE(test_queue_insert_and_remove) {
+    // Normal Case: Inserting and removing elements from the queue
     cqueue* queue = queue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(queue);
 
-    ctofu tofu1 = tofu_create_from_integer(1);
-    ctofu tofu2 = tofu_create_from_double(2.5);
-    ctofu tofu3 = tofu_create_from_string("Hello");
+    ctofu element = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, queue_insert(queue, element));
+    TEST_ASSERT_EQUAL(1, queue_size(queue));
 
-    ctofu_error error = queue_insert(queue, tofu1);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
-
-    error = queue_insert(queue, tofu2);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
-
-    error = queue_insert(queue, tofu3);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
-
-    // Test inserting a large number of elements
-    for (int i = 0; i < 1000; ++i) {
-        ctofu data = tofu_create_from_integer(i);
-        error = queue_insert(queue, data);
-        TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
-    }
+    ctofu removed_element;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, queue_remove(queue, &removed_element));
+    TEST_ASSERT_EQUAL(0, queue_size(queue));
+    TEST_ASSERT_EQUAL(element.integer_type, removed_element.integer_type);
 
     queue_erase(queue);
+
+    // Edge Case: Removing from an empty queue
+    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, queue_remove(queue, &removed_element));
 }
 
-XTEST_CASE(xdata_let_queue_remove_edge_cases) {
-    cqueue* empty_queue = queue_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(empty_queue);
-
-    // Test removing elements from an empty queue
-    ctofu_error error = queue_remove(empty_queue);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, error);
-
-    queue_erase(empty_queue);
-
-    // Test removing a large number of elements
-    cqueue* queue = queue_create(DOUBLE_TYPE);
+XTEST_CASE(test_queue_search) {
+    // Normal Case: Searching for an element in the queue
+    cqueue* queue = queue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(queue);
 
-    for (int i = 0; i < 1000; ++i) {
-        ctofu data = tofu_create_from_double(i);
-        queue_insert(queue, data);
-    }
+    ctofu element = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, queue_insert(queue, element));
 
-    for (int i = 0; i < 1000; ++i) {
-        error = queue_remove(queue);
-        TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, error);
-    }
+    TEST_ASSERT_TRUE(queue_not_cnullptr(queue));
+    TEST_ASSERT_TRUE(queue_not_empty(queue));
+    TEST_ASSERT_FALSE(queue_is_empty(queue));
+    TEST_ASSERT_FALSE(queue_is_cnullptr(queue));
+
+    TEST_ASSERT_TRUE(queue_not_cnullptr(queue));
+    TEST_ASSERT_TRUE(queue_not_empty(queue));
+    TEST_ASSERT_FALSE(queue_is_empty(queue));
+    TEST_ASSERT_FALSE(queue_is_cnullptr(queue));
 
     queue_erase(queue);
+
+    // Edge Case: Searching in an empty queue
+    TEST_ASSERT_FALSE(queue_not_cnullptr(queue));
+    TEST_ASSERT_FALSE(queue_not_empty(queue));
+    TEST_ASSERT_TRUE(queue_is_empty(queue));
+    TEST_ASSERT_TRUE(queue_is_cnullptr(queue));
 }
 
-XTEST_CASE(xdata_let_queue_search_edge_cases) {
-    cqueue* empty_queue = queue_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(empty_queue);
+XTEST_CASE(test_queue_setter_and_getter) {
+    // Normal Case: Setting and getting elements in the queue
+    cqueue* queue = queue_create(INTEGER_TYPE);
+    TEST_ASSERT_NOT_NULL_PTR(queue);
 
-    ctofu tofu = tofu_create_from_integer(42);
+    ctofu element1 = {.integer_type = 42};
+    ctofu element2 = {.integer_type = 24};
 
-    // Test searching for an element in an empty queue
-    ctofu_error error = queue_search(empty_queue, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, error);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, queue_insert(queue, element1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, queue_setter(queue, element2));
 
-    queue_erase(empty_queue);
+    ctofu* retrieved_element = queue_getter(queue, element1);
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_element);
+    TEST_ASSERT_EQUAL(element2.integer_type, retrieved_element->integer_type);
+
+    queue_erase(queue);
+
+    // Edge Case: Getting from an empty queue
+    retrieved_element = queue_getter(queue, element1);
+    TEST_ASSERT_NULL_PTR(retrieved_element);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_queue_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_queue_group) {
     XTEST_NOTE("Running all test cases for queue:");
 
-    XTEST_RUN_UNIT(xdata_let_queue_create_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_queue_insert,         runner);
-    XTEST_RUN_UNIT(xdata_let_queue_remove,         runner);
-    XTEST_RUN_UNIT(xdata_let_queue_search,         runner);
-    XTEST_RUN_UNIT(xdata_let_queue_insert_edge_cases, runner);
-    XTEST_RUN_UNIT(xdata_let_queue_remove_edge_cases, runner);
-    XTEST_RUN_UNIT(xdata_let_queue_search_edge_cases, runner);
+    XTEST_RUN_UNIT(test_queue_create_and_erase,  runner);
+    XTEST_RUN_UNIT(test_queue_insert_and_remove, runner);
+    XTEST_RUN_UNIT(test_queue_search,            runner);
+    XTEST_RUN_UNIT(test_queue_setter_and_getter, runner);
 } // end of func

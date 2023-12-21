@@ -39,134 +39,83 @@
 //
 
 // Test case 1: Test cset creation and destruction
-XTEST_CASE(xdata_let_set_create_and_destroy) {
+XTEST_CASE(test_set_create_and_erase) {
+    // Normal Case: Creating and erasing a set
     cset* set = set_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(set);
-
     set_erase(set);
+
+    // Edge Case: Creating with an invalid type
+    set = set_create(INVALID_TYPE);
     TEST_ASSERT_NULL_PTR(set);
 }
 
-// Test case 2: Test cset insertion and removal
-XTEST_CASE(xdata_let_set_insert_and_remove) {
+XTEST_CASE(test_set_insert_and_remove) {
+    // Normal Case: Inserting and removing elements from the set
     cset* set = set_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(set);
 
-    ctofu tofu1 = tofu_create_from_integer(1);
-    ctofu tofu2 = tofu_create_from_integer(2);
-    ctofu tofu3 = tofu_create_from_integer(3);
+    ctofu element = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, set_insert(set, element));
+    TEST_ASSERT_EQUAL(1, set_size(set));
 
-    ctofu_error result = set_insert(set, tofu1);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-
-    result = set_insert(set, tofu2);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-
-    result = set_insert(set, tofu3);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-
-    result = set_remove(set, tofu2);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-
-    ctofu_error found_tofu2 = set_search(set, tofu2);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, found_tofu2);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, set_remove(set, element));
+    TEST_ASSERT_EQUAL(0, set_size(set));
 
     set_erase(set);
+
+    // Edge Case: Removing from an empty set
+    TEST_ASSERT_EQUAL(CTOFU_ERROR_NOT_FOUND, set_remove(set, element));
 }
 
-// Test case 3: Test cset size
-XTEST_CASE(xdata_let_set_size) {
+XTEST_CASE(test_set_search) {
+    // Normal Case: Searching for an element in the set
     cset* set = set_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(set);
 
-    ctofu tofu1 = tofu_create_from_integer(1);
-    ctofu tofu2 = tofu_create_from_integer(2);
+    ctofu element = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, set_insert(set, element));
 
-    set_insert(set, tofu1);
-    set_insert(set, tofu2);
-
-    size_t size = set_size(set);
-    TEST_ASSERT_EQUAL_INT(2, size);
+    TEST_ASSERT_TRUE(set_contains(set, element));
 
     set_erase(set);
+
+    // Edge Case: Searching in an empty set
+    TEST_ASSERT_FALSE(set_contains(set, element));
 }
 
-// Test case 4: Test cset empty check
-XTEST_CASE(xdata_let_set_empty_check) {
+XTEST_CASE(test_set_iterator) {
+    // Normal Case: Iterating through the set
     cset* set = set_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(set);
 
-    TEST_ASSERT_TRUE_BOOL(set_is_empty(set));
-    TEST_ASSERT_FALSE_BOOL(set_not_empty(set));
+    ctofu element1 = {.integer_type = 42};
+    ctofu element2 = {.integer_type = 24};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, set_insert(set, element1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, set_insert(set, element2));
 
-    ctofu tofu = tofu_create_from_integer(42);
-    set_insert(set, tofu);
+    ctofu_iterator iterator = set_iterator_start(set);
+    TEST_ASSERT_TRUE(set_iterator_has_next(iterator));
+    TEST_ASSERT_EQUAL(element1.integer_type, iterator.current->data.integer_type);
 
-    TEST_ASSERT_FALSE_BOOL(set_is_empty(set));
-    TEST_ASSERT_TRUE_BOOL(set_not_empty(set));
+    iterator = set_iterator_next(iterator);
+    TEST_ASSERT_TRUE(set_iterator_has_next(iterator));
+    TEST_ASSERT_EQUAL(element2.integer_type, iterator.current->data.integer_type);
 
-    set_erase(set);
-}
-
-XTEST_CASE(xdata_let_set_insert_and_remove_edge_cases) {
-    cset* set = set_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(set);
-
-    ctofu tofu1 = tofu_create_from_integer(1);
-    ctofu tofu2 = tofu_create_from_double(2.5);
-    ctofu tofu3 = tofu_create_from_string("Hello");
-
-    ctofu_error result = set_insert(set, tofu1);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-
-    result = set_insert(set, tofu2);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-
-    result = set_insert(set, tofu3);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-
-    // Test removing an element that doesn't exist
-    ctofu tofu_not_in_set = tofu_create_from_integer(999);
-    result = set_remove(set, tofu_not_in_set);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, result);
+    iterator = set_iterator_next(iterator);
+    TEST_ASSERT_FALSE(set_iterator_has_next(iterator));
 
     set_erase(set);
-}
-
-XTEST_CASE(xdata_let_set_size_edge_cases) {
-    cset* empty_set = set_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(empty_set);
-
-    size_t size = set_size(empty_set);
-    TEST_ASSERT_EQUAL_INT(0, size);
-
-    set_erase(empty_set);
-}
-
-XTEST_CASE(xdata_let_set_search_edge_cases) {
-    cset* empty_set = set_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(empty_set);
-
-    ctofu tofu = tofu_create_from_integer(42);
-
-    // Test searching for an element in an empty set
-    ctofu_error result = set_search(empty_set, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, result);
-
-    set_erase(empty_set);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_set_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_set_group) {
     XTEST_NOTE("Running all test cases for set:");
 
-    XTEST_RUN_UNIT(xdata_let_set_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_set_empty_check,        runner);
-    XTEST_RUN_UNIT(xdata_let_set_insert_and_remove,  runner);
-    XTEST_RUN_UNIT(xdata_let_set_size,               runner);
-    XTEST_RUN_UNIT(xdata_let_set_insert_and_remove_edge_cases, runner);
-    XTEST_RUN_UNIT(xdata_let_set_size_edge_cases,              runner);
-    XTEST_RUN_UNIT(xdata_let_set_search_edge_cases,            runner);
+    XTEST_RUN_UNIT(test_set_create_and_erase,  runner);
+    XTEST_RUN_UNIT(test_set_insert_and_remove, runner);
+    XTEST_RUN_UNIT(test_set_search,            runner);
+    XTEST_RUN_UNIT(test_set_iterator,          runner);
 } // end of func

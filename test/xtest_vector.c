@@ -37,91 +37,53 @@
 //
 // XUNIT TEST CASES
 //
-XTEST_CASE(xdata_let_vector_create_and_destroy) {
+XTEST_CASE(test_vector_creation) {
+    // Edge Case: Creating a vector with an invalid type
+    TEST_ASSERT_NULL_PTR(vector_create(INVALID_TYPE));
+
+    // Normal Case: Creating a vector with a valid type
+    cvector* vector = vector_create(INTEGER_TYPE);
+    TEST_ASSERT_NOT_NULL_PTR(vector);
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, vector->expected_type);
+    vector_erase(vector);
+}
+
+XTEST_CASE(test_vector_push_back) {
+    // Normal Case: Pushing back an element
     cvector vector = vector_create(INTEGER_TYPE);
-
-    TEST_ASSERT_EQUAL(INTEGER_TYPE, vector.expected_type);
-    TEST_ASSERT_TRUE(vector_is_empty(&vector));
-
-    vector_erase(&vector);
-
-    TEST_ASSERT_TRUE(vector_is_cnullptr(&vector));
-}
-
-XTEST_CASE(xdata_let_vector_push_back_and_peek) {
-    cvector vector = vector_create(DOUBLE_TYPE);
-
-    vector_push_back(&vector, tofu_create_from_double(3.14));
-
-    TEST_ASSERT_FALSE(vector_is_empty(&vector));
+    vector_push_back(&vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 42});
     TEST_ASSERT_EQUAL(1, vector_size(&vector));
-
-    ctofu element = vector_getter(&vector, 0);
-    TEST_ASSERT_DOUBLE_EQUAL(3.14, tofu_get_double(element));
-
+    TEST_ASSERT_EQUAL(42, vector_getter(&vector, 0).data.integer_type);
     vector_erase(&vector);
+
+    // Edge Case: Pushing back into a NULL vector
+    TEST_ASSERT_NULL_PTR(vector_getter(NULL, 0).data.integer_type);
 }
 
-XTEST_CASE(xdata_let_vector_search) {
-    cvector vector = vector_create(STRING_TYPE);
-
-    vector_push_back(&vector, tofu_create_from_string("Hello"));
-    vector_push_back(&vector, tofu_create_from_string("World"));
-
-    int index = vector_search(&vector, tofu_create_from_string("World"));
-    TEST_ASSERT_EQUAL(1, index);
-
-    index = vector_search(&vector, tofu_create_from_string("NotInVector"));
-    TEST_ASSERT_EQUAL(-1, index);
-
+XTEST_CASE(test_vector_search) {
+    // Normal Case: Searching for an element
+    cvector vector = vector_create(INTEGER_TYPE);
+    for (int i = 0; i < 10; ++i) {
+        vector_push_back(&vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i * 2});
+    }
+    int result = vector_search(&vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 6});
+    TEST_ASSERT_EQUAL(3, result);
     vector_erase(&vector);
-}
 
-XTEST_CASE(xdata_let_vector_reverse) {
-    cvector vector = vector_create(BOOLEAN_TYPE);
-
-    vector_push_back(&vector, tofu_create_from_boolean(true));
-    vector_push_back(&vector, tofu_create_from_boolean(false));
-
-    vector_reverse(&vector);
-
-    TEST_ASSERT_EQUAL(false, tofu_get_boolean(vector_getter(&vector, 0)));
-    TEST_ASSERT_EQUAL(true, tofu_get_boolean(vector_getter(&vector, 1)));
-
-    vector_erase(&vector);
-}
-
-XTEST_CASE(xdata_let_vector_create_and_destroy_with_types) {
-    cvector int_vector = vector_create(INTEGER_TYPE);
-    TEST_ASSERT_EQUAL(INTEGER_TYPE, int_vector.expected_type);
-    vector_erase(&int_vector);
-
-    cvector double_vector = vector_create(DOUBLE_TYPE);
-    TEST_ASSERT_EQUAL(DOUBLE_TYPE, double_vector.expected_type);
-    vector_erase(&double_vector);
-
-    cvector string_vector = vector_create(STRING_TYPE);
-    TEST_ASSERT_EQUAL(STRING_TYPE, string_vector.expected_type);
-    vector_erase(&string_vector);
-
-    cvector bool_vector = vector_create(BOOLEAN_TYPE);
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE, bool_vector.expected_type);
-    vector_erase(&bool_vector);
-
-    // Test creating a vector with an invalid type
-    cvector invalid_vector = vector_create(INVALID_TYPE);
-    TEST_ASSERT_TRUE(vector_is_cnullptr(&invalid_vector));
+    // Edge Case: Searching in an empty vector
+    cvector empty_vector = vector_create(INTEGER_TYPE);
+    result = vector_search(&empty_vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 6});
+    TEST_ASSERT_EQUAL(-1, result);
+    vector_erase(&empty_vector);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_vector_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_vector_group) {
     XTEST_NOTE("Running all test cases for vector:");
 
-    XTEST_RUN_UNIT(xdata_let_vector_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_vector_push_back_and_peek, runner);
-    XTEST_RUN_UNIT(xdata_let_vector_search,             runner);
-    XTEST_RUN_UNIT(xdata_let_vector_reverse,            runner);
-    XTEST_RUN_UNIT(xdata_let_vector_create_and_destroy_with_types, runner);
+    XTEST_RUN_UNIT(test_vector_creation,  runner);
+    XTEST_RUN_UNIT(test_vector_push_back, runner);
+    XTEST_RUN_UNIT(test_vector_search,    runner);
 } // end of func

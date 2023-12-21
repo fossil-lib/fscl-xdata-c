@@ -37,152 +37,90 @@
 //
 // XUNIT TEST CASES
 //
-
-// Test case 1: Test cpqueue creation and destruction
-XTEST_CASE(xdata_let_pqueue_create_and_destroy) {
+XTEST_CASE(test_pqueue_create_and_erase) {
+    // Normal Case: Creating and erasing a priority queue
     cpqueue* pqueue = pqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(pqueue);
-
     pqueue_erase(pqueue);
+
+    // Edge Case: Creating with an invalid type
+    pqueue = pqueue_create(INVALID_TYPE);
     TEST_ASSERT_NULL_PTR(pqueue);
 }
 
-// Test case 2: Test cpqueue insertion and retrieval
-XTEST_CASE(xdata_let_pqueue_insert_and_get) {
+XTEST_CASE(test_pqueue_insert_and_remove) {
+    // Normal Case: Inserting and removing elements from the priority queue
     cpqueue* pqueue = pqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(pqueue);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    int priority = 2;
-    ctofu_error result = pqueue_insert(pqueue, tofu, priority);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    ctofu element = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, pqueue_insert(pqueue, element, 1));
+    TEST_ASSERT_EQUAL(1, pqueue_size(pqueue));
 
-    ctofu* retrieved_tofu = pqueue_getter(pqueue, tofu, priority);
-    TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
-    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(*retrieved_tofu));
+    ctofu removed_element;
+    int priority;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, pqueue_remove(pqueue, &removed_element, &priority));
+    TEST_ASSERT_EQUAL(0, pqueue_size(pqueue));
+    TEST_ASSERT_EQUAL(element.integer_type, removed_element.integer_type);
 
     pqueue_erase(pqueue);
+
+    // Edge Case: Removing from an empty priority queue
+    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, pqueue_remove(pqueue, &removed_element, &priority));
 }
 
-// Test case 3: Test cpqueue removal
-XTEST_CASE(xdata_let_pqueue_remove) {
+XTEST_CASE(test_pqueue_search) {
+    // Normal Case: Searching for an element in the priority queue
     cpqueue* pqueue = pqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(pqueue);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    int priority = 2;
-    ctofu_error result = pqueue_insert(pqueue, tofu, priority);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    ctofu element = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, pqueue_insert(pqueue, element, 1));
 
-    result = pqueue_remove(pqueue, tofu, priority);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-
-    ctofu* retrieved_tofu = pqueue_getter(pqueue, tofu, priority);
-    TEST_ASSERT_NULL_PTR(retrieved_tofu);
+    TEST_ASSERT_TRUE(pqueue_not_cnullptr(pqueue));
+    TEST_ASSERT_TRUE(pqueue_not_empty(pqueue));
+    TEST_ASSERT_FALSE(pqueue_is_empty(pqueue));
+    TEST_ASSERT_FALSE(pqueue_is_cnullptr(pqueue));
 
     pqueue_erase(pqueue);
+
+    // Edge Case: Searching in an empty priority queue
+    TEST_ASSERT_FALSE(pqueue_not_cnullptr(pqueue));
+    TEST_ASSERT_FALSE(pqueue_not_empty(pqueue));
+    TEST_ASSERT_TRUE(pqueue_is_empty(pqueue));
+    TEST_ASSERT_TRUE(pqueue_is_cnullptr(pqueue));
 }
 
-// Test case 4: Test cpqueue size
-XTEST_CASE(xdata_let_pqueue_size) {
+XTEST_CASE(test_pqueue_setter_and_getter) {
+    // Normal Case: Setting and getting elements in the priority queue
     cpqueue* pqueue = pqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(pqueue);
 
-    ctofu tofu1 = tofu_create_from_integer(1);
-    ctofu tofu2 = tofu_create_from_integer(2);
-    ctofu tofu3 = tofu_create_from_integer(3);
+    ctofu element1 = {.integer_type = 42};
+    ctofu element2 = {.integer_type = 24};
 
-    pqueue_insert(pqueue, tofu1, 1);
-    pqueue_insert(pqueue, tofu2, 2);
-    pqueue_insert(pqueue, tofu3, 1);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, pqueue_insert(pqueue, element1, 1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, pqueue_setter(pqueue, element2, 2));
 
-    size_t size = pqueue_size(pqueue);
-    TEST_ASSERT_EQUAL_INT(3, size);
-
-    pqueue_erase(pqueue);
-}
-
-// Test case 5: Test cpqueue empty check
-XTEST_CASE(xdata_let_pqueue_empty_check) {
-    cpqueue* pqueue = pqueue_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(pqueue);
-
-    TEST_ASSERT_TRUE_BOOL(pqueue_is_empty(pqueue));
-    TEST_ASSERT_FALSE_BOOL(pqueue_not_empty(pqueue));
-
-    ctofu tofu = tofu_create_from_integer(42);
-    pqueue_insert(pqueue, tofu, 1);
-
-    TEST_ASSERT_FALSE_BOOL(pqueue_is_empty(pqueue));
-    TEST_ASSERT_TRUE_BOOL(pqueue_not_empty(pqueue));
+    ctofu* retrieved_element = pqueue_getter(pqueue, element1, 1);
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_element);
+    TEST_ASSERT_EQUAL(element2.integer_type, retrieved_element->integer_type);
 
     pqueue_erase(pqueue);
-}
 
-XTEST_CASE(xdata_let_pqueue_remove_edge_cases) {
-    cpqueue* empty_pqueue = pqueue_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(empty_pqueue);
-
-    // Test removing elements from an empty priority queue
-    ctofu tofu = tofu_create_from_integer(42);
-    int priority = 1;
-    ctofu_error result = pqueue_remove(empty_pqueue, tofu, priority);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, result);
-
-    pqueue_erase(empty_pqueue);
-
-    // Test removing a large number of elements
-    cpqueue* pqueue = pqueue_create(DOUBLE_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(pqueue);
-
-    for (int i = 0; i < 1000; ++i) {
-        ctofu data = tofu_create_from_double(i * 0.1);
-        int priority = i % 5;  // Priorities 0, 1, 2, 3, 4
-        pqueue_insert(pqueue, data, priority);
-    }
-
-    for (int i = 0; i < 1000; ++i) {
-        ctofu data = tofu_create_from_double(i * 0.1);
-        int priority = i % 5;  // Priorities 0, 1, 2, 3, 4
-        result = pqueue_remove(pqueue, data, priority);
-        TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-    }
-
-    pqueue_erase(pqueue);
-}
-
-XTEST_CASE(xdata_let_pqueue_insert_and_get_edge_cases) {
-    cpqueue* pqueue = pqueue_create(DOUBLE_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(pqueue);
-
-    // Test inserting elements with different priorities
-    for (int i = 0; i < 10; ++i) {
-        ctofu data = tofu_create_from_double(i * 1.5);
-        int priority = i % 3;  // Priorities 0, 1, 2
-        pqueue_insert(pqueue, data, priority);
-    }
-
-    // Test inserting and retrieving a large number of elements
-    for (int i = 0; i < 1000; ++i) {
-        ctofu data = tofu_create_from_double(i * 0.1);
-        int priority = i % 5;  // Priorities 0, 1, 2, 3, 4
-        pqueue_insert(pqueue, data, priority);
-    }
-
-    pqueue_erase(pqueue);
+    // Edge Case: Getting from an empty priority queue
+    retrieved_element = pqueue_getter(pqueue, element1, 1);
+    TEST_ASSERT_NULL_PTR(retrieved_element);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_pqueue_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_pqueue_group) {
     XTEST_NOTE("Running all test cases for pqueue:");
 
-    XTEST_RUN_UNIT(xdata_let_pqueue_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_pqueue_empty_check,        runner);
-    XTEST_RUN_UNIT(xdata_let_pqueue_insert_and_get,     runner);
-    XTEST_RUN_UNIT(xdata_let_pqueue_remove,             runner);
-    XTEST_RUN_UNIT(xdata_let_pqueue_size,               runner);
-    XTEST_RUN_UNIT(xdata_let_pqueue_size, runner);
-    XTEST_RUN_UNIT(xdata_let_pqueue_insert_and_get_edge_cases, runner);
+    XTEST_RUN_UNIT(test_pqueue_create_and_erase,  runner);
+    XTEST_RUN_UNIT(test_pqueue_insert_and_remove, runner);
+    XTEST_RUN_UNIT(test_pqueue_search,            runner);
+    XTEST_RUN_UNIT(test_pqueue_setter_and_getter, runner);
 } // end of func

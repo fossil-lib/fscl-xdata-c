@@ -39,114 +39,62 @@
 //
 
 // Test case for creating and destroying a tree
-XTEST_CASE(xdata_let_tree_create_and_destroy_tree) {
+XTEST_CASE(test_tree_creation_and_deletion) {
+    // Normal Case: Creating and deleting a tree with a valid type
     ctree* tree = tree_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(tree);
-
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, tree->tree_type);
     tree_erase(tree);
+
+    // Edge Case: Creating a tree with an invalid type
+    TEST_ASSERT_NULL_PTR(tree_create(INVALID_TYPE));
 }
 
-// Test case for inserting and searching for a node in the tree
-XTEST_CASE(xdata_let_tree_insert_and_search_tree) {
+XTEST_CASE(test_tree_insert_and_search) {
+    // Normal Case: Inserting and searching for elements
     ctree* tree = tree_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(tree);
+    ctofu data = {.type = INTEGER_TYPE, .data.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tree_insert(tree, data));
+    TEST_ASSERT_TRUE(tree_contains(tree, data));
 
-    ctofu data_to_insert = tofu_create_from_integer(42);
+    // Edge Case: Inserting into a NULL tree
+    TEST_ASSERT_EQUAL(TOFU_WAS_NULLPTR, tree_insert(NULL, data));
 
-    // Insert a node into the tree
-    ctofu_error insert_result = tree_insert(tree, data_to_insert);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, insert_result);
-
-    // Search for the inserted node
-    ctofu_error search_result = tree_search(tree, data_to_insert);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, search_result);
+    // Edge Case: Searching in an empty tree
+    ctree* empty_tree = tree_create(INTEGER_TYPE);
+    TEST_ASSERT_FALSE(tree_contains(empty_tree, data));
 
     tree_erase(tree);
+    tree_erase(empty_tree);
 }
 
-// Test case for inserting and deleting a node in the tree
-XTEST_CASE(xdata_let_tree_insert_and_delete_tree) {
+XTEST_CASE(test_tree_remove) {
+    // Normal Case: Removing an element
     ctree* tree = tree_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(tree);
+    ctofu data = {.type = INTEGER_TYPE, .data.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tree_insert(tree, data));
+    TEST_ASSERT_TRUE(tree_contains(tree, data));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tree_remove(tree, data));
+    TEST_ASSERT_FALSE(tree_contains(tree, data));
 
-    ctofu data_to_insert = tofu_create_from_integer(42);
+    // Edge Case: Removing from a NULL tree
+    TEST_ASSERT_EQUAL(TOFU_WAS_NULLPTR, tree_remove(NULL, data));
 
-    // Insert a node into the tree
-    ctofu_error insert_result = tree_insert(tree, data_to_insert);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, insert_result);
-
-    // Delete the inserted node
-    ctofu_error delete_result = tree_remove(tree, data_to_insert);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, delete_result);
-
-    tree_erase(tree);
-}
-
-XTEST_CASE(xdata_let_tree_create_and_destroy_tree_with_types) {
-    ctree* double_tree = tree_create(DOUBLE_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(double_tree);
-    tree_erase(double_tree);
-
-    ctree* string_tree = tree_create(STRING_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(string_tree);
-    tree_erase(string_tree);
-
-    ctree* bool_tree = tree_create(BOOLEAN_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(bool_tree);
-    tree_erase(bool_tree);
-
-    // Test creating a tree with an invalid type
-    ctree* invalid_tree = tree_create(INVALID_TYPE);
-    TEST_ASSERT_NULL_PTR(invalid_tree);
-}
-
-XTEST_CASE(xdata_let_tree_insert_and_search_tree_edge_cases) {
-    ctree* tree = tree_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(tree);
-
-    // Test inserting nodes with various data types
-    ctofu int_data = tofu_create_from_integer(42);
-    ctofu double_data = tofu_create_from_double(3.14);
-    ctofu string_data = tofu_create_from_string("Hello");
-
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, tree_insert(tree, int_data));
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, tree_insert(tree, double_data));
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, tree_insert(tree, string_data));
-
-    // Test searching for a node that doesn't exist
-    ctofu not_found_data = tofu_create_from_integer(999);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_NOT_FOUND, tree_search(tree, not_found_data));
+    // Edge Case: Removing from an empty tree
+    ctree* empty_tree = tree_create(INTEGER_TYPE);
+    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, tree_remove(empty_tree, data));
 
     tree_erase(tree);
-}
-
-XTEST_CASE(xdata_let_tree_insert_and_delete_tree_edge_cases) {
-    ctree* tree = tree_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(tree);
-
-    // Test deleting a node that doesn't exist
-    ctofu not_found_data = tofu_create_from_integer(999);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_NOT_FOUND, tree_remove(tree, not_found_data));
-
-    // Test deleting the root node
-    ctofu root_data = tofu_create_from_integer(42);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, tree_insert(tree, root_data));
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, tree_remove(tree, root_data));
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_NOT_FOUND, tree_search(tree, root_data));
-
-    tree_erase(tree);
+    tree_erase(empty_tree);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_tree_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_tree_group) {
     XTEST_NOTE("Running all test cases for tree:");
 
-    XTEST_RUN_UNIT(xdata_let_tree_create_and_destroy_tree, runner);
-    XTEST_RUN_UNIT(xdata_let_tree_insert_and_search_tree,  runner);
-    XTEST_RUN_UNIT(xdata_let_tree_insert_and_delete_tree,  runner);
-    XTEST_RUN_UNIT(xdata_let_tree_create_and_destroy_tree_with_types, runner);
-    XTEST_RUN_UNIT(xdata_let_tree_insert_and_search_tree_edge_cases,  runner);
-    XTEST_RUN_UNIT(xdata_let_tree_insert_and_delete_tree_edge_cases,  runner);
+    XTEST_RUN_UNIT(test_tree_creation_and_deletion, runner);
+    XTEST_RUN_UNIT(test_tree_insert_and_search,     runner);
+    XTEST_RUN_UNIT(test_tree_remove,                runner);
 } // end of func

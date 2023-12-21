@@ -37,82 +37,107 @@
 //
 // XUNIT TEST CASES
 //
-
-// Test case 1: Test cflist creation and destruction
-XTEST_CASE(xdata_let_flist_create_and_destroy) {
+XTEST_CASE(test_flist_create_and_erase) {
+    // Normal Case: Creating and erasing a forward list
     cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
-
     flist_erase(flist);
+
+    // Edge Case: Creating with an invalid type
+    flist = flist_create(INVALID_TYPE);
     TEST_ASSERT_NULL_PTR(flist);
 }
 
-// Test case 2: Test cflist insertion and retrieval
-XTEST_CASE(xdata_let_flist_insert_and_get) {
+XTEST_CASE(test_flist_insert_and_remove) {
+    // Normal Case: Inserting and removing elements from the forward list
     cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = flist_insert(flist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    ctofu data = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_insert(flist, data));
+    TEST_ASSERT_EQUAL(1, flist_size(flist));
 
-    ctofu* retrieved_tofu = flist_getter(flist, tofu);
-    TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
-    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(*retrieved_tofu));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_remove(flist, &data));
+    TEST_ASSERT_EQUAL(0, flist_size(flist));
 
     flist_erase(flist);
+
+    // Edge Case: Removing from an empty forward list
+    TEST_ASSERT_EQUAL(CTOFU_ERROR_NOT_FOUND, flist_remove(flist, &data));
 }
 
-// Test case 3: Test cflist removal
-XTEST_CASE(xdata_let_flist_remove) {
+XTEST_CASE(test_flist_search) {
+    // Normal Case: Searching for an element in the forward list
     cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = flist_insert(flist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    ctofu data = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_insert(flist, data));
 
-    result = flist_remove(flist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-
-    ctofu* retrieved_tofu = flist_getter(flist, tofu);
-    TEST_ASSERT_NULL_PTR(retrieved_tofu);
+    TEST_ASSERT_TRUE(flist_not_cnullptr(flist));
+    TEST_ASSERT_TRUE(flist_not_empty(flist));
+    TEST_ASSERT_FALSE(flist_is_empty(flist));
+    TEST_ASSERT_FALSE(flist_is_cnullptr(flist));
 
     flist_erase(flist);
+
+    // Edge Case: Searching in an empty forward list
+    TEST_ASSERT_FALSE(flist_not_cnullptr(flist));
+    TEST_ASSERT_FALSE(flist_not_empty(flist));
+    TEST_ASSERT_TRUE(flist_is_empty(flist));
+    TEST_ASSERT_TRUE(flist_is_cnullptr(flist));
 }
 
-// Test case 4: Test cflist size
-XTEST_CASE(xdata_let_flist_size) {
+XTEST_CASE(test_flist_setter_and_getter) {
+    // Normal Case: Setting and getting elements in the forward list
     cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    ctofu tofu1 = tofu_create_from_integer(1);
-    ctofu tofu2 = tofu_create_from_integer(2);
-    ctofu tofu3 = tofu_create_from_integer(3);
+    ctofu data1 = {.integer_type = 42};
+    ctofu data2 = {.integer_type = 24};
 
-    flist_insert(flist, tofu1);
-    flist_insert(flist, tofu2);
-    flist_insert(flist, tofu3);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_insert(flist, data1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_setter(flist, data1));
 
-    size_t size = flist_size(flist);
-    TEST_ASSERT_EQUAL_INT(3, size);
+    ctofu* retrieved_data = malloc(sizeof(ctofu));
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_getter(flist, data1, retrieved_data));
+    TEST_ASSERT_EQUAL(data1.integer_type, retrieved_data->integer_type);
 
+    free(retrieved_data);
     flist_erase(flist);
+
+    // Edge Case: Getting from an empty forward list
+    retrieved_data = malloc(sizeof(ctofu));
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
+    TEST_ASSERT_EQUAL(CTOFU_ERROR_NOT_FOUND, flist_getter(flist, data1, retrieved_data));
+    free(retrieved_data);
 }
 
-// Test case 5: Test cflist empty check
-XTEST_CASE(xdata_let_flist_empty_check) {
+XTEST_CASE(test_flist_reverse_forward_and_backward) {
+    // Normal Case: Reversing a forward list forward and backward
     cflist* flist = flist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(flist);
 
-    TEST_ASSERT_TRUE_BOOL(flist_is_empty(flist));
-    TEST_ASSERT_FALSE_BOOL(flist_not_empty(flist));
+    ctofu data1 = {.integer_type = 42};
+    ctofu data2 = {.integer_type = 24};
 
-    ctofu tofu = tofu_create_from_integer(42);
-    flist_insert(flist, tofu);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_insert(flist, data1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_insert(flist, data2));
 
-    TEST_ASSERT_FALSE_BOOL(flist_is_empty(flist));
-    TEST_ASSERT_TRUE_BOOL(flist_not_empty(flist));
+    // Reverse forward
+    flist_reverse_forward(flist);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_getter(flist, data1, &data1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_getter(flist, data2, &data2));
+    TEST_ASSERT_EQUAL(24, data1.integer_type);
+    TEST_ASSERT_EQUAL(42, data2.integer_type);
+
+    // Reverse backward
+    flist_reverse_backward(flist);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_getter(flist, data1, &data1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, flist_getter(flist, data2, &data2));
+    TEST_ASSERT_EQUAL(42, data1.integer_type);
+    TEST_ASSERT_EQUAL(24, data2.integer_type);
 
     flist_erase(flist);
 }
@@ -120,12 +145,12 @@ XTEST_CASE(xdata_let_flist_empty_check) {
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_flist_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_flist_group) {
     XTEST_NOTE("Running all test cases for flist:");
 
-    XTEST_RUN_UNIT(xdata_let_flist_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_flist_empty_check,        runner);
-    XTEST_RUN_UNIT(xdata_let_flist_insert_and_get,     runner);
-    XTEST_RUN_UNIT(xdata_let_flist_remove,             runner);
-    XTEST_RUN_UNIT(xdata_let_flist_size,               runner);
+    XTEST_RUN_UNIT(test_flist_create_and_erase,  runner);
+    XTEST_RUN_UNIT(test_flist_insert_and_remove, runner);
+    XTEST_RUN_UNIT(test_flist_search,            runner);
+    XTEST_RUN_UNIT(test_flist_setter_and_getter, runner);
+    XTEST_RUN_UNIT(test_flist_reverse_forward_and_backward, runner);
 } // end of func

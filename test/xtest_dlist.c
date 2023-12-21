@@ -37,95 +37,91 @@
 //
 // XUNIT TEST CASES
 //
-
-// Test case 1: Test cdlist creation and destruction
-XTEST_CASE(xdata_let_dlist_create_and_destroy) {
+XTEST_CASE(test_dlist_create_and_erase) {
+    // Normal Case: Creating and erasing a doubly-linked list
     cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
-
     dlist_erase(dlist);
+
+    // Edge Case: Creating with an invalid type
+    dlist = dlist_create(INVALID_TYPE);
     TEST_ASSERT_NULL_PTR(dlist);
 }
 
-// Test case 2: Test cdlist insertion and retrieval
-XTEST_CASE(xdata_let_dlist_insert_and_get) {
+XTEST_CASE(test_dlist_insert_and_remove) {
+    // Normal Case: Inserting and removing elements from the doubly-linked list
     cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = dlist_insert(dlist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    ctofu data = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_insert(dlist, data));
+    TEST_ASSERT_EQUAL(1, dlist_size(dlist));
 
-    ctofu* retrieved_tofu = dlist_getter(dlist, tofu);
-    TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
-    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(*retrieved_tofu));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_remove(dlist, &data));
+    TEST_ASSERT_EQUAL(0, dlist_size(dlist));
 
     dlist_erase(dlist);
+
+    // Edge Case: Removing from an empty doubly-linked list
+    TEST_ASSERT_EQUAL(CTOFU_ERROR_NOT_FOUND, dlist_remove(dlist, &data));
 }
 
-// Test case 3: Test cdlist removal
-XTEST_CASE(xdata_let_dlist_remove) {
+XTEST_CASE(test_dlist_search) {
+    // Normal Case: Searching for an element in the doubly-linked list
     cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = dlist_insert(dlist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    ctofu data = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_insert(dlist, data));
 
-    result = dlist_remove(dlist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-
-    ctofu* retrieved_tofu = dlist_getter(dlist, tofu);
-    TEST_ASSERT_NULL_PTR(retrieved_tofu);
+    TEST_ASSERT_TRUE(dlist_not_cnullptr(dlist));
+    TEST_ASSERT_TRUE(dlist_not_empty(dlist));
+    TEST_ASSERT_FALSE(dlist_is_empty(dlist));
+    TEST_ASSERT_FALSE(dlist_is_cnullptr(dlist));
 
     dlist_erase(dlist);
+
+    // Edge Case: Searching in an empty doubly-linked list
+    TEST_ASSERT_FALSE(dlist_not_cnullptr(dlist));
+    TEST_ASSERT_FALSE(dlist_not_empty(dlist));
+    TEST_ASSERT_TRUE(dlist_is_empty(dlist));
+    TEST_ASSERT_TRUE(dlist_is_cnullptr(dlist));
 }
 
-// Test case 4: Test cdlist size
-XTEST_CASE(xdata_let_dlist_size) {
+XTEST_CASE(test_dlist_setter_and_getter) {
+    // Normal Case: Setting and getting elements in the doubly-linked list
     cdlist* dlist = dlist_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dlist);
 
-    ctofu tofu1 = tofu_create_from_integer(1);
-    ctofu tofu2 = tofu_create_from_integer(2);
-    ctofu tofu3 = tofu_create_from_integer(3);
+    ctofu data1 = {.integer_type = 42};
+    ctofu data2 = {.integer_type = 24};
 
-    dlist_insert(dlist, tofu1);
-    dlist_insert(dlist, tofu2);
-    dlist_insert(dlist, tofu3);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_insert(dlist, data1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_setter(dlist, data1));
 
-    size_t size = dlist_size(dlist);
-    TEST_ASSERT_EQUAL_INT(3, size);
+    ctofu* retrieved_data = malloc(sizeof(ctofu));
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dlist_getter(dlist, data1, retrieved_data));
+    TEST_ASSERT_EQUAL(data1.integer_type, retrieved_data->integer_type);
 
+    free(retrieved_data);
     dlist_erase(dlist);
-}
 
-// Test case 5: Test cdlist empty check
-XTEST_CASE(xdata_let_dlist_empty_check) {
-    cdlist* dlist = dlist_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(dlist);
-
-    TEST_ASSERT_TRUE_BOOL(dlist_is_empty(dlist));
-    TEST_ASSERT_FALSE_BOOL(dlist_not_empty(dlist));
-
-    ctofu tofu = tofu_create_from_integer(42);
-    dlist_insert(dlist, tofu);
-
-    TEST_ASSERT_FALSE_BOOL(dlist_is_empty(dlist));
-    TEST_ASSERT_TRUE_BOOL(dlist_not_empty(dlist));
-
-    dlist_erase(dlist);
+    // Edge Case: Getting from an empty doubly-linked list
+    retrieved_data = malloc(sizeof(ctofu));
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
+    TEST_ASSERT_EQUAL(CTOFU_ERROR_NOT_FOUND, dlist_getter(dlist, data1, retrieved_data));
+    free(retrieved_data);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_dlist_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_dlist_group) {
     XTEST_NOTE("Running all test cases for dlist:");
 
-    XTEST_RUN_UNIT(xdata_let_dlist_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_dlist_empty_check,        runner);
-    XTEST_RUN_UNIT(xdata_let_dlist_insert_and_get,     runner);
-    XTEST_RUN_UNIT(xdata_let_dlist_remove,             runner);
-    XTEST_RUN_UNIT(xdata_let_dlist_size,               runner);
+    XTEST_RUN_UNIT(test_dlist_create_and_erase,  runner);
+    XTEST_RUN_UNIT(test_dlist_insert_and_remove, runner);
+    XTEST_RUN_UNIT(test_dlist_search,            runner);
+    XTEST_RUN_UNIT(test_dlist_setter_and_getter, runner);
 } // end of func

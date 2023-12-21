@@ -39,93 +39,91 @@
 //
 
 // Test case 1: Test cdqueue creation and destruction
-XTEST_CASE(xdata_let_dqueue_create_and_destroy) {
+XTEST_CASE(test_dqueue_create_and_erase) {
+    // Normal Case: Creating and erasing a double-ended queue
     cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
-
     dqueue_erase(dqueue);
+
+    // Edge Case: Creating with an invalid type
+    dqueue = dqueue_create(INVALID_TYPE);
     TEST_ASSERT_NULL_PTR(dqueue);
 }
 
-// Test case 2: Test cdqueue insertion and retrieval
-XTEST_CASE(xdata_let_dqueue_insert_and_get) {
+XTEST_CASE(test_dqueue_insert_and_remove) {
+    // Normal Case: Inserting and removing elements from the double-ended queue
     cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = dqueue_insert(dqueue, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    ctofu data = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_insert(dqueue, data));
+    TEST_ASSERT_EQUAL(1, dqueue_size(dqueue));
 
-    ctofu* retrieved_tofu = dqueue_getter(dqueue, tofu);
-    TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
-    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(*retrieved_tofu));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_remove(dqueue, &data));
+    TEST_ASSERT_EQUAL(0, dqueue_size(dqueue));
 
     dqueue_erase(dqueue);
+
+    // Edge Case: Removing from an empty double-ended queue
+    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, dqueue_remove(dqueue, &data));
 }
 
-// Test case 3: Test cdqueue removal
-XTEST_CASE(xdata_let_dqueue_remove) {
+XTEST_CASE(test_dqueue_search) {
+    // Normal Case: Searching for an element in the double-ended queue
     cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = dqueue_insert(dqueue, tofu);
-    TEST_ASSERT_EQUAL_INT(TRILO_XDATA_TYPE_SUCCESS, result);
+    ctofu data = {.integer_type = 42};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_insert(dqueue, data));
 
-    result = dqueue_remove(dqueue, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
-
-    ctofu* retrieved_tofu = dqueue_getter(dqueue, tofu);
-    TEST_ASSERT_NULL_PTR(retrieved_tofu);
+    TEST_ASSERT_TRUE(dqueue_not_cnullptr(dqueue));
+    TEST_ASSERT_TRUE(dqueue_not_empty(dqueue));
+    TEST_ASSERT_FALSE(dqueue_is_empty(dqueue));
+    TEST_ASSERT_FALSE(dqueue_is_cnullptr(dqueue));
 
     dqueue_erase(dqueue);
+
+    // Edge Case: Searching in an empty double-ended queue
+    TEST_ASSERT_FALSE(dqueue_not_cnullptr(dqueue));
+    TEST_ASSERT_FALSE(dqueue_not_empty(dqueue));
+    TEST_ASSERT_TRUE(dqueue_is_empty(dqueue));
+    TEST_ASSERT_TRUE(dqueue_is_cnullptr(dqueue));
 }
 
-// Test case 4: Test cdqueue size
-XTEST_CASE(xdata_let_dqueue_size) {
+XTEST_CASE(test_dqueue_setter_and_getter) {
+    // Normal Case: Setting and getting elements in the double-ended queue
     cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
 
-    ctofu tofu1 = tofu_create_from_integer(1);
-    ctofu tofu2 = tofu_create_from_integer(2);
-    ctofu tofu3 = tofu_create_from_integer(3);
+    ctofu data1 = {.integer_type = 42};
+    ctofu data2 = {.integer_type = 24};
 
-    dqueue_insert(dqueue, tofu1);
-    dqueue_insert(dqueue, tofu2);
-    dqueue_insert(dqueue, tofu3);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_insert(dqueue, data1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_setter(dqueue, data1));
 
-    size_t size = dqueue_size(dqueue);
-    TEST_ASSERT_EQUAL_INT(3, size);
+    ctofu* retrieved_data = malloc(sizeof(ctofu));
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, dqueue_getter(dqueue, data1, retrieved_data));
+    TEST_ASSERT_EQUAL(data1.integer_type, retrieved_data->integer_type);
 
+    free(retrieved_data);
     dqueue_erase(dqueue);
-}
 
-// Test case 5: Test cdqueue empty check
-XTEST_CASE(xdata_let_dqueue_empty_check) {
-    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(dqueue);
-
-    TEST_ASSERT_TRUE_BOOL(dqueue_is_empty(dqueue));
-    TEST_ASSERT_FALSE_BOOL(dqueue_not_empty(dqueue));
-
-    ctofu tofu = tofu_create_from_integer(42);
-    dqueue_insert(dqueue, tofu);
-
-    TEST_ASSERT_FALSE_BOOL(dqueue_is_empty(dqueue));
-    TEST_ASSERT_TRUE_BOOL(dqueue_not_empty(dqueue));
-
-    dqueue_erase(dqueue);
+    // Edge Case: Getting from an empty double-ended queue
+    retrieved_data = malloc(sizeof(ctofu));
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_data);
+    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, dqueue_getter(dqueue, data1, retrieved_data));
+    free(retrieved_data);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_dqueue_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_dqueue_group) {
     XTEST_NOTE("Running all test cases for dqueue:");
 
-    XTEST_RUN_UNIT(xdata_let_dqueue_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_dqueue_empty_check,        runner);
-    XTEST_RUN_UNIT(xdata_let_dqueue_insert_and_get,     runner);
-    XTEST_RUN_UNIT(xdata_let_dqueue_remove,             runner);
-    XTEST_RUN_UNIT(xdata_let_dqueue_size,               runner);
+    XTEST_RUN_UNIT(test_dqueue_create_and_erase,  runner);
+    XTEST_RUN_UNIT(test_dqueue_insert_and_remove, runner);
+    XTEST_RUN_UNIT(test_dqueue_search,            runner);
+    XTEST_RUN_UNIT(test_dqueue_setter_and_getter, runner);
 } // end of func

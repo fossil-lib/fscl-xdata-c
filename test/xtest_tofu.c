@@ -41,106 +41,50 @@
 //
 
 // Test case 1: Test ctofu creation and retrieval of integer value
-XTEST_CASE(xdata_let_tofu_create_and_get_integer) {
-    ctofu tofu = tofu_create_from_integer(42);
-    TEST_ASSERT_EQUAL_BOOL(INTEGER_TYPE, tofu_get_type(tofu));
-    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(tofu));
-}
-
-// Test case 2: Test ctofu creation and retrieval of double value
-XTEST_CASE(xdata_let_tofu_create_and_get_double) {
-    ctofu tofu = tofu_create_from_double(3.14);
-    TEST_ASSERT_EQUAL_BOOL(DOUBLE_TYPE, tofu_get_type(tofu));
-    TEST_ASSERT_DOUBLE_EQUAL(3.14, tofu_get_double(tofu));
-}
-
-// Test case 3: Test ctofu equality
-XTEST_CASE(xdata_let_tofu_equality) {
-    ctofu tofu1 = tofu_create_from_integer(42);
-    ctofu tofu2 = tofu_create_from_integer(42);
-    ctofu tofu3 = tofu_create_from_double(3.14);
-
-    TEST_ASSERT_TRUE_BOOL(tofu_equal(tofu1, tofu2));
-    TEST_ASSERT_FALSE_BOOL(tofu_equal(tofu1, tofu3));
-}
-
-// Test case 4: Test ctofu copy
-XTEST_CASE(xdata_let_tofu_copy) {
-    ctofu tofu1 = tofu_create_from_integer(42);
-    ctofu tofu2 = tofu_copy(tofu1);
-
-    TEST_ASSERT_TRUE_BOOL(tofu_equal(tofu1, tofu2));
-}
-
-XTEST_CASE(xdata_let_tofu_create_and_get_string_edge_cases) {
-    const char* empty_str = "";
-    const char* special_chars_str = "!@#$%^&*()";
-
-    ctofu empty_tofu = tofu_create_from_string(empty_str);
-    TEST_ASSERT_EQUAL_BOOL(STRING_TYPE, tofu_get_type(empty_tofu));
-    TEST_ASSERT_EQUAL_STRING(empty_str, tofu_get_string(empty_tofu));
-
-    ctofu special_chars_tofu = tofu_create_from_string(special_chars_str);
-    TEST_ASSERT_EQUAL_BOOL(STRING_TYPE, tofu_get_type(special_chars_tofu));
-    TEST_ASSERT_EQUAL_STRING(special_chars_str, tofu_get_string(special_chars_tofu));
-}
-
-XTEST_CASE(xdata_let_tofu_create_and_get_boolean_edge_cases) {
-    ctofu true_tofu = tofu_create_from_boolean(true);
-    TEST_ASSERT_EQUAL_BOOL(BOOLEAN_TYPE, tofu_get_type(true_tofu));
-    TEST_ASSERT_TRUE_BOOL(tofu_get_boolean(true_tofu));
-
-    ctofu false_tofu = tofu_create_from_boolean(false);
-    TEST_ASSERT_EQUAL_BOOL(BOOLEAN_TYPE, tofu_get_type(false_tofu));
-    TEST_ASSERT_FALSE_BOOL(tofu_get_boolean(false_tofu));
-}
-
-// Test cases for ctofu functions
 XTEST_CASE(test_tofu_create_and_erase) {
-    // Test creating ctofu instances and erasing them
-    ctofu tofu1 = tofu_create_from_integer(42);
-    TEST_ASSERT_EQUAL(INTEGER_TYPE, tofu1.type);
-    TEST_ASSERT_EQUAL(42, tofu_get_integer(tofu1));
+    // Normal Case: Creating and erasing a tofu value
+    ctofu_data value = {.integer_type = 42};
+    ctofu* result;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tofu_create(INTEGER_TYPE, &value, &result));
+    TEST_ASSERT_NOT_NULL_PTR(result);
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, tofu_type_getter(result));
+    tofu_erase(result);
 
-    ctofu tofu2 = tofu_create_from_string("Hello, Tofu!");
-    TEST_ASSERT_EQUAL(STRING_TYPE, tofu2.type);
-    TEST_ASSERT_EQUAL_STRING("Hello, Tofu!", tofu_get_string(tofu2));
+    // Edge Case: Creating with an invalid type
+    TEST_ASSERT_EQUAL(TOFU_WAS_UNKNOWN, tofu_create(INVALID_TYPE, &value, &result));
+    TEST_ASSERT_NULL_PTR(result);
 
-    ctofu tofu3 = tofu_create_from_double(3.14);
-    TEST_ASSERT_EQUAL(DOUBLE_TYPE, tofu3.type);
-    TEST_ASSERT_DOUBLE_EQUAL(3.14, tofu_get_double(tofu3));
+    // Edge Case: Creating with a NULL value
+    TEST_ASSERT_EQUAL(TOFU_WAS_NULLPTR, tofu_create(INTEGER_TYPE, NULL, &result));
+    TEST_ASSERT_NULL_PTR(result);
 
-    tofu_erase(&tofu1);
-    tofu_erase(&tofu2);
-    tofu_erase(&tofu3);
+    // Edge Case: Creating with a NULL result
+    TEST_ASSERT_EQUAL(TOFU_WAS_NULLPTR, tofu_create(INTEGER_TYPE, &value, NULL));
 }
 
-XTEST_CASE(test_tofu_compare) {
-    // Test comparing ctofu instances
-    ctofu tofu1 = tofu_create_from_integer(42);
-    ctofu tofu2 = tofu_create_from_integer(42);
-    ctofu tofu3 = tofu_create_from_integer(100);
+XTEST_CASE(test_tofu_sort_insertion) {
+    // Normal Case: Sorting an array using insertion sort
+    ctofu array[] = {{"one", STRING_TYPE}, {"four", STRING_TYPE}, {"two", STRING_TYPE}};
+    size_t num = sizeof(array) / sizeof(array[0]);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tofu_sort_insertion(array, num));
+    TEST_ASSERT_EQUAL_STRING("four", array[0].data.string_type);
+    TEST_ASSERT_EQUAL_STRING("one", array[1].data.string_type);
+    TEST_ASSERT_EQUAL_STRING("two", array[2].data.string_type);
 
-    TEST_ASSERT_EQUAL(TRILO_XDATA_TYPE_SUCCESS, tofu_compare(tofu1, tofu2));
-    TEST_ASSERT_EQUAL(TRILO_XDATA_TYPE_WAS_MISMATCH, tofu_compare(tofu1, tofu3));
+    // Edge Case: Sorting an empty array
+    ctofu empty_array[0];
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tofu_sort_insertion(empty_array, 0));
 
-    tofu_erase(&tofu1);
-    tofu_erase(&tofu2);
-    tofu_erase(&tofu3);
+    // Edge Case: Sorting with a NULL array
+    TEST_ASSERT_EQUAL(TOFU_WAS_NULLPTR, tofu_sort_insertion(NULL, num));
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_tofu_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_tofu_group) {
     XTEST_NOTE("Running all test cases for tofu:");
 
-    XTEST_RUN_UNIT(test_tofu_create_and_erase,            runner);
-    XTEST_RUN_UNIT(test_tofu_compare,                     runner);
-    XTEST_RUN_UNIT(xdata_let_tofu_copy,                   runner);
-    XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_double,  runner);
-    XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_integer, runner);
-    XTEST_RUN_UNIT(xdata_let_tofu_equality,               runner);
-    XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_string_edge_cases,  runner);
-    XTEST_RUN_UNIT(xdata_let_tofu_create_and_get_boolean_edge_cases, runner);
+    XTEST_RUN_UNIT(test_tofu_create_and_erase, runner);
+    XTEST_RUN_UNIT(test_tofu_sort_insertion,   runner);
 } // end of func

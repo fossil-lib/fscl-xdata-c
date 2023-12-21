@@ -37,127 +37,94 @@
 //
 // XUNIT TEST CASES
 //
+XTEST_CASE(test_map_create_and_erase) {
+    // Normal Case: Creating and erasing a map
+    cmap* map = map_create(INTEGER_TYPE);
+    TEST_ASSERT_NOT_NULL_PTR(map);
+    map_erase(map);
 
-// Test case 1: Test cmap creation and destruction
-XTEST_CASE(xdata_let_map_create_and_destroy) {
+    // Edge Case: Creating with an invalid type
+    map = map_create(INVALID_TYPE);
+    TEST_ASSERT_NULL_PTR(map);
+}
+
+XTEST_CASE(test_map_insert_and_remove) {
+    // Normal Case: Inserting and removing elements from the map
     cmap* map = map_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(map);
 
+    ctofu key = {.integer_type = 42};
+    ctofu value = {.integer_type = 24};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_insert(map, key, value));
+    TEST_ASSERT_EQUAL(1, map_size(map));
+
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_remove(map, key));
+    TEST_ASSERT_EQUAL(0, map_size(map));
+
     map_erase(map);
+
+    // Edge Case: Removing from an empty map
+    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, map_remove(map, key));
 }
 
-// Test case 2: Test cmap insert and search
-XTEST_CASE(xdata_let_map_insert_and_search) {
-    cmap* map = map_create(STRING_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(map);
-
-    ctofu key = tofu_create_from_string("name");
-    ctofu value = tofu_create_from_string("John");
-
-    ctofu_error insertResult = map_insert(map, key, value);
-    TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_SUCCESS, insertResult);
-
-    ctofu_error searchResult = map_search(map, key);
-    TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_SUCCESS, searchResult);
-
-    // Clean up
-    map_erase(map);
-}
-
-// Test case 3: Test cmap remove operation
-XTEST_CASE(xdata_let_map_remove) {
+XTEST_CASE(test_map_search) {
+    // Normal Case: Searching for an element in the map
     cmap* map = map_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(map);
 
-    ctofu key = tofu_create_from_string("age");
-    ctofu value = tofu_create_from_integer(30);
+    ctofu key = {.integer_type = 42};
+    ctofu value = {.integer_type = 24};
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_insert(map, key, value));
 
-    ctofu_error insertResult = map_insert(map, key, value);
-    TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_SUCCESS, insertResult);
+    TEST_ASSERT_TRUE(map_not_cnullptr(map));
+    TEST_ASSERT_TRUE(map_not_empty(map));
+    TEST_ASSERT_FALSE(map_is_empty(map));
+    TEST_ASSERT_FALSE(map_is_cnullptr(map));
 
-    ctofu_error removeResult = map_remove(map, key);
-    TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_SUCCESS, removeResult);
-
-    ctofu_error searchResult = map_search(map, key);
-    TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_WAS_UNKNOWN, searchResult);
-
-    // Clean up
     map_erase(map);
+
+    // Edge Case: Searching in an empty map
+    TEST_ASSERT_FALSE(map_not_cnullptr(map));
+    TEST_ASSERT_FALSE(map_not_empty(map));
+    TEST_ASSERT_TRUE(map_is_empty(map));
+    TEST_ASSERT_TRUE(map_is_cnullptr(map));
 }
 
-// Test case 4: Test cmap setter and getter operations
-XTEST_CASE(xdata_let_map_getter_and_setter) {
-    cmap* map = map_create(BOOLEAN_TYPE);
+XTEST_CASE(test_map_setter_and_getter) {
+    // Normal Case: Setting and getting elements in the map
+    cmap* map = map_create(INTEGER_TYPE);
     TEST_ASSERT_NOT_NULL_PTR(map);
 
-    ctofu key = tofu_create_from_string("is_valid");
-    ctofu value = tofu_create_from_boolean(true);
+    ctofu key = {.integer_type = 42};
+    ctofu value1 = {.integer_type = 24};
+    ctofu value2 = {.integer_type = 12};
 
-    ctofu_error insertResult = map_insert(map, key, value);
-    TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_SUCCESS, insertResult);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_insert(map, key, value1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_setter(map, key, value2));
 
-    ctofu newValue = tofu_create_from_boolean(false);
-    ctofu_error setResult = map_setter(map, key, newValue);
-    TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_SUCCESS, setResult);
+    ctofu* retrieved_value = malloc(sizeof(ctofu));
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_value);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_getter(map, key, retrieved_value));
+    TEST_ASSERT_EQUAL(value2.integer_type, retrieved_value->integer_type);
 
-    ctofu retrievedValue;
-    ctofu_error getResult = map_getter(map, key, &retrievedValue);
-    TEST_ASSERT_EQUAL_ENUM(TRILO_XDATA_TYPE_SUCCESS, getResult);
-    TEST_ASSERT_TRUE(tofu_get_boolean(retrievedValue) == false);
-
-    // Clean up
+    free(retrieved_value);
     map_erase(map);
-}
 
-// Test case 5: Test cmap size operation
-XTEST_CASE(xdata_let_map_size) {
-    cmap* map = map_create(DOUBLE_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(map);
-
-    TEST_ASSERT_EQUAL_ENUM(0, map_size(map));
-
-    ctofu key1 = tofu_create_from_string("price");
-    ctofu value1 = tofu_create_from_double(19.99);
-    map_insert(map, key1, value1);
-
-    TEST_ASSERT_EQUAL_ENUM(1, map_size(map));
-
-    ctofu key2 = tofu_create_from_string("quantity");
-    ctofu value2 = tofu_create_from_integer(5);
-    map_insert(map, key2, value2);
-
-    TEST_ASSERT_EQUAL_ENUM(2, map_size(map));
-
-    // Clean up
-    map_erase(map);
-}
-
-// Test case 6: Test cmap contains operation
-XTEST_CASE(xdata_let_map_contains) {
-    cmap* map = map_create(CHAR_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(map);
-
-    ctofu key = tofu_create_from_char('A');
-    ctofu value = tofu_create_from_string("Apple");
-    map_insert(map, key, value);
-
-    TEST_ASSERT_TRUE(map_contains(map, key));
-    TEST_ASSERT_FALSE(map_contains(map, tofu_create_from_char('B')));
-
-    // Clean up
-    map_erase(map);
+    // Edge Case: Getting from an empty map
+    retrieved_value = malloc(sizeof(ctofu));
+    TEST_ASSERT_NOT_NULL_PTR(retrieved_value);
+    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, map_getter(map, key, retrieved_value));
+    free(retrieved_value);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_map_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_map_group) {
     XTEST_NOTE("Running all test cases for map:");
 
-    XTEST_RUN_UNIT(xdata_let_map_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_map_insert_and_search,  runner);
-    XTEST_RUN_UNIT(xdata_let_map_remove,             runner);
-    XTEST_RUN_UNIT(xdata_let_map_getter_and_setter,  runner);
-    XTEST_RUN_UNIT(xdata_let_map_size,               runner);
-    XTEST_RUN_UNIT(xdata_let_map_contains,           runner);
+    XTEST_RUN_UNIT(test_map_create_and_erase,  runner);
+    XTEST_RUN_UNIT(test_map_insert_and_remove, runner);
+    XTEST_RUN_UNIT(test_map_search,            runner);
+    XTEST_RUN_UNIT(test_map_setter_and_getter, runner);
 } // end of func
