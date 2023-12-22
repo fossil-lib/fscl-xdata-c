@@ -368,12 +368,7 @@ ctofu_data tscl_tofu_value_getter(const ctofu* current) {
             break;
 
         case ARRAY_TYPE:
-            // Copying array type may require a more complex logic
-            // You might want to iterate through the array elements and copy each one
-            break;
-
-        // Add cases for other types as needed
-
+        case NULLPTR_TYPE:
         default:
             // Handle unsupported types
             printf("Unsupported type for value getter\n");
