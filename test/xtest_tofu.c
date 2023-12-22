@@ -54,9 +54,12 @@ XTEST_CASE(test_tofu_create_and_erase) {
 
 XTEST_CASE(test_tofu_sort_insertion) {
     // Create linked list nodes for integers
-    ctofu_data data1 = {INTEGER_TYPE, 5};
-    ctofu_data data2 = {INTEGER_TYPE, 3};
-    ctofu_data data3 = {INTEGER_TYPE, 7};
+    ctofu_data data1;
+    data1.integer_type = 5;
+    ctofu_data data2;
+    data1.integer_type = 3;
+    ctofu_data data3;
+    data1.integer_type = 7;
 
     ctofu* node1 = NULL;
     ctofu* node2 = NULL;
