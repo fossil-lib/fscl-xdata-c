@@ -69,16 +69,6 @@ XTEST_CASE(test_tofu_sort_insertion) {
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(INTEGER_TYPE, &data2, &node2));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(INTEGER_TYPE, &data3, &node3));
 
-    // Create a linked list with the nodes
-    node1->data.array_type.elements = node2;
-    node1->data.array_type.size = 1;
-
-    node2->data.array_type.elements = node3;
-    node2->data.array_type.size = 2;
-
-    node3->data.array_type.elements = NULL;  // End of the list
-    node3->data.array_type.size = 3;
-
     // Sort the linked list using insertion sort
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_sort_insertion(node1, 3));
 
