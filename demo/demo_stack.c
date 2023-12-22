@@ -34,35 +34,29 @@
 
 int main() {
     // Create a stack for integers
-    cstack* int_stack = stack_create(INTEGER_TYPE);
+    cstack* int_stack = tscl_stack_create(INTEGER_TYPE);
 
-    // Push integers onto the stack using a for loop
-    for (int i = 1; i <= 5; ++i) {
-        ctofu data;
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = i * 10}, &data);
-        stack_insert(int_stack, data);
+    // Push elements onto the stack
+    tscl_stack_insert(int_stack, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 10});
+    tscl_stack_insert(int_stack, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 20});
+    tscl_stack_insert(int_stack, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 30});
+
+    // Display stack size
+    printf("Stack Size: %zu\n", tscl_stack_size(int_stack));
+
+    // Display and remove the top element from the stack
+    ctofu top_element;
+    if (tscl_stack_remove(int_stack, &top_element) == TOFU_SUCCESS) {
+        printf("Top Element: %d\n", top_element.data.integer_type);
     }
 
-    // Print the size of the stack
-    printf("Stack size: %zu\n", stack_size(int_stack));
-
-    // Print the elements of the stack using a for loop
-    printf("Stack elements:\n");
-    for (size_t i = 0; i < stack_size(int_stack); ++i) {
-        ctofu current = stack_top(int_stack, (ctofu){.type = INVALID_TYPE});
-        printf("Element %zu: %d\n", i, current.data.integer_type);
-        stack_remove(int_stack, NULL);  // Remove the top element
+    // Check if the stack is not empty
+    if (tscl_stack_not_empty(int_stack)) {
+        printf("The stack is not empty.\n");
     }
 
-    // Check if the stack is empty
-    if (stack_is_empty(int_stack)) {
-        printf("Stack is empty.\n");
-    } else {
-        printf("Stack is not empty.\n");
-    }
-
-    // Clean up the memory
-    stack_erase(int_stack);
+    // Clean up
+    tscl_stack_erase(int_stack);
 
     return 0;
-} // end of func
+}

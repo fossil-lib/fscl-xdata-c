@@ -33,49 +33,43 @@
 #include <stdio.h>
 
 int main() {
-    // Create a doubly-ended queue for integers
-    cdqueue* int_dqueue = dqueue_create(INTEGER_TYPE);
+    // Create a double-ended queue for integers
+    cdqueue* int_dqueue = tscl_dqueue_create(INTEGER_TYPE);
 
-    // Insert integers into the front of the deque
-    for (int i = 1; i <= 5; ++i) {
-        ctofu data;
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = i}, &data);
-        dqueue_insert(int_dqueue, data);
+    // Insert elements into the double-ended queue
+    tscl_dqueue_insert(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 1});
+    tscl_dqueue_insert(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2});
+    tscl_dqueue_insert(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 3});
+
+    // Display the size of the double-ended queue
+    printf("Queue Size: %zu\n", tscl_dqueue_size(int_dqueue));
+
+    // Check if the double-ended queue is not empty
+    if (tscl_dqueue_not_empty(int_dqueue)) {
+        printf("The double-ended queue is not empty.\n");
     }
 
-    // Print the size of the deque
-    printf("Deque size: %zu\n", dqueue_size(int_dqueue));
-
-    // Print the elements of the deque using a for loop
-    printf("Deque elements:\n");
-    for (size_t i = 0; i < dqueue_size(int_dqueue); ++i) {
-        ctofu current = *dqueue_getter(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
-        printf("%d ", current.data.integer_type);
-    }
-    printf("\n");
-
-    // Remove an element from the front of the deque
-    ctofu removed_element;
-    dqueue_remove(int_dqueue, &removed_element);
-
-    // Print the updated size and elements of the deque
-    printf("Updated Deque size: %zu\n", dqueue_size(int_dqueue));
-    printf("Updated Deque elements:\n");
-    for (size_t i = 0; i < dqueue_size(int_dqueue); ++i) {
-        ctofu current = *dqueue_getter(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
-        printf("%d ", current.data.integer_type);
-    }
-    printf("\n");
-
-    // Check if the deque is not empty
-    if (dqueue_not_empty(int_dqueue)) {
-        printf("Deque is not empty.\n");
+    // Search for an element in the double-ended queue
+    ctofu searched_value;
+    if (tscl_dqueue_search(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}) == 0) {
+        printf("Element found in the double-ended queue.\n");
+        // Get the value associated with the element
+        tscl_dqueue_getter(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}, &searched_value);
+        printf("Associated Value: %d\n", searched_value.data.integer_type);
     } else {
-        printf("Deque is empty.\n");
+        printf("Element not found in the double-ended queue.\n");
     }
 
-    // Clean up the memory
-    dqueue_erase(int_dqueue);
+    // Remove elements from the double-ended queue
+    ctofu removed_value;
+    tscl_dqueue_remove(int_dqueue, &removed_value);
+    printf("Removed Value: %d\n", removed_value.data.integer_type);
+
+    // Display the size after removal
+    printf("Queue Size After Removal: %zu\n", tscl_dqueue_size(int_dqueue));
+
+    // Clean up
+    tscl_dqueue_erase(int_dqueue);
 
     return 0;
 } // end of func

@@ -33,35 +33,37 @@
 #include <stdio.h>
 
 int main() {
-    // Create a binary search tree for integers
-    ctree* int_tree = tree_create(INTEGER_TYPE);
+    // Create a binary search tree
+    ctree* binary_tree = tscl_tree_create(INTEGER_TYPE);
 
-    // Insert integers into the tree using a for loop
-    int values[] = {50, 30, 70, 20, 40};
+    // Insert elements into the tree
+    tscl_tree_insert(binary_tree, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 50});
+    tscl_tree_insert(binary_tree, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 30});
+    tscl_tree_insert(binary_tree, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 70});
+    tscl_tree_insert(binary_tree, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 20});
+    tscl_tree_insert(binary_tree, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 40});
+    tscl_tree_insert(binary_tree, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 60});
+    tscl_tree_insert(binary_tree, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 80});
 
-    for (size_t i = 0; i < sizeof(values) / sizeof(values[0]); ++i) {
-        ctofu data;
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = values[i]}, &data);
-        tree_insert(int_tree, data);
-    }
+    // Display tree size
+    printf("Tree Size: %zu\n", tscl_tree_size(binary_tree));
 
-    // Print the size of the tree
-    printf("Tree size: %zu\n", tree_size(int_tree));
-
-    // Search for a value in the tree
-    ctofu search_key;
-    tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = 30}, &search_key);
-
-    ctofu_error search_result = tree_search(int_tree, search_key);
-    if (search_result == TOFU_SUCCESS) {
-        printf("Value found in the tree!\n");
+    // Search for an element in the tree
+    ctofu search_result;
+    if (tscl_tree_search(binary_tree, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 40}) == TOFU_SUCCESS) {
+        printf("Element 40 is present in the tree.\n");
     } else {
-        printf("Value not found in the tree.\n");
+        printf("Element 40 is not present in the tree.\n");
     }
 
-    // Clean up the memory
-    tree_erase(int_tree);
-    tofu_erase(&search_key);
+    // Remove an element from the tree
+    tscl_tree_remove(binary_tree, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 30});
+
+    // Display tree size after removal
+    printf("Tree Size after removal: %zu\n", tscl_tree_size(binary_tree));
+
+    // Clean up
+    tscl_tree_erase(binary_tree);
 
     return 0;
-} // end of func
+}

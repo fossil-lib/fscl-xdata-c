@@ -33,54 +33,56 @@
 #include <stdio.h>
 
 int main() {
-    // Create a singly linked list for integers
-    cflist* int_flist = flist_create(INTEGER_TYPE);
+    // Create a linked list for integers
+    cflist* int_list = tscl_flist_create(INTEGER_TYPE);
 
-    // Insert integers into the linked list
-    for (int i = 1; i <= 5; ++i) {
-        ctofu data;
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = i}, &data);
-        flist_insert(int_flist, data);
+    // Insert elements into the linked list
+    tscl_flist_insert(int_list, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 1});
+    tscl_flist_insert(int_list, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2});
+    tscl_flist_insert(int_list, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 3});
+
+    // Display the size of the linked list
+    printf("List Size: %zu\n", tscl_flist_size(int_list));
+
+    // Check if the linked list is not empty
+    if (tscl_flist_not_empty(int_list)) {
+        printf("The linked list is not empty.\n");
     }
 
-    // Print the size of the linked list
-    printf("Linked List size: %zu\n", flist_size(int_flist));
-
-    // Print the elements of the linked list using a for loop
-    printf("Linked List elements:\n");
-    for (size_t i = 0; i < flist_size(int_flist); ++i) {
-        ctofu current = *flist_getter(int_flist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
-        printf("%d ", current.data.integer_type);
-    }
-    printf("\n");
-
-    // Reverse the linked list forward and print the reversed elements
-    flist_reverse_forward(int_flist);
-    printf("Reversed Linked List elements (forward):\n");
-    for (size_t i = 0; i < flist_size(int_flist); ++i) {
-        ctofu current = *flist_getter(int_flist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
-        printf("%d ", current.data.integer_type);
-    }
-    printf("\n");
-
-    // Reverse the linked list backward and print the reversed elements
-    flist_reverse_backward(int_flist);
-    printf("Reversed Linked List elements (backward):\n");
-    for (size_t i = 0; i < flist_size(int_flist); ++i) {
-        ctofu current = *flist_getter(int_flist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
-        printf("%d ", current.data.integer_type);
-    }
-    printf("\n");
-
-    // Check if the linked list is empty
-    if (flist_is_empty(int_flist)) {
-        printf("Linked List is empty.\n");
+    // Search for an element in the linked list
+    ctofu searched_value;
+    if (tscl_flist_search(int_list, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}) == 0) {
+        printf("Element found in the linked list.\n");
+        // Get the value associated with the element
+        tscl_flist_getter(int_list, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}, &searched_value);
+        printf("Associated Value: %d\n", searched_value.data.integer_type);
     } else {
-        printf("Linked List is not empty.\n");
+        printf("Element not found in the linked list.\n");
     }
 
-    // Clean up the memory
-    flist_erase(int_flist);
+    // Reverse the linked list and display it
+    printf("Linked List Before Reversal:\n");
+    cflist_node* current_node = int_list->head;
+    while (current_node != NULL) {
+        printf("%d -> ", current_node->data.data.integer_type);
+        current_node = current_node->next;
+    }
+    printf("NULL\n");
+
+    // Reverse the linked list
+    tscl_flist_reverse_forward(int_list);
+
+    // Display the reversed linked list
+    printf("Linked List After Forward Reversal:\n");
+    current_node = int_list->head;
+    while (current_node != NULL) {
+        printf("%d -> ", current_node->data.data.integer_type);
+        current_node = current_node->next;
+    }
+    printf("NULL\n");
+
+    // Clean up
+    tscl_flist_erase(int_list);
 
     return 0;
 } // end of func

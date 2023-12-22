@@ -34,36 +34,34 @@
 
 int main() {
     // Create a priority queue for integers
-    cpqueue* int_pqueue = pqueue_create(INTEGER_TYPE);
+    cpqueue* int_pqueue = tscl_pqueue_create(INTEGER_TYPE);
 
-    // Insert integers with priorities into the priority queue using a for loop
-    for (int i = 1; i <= 3; ++i) {
-        ctofu data;
-        tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = i * 10}, &data);
-        pqueue_insert(int_pqueue, data, i);  // Priority: i
+    // Insert elements with priorities into the priority queue
+    tscl_pqueue_insert(int_pqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 10}, 2);
+    tscl_pqueue_insert(int_pqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 20}, 1);
+    tscl_pqueue_insert(int_pqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 30}, 3);
+
+    // Display priority queue size
+    printf("Priority Queue Size: %zu\n", tscl_pqueue_size(int_pqueue));
+
+    // Check if the priority queue is not empty
+    if (tscl_pqueue_not_empty(int_pqueue)) {
+        printf("The priority queue is not empty.\n");
     }
 
-    // Print the size of the priority queue
-    printf("Priority Queue size: %zu\n", pqueue_size(int_pqueue));
+    // Remove an element with priority from the priority queue
+    ctofu removed_element;
+    int removed_priority;
+    tscl_pqueue_remove(int_pqueue, &removed_element, &removed_priority);
 
-    // Print the elements of the priority queue using a for loop
-    printf("Priority Queue elements:\n");
-    for (size_t i = 0; i < pqueue_size(int_pqueue); ++i) {
-        ctofu current;
-        int priority;
-        pqueue_remove(int_pqueue, &current, &priority);
-        printf("Element with Priority %d: %d\n", priority, current.data.integer_type);
-    }
+    // Display the removed element and its priority
+    printf("Removed Element: %d with Priority: %d\n", removed_element.data.integer_type, removed_priority);
 
-    // Check if the priority queue is empty
-    if (pqueue_is_empty(int_pqueue)) {
-        printf("Priority Queue is empty.\n");
-    } else {
-        printf("Priority Queue is not empty.\n");
-    }
+    // Display updated priority queue size
+    printf("Priority Queue Size after removal: %zu\n", tscl_pqueue_size(int_pqueue));
 
-    // Clean up the memory
-    pqueue_erase(int_pqueue);
+    // Clean up
+    tscl_pqueue_erase(int_pqueue);
 
     return 0;
 } // end of func

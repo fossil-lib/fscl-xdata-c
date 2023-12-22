@@ -31,66 +31,41 @@
 */
 #include "trilobite/xdata/tofu.h"
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Sample data with strings
+ctofu_data data_array[] = {
+    {STRING_TYPE, .string_type = "Banana"},
+    {STRING_TYPE, .string_type = "Apple"},
+    {STRING_TYPE, .string_type = "Orange"},
+    {STRING_TYPE, .string_type = "Grapes"},
+    {STRING_TYPE, .string_type = "Pineapple"}
+};
 
 int main() {
-    // Create an array of ctofu elements
-    ctofu array[5];
+    // Create an array of ctofu
+    ctofu* array = NULL;
+    ctofu_error create_result = tscl_tofu_create(ARRAY_TYPE, data_array, &array);
 
-    // Populate the array with some data
-    tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = 42}, &array[0]);
-    tofu_create(DOUBLE_TYPE, &(ctofu_data){.double_type = 3.14}, &array[1]);
-    tofu_create(STRING_TYPE, &(ctofu_data){.string_type = "Hello"}, &array[2]);
-    tofu_create(BOOLEAN_TYPE, &(ctofu_data){.boolean_type = true}, &array[3]);
-    tofu_create(NULLPTR_TYPE, NULL, &array[4]);
+    if (create_result == TOFU_SUCCESS) {
+        // Sort the array using selection sort (you can replace it with other sorting functions)
+        tscl_tofu_sort_selection(array->data.array_type.elements, array->data.array_type.size);
 
-    // Print the original array
-    printf("Original Array:\n");
-    for (size_t i = 0; i < 5; ++i) {
-        printf("Element %zu: ", i);
-        print_ctofu_value(&array[i]);
-        printf("\n");
-    }
+        // Print the sorted array
+        printf("Sorted Array:\n");
+        for (size_t i = 0; i < array->data.array_type.size; ++i) {
+            ctofu_data current_data = tscl_tofu_value_getter(array[i].data.array_type.elements);
+            if (array[i].type == STRING_TYPE) {
+                printf("%s\n", current_data.string_type);
+            }
+        }
 
-    // Sort the array using insertion sort
-    tofu_sort_insertion(array, 5);
-
-    // Print the sorted array
-    printf("\nSorted Array:\n");
-    for (size_t i = 0; i < 5; ++i) {
-        printf("Element %zu: ", i);
-        print_ctofu_value(&array[i]);
-        printf("\n");
-    }
-
-    // Reverse the array
-    tofu_reverse(array, 5);
-
-    // Print the reversed array
-    printf("\nReversed Array:\n");
-    for (size_t i = 0; i < 5; ++i) {
-        printf("Element %zu: ", i);
-        print_ctofu_value(&array[i]);
-        printf("\n");
-    }
-
-    // Search for a specific element in the array
-    ctofu key;
-    tofu_create(INTEGER_TYPE, &(ctofu_data){.data.integer_type = 42}, &key);
-    size_t index = tofu_search_linear(array, 5, &key);
-
-    // Print the result of the search
-    printf("\nSearch Result:\n");
-    if (index != -1) {
-        printf("Element found at index %zu\n", index);
+        // Clean up
+        tscl_tofu_erase(array);
     } else {
-        printf("Element not found\n");
-    }
-
-    // Clean up the memory
-    for (size_t i = 0; i < 5; ++i) {
-        tofu_erase(&array[i]);
+        printf("Failed to create ctofu array.\n");
     }
 
     return 0;
-} // end of func
+}

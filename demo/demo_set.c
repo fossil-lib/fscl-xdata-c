@@ -34,34 +34,29 @@
 
 int main() {
     // Create a set for integers
-    cset* int_set = set_create(INTEGER_TYPE);
+    cset* int_set = tscl_set_create(INTEGER_TYPE);
 
-    // Insert some integers into the set
-    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 10}});
-    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 20}});
-    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 30}});
-    set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 20}});  // Duplicates are not allowed
+    // Insert elements into the set
+    tscl_set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 10});
+    tscl_set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 20});
+    tscl_set_insert(int_set, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 30});
 
-    // Print the size of the set
-    printf("Set size: %zu\n", set_size(int_set));
+    // Display set size
+    printf("Set Size: %zu\n", tscl_set_size(int_set));
 
-    // Print the elements of the set
-    printf("Set elements:\n");
-    ctofu_iterator iterator = set_iterator_start(int_set);
-    while (set_iterator_has_next(iterator)) {
-        ctofu_iterator current = set_iterator_next(iterator);
-        printf("Element: %d\n", current.current_value);
+    // Check if the set contains a specific element
+    if (tscl_set_contains(int_set, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 20})) {
+        printf("The set contains the element 20.\n");
     }
 
-    // Check if the set is empty
-    if (set_is_empty(int_set)) {
-        printf("Set is empty.\n");
-    } else {
-        printf("Set is not empty.\n");
-    }
+    // Remove an element from the set
+    tscl_set_remove(int_set, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 20});
 
-    // Clean up the memory
-    set_erase(int_set);
+    // Display set size after removal
+    printf("Set Size after removal: %zu\n", tscl_set_size(int_set));
+
+    // Clean up
+    tscl_set_erase(int_set);
 
     return 0;
 } // end of func

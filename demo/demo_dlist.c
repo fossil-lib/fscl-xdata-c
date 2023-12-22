@@ -33,62 +33,43 @@
 #include <stdio.h>
 
 int main() {
-    // Create a doubly linked list for strings
-    cdlist* string_dlist = dlist_create(STRING_TYPE);
+    // Create a doubly linked list for integers
+    cdlist* int_dlist = tscl_dlist_create(INTEGER_TYPE);
 
-    // Insert strings into the list
-    for (int i = 1; i <= 5; ++i) {
-        char str[10];
-        sprintf(str, "Str%d", i);
+    // Insert elements into the doubly linked list
+    tscl_dlist_insert(int_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 1});
+    tscl_dlist_insert(int_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2});
+    tscl_dlist_insert(int_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 3});
 
-        ctofu data;
-        tofu_create(STRING_TYPE, &(ctofu_data){.string_type = str}, &data);
+    // Display the size of the doubly linked list
+    printf("List Size: %zu\n", tscl_dlist_size(int_dlist));
 
-        dlist_insert(string_dlist, data);
+    // Check if the doubly linked list is not empty
+    if (tscl_dlist_not_empty(int_dlist)) {
+        printf("The doubly linked list is not empty.\n");
     }
 
-    // Print the size of the list
-    printf("Doubly Linked List size: %zu\n", dlist_size(string_dlist));
-
-    // Print the elements of the list using a for loop
-    printf("Doubly Linked List elements:\n");
-    for (size_t i = 0; i < dlist_size(string_dlist); ++i) {
-        ctofu current = *dlist_getter(string_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
-        printf("%s ", current.data.string_type);
-    }
-    printf("\n");
-
-    // Reverse the list forward
-    dlist_reverse_forward(string_dlist);
-
-    // Print the reversed elements of the list
-    printf("Reversed Doubly Linked List elements (forward):\n");
-    for (size_t i = 0; i < dlist_size(string_dlist); ++i) {
-        ctofu current = *dlist_getter(string_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
-        printf("%s ", current.data.string_type);
-    }
-    printf("\n");
-
-    // Reverse the list backward
-    dlist_reverse_backward(string_dlist);
-
-    // Print the reversed elements of the list
-    printf("Reversed Doubly Linked List elements (backward):\n");
-    for (size_t i = 0; i < dlist_size(string_dlist); ++i) {
-        ctofu current = *dlist_getter(string_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i + 1});
-        printf("%s ", current.data.string_type);
-    }
-    printf("\n");
-
-    // Check if the list is not empty
-    if (dlist_not_empty(string_dlist)) {
-        printf("Doubly Linked List is not empty.\n");
+    // Search for an element in the doubly linked list
+    ctofu searched_value;
+    if (tscl_dlist_search(int_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}) == 0) {
+        printf("Element found in the doubly linked list.\n");
+        // Get the value associated with the element
+        tscl_dlist_getter(int_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}, &searched_value);
+        printf("Associated Value: %d\n", searched_value.data.integer_type);
     } else {
-        printf("Doubly Linked List is empty.\n");
+        printf("Element not found in the doubly linked list.\n");
     }
 
-    // Clean up the memory
-    dlist_erase(string_dlist);
+    // Remove elements from the doubly linked list
+    ctofu removed_value;
+    tscl_dlist_remove(int_dlist, &removed_value);
+    printf("Removed Value: %d\n", removed_value.data.integer_type);
+
+    // Display the size after removal
+    printf("List Size After Removal: %zu\n", tscl_dlist_size(int_dlist));
+
+    // Clean up
+    tscl_dlist_erase(int_dlist);
 
     return 0;
 } // end of func

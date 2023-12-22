@@ -33,43 +33,38 @@
 #include <stdio.h>
 
 int main() {
-    // Create a vector for integers
-    cvector int_vector = vector_create(INTEGER_TYPE);
+    // Create a vector of integers
+    cvector int_vector = tscl_vector_create(INTEGER_TYPE);
 
-    // Push some integers into the vector
-    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 10}});
-    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 20}});
-    vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 30}});
+    // Push some elements to the vector
+    tscl_vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 42});
+    tscl_vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 17});
+    tscl_vector_push_back(&int_vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 91});
 
-    // Print the size of the vector
-    printf("Vector size: %zu\n", vector_size(&int_vector));
+    // Display vector information
+    printf("Vector Size: %zu\n", tscl_vector_size(&int_vector));
+    printf("Is Vector Empty? %s\n", tscl_vector_is_empty(&int_vector) ? "Yes" : "No");
 
-    // Print the elements of the vector
-    printf("Vector elements:\n");
-    for (size_t i = 0; i < vector_size(&int_vector); ++i) {
-        printf("Element %zu: %d\n", i, vector_getter(&int_vector, i).data.integer_type);
-    }
+    // Display vector elements
+    printf("Vector Elements: ");
+    tscl_vector_peek(&int_vector);
+    printf("\n");
 
-    // Search for a value in the vector
-    ctofu search_key = (ctofu){.type = INTEGER_TYPE, .data = {.data.integer_type = 20}};
-    int search_result = vector_search(&int_vector, search_key);
-    if (search_result != -1) {
-        printf("Value found at index %d in the vector!\n", search_result);
-    } else {
-        printf("Value not found in the vector.\n");
-    }
+    // Search for an element
+    ctofu target_element = (ctofu){.type = INTEGER_TYPE, .data.integer_type = 17};
+    int search_result = tscl_vector_search(&int_vector, target_element);
+    printf("Index of %d in Vector: %d\n", target_element.data.integer_type, search_result);
 
     // Reverse the vector
-    vector_reverse(&int_vector);
+    tscl_vector_reverse(&int_vector);
 
-    // Print the reversed vector
-    printf("\nReversed Vector:\n");
-    for (size_t i = 0; i < vector_size(&int_vector); ++i) {
-        printf("Element %zu: %d\n", i, vector_getter(&int_vector, i).data.integer_type);
-    }
+    // Display reversed vector elements
+    printf("Reversed Vector Elements: ");
+    tscl_vector_peek(&int_vector);
+    printf("\n");
 
-    // Clean up the memory
-    vector_erase(&int_vector);
+    // Clean up
+    tscl_vector_erase(&int_vector);
 
     return 0;
-}  // end of func
+} // end of func
