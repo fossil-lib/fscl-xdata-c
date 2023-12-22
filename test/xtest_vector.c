@@ -105,7 +105,7 @@ XTEST_CASE(test_vector_search) {
 XTEST_GROUP_DEFINE(xdata_test_vector_group) {
     XTEST_NOTE("Running all test cases for vector:");
 
-    XTEST_RUN_UNIT(test_vector_creation,  runner);
+    XTEST_RUN_UNIT(test_vector_create_and_erase,  runner);
     XTEST_RUN_UNIT(test_vector_push_back, runner);
     XTEST_RUN_UNIT(test_vector_search,    runner);
 } // end of func
