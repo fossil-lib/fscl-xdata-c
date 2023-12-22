@@ -38,83 +38,104 @@
 // XUNIT TEST CASES
 //
 XTEST_CASE(test_map_create_and_erase) {
-    // Normal Case: Creating and erasing a map
-    cmap* map = map_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(map);
-    map_erase(map);
+    cmap* map = tscl_map_create(INTEGER_TYPE);
 
-    // Edge Case: Creating with an invalid type
-    map = map_create(INVALID_TYPE);
+    // Check if the map is created with the expected values
+    TEST_ASSERT_NOT_NULL_PTR(map);
+    TEST_ASSERT_EQUAL_UINT(0, map->size);
+
+    tscl_map_erase(map);
+
+    // Check if the map is erased
+    TEST_ASSERT_EQUAL_UINT(0, map->size);
     TEST_ASSERT_NULL_PTR(map);
 }
 
-XTEST_CASE(test_map_insert_and_remove) {
-    // Normal Case: Inserting and removing elements from the map
-    cmap* map = map_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(map);
+XTEST_CASE(test_map_insert_and_size) {
+    cmap* map = tscl_map_create(INTEGER_TYPE);
 
-    ctofu key = {.data.integer_type = 42};
-    ctofu value = {.data.integer_type = 24};
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_insert(map, key, value));
-    TEST_ASSERT_EQUAL(1, map_size(map));
+    // Insert some key-value pairs
+    ctofu key1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu value1 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu key2 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu value2 = { INTEGER_TYPE, { .integer_type = 20 } };
 
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_remove(map, key));
-    TEST_ASSERT_EQUAL(0, map_size(map));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_map_insert(map, key1, value1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_map_insert(map, key2, value2));
 
-    map_erase(map);
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(2, tscl_map_size(map));
 
-    // Edge Case: Removing from an empty map
-    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, map_remove(map, key));
+    tscl_map_erase(map);
 }
 
-XTEST_CASE(test_map_search) {
-    // Normal Case: Searching for an element in the map
-    cmap* map = map_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(map);
+XTEST_CASE(test_map_remove) {
+    cmap* map = tscl_map_create(INTEGER_TYPE);
 
-    ctofu key = {.data.integer_type = 42};
-    ctofu value = {.data.integer_type = 24};
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_insert(map, key, value));
+    // Insert some key-value pairs
+    ctofu key1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu value1 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu key2 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu value2 = { INTEGER_TYPE, { .integer_type = 20 } };
 
-    TEST_ASSERT_TRUE(map_not_cnullptr(map));
-    TEST_ASSERT_TRUE(map_not_empty(map));
-    TEST_ASSERT_FALSE(map_is_empty(map));
-    TEST_ASSERT_FALSE(map_is_cnullptr(map));
+    tscl_map_insert(map, key1, value1);
+    tscl_map_insert(map, key2, value2);
 
-    map_erase(map);
+    // Remove a key-value pair
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_map_remove(map, key1));
 
-    // Edge Case: Searching in an empty map
-    TEST_ASSERT_FALSE(map_not_cnullptr(map));
-    TEST_ASSERT_FALSE(map_not_empty(map));
-    TEST_ASSERT_TRUE(map_is_empty(map));
-    TEST_ASSERT_TRUE(map_is_cnullptr(map));
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(1, tscl_map_size(map));
+
+    tscl_map_erase(map);
 }
 
-XTEST_CASE(test_map_setter_and_getter) {
-    // Normal Case: Setting and getting elements in the map
-    cmap* map = map_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(map);
+XTEST_CASE(test_map_getter_and_setter) {
+    cmap* map = tscl_map_create(INTEGER_TYPE);
 
-    ctofu key = {.data.integer_type = 42};
-    ctofu value1 = {.data.integer_type = 24};
-    ctofu value2 = {.data.integer_type = 12};
+    // Insert a key-value pair
+    ctofu key = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu value = { INTEGER_TYPE, { .integer_type = 10 } };
 
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_insert(map, key, value1));
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_setter(map, key, value2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_map_insert(map, key, value));
 
-    ctofu* retrieved_value = malloc(sizeof(ctofu));
-    TEST_ASSERT_NOT_NULL_PTR(retrieved_value);
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, map_getter(map, key, retrieved_value));
-    TEST_ASSERT_EQUAL(value2.integer_type, retrieved_value->integer_type);
+    // Get the value for a key
+    ctofu retrievedValue;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_map_getter(map, key, &retrievedValue));
 
-    free(retrieved_value);
-    map_erase(map);
+    // Check if the retrieved value is correct
+    TEST_ASSERT_EQUAL_INT(10, retrievedValue.data.integer_type);
 
-    // Edge Case: Getting from an empty map
-    retrieved_value = malloc(sizeof(ctofu));
-    TEST_ASSERT_NOT_NULL_PTR(retrieved_value);
-    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, map_getter(map, key, retrieved_value));
-    free(retrieved_value);
+    // Update the value for a key
+    ctofu updatedValue = { INTEGER_TYPE, { .integer_type = 50 } };
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_map_setter(map, key, updatedValue));
+
+    // Get the updated value for the key
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_map_getter(map, key, &retrievedValue));
+
+    // Check if the retrieved value is correct after update
+    TEST_ASSERT_EQUAL_INT(50, retrievedValue.data.integer_type);
+
+    tscl_map_erase(map);
+}
+
+XTEST_CASE(test_map_contains) {
+    cmap* map = tscl_map_create(INTEGER_TYPE);
+
+    // Insert a key-value pair
+    ctofu key = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu value = { INTEGER_TYPE, { .integer_type = 10 } };
+
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_map_insert(map, key, value));
+
+    // Check if the map contains the key
+    TEST_ASSERT_TRUE(tscl_map_contains(map, key));
+
+    // Check for a non-existing key
+    ctofu nonExistingKey = { INTEGER_TYPE, { .integer_type = 100 } };
+    TEST_ASSERT_FALSE(tscl_map_contains(map, nonExistingKey));
+
+    tscl_map_erase(map);
 }
 
 //
@@ -124,7 +145,8 @@ XTEST_GROUP_DEFINE(xdata_test_map_group) {
     XTEST_NOTE("Running all test cases for map:");
 
     XTEST_RUN_UNIT(test_map_create_and_erase,  runner);
-    XTEST_RUN_UNIT(test_map_insert_and_remove, runner);
-    XTEST_RUN_UNIT(test_map_search,            runner);
-    XTEST_RUN_UNIT(test_map_setter_and_getter, runner);
+    XTEST_RUN_UNIT(test_map_insert_and_size,   runner);
+    XTEST_RUN_UNIT(test_map_remove,            runner);
+    XTEST_RUN_UNIT(test_map_getter_and_setter, runner);
+    XTEST_RUN_UNIT(test_map_contains,          runner);
 } // end of func

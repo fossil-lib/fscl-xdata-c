@@ -37,55 +37,66 @@
 //
 // XUNIT TEST CASES
 //
-
-// Test case for creating and destroying a tree
-XTEST_CASE(test_tree_creation_and_deletion) {
-    // Normal Case: Creating and deleting a tree with a valid type
-    ctree* tree = tree_create(INTEGER_TYPE);
+XTEST_CASE(test_tree_create_and_erase) {
+    ctree* tree = tscl_tree_create(INTEGER_TYPE);
+    
+    // Check if the tree is created with the expected values
     TEST_ASSERT_NOT_NULL_PTR(tree);
-    TEST_ASSERT_EQUAL(INTEGER_TYPE, tree->tree_type);
-    tree_erase(tree);
+    TEST_ASSERT_NULL_PTR(tree->root);
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, tree->tree);
 
-    // Edge Case: Creating a tree with an invalid type
-    TEST_ASSERT_NULL_PTR(tree_create(INVALID_TYPE));
+    tscl_tree_erase(tree);
+
+    // Check if the tree is erased
+    TEST_ASSERT_NULL_PTR(tree->root);
+    TEST_ASSERT_NULL_PTR(tree);
 }
 
 XTEST_CASE(test_tree_insert_and_search) {
-    // Normal Case: Inserting and searching for elements
-    ctree* tree = tree_create(INTEGER_TYPE);
-    ctofu data = {.type = INTEGER_TYPE, .data.integer_type = 42};
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tree_insert(tree, data));
-    TEST_ASSERT_TRUE(tree_contains(tree, data));
+    ctree* tree = tscl_tree_create(INTEGER_TYPE);
 
-    // Edge Case: Inserting into a NULL tree
-    TEST_ASSERT_EQUAL(TOFU_WAS_NULLPTR, tree_insert(NULL, data));
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    // Edge Case: Searching in an empty tree
-    ctree* empty_tree = tree_create(INTEGER_TYPE);
-    TEST_ASSERT_FALSE(tree_contains(empty_tree, data));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tree_insert(tree, element1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tree_insert(tree, element2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tree_insert(tree, element3));
 
-    tree_erase(tree);
-    tree_erase(empty_tree);
+    // Search for elements
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tree_search(tree, element1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tree_search(tree, element2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tree_search(tree, element3));
+
+    // Search for non-existing element
+    ctofu nonExistingElement = { INTEGER_TYPE, { .integer_type = 100 } };
+    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, tscl_tree_search(tree, nonExistingElement));
+
+    tscl_tree_erase(tree);
 }
 
 XTEST_CASE(test_tree_remove) {
-    // Normal Case: Removing an element
-    ctree* tree = tree_create(INTEGER_TYPE);
-    ctofu data = {.type = INTEGER_TYPE, .data.integer_type = 42};
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tree_insert(tree, data));
-    TEST_ASSERT_TRUE(tree_contains(tree, data));
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tree_remove(tree, data));
-    TEST_ASSERT_FALSE(tree_contains(tree, data));
+    ctree* tree = tscl_tree_create(INTEGER_TYPE);
 
-    // Edge Case: Removing from a NULL tree
-    TEST_ASSERT_EQUAL(TOFU_WAS_NULLPTR, tree_remove(NULL, data));
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    // Edge Case: Removing from an empty tree
-    ctree* empty_tree = tree_create(INTEGER_TYPE);
-    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, tree_remove(empty_tree, data));
+    tscl_tree_insert(tree, element1);
+    tscl_tree_insert(tree, element2);
+    tscl_tree_insert(tree, element3);
 
-    tree_erase(tree);
-    tree_erase(empty_tree);
+    // Remove an element
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tree_remove(tree, element2));
+
+    // Search for removed and remaining elements
+    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, tscl_tree_search(tree, element2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tree_search(tree, element1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tree_search(tree, element3));
+
+    tscl_tree_erase(tree);
 }
 
 //

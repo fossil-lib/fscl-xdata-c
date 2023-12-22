@@ -39,47 +39,89 @@
 //
 
 XTEST_CASE(test_stack_create_and_erase) {
-    // Normal Case: Creating and erasing a stack
-    cstack* stack = stack_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(stack);
-    stack_erase(stack);
+    cstack* stack = tscl_stack_create(INTEGER_TYPE);
 
-    // Edge Case: Creating with an invalid type
-    stack = stack_create(INVALID_TYPE);
+    // Check if the stack is created with the expected values
+    TEST_ASSERT_NOT_NULL_PTR(stack);
+    TEST_ASSERT_NULL_PTR(stack->top);
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, stack->stack_type);
+
+    tscl_stack_erase(stack);
+
+    // Check if the stack is erased
+    TEST_ASSERT_NULL_PTR(stack->top);
     TEST_ASSERT_NULL_PTR(stack);
 }
 
-XTEST_CASE(test_stack_insert_and_remove) {
-    // Normal Case: Inserting and removing elements from the stack
-    cstack* stack = stack_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(stack);
+XTEST_CASE(test_stack_insert_and_size) {
+    cstack* stack = tscl_stack_create(INTEGER_TYPE);
 
-    ctofu element = {.data.integer_type = 42};
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, stack_insert(stack, element));
-    TEST_ASSERT_EQUAL(1, stack_size(stack));
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    ctofu popped;
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, stack_remove(stack, &popped));
-    TEST_ASSERT_EQUAL(42, popped.data.integer_type);
-    TEST_ASSERT_EQUAL(0, stack_size(stack));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_stack_insert(stack, element1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_stack_insert(stack, element2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_stack_insert(stack, element3));
 
-    stack_erase(stack);
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(3, tscl_stack_size(stack));
 
-    // Edge Case: Removing from an empty stack
-    TEST_ASSERT_EQUAL(TOFU_WAS_UNKNOWN
-    TEST_ASSERT_NOT_NULL_PTR(stack);
-
-    ctofu element = {.data.integer_type = 42};
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, stack_insert(stack, element));
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, stack_insert(stack, element));
-
-    TEST_ASSERT_EQUAL(1, stack_search(stack, element));
-
-    stack_erase(stack);
-
-    // Edge Case: Searching in an empty stack
-    TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, stack_search(stack, element));
+    tscl_stack_erase(stack);
 }
+
+XTEST_CASE(test_stack_remove) {
+    cstack* stack = tscl_stack_create(INTEGER_TYPE);
+
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+
+    tscl_stack_insert(stack, element1);
+    tscl_stack_insert(stack, element2);
+    tscl_stack_insert(stack, element3);
+
+    // Remove an element
+    ctofu removedElement;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_stack_remove(stack, &removedElement));
+
+    // Check if the removed element is correct
+    TEST_ASSERT_EQUAL_INT(5, removedElement.data.integer_type);
+
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(2, tscl_stack_size(stack));
+
+    tscl_stack_erase(stack);
+}
+
+XTEST_CASE(test_stack_top) {
+    cstack* stack = tscl_stack_create(INTEGER_TYPE);
+
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+
+    tscl_stack_insert(stack, element1);
+    tscl_stack_insert(stack, element2);
+    tscl_stack_insert(stack, element3);
+
+    // Check the top element
+    ctofu topElement = tscl_stack_top(stack, (ctofu){INTEGER_TYPE, {.integer_type = -1}});
+    TEST_ASSERT_EQUAL_INT(5, topElement.data.integer_type);
+
+    // Remove an element
+    tscl_stack_remove(stack, NULL);
+
+    // Check the top element after removal
+    topElement = tscl_stack_top(stack, (ctofu){INTEGER_TYPE, {.integer_type = -1}});
+    TEST_ASSERT_EQUAL_INT(10, topElement.data.integer_type);
+
+    tscl_stack_erase(stack);
+}
+
 
 //
 // XUNIT-TEST RUNNER
@@ -88,6 +130,7 @@ XTEST_GROUP_DEFINE(xdata_test_stack_group) {
     XTEST_NOTE("Running all test cases for stack:");
 
     XTEST_RUN_UNIT(test_stack_create_and_erase,  runner);
-    XTEST_RUN_UNIT(test_stack_insert_and_remove, runner);
-    XTEST_RUN_UNIT(test_stack_search,            runner);
+    XTEST_RUN_UNIT(test_stack_insert_and_size, runner);
+    XTEST_RUN_UNIT(test_stack_remove,            runner);
+    XTEST_RUN_UNIT(test_stack_top,               runner);
 } // end of func

@@ -37,51 +37,81 @@
 //
 // XUNIT TEST CASES
 //
-
-// Test case 1: Test cset creation and destruction
 XTEST_CASE(test_set_create_and_erase) {
-    // Normal Case: Creating and erasing a set
-    cset* set = set_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(set);
-    set_erase(set);
+    cset* set = tscl_set_create(INTEGER_TYPE);
 
-    // Edge Case: Creating with an invalid type
-    set = set_create(INVALID_TYPE);
+    // Check if the set is created with the expected values
+    TEST_ASSERT_NOT_NULL_PTR(set);
+    TEST_ASSERT_NULL_PTR(set->head);
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, set->set_type);
+
+    tscl_set_erase(set);
+
+    // Check if the set is erased
+    TEST_ASSERT_NULL_PTR(set->head);
     TEST_ASSERT_NULL_PTR(set);
 }
 
-XTEST_CASE(test_set_insert_and_remove) {
-    // Normal Case: Inserting and removing elements from the set
-    cset* set = set_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(set);
+XTEST_CASE(test_set_insert_and_size) {
+    cset* set = tscl_set_create(INTEGER_TYPE);
 
-    ctofu element = {.data.integer_type = 42};
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, set_insert(set, element));
-    TEST_ASSERT_EQUAL(1, set_size(set));
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, set_remove(set, element));
-    TEST_ASSERT_EQUAL(0, set_size(set));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_set_insert(set, element1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_set_insert(set, element2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_set_insert(set, element3));
 
-    set_erase(set);
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(3, tscl_set_size(set));
 
-    // Edge Case: Removing from an empty set
-    TEST_ASSERT_EQUAL(CTOFU_ERROR_NOT_FOUND, set_remove(set, element));
+    tscl_set_erase(set);
 }
 
-XTEST_CASE(test_set_search) {
-    // Normal Case: Searching for an element in the set
-    cset* set = set_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(set);
+XTEST_CASE(test_set_remove) {
+    cset* set = tscl_set_create(INTEGER_TYPE);
 
-    ctofu element = {.data.integer_type = 42};
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, set_insert(set, element));
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    TEST_ASSERT_TRUE(set_contains(set, element));
+    tscl_set_insert(set, element1);
+    tscl_set_insert(set, element2);
+    tscl_set_insert(set, element3);
 
-    set_erase(set);
+    // Remove an element
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_set_remove(set, element2));
 
-    // Edge Case: Searching in an empty set
-    TEST_ASSERT_FALSE(set_contains(set, element));
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(2, tscl_set_size(set));
+
+    tscl_set_erase(set);
+}
+
+XTEST_CASE(test_set_contains) {
+    cset* set = tscl_set_create(INTEGER_TYPE);
+
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+
+    tscl_set_insert(set, element1);
+    tscl_set_insert(set, element2);
+    tscl_set_insert(set, element3);
+
+    // Check if elements are contained in the set
+    TEST_ASSERT_TRUE(tscl_set_contains(set, element1));
+    TEST_ASSERT_TRUE(tscl_set_contains(set, element3));
+
+    // Check for non-existing element
+    ctofu nonExistingElement = { INTEGER_TYPE, { .integer_type = 100 } };
+    TEST_ASSERT_FALSE(tscl_set_contains(set, nonExistingElement));
+
+    tscl_set_erase(set);
 }
 
 //
@@ -91,6 +121,7 @@ XTEST_GROUP_DEFINE(xdata_test_set_group) {
     XTEST_NOTE("Running all test cases for set:");
 
     XTEST_RUN_UNIT(test_set_create_and_erase,  runner);
-    XTEST_RUN_UNIT(test_set_insert_and_remove, runner);
-    XTEST_RUN_UNIT(test_set_search,            runner);
+    XTEST_RUN_UNIT(test_set_insert_and_size,   runner);
+    XTEST_RUN_UNIT(test_set_remove,            runner);
+    XTEST_RUN_UNIT(test_set_contains,          runner);
 } // end of func

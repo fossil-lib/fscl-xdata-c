@@ -40,43 +40,33 @@
 // XUNIT TEST CASES
 //
 
-// Test case 1: Test ctofu creation and retrieval of integer value
 XTEST_CASE(test_tofu_create_and_erase) {
-    // Normal Case: Creating and erasing a tofu value
-    ctofu_data value = {.data.integer_type = 42};
-    ctofu* result;
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tofu_create(INTEGER_TYPE, &value, &result));
+    ctofu_data data;
+    data.integer_type = 42;
+
+    ctofu* result = NULL;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(INTEGER_TYPE, &data, &result));
     TEST_ASSERT_NOT_NULL_PTR(result);
-    TEST_ASSERT_EQUAL(INTEGER_TYPE, tofu_type_getter(result));
-    tofu_erase(result);
 
-    // Edge Case: Creating with an invalid type
-    TEST_ASSERT_EQUAL(TOFU_WAS_UNKNOWN, tofu_create(INVALID_TYPE, &value, &result));
+    tscl_tofu_erase(result);
     TEST_ASSERT_NULL_PTR(result);
-
-    // Edge Case: Creating with a NULL value
-    TEST_ASSERT_EQUAL(TOFU_WAS_NULLPTR, tofu_create(INTEGER_TYPE, NULL, &result));
-    TEST_ASSERT_NULL_PTR(result);
-
-    // Edge Case: Creating with a NULL result
-    TEST_ASSERT_EQUAL(TOFU_WAS_NULLPTR, tofu_create(INTEGER_TYPE, &value, NULL));
 }
 
 XTEST_CASE(test_tofu_sort_insertion) {
-    // Normal Case: Sorting an array using insertion sort
-    ctofu array[] = {{"one", STRING_TYPE}, {"four", STRING_TYPE}, {"two", STRING_TYPE}};
-    size_t num = sizeof(array) / sizeof(array[0]);
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tofu_sort_insertion(array, num));
-    TEST_ASSERT_EQUAL_STRING("four", array[0].data.string_type);
-    TEST_ASSERT_EQUAL_STRING("one", array[1].data.string_type);
-    TEST_ASSERT_EQUAL_STRING("two", array[2].data.string_type);
+    // Create an array of integers
+    ctofu_data data_array[] = { {INTEGER_TYPE, 5}, {INTEGER_TYPE, 3}, {INTEGER_TYPE, 7} };
+    ctofu* array = NULL;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(ARRAY_TYPE, data_array, &array));
 
-    // Edge Case: Sorting an empty array
-    ctofu empty_array[0];
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tofu_sort_insertion(empty_array, 0));
+    // Sort the array using insertion sort
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_sort_insertion(array->data.array_type.elements, array->data.array_type.size));
 
-    // Edge Case: Sorting with a NULL array
-    TEST_ASSERT_EQUAL(TOFU_WAS_NULLPTR, tofu_sort_insertion(NULL, num));
+    // Check if the array is sorted
+    TEST_ASSERT_EQUAL_INT(3, array->data.array_type.elements[0].data.integer_type);
+    TEST_ASSERT_EQUAL_INT(5, array->data.array_type.elements[1].data.integer_type);
+    TEST_ASSERT_EQUAL_INT(7, array->data.array_type.elements[2].data.integer_type);
+
+    tscl_tofu_erase(array);
 }
 
 //

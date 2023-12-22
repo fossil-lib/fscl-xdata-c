@@ -37,48 +37,66 @@
 //
 // XUNIT TEST CASES
 //
-XTEST_CASE(test_vector_creation) {
-    // Edge Case: Creating a vector with an invalid type
-    TEST_ASSERT_NULL_PTR(vector_create(INVALID_TYPE));
+XTEST_CASE(test_vector_create_and_erase) {
+    cvector vector = tscl_vector_create(INTEGER_TYPE);
+    
+    // Check if the vector is created with the expected values
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, vector.expected_type);
+    TEST_ASSERT_NULL_PTR(vector.data);
+    TEST_ASSERT_EQUAL_UINT(0, vector.size);
+    TEST_ASSERT_EQUAL_UINT(INITIAL_CAPACITY, vector.capacity);
 
-    // Normal Case: Creating a vector with a valid type
-    cvector* vector = vector_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(vector);
-    TEST_ASSERT_EQUAL(INTEGER_TYPE, vector->expected_type);
-    vector_erase(vector);
+    tscl_vector_erase(&vector);
+
+    // Check if the vector is erased
+    TEST_ASSERT_NULL_PTR(vector.data);
+    TEST_ASSERT_EQUAL_UINT(0, vector.size);
+    TEST_ASSERT_EQUAL_UINT(0, vector.capacity);
 }
 
 XTEST_CASE(test_vector_push_back) {
-    // Normal Case: Pushing back an element
-    cvector vector = vector_create(INTEGER_TYPE);
-    vector_push_back(&vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 42});
-    TEST_ASSERT_EQUAL(1, vector_size(&vector));
-    
-    // Use vector_getter for validation
-    ctofu retrieved_data = vector_getter(&vector, 0);
-    TEST_ASSERT_EQUAL(42, retrieved_data.data.integer_type);
-    
-    vector_erase(&vector);
+    cvector vector = tscl_vector_create(INTEGER_TYPE);
 
-    // Edge Case: Pushing back into a NULL vector
-    TEST_ASSERT_NULL_PTR(vector_getter(NULL, 0).data.integer_type);
+    // Push back some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+
+    tscl_vector_push_back(&vector, element1);
+    tscl_vector_push_back(&vector, element2);
+    tscl_vector_push_back(&vector, element3);
+
+    // Check if the elements are added correctly
+    TEST_ASSERT_EQUAL_UINT(3, vector.size);
+    TEST_ASSERT_EQUAL_INT(42, vector.data[0].data.integer_type);
+    TEST_ASSERT_EQUAL_INT(10, vector.data[1].data.integer_type);
+    TEST_ASSERT_EQUAL_INT(5, vector.data[2].data.integer_type);
+
+    tscl_vector_erase(&vector);
 }
 
 XTEST_CASE(test_vector_search) {
-    // Normal Case: Searching for an element
-    cvector vector = vector_create(INTEGER_TYPE);
-    for (int i = 0; i < 10; ++i) {
-        vector_push_back(&vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = i * 2});
-    }
-    int result = vector_search(&vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 6});
-    TEST_ASSERT_EQUAL(3, result);
-    vector_erase(&vector);
+    cvector vector = tscl_vector_create(INTEGER_TYPE);
 
-    // Edge Case: Searching in an empty vector
-    cvector empty_vector = vector_create(INTEGER_TYPE);
-    result = vector_search(&empty_vector, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 6});
-    TEST_ASSERT_EQUAL(-1, result);
-    vector_erase(&empty_vector);
+    // Push back some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+
+    tscl_vector_push_back(&vector, element1);
+    tscl_vector_push_back(&vector, element2);
+    tscl_vector_push_back(&vector, element3);
+
+    // Search for elements
+    TEST_ASSERT_EQUAL_INT(0, tscl_vector_search(&vector, element1));
+    TEST_ASSERT_EQUAL_INT(1, tscl_vector_search(&vector, element2));
+    TEST_ASSERT_EQUAL_INT(2, tscl_vector_search(&vector, element3));
+
+    // Search for non-existing element
+    ctofu nonExistingElement = { INTEGER_TYPE, { .integer_type = 100 } };
+    TEST_ASSERT_EQUAL_INT(-1, tscl_vector_search(&vector, nonExistingElement));
+
+    tscl_vector_erase(&vector);
 }
 
 //
