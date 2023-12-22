@@ -37,8 +37,8 @@
 
    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
 */
-#ifndef TRILOBITE_XDATA_MAP_H
-#define TRILOBITE_XDATA_MAP_H
+#ifndef TSCL_MAP_H
+#define TSCL_MAP_H
 
 #ifdef __cplusplus
 extern "C"
@@ -60,126 +60,35 @@ typedef struct {
 // =======================
 // CREATE and DELETE
 // =======================
-
-/**
- * @brief Creates a new cmap instance with the specified list type.
- *
- * @param list_type The data type for the cmap (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created cmap instance.
- */
-cmap* map_create(enum ctofu_type list_type);
-
-/**
- * @brief Destroys the cmap instance, freeing all associated memory.
- *
- * @param map The cmap instance to be destroyed.
- */
-void map_erase(cmap* map);
+cmap* tscl_map_create(ctofu_type list_type);
+void tscl_map_erase(cmap* map);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-
-/**
- * @brief Inserts a key-value pair into the cmap.
- *
- * @param map   The cmap where the key-value pair will be inserted.
- * @param key   The key in the key-value pair.
- * @param value The value in the key-value pair.
- * @return A ctofu_error value indicating the result of the insertion.
- */
-ctofu_error map_insert(cmap* map, ctofu key, ctofu value);
-
-/**
- * @brief Removes a key-value pair from the cmap by key.
- *
- * @param map The cmap from which the key-value pair will be removed.
- * @param key The key of the key-value pair to be removed.
- * @return A ctofu_error value indicating the result of the removal.
- */
-ctofu_error map_remove(cmap* map, ctofu key);
-
-/**
- * @brief Searches for a key in the cmap.
- *
- * @param map The cmap to search within.
- * @param key The key to search for.
- * @return A ctofu_error value indicating the result of the search.
- */
-ctofu_error map_search(const cmap* map, ctofu key);
+ctofu_error tscl_map_insert(cmap* map, ctofu key, ctofu value);
+ctofu_error tscl_map_remove(cmap* map, ctofu key);
+ctofu_error tscl_map_search(const cmap* map, ctofu key);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
+size_t tscl_map_size(const cmap* map);
+ctofu_error tscl_map_getter(cmap* map, ctofu key, ctofu* value);
+ctofu_error tscl_map_setter(cmap* map, ctofu key, ctofu value);
+bool tscl_map_not_empty(const cmap* map);
+bool tscl_map_not_cnullptr(const cmap* map);
+bool tscl_map_is_empty(const cmap* map);
+bool tscl_map_is_cnullptr(const cmap* map);
+bool tscl_map_contains(const cmap* map, ctofu key);
 
-/**
- * @brief Gets the size of the cmap.
- *
- * @param map The cmap for which the size will be determined.
- * @return The size of the cmap.
- */
-size_t map_size(const cmap* map);
-
-/**
- * @brief Getter function to retrieve a value by key from the cmap.
- *
- * @param map  The cmap from which the value will be retrieved.
- * @param key  The key for which the value will be retrieved.
- * @param value A pointer to store the retrieved value.
- * @return A ctofu_error value indicating the result of the retrieval.
- */
-ctofu_error map_getter(cmap* map, ctofu key, ctofu* value);
-
-/**
- * @brief Setter function to update a value by key in the cmap.
- *
- * @param map   The cmap in which the value will be updated.
- * @param key   The key for which the value will be updated.
- * @param value The new value to set.
- * @return A ctofu_error value indicating the result of the update.
- */
-ctofu_error map_setter(cmap* map, ctofu key, ctofu value);
-
-/**
- * @brief Checks if the cmap is not empty.
- *
- * @param map The cmap to check.
- * @return true if the cmap is not empty, false otherwise.
- */
-bool map_not_empty(const cmap* map);
-
-/**
- * @brief Checks if the cmap is not a null pointer.
- *
- * @param map The cmap to check.
- * @return true if the cmap is not a null pointer, false otherwise.
- */
-bool map_not_cnullptr(const cmap* map);
-
-/**
- * @brief Checks if the cmap is empty.
- *
- * @param map The cmap to check.
- * @return true if the cmap is empty, false otherwise.
- */
-bool map_is_empty(const cmap* map);
-
-/**
- * @brief Checks if the cmap is a null pointer.
- *
- * @param map The cmap to check.
- * @return true if the cmap is a null pointer, false otherwise.
- */
-bool map_is_cnullptr(const cmap* map);
-
-/**
- * @brief Checks if a key exists in the cmap.
- *
- * @param map The cmap to check.
- * @param key The key to search for.
- * @return true if the key exists in the cmap, false otherwise.
- */
-bool map_contains(const cmap* map, ctofu key);
+// =======================
+// ITERATOR FUNCTIONS
+// =======================
+ctofu_iterator tscl_map_iterator_start(cmap* map);
+ctofu_iterator tscl_map_iterator_end(cmap* map);
+ctofu_iterator tscl_map_iterator_next(ctofu_iterator iterator);
+bool tscl_map_iterator_has_next(ctofu_iterator iterator);
 
 #ifdef __cplusplus
 }

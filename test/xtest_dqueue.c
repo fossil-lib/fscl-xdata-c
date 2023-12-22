@@ -37,95 +37,125 @@
 //
 // XUNIT TEST CASES
 //
+XTEST_CASE(test_dqueue_create_and_erase) {
+    cdqueue* dqueue = tscl_dqueue_create(INTEGER_TYPE);
 
-// Test case 1: Test cdqueue creation and destruction
-XTEST_CASE(xdata_let_dqueue_create_and_destroy) {
-    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
+    // Check if the deque is created with the expected values
     TEST_ASSERT_NOT_NULL_PTR(dqueue);
+    TEST_ASSERT_NULL_PTR(dqueue->front);
+    TEST_ASSERT_NULL_PTR(dqueue->rear);
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, dqueue->list_type);
 
-    dqueue_erase(dqueue);
+    tscl_dqueue_erase(dqueue);
+
+    // Check if the deque is erased
+    TEST_ASSERT_NULL_PTR(dqueue->front);
+    TEST_ASSERT_NULL_PTR(dqueue->rear);
     TEST_ASSERT_NULL_PTR(dqueue);
 }
 
-// Test case 2: Test cdqueue insertion and retrieval
-XTEST_CASE(xdata_let_dqueue_insert_and_get) {
-    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(dqueue);
+XTEST_CASE(test_dqueue_insert_and_size) {
+    cdqueue* dqueue = tscl_dqueue_create(INTEGER_TYPE);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = dqueue_insert(dqueue, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    ctofu* retrieved_tofu = dqueue_getter(dqueue, tofu);
-    TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
-    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(*retrieved_tofu));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dqueue_insert(dqueue, element1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dqueue_insert(dqueue, element2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dqueue_insert(dqueue, element3));
 
-    dqueue_erase(dqueue);
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(3, tscl_dqueue_size(dqueue));
+
+    tscl_dqueue_erase(dqueue);
 }
 
-// Test case 3: Test cdqueue removal
-XTEST_CASE(xdata_let_dqueue_remove) {
-    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(dqueue);
+XTEST_CASE(test_dqueue_remove) {
+    cdqueue* dqueue = tscl_dqueue_create(INTEGER_TYPE);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = dqueue_insert(dqueue, tofu);
-    TEST_ASSERT_EQUAL_INT(TRILO_XDATA_TYPE_SUCCESS, result);
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    result = dqueue_remove(dqueue, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    tscl_dqueue_insert(dqueue, element1);
+    tscl_dqueue_insert(dqueue, element2);
+    tscl_dqueue_insert(dqueue, element3);
 
-    ctofu* retrieved_tofu = dqueue_getter(dqueue, tofu);
-    TEST_ASSERT_NULL_PTR(retrieved_tofu);
+    // Remove an element
+    ctofu removedElement;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dqueue_remove(dqueue, &removedElement));
 
-    dqueue_erase(dqueue);
+    // Check if the removed element is correct
+    TEST_ASSERT_EQUAL_INT(42, removedElement.data.integer_type);
+
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(2, tscl_dqueue_size(dqueue));
+
+    tscl_dqueue_erase(dqueue);
 }
 
-// Test case 4: Test cdqueue size
-XTEST_CASE(xdata_let_dqueue_size) {
-    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(dqueue);
+XTEST_CASE(test_dqueue_getter_and_setter) {
+    cdqueue* dqueue = tscl_dqueue_create(INTEGER_TYPE);
 
-    ctofu tofu1 = tofu_create_from_integer(1);
-    ctofu tofu2 = tofu_create_from_integer(2);
-    ctofu tofu3 = tofu_create_from_integer(3);
+    // Insert an element
+    ctofu element = { INTEGER_TYPE, { .integer_type = 42 } };
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dqueue_insert(dqueue, element));
 
-    dqueue_insert(dqueue, tofu1);
-    dqueue_insert(dqueue, tofu2);
-    dqueue_insert(dqueue, tofu3);
+    // Get the value for an element
+    ctofu* retrievedElement = tscl_dqueue_getter(dqueue, element);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.integer_type);
 
-    size_t size = dqueue_size(dqueue);
-    TEST_ASSERT_EQUAL_INT(3, size);
+    // Update the value for an element
+    ctofu updatedElement = { INTEGER_TYPE, { .integer_type = 50 } };
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dqueue_setter(dqueue, updatedElement));
 
-    dqueue_erase(dqueue);
+    // Get the updated value for the element
+    retrievedElement = tscl_dqueue_getter(dqueue, updatedElement);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(50, retrievedElement->data.integer_type);
+
+    tscl_dqueue_erase(dqueue);
 }
 
-// Test case 5: Test cdqueue empty check
-XTEST_CASE(xdata_let_dqueue_empty_check) {
-    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(dqueue);
+XTEST_CASE(test_dqueue_not_empty_and_is_empty) {
+    cdqueue* dqueue = tscl_dqueue_create(INTEGER_TYPE);
 
-    TEST_ASSERT_TRUE_BOOL(dqueue_is_empty(dqueue));
-    TEST_ASSERT_FALSE_BOOL(dqueue_not_empty(dqueue));
+    // Check initially not empty
+    TEST_ASSERT_FALSE(tscl_dqueue_not_empty(dqueue));
+    TEST_ASSERT_TRUE(tscl_dqueue_is_empty(dqueue));
 
-    ctofu tofu = tofu_create_from_integer(42);
-    dqueue_insert(dqueue, tofu);
+    // Insert an element
+    ctofu element = { INTEGER_TYPE, { .integer_type = 42 } };
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dqueue_insert(dqueue, element));
 
-    TEST_ASSERT_FALSE_BOOL(dqueue_is_empty(dqueue));
-    TEST_ASSERT_TRUE_BOOL(dqueue_not_empty(dqueue));
+    // Check not empty after insertion
+    TEST_ASSERT_TRUE(tscl_dqueue_not_empty(dqueue));
+    TEST_ASSERT_FALSE(tscl_dqueue_is_empty(dqueue));
 
-    dqueue_erase(dqueue);
+    // Remove the element
+    ctofu removedElement;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dqueue_remove(dqueue, &removedElement));
+
+    // Check empty after removal
+    TEST_ASSERT_FALSE(tscl_dqueue_not_empty(dqueue));
+    TEST_ASSERT_TRUE(tscl_dqueue_is_empty(dqueue));
+
+    tscl_dqueue_erase(dqueue);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_dqueue_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_dqueue_group) {
     XTEST_NOTE("Running all test cases for dqueue:");
 
-    XTEST_RUN_UNIT(xdata_let_dqueue_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_dqueue_empty_check,        runner);
-    XTEST_RUN_UNIT(xdata_let_dqueue_insert_and_get,     runner);
-    XTEST_RUN_UNIT(xdata_let_dqueue_remove,             runner);
-    XTEST_RUN_UNIT(xdata_let_dqueue_size,               runner);
+    XTEST_RUN_UNIT(test_dqueue_create_and_erase, runner);
+    XTEST_RUN_UNIT(test_dqueue_insert_and_size,  runner);
+    XTEST_RUN_UNIT(test_dqueue_remove,                 runner);
+    XTEST_RUN_UNIT(test_dqueue_getter_and_setter,      runner);
+    XTEST_RUN_UNIT(test_dqueue_not_empty_and_is_empty, runner);
 } // end of func

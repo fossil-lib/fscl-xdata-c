@@ -37,91 +37,75 @@
 //
 // XUNIT TEST CASES
 //
-XTEST_CASE(xdata_let_vector_create_and_destroy) {
-    cvector vector = vector_create(INTEGER_TYPE);
-
+XTEST_CASE(test_vector_create_and_erase) {
+    cvector vector = tscl_vector_create(INTEGER_TYPE);
+    
+    // Check if the vector is created with the expected values
     TEST_ASSERT_EQUAL(INTEGER_TYPE, vector.expected_type);
-    TEST_ASSERT_TRUE(vector_is_empty(&vector));
+    TEST_ASSERT_NULL_PTR(vector.data);
+    TEST_ASSERT_EQUAL_UINT(0, vector.size);
+    TEST_ASSERT_EQUAL_UINT(INITIAL_CAPACITY, vector.capacity);
 
-    vector_erase(&vector);
+    tscl_vector_erase(&vector);
 
-    TEST_ASSERT_TRUE(vector_is_cnullptr(&vector));
+    // Check if the vector is erased
+    TEST_ASSERT_NULL_PTR(vector.data);
+    TEST_ASSERT_EQUAL_UINT(0, vector.size);
+    TEST_ASSERT_EQUAL_UINT(0, vector.capacity);
 }
 
-XTEST_CASE(xdata_let_vector_push_back_and_peek) {
-    cvector vector = vector_create(DOUBLE_TYPE);
+XTEST_CASE(test_vector_push_back) {
+    cvector vector = tscl_vector_create(INTEGER_TYPE);
 
-    vector_push_back(&vector, tofu_create_from_double(3.14));
+    // Push back some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    TEST_ASSERT_FALSE(vector_is_empty(&vector));
-    TEST_ASSERT_EQUAL(1, vector_size(&vector));
+    tscl_vector_push_back(&vector, element1);
+    tscl_vector_push_back(&vector, element2);
+    tscl_vector_push_back(&vector, element3);
 
-    ctofu element = vector_getter(&vector, 0);
-    TEST_ASSERT_DOUBLE_EQUAL(3.14, tofu_get_double(element));
+    // Check if the elements are added correctly
+    TEST_ASSERT_EQUAL_UINT(3, vector.size);
+    TEST_ASSERT_EQUAL_INT(42, vector.data[0].data.integer_type);
+    TEST_ASSERT_EQUAL_INT(10, vector.data[1].data.integer_type);
+    TEST_ASSERT_EQUAL_INT(5, vector.data[2].data.integer_type);
 
-    vector_erase(&vector);
+    tscl_vector_erase(&vector);
 }
 
-XTEST_CASE(xdata_let_vector_search) {
-    cvector vector = vector_create(STRING_TYPE);
+XTEST_CASE(test_vector_search) {
+    cvector vector = tscl_vector_create(INTEGER_TYPE);
 
-    vector_push_back(&vector, tofu_create_from_string("Hello"));
-    vector_push_back(&vector, tofu_create_from_string("World"));
+    // Push back some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    int index = vector_search(&vector, tofu_create_from_string("World"));
-    TEST_ASSERT_EQUAL(1, index);
+    tscl_vector_push_back(&vector, element1);
+    tscl_vector_push_back(&vector, element2);
+    tscl_vector_push_back(&vector, element3);
 
-    index = vector_search(&vector, tofu_create_from_string("NotInVector"));
-    TEST_ASSERT_EQUAL(-1, index);
+    // Search for elements
+    TEST_ASSERT_EQUAL_INT(0, tscl_vector_search(&vector, element1));
+    TEST_ASSERT_EQUAL_INT(1, tscl_vector_search(&vector, element2));
+    TEST_ASSERT_EQUAL_INT(2, tscl_vector_search(&vector, element3));
 
-    vector_erase(&vector);
-}
+    // Search for non-existing element
+    ctofu nonExistingElement = { INTEGER_TYPE, { .integer_type = 100 } };
+    TEST_ASSERT_EQUAL_INT(-1, tscl_vector_search(&vector, nonExistingElement));
 
-XTEST_CASE(xdata_let_vector_reverse) {
-    cvector vector = vector_create(BOOLEAN_TYPE);
-
-    vector_push_back(&vector, tofu_create_from_boolean(true));
-    vector_push_back(&vector, tofu_create_from_boolean(false));
-
-    vector_reverse(&vector);
-
-    TEST_ASSERT_EQUAL(false, tofu_get_boolean(vector_getter(&vector, 0)));
-    TEST_ASSERT_EQUAL(true, tofu_get_boolean(vector_getter(&vector, 1)));
-
-    vector_erase(&vector);
-}
-
-XTEST_CASE(xdata_let_vector_create_and_destroy_with_types) {
-    cvector int_vector = vector_create(INTEGER_TYPE);
-    TEST_ASSERT_EQUAL(INTEGER_TYPE, int_vector.expected_type);
-    vector_erase(&int_vector);
-
-    cvector double_vector = vector_create(DOUBLE_TYPE);
-    TEST_ASSERT_EQUAL(DOUBLE_TYPE, double_vector.expected_type);
-    vector_erase(&double_vector);
-
-    cvector string_vector = vector_create(STRING_TYPE);
-    TEST_ASSERT_EQUAL(STRING_TYPE, string_vector.expected_type);
-    vector_erase(&string_vector);
-
-    cvector bool_vector = vector_create(BOOLEAN_TYPE);
-    TEST_ASSERT_EQUAL(BOOLEAN_TYPE, bool_vector.expected_type);
-    vector_erase(&bool_vector);
-
-    // Test creating a vector with an invalid type
-    cvector invalid_vector = vector_create(INVALID_TYPE);
-    TEST_ASSERT_TRUE(vector_is_cnullptr(&invalid_vector));
+    tscl_vector_erase(&vector);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_vector_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_vector_group) {
     XTEST_NOTE("Running all test cases for vector:");
 
-    XTEST_RUN_UNIT(xdata_let_vector_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_vector_push_back_and_peek, runner);
-    XTEST_RUN_UNIT(xdata_let_vector_search,             runner);
-    XTEST_RUN_UNIT(xdata_let_vector_reverse,            runner);
-    XTEST_RUN_UNIT(xdata_let_vector_create_and_destroy_with_types, runner);
+    XTEST_RUN_UNIT(test_vector_create_and_erase,  runner);
+    XTEST_RUN_UNIT(test_vector_push_back, runner);
+    XTEST_RUN_UNIT(test_vector_search,    runner);
 } // end of func

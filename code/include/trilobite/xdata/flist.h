@@ -37,8 +37,8 @@
 
    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
 */
-#ifndef TRILOBITE_XDATA_FLIST_H
-#define TRILOBITE_XDATA_FLIST_H
+#ifndef TSCL_FLIST_H
+#define TSCL_FLIST_H
 
 #ifdef __cplusplus
 extern "C"
@@ -56,134 +56,34 @@ typedef struct cflist_node {
 // Linked list structure
 typedef struct cflist {
     cflist_node* head;
-    enum ctofu_type list_type;  // Type of the linked list
+    ctofu_type list_type;  // Type of the linked list
 } cflist;
 
 // =======================
 // CREATE and DELETE
 // =======================
-
-/**
- * @brief Creates a new cflist instance with the specified list type.
- *
- * @param list_type The data type for the cflist (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created cflist instance.
- */
-cflist* flist_create(enum ctofu_type list_type);
-
-/**
- * @brief Destroys the cflist instance, freeing all associated memory.
- *
- * @param flist The cflist instance to be destroyed.
- */
-void flist_erase(cflist* flist);
+cflist* tscl_flist_create(ctofu_type list_type);
+void tscl_flist_erase(cflist* flist);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-
-/**
- * @brief Inserts a ctofu data element into the cflist.
- *
- * @param flist The cflist where the data will be inserted.
- * @param data  The ctofu data element to be inserted.
- * @return A ctofu_error value indicating the result of the insertion.
- */
-ctofu_error flist_insert(cflist* flist, ctofu data);
-
-/**
- * @brief Removes a ctofu data element from the cflist.
- *
- * @param flist The cflist from which the data will be removed.
- * @param data  The ctofu data element to be removed.
- * @return A ctofu_error value indicating the result of the removal.
- */
-ctofu_error flist_remove(cflist* flist, ctofu data);
-
-/**
- * @brief Searches for a ctofu data element in the cflist.
- *
- * @param flist The cflist to search within.
- * @param data  The ctofu data element to search for.
- * @return A ctofu_error value indicating the result of the search.
- */
-ctofu_error flist_search(const cflist* flist, ctofu data);
-
-/**
- * @brief Reverses the cflist in the forward direction.
- *
- * @param flist The cflist to be reversed.
- */
-void flist_reverse_forward(cflist* flist);
-
-/**
- * @brief Reverses the cflist in the backward direction.
- *
- * @param flist The cflist to be reversed.
- */
-void flist_reverse_backward(cflist* flist);
+ctofu_error tscl_flist_insert(cflist* flist, ctofu data);
+ctofu_error tscl_flist_remove(cflist* flist, ctofu* data);
+ctofu_error tscl_flist_search(const cflist* flist, ctofu data);
+void tscl_flist_reverse_forward(cflist* flist);
+void tscl_flist_reverse_backward(cflist* flist);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-
-/**
- * @brief Gets the size of the cflist.
- *
- * @param flist The cflist for which the size will be determined.
- * @return The size of the cflist.
- */
-size_t flist_size(const cflist* flist);
-
-/**
- * @brief Getter function to retrieve a ctofu data element from the cflist.
- *
- * @param flist The cflist from which the data will be retrieved.
- * @param data  The ctofu data element to retrieve.
- * @return A pointer to the ctofu data element in the cflist (or NULL if not found).
- */
-ctofu* flist_getter(cflist* flist, ctofu data);
-
-/**
- * @brief Setter function to update a ctofu data element in the cflist.
- *
- * @param flist The cflist in which the data will be updated.
- * @param data  The ctofu data element to update.
- * @return A ctofu_error value indicating the result of the update.
- */
-ctofu_error flist_setter(cflist* flist, ctofu data);
-
-/**
- * @brief Checks if the cflist is not empty.
- *
- * @param flist The cflist to check.
- * @return true if the cflist is not empty, false otherwise.
- */
-bool flist_not_empty(const cflist* flist);
-
-/**
- * @brief Checks if the cflist is not a null pointer.
- *
- * @param flist The cflist to check.
- * @return true if the cflist is not a null pointer, false otherwise.
- */
-bool flist_not_cnullptr(const cflist* flist);
-
-/**
- * @brief Checks if the cflist is empty.
- *
- * @param flist The cflist to check.
- * @return true if the cflist is empty, false otherwise.
- */
-bool flist_is_empty(const cflist* flist);
-
-/**
- * @brief Checks if the cflist is a null pointer.
- *
- * @param flist The cflist to check.
- * @return true if the cflist is a null pointer, false otherwise.
- */
-bool flist_is_cnullptr(const cflist* flist);
+size_t tscl_flist_size(const cflist* flist);
+ctofu* tscl_flist_getter(cflist* flist, ctofu data);
+ctofu_error tscl_flist_setter(cflist* flist, ctofu data);
+bool tscl_flist_not_empty(const cflist* flist);
+bool tscl_flist_not_cnullptr(const cflist* flist);
+bool tscl_flist_is_empty(const cflist* flist);
+bool tscl_flist_is_cnullptr(const cflist* flist);
 
 #ifdef __cplusplus
 }

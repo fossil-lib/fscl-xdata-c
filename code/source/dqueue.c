@@ -37,228 +37,179 @@
 // =======================
 // CREATE and DELETE
 // =======================
+cdqueue* tscl_dqueue_create(ctofu_type list_type) {
+    cdqueue* new_dqueue = (cdqueue*)malloc(sizeof(cdqueue));
+    if (new_dqueue == NULL) {
+        // Handle memory allocation failure
+        return NULL;
+    }
 
-// Function to create a new cdqueue
-cdqueue* dqueue_create(enum ctofu_type list_type) {
-    cdqueue* dqueue = (cdqueue*)malloc(sizeof(cdqueue));
+    new_dqueue->list_type = list_type;
+    new_dqueue->front = NULL;
+    new_dqueue->rear = NULL;
+
+    return new_dqueue;
+}
+
+void tscl_dqueue_erase(cdqueue* dqueue) {
     if (dqueue == NULL) {
-        return NULL; // Memory allocation failed
-    } // end if
-
-    dqueue->list_type = list_type;
-    dqueue->front = NULL;
-    dqueue->rear = NULL;
-
-    return dqueue;
-} // end of func
-
-// Function to destroy the cdqueue
-void dqueue_erase(cdqueue* dqueue) {
-    if (dqueue == NULL) {
-        return; // Nothing to destroy
-    } // end if
+        return;
+    }
 
     while (dqueue->front != NULL) {
-        cdqueue_node* temp = dqueue->front;
-        dqueue->front = dqueue->front->next;
-        free(temp);
-    } // end while
+        ctofu data;
+        tscl_dqueue_remove(dqueue, &data);
+    }
 
     free(dqueue);
-} // end of func
+}
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
-// Function to insert a ctofu data into the list
-ctofu_error dqueue_insert(cdqueue* dqueue, ctofu data) {
+ctofu_error tscl_dqueue_insert(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    if (data.type != dqueue->list_type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
+    cdqueue_node* new_node = (cdqueue_node*)malloc(sizeof(cdqueue_node));
+    if (new_node == NULL) {
+        // Handle memory allocation failure
+        return TOFU_WAS_BAD_MALLOC;
+    }
 
-    cdqueue_node* newNode = (cdqueue_node*)malloc(sizeof(cdqueue_node));
-    if (newNode == NULL) {
-        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
-    } // end if
-
-    newNode->data = data;
-    newNode->next = NULL;
-
-    if (dqueue->rear == NULL) {
-        // If the queue is empty, set both front and rear to the new node
-        dqueue->front = newNode;
-        dqueue->rear = newNode;
-    } else {
-        // Otherwise, update the rear node's next pointer
-        dqueue->rear->next = newNode;
-        dqueue->rear = newNode;
-    } // end if else
-
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
-
-// Function to remove a ctofu data from the list
-ctofu_error dqueue_remove(cdqueue* dqueue, ctofu data) {
-    if (dqueue == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+    new_node->data = data;
+    new_node->prev = NULL;
+    new_node->next = NULL;
 
     if (dqueue->front == NULL) {
-        return TRILO_XDATA_TYPE_WAS_UNKNOWN;
-    } // end if
+        // Queue is empty
+        dqueue->front = new_node;
+        dqueue->rear = new_node;
+    } else {
+        new_node->next = dqueue->front;
+        dqueue->front->prev = new_node;
+        dqueue->front = new_node;
+    }
 
-    if (data.type != dqueue->list_type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
+    return TOFU_SUCCESS;
+}
 
-    cdqueue_node* current = dqueue->front;
-    cdqueue_node* prev = NULL;
+ctofu_error tscl_dqueue_remove(cdqueue* dqueue, ctofu* data) {
+    if (dqueue == NULL || data == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
 
-    while (current != NULL) {
-        if (tofu_compare(current->data, data) == TRILO_XDATA_TYPE_SUCCESS) {
-            if (current == dqueue->front) {
-                // If the front node matches, update the front pointer
-                dqueue->front = current->next;
-            } else if (current == dqueue->rear) {
-                // If the rear node matches, update the rear pointer
-                dqueue->rear = prev;
-                prev->next = NULL;
-            } else {
-                // Update the next pointer of the previous node
-                prev->next = current->next;
-            } // end if else's
+    if (dqueue->front == NULL) {
+        return TOFU_NOT_FOUND; // Queue is empty
+    }
 
-            // Free the memory for the removed node
-            free(current);
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } // end if
+    cdqueue_node* temp = dqueue->front;
+    *data = temp->data;
 
-        prev = current;
-        current = current->next;
-    } // end while
+    if (dqueue->front == dqueue->rear) {
+        // Only one element in the queue
+        free(temp);
+        dqueue->front = NULL;
+        dqueue->rear = NULL;
+    } else {
+        dqueue->front = dqueue->front->next;
+        dqueue->front->prev = NULL;
+        free(temp);
+    }
 
-    return TRILO_XDATA_TYPE_WAS_UNKNOWN;
-} // end of func
+    return TOFU_SUCCESS;
+}
 
-// Function to search for a ctofu data in the list
-ctofu_error dqueue_search(const cdqueue* dqueue, ctofu data) {
+ctofu_error tscl_dqueue_search(const cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
-
-    if (data.type != dqueue->list_type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
     cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
-        if (tofu_compare(current->data, data) == TRILO_XDATA_TYPE_SUCCESS) {
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } // end if
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+            return TOFU_SUCCESS; // Found
+        }
 
         current = current->next;
-    } // end while
+    }
 
-    return TRILO_XDATA_TYPE_WAS_UNKNOWN;
-} // end of func
+    return TOFU_NOT_FOUND; // Not found
+}
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
-// Function to get the size of the cdqueue
-size_t dqueue_size(const cdqueue* dqueue) {
+size_t tscl_dqueue_size(const cdqueue* dqueue) {
     if (dqueue == NULL) {
         return 0;
-    } // end if
+    }
 
     size_t size = 0;
     cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
-        size++;
+        ++size;
         current = current->next;
-    } // end while
+    }
 
     return size;
-} // end of func
+}
 
-// Function to insert a ctofu data into the list
-ctofu* dqueue_getter(cdqueue* dqueue, ctofu data) {
+ctofu* tscl_dqueue_getter(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
         return NULL;
-    } // end if
-
-    if (data.type != dqueue->list_type) {
-        return NULL;
-    } // end if
+    }
 
     cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
-        if (tofu_compare(current->data, data) == TRILO_XDATA_TYPE_SUCCESS) {
-            return &(current->data);
-        } // end if
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+            return &current->data; // Found
+        }
 
         current = current->next;
-    } // end while
+    }
 
-    return NULL;
-} // end of func
+    return NULL; // Not found
+}
 
-// Function to insert a ctofu data into the list
-ctofu_error dqueue_setter(cdqueue* dqueue, ctofu data) {
+ctofu_error tscl_dqueue_setter(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    if (data.type != dqueue->list_type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
+    cdqueue_node* current = dqueue->front;
 
-    cdqueue_node* newNode = (cdqueue_node*)malloc(sizeof(cdqueue_node));
-    if (newNode == NULL) {
-        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
-    } // end if
+    while (current != NULL) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+            // Found, update the data
+            current->data = data;
+            return TOFU_SUCCESS;
+        }
 
-    newNode->data = data;
-    newNode->next = NULL;
+        current = current->next;
+    }
 
-    if (dqueue->rear == NULL) {
-        // If the queue is empty, set both front and rear to the new node
-        dqueue->front = newNode;
-        dqueue->rear = newNode;
-    } else {
-        // Otherwise, update the rear node's next pointer
-        dqueue->rear->next = newNode;
-        dqueue->rear = newNode;
-    } // end if else
+    return TOFU_NOT_FOUND; // Not found
+}
 
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
+bool tscl_dqueue_not_empty(const cdqueue* dqueue) {
+    return dqueue != NULL && dqueue->front != NULL;
+}
 
-// Function to check if the list is not empty
-bool dqueue_not_empty(const cdqueue* dqueue) {
-    return (dqueue != NULL) && (dqueue->front != NULL);
-} // end of func
-
-// Function to check if the list is null
-bool dqueue_not_cnullptr(const cdqueue* dqueue) {
+bool tscl_dqueue_not_cnullptr(const cdqueue* dqueue) {
     return dqueue != NULL;
-} // end of func
+}
 
-// Function to check if the list is empty
-bool dqueue_is_empty(const cdqueue* dqueue) {
-    return (dqueue == NULL) || (dqueue->front == NULL);
-} // end of func
+bool tscl_dqueue_is_empty(const cdqueue* dqueue) {
+    return dqueue == NULL || dqueue->front == NULL;
+}
 
-// Function to check if the list is null
-bool dqueue_is_cnullptr(const cdqueue* dqueue) {
+bool tscl_dqueue_is_cnullptr(const cdqueue* dqueue) {
     return dqueue == NULL;
-} // end of func
+}

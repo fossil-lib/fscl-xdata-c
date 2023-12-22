@@ -37,95 +37,135 @@
 //
 // XUNIT TEST CASES
 //
+XTEST_CASE(test_flist_create_and_erase) {
+    cflist* flist = tscl_flist_create(INTEGER_TYPE);
 
-// Test case 1: Test cflist creation and destruction
-XTEST_CASE(xdata_let_flist_create_and_destroy) {
-    cflist* flist = flist_create(INTEGER_TYPE);
+    // Check if the linked list is created with the expected values
     TEST_ASSERT_NOT_NULL_PTR(flist);
+    TEST_ASSERT_NULL_PTR(flist->head);
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, flist->list_type);
 
-    flist_erase(flist);
+    tscl_flist_erase(flist);
+
+    // Check if the linked list is erased
+    TEST_ASSERT_NULL_PTR(flist->head);
     TEST_ASSERT_NULL_PTR(flist);
 }
 
-// Test case 2: Test cflist insertion and retrieval
-XTEST_CASE(xdata_let_flist_insert_and_get) {
-    cflist* flist = flist_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(flist);
+XTEST_CASE(test_flist_insert_and_size) {
+    cflist* flist = tscl_flist_create(INTEGER_TYPE);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = flist_insert(flist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    ctofu* retrieved_tofu = flist_getter(flist, tofu);
-    TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
-    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(*retrieved_tofu));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_flist_insert(flist, element1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_flist_insert(flist, element2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_flist_insert(flist, element3));
 
-    flist_erase(flist);
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(3, tscl_flist_size(flist));
+
+    tscl_flist_erase(flist);
 }
 
-// Test case 3: Test cflist removal
-XTEST_CASE(xdata_let_flist_remove) {
-    cflist* flist = flist_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(flist);
+XTEST_CASE(test_flist_remove) {
+    cflist* flist = tscl_flist_create(INTEGER_TYPE);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = flist_insert(flist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    result = flist_remove(flist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    tscl_flist_insert(flist, element1);
+    tscl_flist_insert(flist, element2);
+    tscl_flist_insert(flist, element3);
 
-    ctofu* retrieved_tofu = flist_getter(flist, tofu);
-    TEST_ASSERT_NULL_PTR(retrieved_tofu);
+    // Remove an element
+    ctofu removedElement;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_flist_remove(flist, &removedElement));
 
-    flist_erase(flist);
+    // Check if the removed element is correct
+    TEST_ASSERT_EQUAL_INT(42, removedElement.data.integer_type);
+
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(2, tscl_flist_size(flist));
+
+    tscl_flist_erase(flist);
 }
 
-// Test case 4: Test cflist size
-XTEST_CASE(xdata_let_flist_size) {
-    cflist* flist = flist_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(flist);
+XTEST_CASE(test_flist_reverse_forward) {
+    cflist* flist = tscl_flist_create(INTEGER_TYPE);
 
-    ctofu tofu1 = tofu_create_from_integer(1);
-    ctofu tofu2 = tofu_create_from_integer(2);
-    ctofu tofu3 = tofu_create_from_integer(3);
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    flist_insert(flist, tofu1);
-    flist_insert(flist, tofu2);
-    flist_insert(flist, tofu3);
+    tscl_flist_insert(flist, element1);
+    tscl_flist_insert(flist, element2);
+    tscl_flist_insert(flist, element3);
 
-    size_t size = flist_size(flist);
-    TEST_ASSERT_EQUAL_INT(3, size);
+    // Reverse the linked list forward
+    tscl_flist_reverse_forward(flist);
 
-    flist_erase(flist);
+    // Check if the elements are in reverse order
+    ctofu* retrievedElement = tscl_flist_getter(flist, element3);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.integer_type);
+
+    retrievedElement = tscl_flist_getter(flist, element2);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(10, retrievedElement->data.integer_type);
+
+    retrievedElement = tscl_flist_getter(flist, element1);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(5, retrievedElement->data.integer_type);
+
+    tscl_flist_erase(flist);
 }
 
-// Test case 5: Test cflist empty check
-XTEST_CASE(xdata_let_flist_empty_check) {
-    cflist* flist = flist_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(flist);
+XTEST_CASE(test_flist_reverse_backward) {
+    cflist* flist = tscl_flist_create(INTEGER_TYPE);
 
-    TEST_ASSERT_TRUE_BOOL(flist_is_empty(flist));
-    TEST_ASSERT_FALSE_BOOL(flist_not_empty(flist));
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    ctofu tofu = tofu_create_from_integer(42);
-    flist_insert(flist, tofu);
+    tscl_flist_insert(flist, element1);
+    tscl_flist_insert(flist, element2);
+    tscl_flist_insert(flist, element3);
 
-    TEST_ASSERT_FALSE_BOOL(flist_is_empty(flist));
-    TEST_ASSERT_TRUE_BOOL(flist_not_empty(flist));
+    // Reverse the linked list backward
+    tscl_flist_reverse_backward(flist);
 
-    flist_erase(flist);
+    // Check if the elements are in reverse order
+    ctofu* retrievedElement = tscl_flist_getter(flist, element3);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.integer_type);
+
+    retrievedElement = tscl_flist_getter(flist, element2);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(10, retrievedElement->data.integer_type);
+
+    retrievedElement = tscl_flist_getter(flist, element1);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(5, retrievedElement->data.integer_type);
+
+    tscl_flist_erase(flist);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_flist_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_flist_group) {
     XTEST_NOTE("Running all test cases for flist:");
 
-    XTEST_RUN_UNIT(xdata_let_flist_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_flist_empty_check,        runner);
-    XTEST_RUN_UNIT(xdata_let_flist_insert_and_get,     runner);
-    XTEST_RUN_UNIT(xdata_let_flist_remove,             runner);
-    XTEST_RUN_UNIT(xdata_let_flist_size,               runner);
+    XTEST_RUN_UNIT(test_flist_create_and_erase, runner);
+    XTEST_RUN_UNIT(test_flist_insert_and_size,  runner);
+    XTEST_RUN_UNIT(test_flist_remove,           runner);
+    XTEST_RUN_UNIT(test_flist_reverse_forward,  runner);
+    XTEST_RUN_UNIT(test_flist_reverse_backward, runner);
 } // end of func

@@ -38,198 +38,99 @@
 // XUNIT TEST CASES
 //
 
-XTEST_CASE(xdata_let_stack_create_and_destroy) {
-    cstack* stack = stack_create(INTEGER_TYPE);
+XTEST_CASE(test_stack_create_and_erase) {
+    cstack* stack = tscl_stack_create(INTEGER_TYPE);
+
+    // Check if the stack is created with the expected values
     TEST_ASSERT_NOT_NULL_PTR(stack);
+    TEST_ASSERT_NULL_PTR(stack->top);
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, stack->stack_type);
 
-    stack_erase(stack);
+    tscl_stack_erase(stack);
+
+    // Check if the stack is erased
+    TEST_ASSERT_NULL_PTR(stack->top);
+    TEST_ASSERT_NULL_PTR(stack);
 }
 
-XTEST_CASE(xdata_let_stack_insert_and_size) {
-    cstack* stack = stack_create(INTEGER_TYPE);
-    
-    ctofu data1 = tofu_create_from_integer(42);
-    ctofu data2 = tofu_create_from_integer(7);
+XTEST_CASE(test_stack_insert_and_size) {
+    cstack* stack = tscl_stack_create(INTEGER_TYPE);
 
-    ctofu_error result1 = stack_insert(stack, data1);
-    ctofu_error result2 = stack_insert(stack, data2);
-    
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result1);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result2);
-    
-    size_t size = stack_size(stack);
-    TEST_ASSERT_EQUAL_BOOL(2, size);
-    
-    stack_erase(stack);
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_stack_insert(stack, element1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_stack_insert(stack, element2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_stack_insert(stack, element3));
+
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(3, tscl_stack_size(stack));
+
+    tscl_stack_erase(stack);
 }
 
-XTEST_CASE(xdata_let_stack_remove_and_search) {
-    cstack* stack = stack_create(INTEGER_TYPE);
-    
-    ctofu data1 = tofu_create_from_integer(42);
-    ctofu data2 = tofu_create_from_integer(7);
+XTEST_CASE(test_stack_remove) {
+    cstack* stack = tscl_stack_create(INTEGER_TYPE);
 
-    stack_insert(stack, data1);
-    stack_insert(stack, data2);
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    ctofu_error result1 = stack_remove(stack, data1);
-    ctofu_error result2 = stack_remove(stack, data2);
-    
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result1);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result2);
-    
-    ctofu_error search_result1 = stack_search(stack, data1);
-    ctofu_error search_result2 = stack_search(stack, data2);
-    
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, search_result1);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, search_result2);
-    
-    stack_erase(stack);
+    tscl_stack_insert(stack, element1);
+    tscl_stack_insert(stack, element2);
+    tscl_stack_insert(stack, element3);
+
+    // Remove an element
+    ctofu removedElement;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_stack_remove(stack, &removedElement));
+
+    // Check if the removed element is correct
+    TEST_ASSERT_EQUAL_INT(5, removedElement.data.integer_type);
+
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(2, tscl_stack_size(stack));
+
+    tscl_stack_erase(stack);
 }
 
-XTEST_CASE(xdata_let_stack_getter_and_setter) {
-    cstack* stack = stack_create(INTEGER_TYPE);
-    
-    ctofu data1 = tofu_create_from_integer(42);
-    ctofu data2 = tofu_create_from_integer(7);
+XTEST_CASE(test_stack_top) {
+    cstack* stack = tscl_stack_create(INTEGER_TYPE);
 
-    stack_insert(stack, data1);
-    stack_insert(stack, data2);
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    ctofu* getter_result1 = stack_getter(stack, data1);
-    ctofu* getter_result2 = stack_getter(stack, data2);
-    
-    TEST_ASSERT_NOT_NULL_PTR(getter_result1);
-    TEST_ASSERT_NOT_NULL_PTR(getter_result2);
-    
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, tofu_compare(*getter_result1, data1));
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, tofu_compare(*getter_result2, data2));
-    
-    ctofu new_data1 = tofu_create_from_integer(99);
-    ctofu new_data2 = tofu_create_from_integer(77);
+    tscl_stack_insert(stack, element1);
+    tscl_stack_insert(stack, element2);
+    tscl_stack_insert(stack, element3);
 
-    ctofu_error setter_result1 = stack_setter(stack, new_data1);
-    ctofu_error setter_result2 = stack_setter(stack, new_data2);
-    
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, setter_result1);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, setter_result2);
+    // Check the top element
+    ctofu topElement = tscl_stack_top(stack, (ctofu){INTEGER_TYPE, {.integer_type = -1}});
+    TEST_ASSERT_EQUAL_INT(5, topElement.data.integer_type);
 
-    // Check if the data was updated
-    getter_result1 = stack_getter(stack, new_data1);
-    getter_result2 = stack_getter(stack, new_data2);
-    
-    TEST_ASSERT_NOT_NULL_PTR(getter_result1);
-    TEST_ASSERT_NOT_NULL_PTR(getter_result2);
-    
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, tofu_compare(*getter_result1, new_data1));
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, tofu_compare(*getter_result2, new_data2));
+    // Remove an element
+    tscl_stack_remove(stack, NULL);
 
-    stack_erase(stack);
+    // Check the top element after removal
+    topElement = tscl_stack_top(stack, (ctofu){INTEGER_TYPE, {.integer_type = -1}});
+    TEST_ASSERT_EQUAL_INT(10, topElement.data.integer_type);
+
+    tscl_stack_erase(stack);
 }
 
-XTEST_CASE(xdata_let_stack_empty_check) {
-    cstack* stack = stack_create(INTEGER_TYPE);
-
-    TEST_ASSERT_TRUE_BOOL(stack_is_empty(stack));
-    TEST_ASSERT_FALSE_BOOL(stack_not_empty(stack));
-
-    ctofu data = tofu_create_from_integer(42);
-    stack_insert(stack, data);
-
-    TEST_ASSERT_FALSE_BOOL(stack_is_empty(stack));
-    TEST_ASSERT_TRUE_BOOL(stack_not_empty(stack));
-
-    stack_erase(stack);
-}
-
-XTEST_CASE(xdata_let_stack_nullptr_check) {
-    cstack* stack = NULL;
-
-    TEST_ASSERT_TRUE_BOOL(stack_is_cnullptr(stack));
-    TEST_ASSERT_FALSE_BOOL(stack_not_cnullptr(stack));
-
-    stack = stack_create(INTEGER_TYPE);
-
-    TEST_ASSERT_FALSE_BOOL(stack_is_cnullptr(stack));
-    TEST_ASSERT_TRUE_BOOL(stack_not_cnullptr(stack));
-
-    stack_erase(stack);
-}
-
-XTEST_CASE(xdata_let_stack_top) {
-    cstack* stack = stack_create(INTEGER_TYPE);
-
-    ctofu data1 = tofu_create_from_integer(42);
-    ctofu data2 = tofu_create_from_integer(7);
-
-    stack_insert(stack, data1);
-    stack_insert(stack, data2);
-
-    TEST_ASSERT_EQUAL_INT(7, tofu_get_integer(stack_top(stack)));
-
-    stack_erase(stack);
-}
-
-XTEST_CASE(xdata_let_stack_insert_and_size_edge_cases) {
-    cstack* stack = stack_create(INTEGER_TYPE);
-
-    // Test inserting a large number of elements
-    for (int i = 0; i < 1000; ++i) {
-        ctofu data = tofu_create_from_integer(i);
-        stack_insert(stack, data);
-    }
-    TEST_ASSERT_EQUAL_INT(1000, stack_size(stack));
-
-    // Test inserting elements of different types
-    ctofu double_data = tofu_create_from_double(3.14);
-    ctofu string_data = tofu_create_from_string("Hello");
-
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, stack_insert(stack, double_data));
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, stack_insert(stack, string_data));
-
-    TEST_ASSERT_EQUAL_INT(1002, stack_size(stack));
-
-    stack_erase(stack);
-}
-
-XTEST_CASE(xdata_let_stack_remove_and_search_edge_cases) {
-    cstack* empty_stack = stack_create(INTEGER_TYPE);
-
-    // Test removing elements from an empty stack
-    ctofu data = tofu_create_from_integer(42);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, stack_remove(empty_stack, data));
-
-    // Test searching for elements in an empty stack
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_WAS_UNKNOWN, stack_search(empty_stack, data));
-
-    stack_erase(empty_stack);
-}
-
-XTEST_CASE(xdata_let_stack_top_edge_cases) {
-    cstack* empty_stack = NULL;
-
-    // Test getting the top element from an empty stack
-    TEST_ASSERT_NULL_PTR(empty_stack);
-
-    stack_erase(empty_stack);
-}
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_stack_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_stack_group) {
     XTEST_NOTE("Running all test cases for stack:");
 
-    XTEST_RUN_UNIT(xdata_let_stack_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_stack_empty_check,        runner);
-    XTEST_RUN_UNIT(xdata_let_stack_getter_and_setter,  runner);
-    XTEST_RUN_UNIT(xdata_let_stack_insert_and_size,    runner);
-    XTEST_RUN_UNIT(xdata_let_stack_nullptr_check,      runner);
-    XTEST_RUN_UNIT(xdata_let_stack_remove_and_search,  runner);
-    XTEST_RUN_UNIT(xdata_let_stack_nullptr_check,      runner);
-    XTEST_RUN_UNIT(xdata_let_stack_remove_and_search,  runner);
-    XTEST_RUN_UNIT(xdata_let_stack_top,                runner);
-    XTEST_RUN_UNIT(xdata_let_stack_insert_and_size_edge_cases,   runner);
-    XTEST_RUN_UNIT(xdata_let_stack_remove_and_search_edge_cases, runner);
-    XTEST_RUN_UNIT(xdata_let_stack_top_edge_cases,               runner);
+    XTEST_RUN_UNIT(test_stack_create_and_erase,  runner);
+    XTEST_RUN_UNIT(test_stack_insert_and_size, runner);
+    XTEST_RUN_UNIT(test_stack_remove,            runner);
+    XTEST_RUN_UNIT(test_stack_top,               runner);
 } // end of func

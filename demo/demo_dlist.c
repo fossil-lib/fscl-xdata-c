@@ -33,43 +33,43 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cdlist instance with INTEGER_TYPE
-    cdlist* dlist = dlist_create(INTEGER_TYPE);
+    // Create a doubly linked list for integers
+    cdlist* int_dlist = tscl_dlist_create(INTEGER_TYPE);
 
-    // Insert data elements into the cdlist
-    dlist_insert(dlist, tofu_create_from_integer(10));
-    dlist_insert(dlist, tofu_create_from_integer(20));
-    dlist_insert(dlist, tofu_create_from_integer(30));
+    // Insert elements into the doubly linked list
+    tscl_dlist_insert(int_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 1});
+    tscl_dlist_insert(int_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2});
+    tscl_dlist_insert(int_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 3});
 
-    // Print the size of the cdlist
-    printf("Size of the doubly list: %zu\n", dlist_size(dlist));
+    // Display the size of the doubly linked list
+    printf("List Size: %zu\n", tscl_dlist_size(int_dlist));
 
-    // Print the cdlist elements in forward order
-    printf("Doubly list elements in forward order:\n");
-    cdlist_node* current = dlist_get_head(dlist);
-    while (current != NULL) {
-        ctofu* tofu = dlist_get_node_data(current);
-        printf("%d\n", tofu_get_integer(*tofu));
-        current = dlist_get_next(current);
-    } // end while
+    // Check if the doubly linked list is not empty
+    if (tscl_dlist_not_empty(int_dlist)) {
+        printf("The doubly linked list is not empty.\n");
+    }
 
-    // Reverse the cdlist in the forward direction
-    dlist_reverse_forward(dlist);
+    // Search for an element in the doubly linked list
+    ctofu searched_value;
+    if (tscl_dlist_search(int_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}) == 0) {
+        printf("Element found in the doubly linked list.\n");
+        // Get the value associated with the element
+        tscl_dlist_getter(int_dlist, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}, &searched_value);
+        printf("Associated Value: %d\n", searched_value.data.integer_type);
+    } else {
+        printf("Element not found in the doubly linked list.\n");
+    }
 
-    // Print the reversed cdlist elements
-    printf("Reversed doubly list elements in forward order:\n");
-    current = dlist_get_head(dlist);
-    while (current != NULL) {
-        ctofu* tofu = dlist_get_node_data(current);
-        printf("%d\n", tofu_get_integer(*tofu));
-        current = dlist_get_next(current);
-    } // end while
+    // Remove elements from the doubly linked list
+    ctofu removed_value;
+    tscl_dlist_remove(int_dlist, &removed_value);
+    printf("Removed Value: %d\n", removed_value.data.integer_type);
 
-    // Check if the cdlist is not empty
-    printf("Is doubly list not empty? %s\n", dlist_not_empty(dlist) ? "true" : "false");
+    // Display the size after removal
+    printf("List Size After Removal: %zu\n", tscl_dlist_size(int_dlist));
 
-    // Destroy the cdlist
-    dlist_erase(dlist);
+    // Clean up
+    tscl_dlist_erase(int_dlist);
 
     return 0;
 } // end of func

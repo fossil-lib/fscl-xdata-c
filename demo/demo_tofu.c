@@ -31,44 +31,41 @@
 */
 #include "trilobite/xdata/tofu.h"
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Sample data with strings
+ctofu_data data_array[] = {
+    {STRING_TYPE, .string_type = "Banana"},
+    {STRING_TYPE, .string_type = "Apple"},
+    {STRING_TYPE, .string_type = "Orange"},
+    {STRING_TYPE, .string_type = "Grapes"},
+    {STRING_TYPE, .string_type = "Pineapple"}
+};
 
 int main() {
-    // Create ctofu instances from different data types
-    ctofu intTofu = tofu_create_from_integer(42);
-    ctofu doubleTofu = tofu_create_from_double(3.14159);
-    ctofu stringTofu = tofu_create_from_string("Hello, World!");
-    ctofu charTofu = tofu_create_from_char('A');
-    ctofu boolTofu = tofu_create_from_boolean(true);
+    // Create an array of ctofu
+    ctofu* array = NULL;
+    ctofu_error create_result = tscl_tofu_create(ARRAY_TYPE, data_array, &array);
 
-    // Print the data stored in each ctofu instance
-    printf("Integer Value: %d\n", tofu_get_integer(intTofu));
-    printf("Double Value: %lf\n", tofu_get_double(doubleTofu));
-    printf("String Value: %s\n", tofu_get_string(stringTofu));
-    printf("Character Value: %c\n", tofu_get_char(charTofu));
-    printf("Boolean Value: %s\n", tofu_get_boolean(boolTofu) ? "true" : "false");
+    if (create_result == TOFU_SUCCESS) {
+        // Sort the array using selection sort (you can replace it with other sorting functions)
+        tscl_tofu_sort_selection(array->data.array_type.elements, array->data.array_type.size);
 
-    // Create an array of ctofu instances and perform sorting and searching
-    ctofu arr[] = {intTofu, doubleTofu, stringTofu, charTofu, boolTofu};
-    size_t arrSize = sizeof(arr) / sizeof(arr[0]);
+        // Print the sorted array
+        printf("Sorted Array:\n");
+        for (size_t i = 0; i < array->data.array_type.size; ++i) {
+            ctofu_data current_data = tscl_tofu_value_getter(array[i].data.array_type.elements);
+            if (array[i].type == STRING_TYPE) {
+                printf("%s\n", current_data.string_type);
+            }
+        }
 
-    // Sort the array using insertion sort
-    tofu_insertion_sort(arr, arrSize);
-
-    // Print the sorted array
-    printf("\nSorted Array:\n");
-    for (size_t i = 0; i < arrSize; i++) {
-        tofu_print(arr[i]);
-    } // end for
-
-    // Perform a binary search for a specific ctofu instance
-    ctofu targetTofu = tofu_create_from_double(3.14159);
-    int result = tofu_binary_search(arr, arrSize, targetTofu);
-    if (result != -1) {
-        printf("\nTarget Value Found at Index: %d\n", result);
+        // Clean up
+        tscl_tofu_erase(array);
     } else {
-        printf("\nTarget Value Not Found\n");
-    } // end if else
+        printf("Failed to create ctofu array.\n");
+    }
 
     return 0;
-} // end of func
+}

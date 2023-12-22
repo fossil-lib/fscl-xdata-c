@@ -37,95 +37,137 @@
 //
 // XUNIT TEST CASES
 //
+XTEST_CASE(test_dlist_create_and_erase) {
+    cdlist* dlist = tscl_dlist_create(INTEGER_TYPE);
 
-// Test case 1: Test cdlist creation and destruction
-XTEST_CASE(xdata_let_dlist_create_and_destroy) {
-    cdlist* dlist = dlist_create(INTEGER_TYPE);
+    // Check if the doubly linked list is created with the expected values
     TEST_ASSERT_NOT_NULL_PTR(dlist);
+    TEST_ASSERT_NULL_PTR(dlist->head);
+    TEST_ASSERT_NULL_PTR(dlist->tail);
+    TEST_ASSERT_EQUAL(INTEGER_TYPE, dlist->list_type);
 
-    dlist_erase(dlist);
+    tscl_dlist_erase(dlist);
+
+    // Check if the doubly linked list is erased
+    TEST_ASSERT_NULL_PTR(dlist->head);
+    TEST_ASSERT_NULL_PTR(dlist->tail);
     TEST_ASSERT_NULL_PTR(dlist);
 }
 
-// Test case 2: Test cdlist insertion and retrieval
-XTEST_CASE(xdata_let_dlist_insert_and_get) {
-    cdlist* dlist = dlist_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(dlist);
+XTEST_CASE(test_dlist_insert_and_size) {
+    cdlist* dlist = tscl_dlist_create(INTEGER_TYPE);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = dlist_insert(dlist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    ctofu* retrieved_tofu = dlist_getter(dlist, tofu);
-    TEST_ASSERT_NOT_NULL_PTR(retrieved_tofu);
-    TEST_ASSERT_EQUAL_INT(42, tofu_get_integer(*retrieved_tofu));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dlist_insert(dlist, element1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dlist_insert(dlist, element2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dlist_insert(dlist, element3));
 
-    dlist_erase(dlist);
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(3, tscl_dlist_size(dlist));
+
+    tscl_dlist_erase(dlist);
 }
 
-// Test case 3: Test cdlist removal
-XTEST_CASE(xdata_let_dlist_remove) {
-    cdlist* dlist = dlist_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(dlist);
+XTEST_CASE(test_dlist_remove) {
+    cdlist* dlist = tscl_dlist_create(INTEGER_TYPE);
 
-    ctofu tofu = tofu_create_from_integer(42);
-    ctofu_error result = dlist_insert(dlist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    result = dlist_remove(dlist, tofu);
-    TEST_ASSERT_EQUAL_BOOL(TRILO_XDATA_TYPE_SUCCESS, result);
+    tscl_dlist_insert(dlist, element1);
+    tscl_dlist_insert(dlist, element2);
+    tscl_dlist_insert(dlist, element3);
 
-    ctofu* retrieved_tofu = dlist_getter(dlist, tofu);
-    TEST_ASSERT_NULL_PTR(retrieved_tofu);
+    // Remove an element
+    ctofu removedElement;
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_dlist_remove(dlist, &removedElement));
 
-    dlist_erase(dlist);
+    // Check if the removed element is correct
+    TEST_ASSERT_EQUAL_INT(42, removedElement.data.integer_type);
+
+    // Check if the size is correct
+    TEST_ASSERT_EQUAL_UINT(2, tscl_dlist_size(dlist));
+
+    tscl_dlist_erase(dlist);
 }
 
-// Test case 4: Test cdlist size
-XTEST_CASE(xdata_let_dlist_size) {
-    cdlist* dlist = dlist_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(dlist);
+XTEST_CASE(test_dlist_reverse_forward) {
+    cdlist* dlist = tscl_dlist_create(INTEGER_TYPE);
 
-    ctofu tofu1 = tofu_create_from_integer(1);
-    ctofu tofu2 = tofu_create_from_integer(2);
-    ctofu tofu3 = tofu_create_from_integer(3);
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    dlist_insert(dlist, tofu1);
-    dlist_insert(dlist, tofu2);
-    dlist_insert(dlist, tofu3);
+    tscl_dlist_insert(dlist, element1);
+    tscl_dlist_insert(dlist, element2);
+    tscl_dlist_insert(dlist, element3);
 
-    size_t size = dlist_size(dlist);
-    TEST_ASSERT_EQUAL_INT(3, size);
+    // Reverse the doubly linked list forward
+    tscl_dlist_reverse_forward(dlist);
 
-    dlist_erase(dlist);
+    // Check if the elements are in reverse order
+    ctofu* retrievedElement = tscl_dlist_getter(dlist, element3);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.integer_type);
+
+    retrievedElement = tscl_dlist_getter(dlist, element2);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(10, retrievedElement->data.integer_type);
+
+    retrievedElement = tscl_dlist_getter(dlist, element1);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(5, retrievedElement->data.integer_type);
+
+    tscl_dlist_erase(dlist);
 }
 
-// Test case 5: Test cdlist empty check
-XTEST_CASE(xdata_let_dlist_empty_check) {
-    cdlist* dlist = dlist_create(INTEGER_TYPE);
-    TEST_ASSERT_NOT_NULL_PTR(dlist);
+XTEST_CASE(test_dlist_reverse_backward) {
+    cdlist* dlist = tscl_dlist_create(INTEGER_TYPE);
 
-    TEST_ASSERT_TRUE_BOOL(dlist_is_empty(dlist));
-    TEST_ASSERT_FALSE_BOOL(dlist_not_empty(dlist));
+    // Insert some elements
+    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
 
-    ctofu tofu = tofu_create_from_integer(42);
-    dlist_insert(dlist, tofu);
+    tscl_dlist_insert(dlist, element1);
+    tscl_dlist_insert(dlist, element2);
+    tscl_dlist_insert(dlist, element3);
 
-    TEST_ASSERT_FALSE_BOOL(dlist_is_empty(dlist));
-    TEST_ASSERT_TRUE_BOOL(dlist_not_empty(dlist));
+    // Reverse the doubly linked list backward
+    tscl_dlist_reverse_backward(dlist);
 
-    dlist_erase(dlist);
+    // Check if the elements are in reverse order
+    ctofu* retrievedElement = tscl_dlist_getter(dlist, element3);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.integer_type);
+
+    retrievedElement = tscl_dlist_getter(dlist, element2);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(10, retrievedElement->data.integer_type);
+
+    retrievedElement = tscl_dlist_getter(dlist, element1);
+    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_EQUAL_INT(5, retrievedElement->data.integer_type);
+
+    tscl_dlist_erase(dlist);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-void xdata_test_dlist_group(XUnitRunner *runner) {
+XTEST_GROUP_DEFINE(xdata_test_dlist_group) {
     XTEST_NOTE("Running all test cases for dlist:");
 
-    XTEST_RUN_UNIT(xdata_let_dlist_create_and_destroy, runner);
-    XTEST_RUN_UNIT(xdata_let_dlist_empty_check,        runner);
-    XTEST_RUN_UNIT(xdata_let_dlist_insert_and_get,     runner);
-    XTEST_RUN_UNIT(xdata_let_dlist_remove,             runner);
-    XTEST_RUN_UNIT(xdata_let_dlist_size,               runner);
+    XTEST_RUN_UNIT(test_dlist_create_and_erase,  runner);
+    XTEST_RUN_UNIT(test_dlist_insert_and_size,   runner);
+    XTEST_RUN_UNIT(test_dlist_remove,            runner);
+    XTEST_RUN_UNIT(test_dlist_reverse_forward,   runner);
+    XTEST_RUN_UNIT(test_dlist_reverse_backward,  runner);
 } // end of func

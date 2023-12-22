@@ -37,331 +37,288 @@
 // =======================
 // CREATE and DELETE
 // =======================
+ctree* tscl_tree_create(ctofu_type tree) {
+    ctree* new_tree = (ctree*)malloc(sizeof(ctree));
+    if (new_tree == NULL) {
+        // Handle memory allocation failure
+        return NULL;
+    }
 
-// Function to create a new ctree
-ctree* tree_create(enum ctofu_type tree_type) {
-    ctree* tree = (ctree*)malloc(sizeof(ctree));
-    if (tree != NULL) {
-        tree->root = NULL;
-        tree->tree_type = tree_type;
-    } // end if
-    return tree;
-} // end of func
+    new_tree->root = NULL;
+    new_tree->tree = tree;
 
-// Helper function to destroy the tree recursively
-void tree_erase_recursive(ctree_node* node) {
+    return new_tree;
+}
+
+// Helper function to recursively erase nodes
+void tscl_tree_erase_recursive(ctree_node* node) {
     if (node == NULL) {
         return;
-    } // end if
+    }
 
-    tree_erase_recursive(node->left);
-    tree_erase_recursive(node->right);
+    tscl_tree_erase_recursive(node->left);
+    tscl_tree_erase_recursive(node->right);
+
     free(node);
-} // end of func
+}
 
-// Function to destroy the ctree
-void tree_erase(ctree* tree) {
-    if (tree != NULL) {
-        tree_erase_recursive(tree->root);
-        free(tree);
-    } // end if
-} // end of func
+void tscl_tree_erase(ctree* tree) {
+    if (tree == NULL) {
+        return;
+    }
+
+    // Recursively erase nodes starting from the root
+    tscl_tree_erase_recursive(tree->root);
+
+    free(tree);
+}
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
-// Function to insert a ctofu data into the tree
-ctofu_error tree_insert(ctree* tree, ctofu data) {
+// Helper function to recursively insert a node
+ctofu_error tscl_tree_insert_recursive(ctree_node** root, ctofu data) {
+    if (*root == NULL) {
+        *root = (ctree_node*)malloc(sizeof(ctree_node));
+        if (*root == NULL) {
+            // Handle memory allocation failure
+            return TOFU_WAS_BAD_MALLOC;
+        }
+
+        (*root)->data = data;
+        (*root)->left = NULL;
+        (*root)->right = NULL;
+
+        return TOFU_SUCCESS;
+    }
+
+    int compare_result;
+    ctofu_error comparison_error = tscl_tofu_compare(&data, &(*root)->data, &compare_result);
+    if (comparison_error != TOFU_SUCCESS) {
+        return comparison_error;
+    }
+
+    if (compare_result < 0) {
+        return tscl_tree_insert_recursive(&(*root)->left, data);
+    } else if (compare_result > 0) {
+        return tscl_tree_insert_recursive(&(*root)->right, data);
+    } else {
+        return TOFU_WAS_MISMATCH; // Duplicate element
+    }
+}
+
+ctofu_error tscl_tree_insert(ctree* tree, ctofu data) {
     if (tree == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    ctree_node* newNode = (ctree_node*)malloc(sizeof(ctree_node));
-    if (newNode == NULL) {
-        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
-    } // end if
+    return tscl_tree_insert_recursive(&tree->root, data);
+}
 
-    newNode->data = data;
-    newNode->left = NULL;
-    newNode->right = NULL;
+// Helper function to find the minimum node in a subtree
+ctree_node* tscl_tree_find_min(ctree_node* node) {
+    while (node->left != NULL) {
+        node = node->left;
+    }
+    return node;
+}
 
-    // If the tree is empty, set the new node as the root
-    if (tree->root == NULL) {
-        tree->root = newNode;
-        return TRILO_XDATA_TYPE_SUCCESS;
-    } // end if
+// Helper function to recursively remove a node
+ctofu_error tscl_tree_remove_recursive(ctree_node** root, ctofu data) {
+    if (*root == NULL) {
+        return TOFU_NOT_FOUND; // Element not found
+    }
 
-    // Otherwise, insert the new node into the tree
-    ctree_node* current = tree->root;
-    while (1) {
-        ctofu_error compareResult = tofu_compare(current->data, data);
+    int compare_result;
+    ctofu_error comparison_error = tscl_tofu_compare(&data, &(*root)->data, &compare_result);
+    if (comparison_error != TOFU_SUCCESS) {
+        return comparison_error;
+    }
 
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            free(newNode); // Data already exists, don't insert it again
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
-            // Determine whether to go left or right based on the comparison result
-            compareResult = tofu_compare(data, current->data);
+    if (compare_result < 0) {
+        return tscl_tree_remove_recursive(&(*root)->left, data);
+    } else if (compare_result > 0) {
+        return tscl_tree_remove_recursive(&(*root)->right, data);
+    } else {
+        // Node with the key found
 
-            if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
-                // Data with the same value already exists, don't insert it again
-                free(newNode);
-                return TRILO_XDATA_TYPE_SUCCESS;
-            } else if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-                // Insert as left child
-                if (current->left == NULL) {
-                    current->left = newNode;
-                    return TRILO_XDATA_TYPE_SUCCESS;
-                }
-                current = current->left;
-            } else {
-                // Insert as right child
-                if (current->right == NULL) {
-                    current->right = newNode;
-                    return TRILO_XDATA_TYPE_SUCCESS;
-                }
-                current = current->right;
-            }
+        // Case 1: Node with only one child or no child
+        if ((*root)->left == NULL) {
+            ctree_node* temp = *root;
+            *root = (*root)->right;
+            free(temp);
+        } else if ((*root)->right == NULL) {
+            ctree_node* temp = *root;
+            *root = (*root)->left;
+            free(temp);
         } else {
-            free(newNode); // Invalid comparison result, don't insert the data
-            return TRILO_XDATA_TYPE_WAS_UNKNOWN;
-        } // end if else
-    } // end while
-} // end of func
+            // Case 3: Node with two children
+            ctree_node* temp = tscl_tree_find_min((*root)->right);
+            (*root)->data = temp->data;
+            return tscl_tree_remove_recursive(&(*root)->right, temp->data);
+        }
 
-// Function to remove a ctofu data from the tree
-ctofu_error tree_remove(ctree* tree, ctofu data) {
+        return TOFU_SUCCESS;
+    }
+}
+
+ctofu_error tscl_tree_remove(ctree* tree, ctofu data) {
     if (tree == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    if (tree->root == NULL) {
-        return TRILO_XDATA_TYPE_SUCCESS; // Empty tree, nothing to remove
-    } // end if
+    return tscl_tree_remove_recursive(&tree->root, data);
+}
 
-    ctree_node* current = tree->root;
-    ctree_node* parent = NULL;
-    ctofu_error compareResult;
+// Helper function to recursively search for a node
+ctofu_error tscl_tree_search_recursive(const ctree_node* root, ctofu data) {
+    if (root == NULL) {
+        return TOFU_NOT_FOUND; // Element not found
+    }
 
-    while (current != NULL) {
-        compareResult = tofu_compare(current->data, data);
+    int compare_result;
+    ctofu_error comparison_error = tscl_tofu_compare(&data, &root->data, &compare_result);
+    if (comparison_error != TOFU_SUCCESS) {
+        return comparison_error;
+    }
 
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            // Node with the matching data found, perform removal
-            if (parent == NULL) {
-                // If the node to be removed is the root
-                if (current->left == NULL && current->right == NULL) {
-                    free(current);
-                    tree->root = NULL;
-                    return TRILO_XDATA_TYPE_SUCCESS;
-                } else if (current->left == NULL) {
-                    ctree_node* temp = current->right;
-                    free(current);
-                    tree->root = temp;
-                    return TRILO_XDATA_TYPE_SUCCESS;
-                } else if (current->right == NULL) {
-                    ctree_node* temp = current->left;
-                    free(current);
-                    tree->root = temp;
-                    return TRILO_XDATA_TYPE_SUCCESS;
-                } else {
-                    ctree_node* minRight = current->right;
-                    while (minRight->left != NULL) {
-                        minRight = minRight->left;
-                    }
-                    current->data = minRight->data;
-                    data = minRight->data;
-                    current = current->right;
-                }
-            } else {
-                // If the node to be removed is not the root
-                if (current->left == NULL && current->right == NULL) {
-                    free(current);
-                    if (parent->left == current) {
-                        parent->left = NULL;
-                    } else {
-                        parent->right = NULL;
-                    }
-                    return TRILO_XDATA_TYPE_SUCCESS;
-                } else if (current->left == NULL) {
-                    ctree_node* temp = current->right;
-                    free(current);
-                    if (parent->left == current) {
-                        parent->left = temp;
-                    } else {
-                        parent->right = temp;
-                    }
-                    return TRILO_XDATA_TYPE_SUCCESS;
-                } else if (current->right == NULL) {
-                    ctree_node* temp = current->left;
-                    free(current);
-                    if (parent->left == current) {
-                        parent->left = temp;
-                    } else {
-                        parent->right = temp;
-                    }
-                    return TRILO_XDATA_TYPE_SUCCESS;
-                } else {
-                    ctree_node* minRight = current->right;
-                    while (minRight->left != NULL) {
-                        minRight = minRight->left;
-                    }
-                    current->data = minRight->data;
-                    data = minRight->data;
-                    current = current->right;
-                    parent = current;
-                }
-            }
-        } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
-            // Determine whether to go left or right based on the comparison result
-            compareResult = tofu_compare(data, current->data);
+    if (compare_result == 0) {
+        return TOFU_SUCCESS; // Element found
+    } else if (compare_result < 0) {
+        return tscl_tree_search_recursive(root->left, data);
+    } else {
+        return tscl_tree_search_recursive(root->right, data);
+    }
+}
 
-            if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
-                // Data not found in the tree
-                return TRILO_XDATA_TYPE_SUCCESS;
-            } else if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-                parent = current;
-                current = current->left;
-            } else {
-                parent = current;
-                current = current->right;
-            }
-        } else {
-            return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Invalid comparison result
-        } // end if else if's
-    } // end while
-
-    return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Data not found in the tree
-} // end of func
-
-// Function to search for a ctofu data in the tree
-ctofu_error tree_search(const ctree* tree, ctofu data) {
+ctofu_error tscl_tree_search(const ctree* tree, ctofu data) {
     if (tree == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    ctree_node* current = tree->root;
-    ctofu_error compareResult;
-
-    while (current != NULL) {
-        compareResult = tofu_compare(current->data, data);
-
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            // Data found in the tree
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
-            // Determine whether to go left or right based on the comparison result
-            compareResult = tofu_compare(data, current->data);
-
-            if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
-                // Data not found in the tree
-                return TRILO_XDATA_TYPE_SUCCESS;
-            } else if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-                current = current->left;
-            } else {
-                current = current->right;
-            } // end if else if's
-        } else {
-            return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Invalid comparison result
-        } // end if else
-    } // end while
-
-    return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Data not found in the tree
-} // end of func
+    return tscl_tree_search_recursive(tree->root, data);
+}
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
-// Helper function to count nodes in the tree
-static void count_nodes(const ctree_node* node, size_t* count) {
-    if (node != NULL) {
-        (*count)++;
-        count_nodes(node->left, count);
-        count_nodes(node->right, count);
-    } // end if
-} // end of func
-
-// Function to get the size of the ctree
-size_t tree_size(const ctree* tree) {
-    if (tree == NULL || tree->root == NULL) {
+size_t tscl_tree_size_recursive(const ctree_node* root) {
+    if (root == NULL) {
         return 0;
-    } // end if
+    }
 
-    size_t count = 0;
-    count_nodes(tree->root, &count);
-    return count;
-} // end of func
+    return 1 + tscl_tree_size_recursive(root->left) + tscl_tree_size_recursive(root->right);
+}
 
-// Function to insert a ctofu data into the tree
-ctofu* tree_getter(const ctree* tree, ctofu data) {
+size_t tscl_tree_size(const ctree* tree) {
+    if (tree == NULL) {
+        return 0;
+    }
+
+    return tscl_tree_size_recursive(tree->root);
+}
+
+// Helper function to recursively get a pointer to a node's data
+ctofu* tscl_tree_getter_recursive(const ctree_node* root, ctofu data) {
+    if (root == NULL) {
+        return NULL;
+    }
+
+    int compare_result;
+    ctofu_error comparison_error = tscl_tofu_compare(&data, &root->data, &compare_result);
+    if (comparison_error != TOFU_SUCCESS) {
+        return NULL;
+    }
+
+    if (compare_result == 0) {
+        return (ctofu*)&root->data;
+    } else if (compare_result < 0) {
+        return tscl_tree_getter_recursive(root->left, data);
+    } else {
+        return tscl_tree_getter_recursive(root->right, data);
+    }
+}
+
+ctofu* tscl_tree_getter(const ctree* tree, ctofu data) {
     if (tree == NULL) {
         return NULL;
-    } // end if
+    }
 
-    ctree_node* current = tree->root;
-    ctofu_error compareResult;
+    return tscl_tree_getter_recursive(tree->root, data);
+}
 
-    while (current != NULL) {
-        compareResult = tofu_compare(current->data, data);
+// Helper function to recursively set the data of a node
+ctofu_error tscl_tree_setter_recursive(ctree_node* root, ctofu data) {
+    if (root == NULL) {
+        return TOFU_NOT_FOUND; // Element not found
+    }
 
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            // Data found in the tree, return a pointer to it
-            return &(current->data);
-        } else if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
-            // Determine whether to go left or right based on the comparison result
-            compareResult = tofu_compare(data, current->data);
+    int compare_result;
+    ctofu_error comparison_error = tscl_tofu_compare(&data, &root->data, &compare_result);
+    if (comparison_error != TOFU_SUCCESS) {
+        return comparison_error;
+    }
 
-            if (compareResult == TRILO_XDATA_TYPE_WAS_MISMATCH) {
-                // Data not found in the tree
-                return NULL;
-            } else if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-                current = current->left;
-            } else {
-                current = current->right;
-            }
-        } else {
-            return NULL; // Invalid comparison result
-        } // end if else's
-    } // end while
+    if (compare_result == 0) {
+        root->data = data; // Update the element
+        return TOFU_SUCCESS;
+    } else if (compare_result < 0) {
+        return tscl_tree_setter_recursive(root->left, data);
+    } else {
+        return tscl_tree_setter_recursive(root->right, data);
+    }
+}
 
-    return NULL; // Data not found in the tree
-} // end of func
+ctofu_error tscl_tree_setter(ctree* tree, ctofu data) {
+    if (tree == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
 
-// Function to insert a ctofu data into the tree
-ctofu_error tree_setter(ctree* tree, ctofu data) {
-    ctofu* existingData = tree_getter(tree, data);
+    return tscl_tree_setter_recursive(tree->root, data);
+}
 
-    if (existingData != NULL) {
-        // Data with the same value already exists, don't insert it again
-        return TRILO_XDATA_TYPE_SUCCESS;
-    } // end if
-
-    return tree_insert(tree, data);
-} // end of func
-
-// Function to check if the tree is empty
-bool tree_not_empty(const ctree* tree) {
+bool tscl_tree_not_empty(const ctree* tree) {
     return tree != NULL && tree->root != NULL;
-} // end of func
+}
 
-// Function to check if the tree is not null
-bool tree_not_cnullptr(const ctree* tree) {
+bool tscl_tree_not_cnullptr(const ctree* tree) {
     return tree != NULL;
-} // end of func
+}
 
-// Function to check if the tree is empty
-bool tree_is_empty(const ctree* tree) {
+bool tscl_tree_is_empty(const ctree* tree) {
     return tree == NULL || tree->root == NULL;
-} // end of func
+}
 
-// Function to check if the tree is null
-bool tree_is_cnullptr(const ctree* tree) {
+bool tscl_tree_is_cnullptr(const ctree* tree) {
     return tree == NULL;
-} // end of func
+}
 
-// Function to check if a ctofu data is in the tree
-bool tree_contains(const ctree* tree, ctofu data) {
-    return tree_getter(tree, data) != NULL;
-} // end of func
+bool tscl_tree_contains_recursive(const ctree_node* root, ctofu data) {
+    if (root == NULL) {
+        return false;
+    }
+
+    int compare_result;
+    ctofu_error comparison_error = tscl_tofu_compare(&data, &root->data, &compare_result);
+    if (comparison_error != TOFU_SUCCESS) {
+        return false;
+    }
+
+    if (compare_result == 0) {
+        return true; // Element found
+    } else if (compare_result < 0) {
+        return tscl_tree_contains_recursive(root->left, data);
+    } else {
+        return tscl_tree_contains_recursive(root->right, data);
+    }
+}
+
+bool tscl_tree_contains(const ctree* tree, ctofu data) {
+    if (tree == NULL) {
+        return false;
+    }
+
+    return tscl_tree_contains_recursive(tree->root, data);
+}

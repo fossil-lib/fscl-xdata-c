@@ -30,7 +30,6 @@
     ----------------------------------------------------------------------------
 */
 #include "trilobite/xdata/flist.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,115 +38,95 @@
 // CREATE and DELETE
 // =======================
 
-// Function to create a new cflist
-cflist* flist_create(enum ctofu_type list_type) {
-    cflist* flist = (cflist*)malloc(sizeof(cflist));
+cflist* tscl_flist_create(ctofu_type list_type) {
+    cflist* new_flist = (cflist*)malloc(sizeof(cflist));
+    if (new_flist == NULL) {
+        // Handle memory allocation failure
+        return NULL;
+    }
+
+    new_flist->list_type = list_type;
+    new_flist->head = NULL;
+
+    return new_flist;
+}
+
+void tscl_flist_erase(cflist* flist) {
     if (flist == NULL) {
-        exit(EXIT_FAILURE);
-    } // end if
+        return;
+    }
 
-    flist->head = NULL;
-    flist->list_type = list_type;
-
-    return flist;
-} // end of func
-
-// Function to destroy the cflist
-void flist_erase(cflist* flist) {
-    cflist_node* current = flist->head;
-    while (current != NULL) {
-        cflist_node* temp = current;
-        current = current->next;
-        free(temp);
-    } // end while
+    while (flist->head != NULL) {
+        ctofu data;
+        tscl_flist_remove(flist, &data);
+    }
 
     free(flist);
-} // end of func
+}
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
 
-// Function to insert a ctofu data into the list
-ctofu_error flist_insert(cflist* flist, ctofu data) {
+ctofu_error tscl_flist_insert(cflist* flist, ctofu data) {
     if (flist == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
-    if (flist->list_type != data.type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    cflist_node* newNode = (cflist_node*)malloc(sizeof(cflist_node));
-    if (newNode == NULL) {
-        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
-    } // end if
+    cflist_node* new_node = (cflist_node*)malloc(sizeof(cflist_node));
+    if (new_node == NULL) {
+        // Handle memory allocation failure
+        return TOFU_WAS_BAD_MALLOC;
+    }
 
-    newNode->data = data;
-    newNode->next = flist->head;
-    flist->head = newNode;
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
+    new_node->data = data;
+    new_node->next = flist->head;
+    flist->head = new_node;
 
-// Function to remove a ctofu data from the list
-ctofu_error flist_remove(cflist* flist, ctofu data) {
+    return TOFU_SUCCESS;
+}
+
+ctofu_error tscl_flist_remove(cflist* flist, ctofu* data) {
+    if (flist == NULL || data == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (flist->head == NULL) {
+        return TOFU_NOT_FOUND; // List is empty
+    }
+
+    cflist_node* temp = flist->head;
+    flist->head = flist->head->next;
+
+    *data = temp->data;
+    free(temp);
+
+    return TOFU_SUCCESS;
+}
+
+ctofu_error tscl_flist_search(const cflist* flist, ctofu data) {
     if (flist == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
-    if (flist->list_type != data.type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
-
-    cflist_node* current = flist->head;
-    cflist_node* prev = NULL;
-
-    while (current != NULL) {
-        if (current->data.type == data.type) {
-            // Check the data type before comparing values
-            if (current->data.type == INTEGER_TYPE && current->data.data.integer_type == data.data.integer_type) {
-                if (prev == NULL) {
-                    flist->head = current->next;
-                } else {
-                    prev->next = current->next;
-                } // end if else
-                free(current);
-                return TRILO_XDATA_TYPE_SUCCESS;
-            } // end if
-        } // end if
-
-        prev = current;
-        current = current->next;
-    } // end while
-
-    return TRILO_XDATA_TYPE_WAS_UNKNOWN;
-} // end of func
-
-// Function to search for a ctofu data in the list
-ctofu_error flist_search(const cflist* flist, ctofu data) {
-    if (flist == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
-    if (flist->list_type != data.type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
     cflist_node* current = flist->head;
 
     while (current != NULL) {
-        if (current->data.type == data.type) {
-            // Check the data type before comparing values
-            if (current->data.type == INTEGER_TYPE && current->data.data.integer_type == data.data.integer_type) {
-                return true;
-            } // end if
-        } // end if
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+            return TOFU_SUCCESS; // Found
+        }
 
         current = current->next;
-    } // end while
+    }
 
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
+    return TOFU_NOT_FOUND; // Not found
+}
 
-// Function to reverse the list in the forward direction
-void flist_reverse_forword(cflist* flist) {
+void tscl_flist_reverse_forward(cflist* flist) {
+    if (flist == NULL || flist->head == NULL) {
+        return;
+    }
+
     cflist_node* prev = NULL;
     cflist_node* current = flist->head;
     cflist_node* next = NULL;
@@ -157,116 +136,99 @@ void flist_reverse_forword(cflist* flist) {
         current->next = prev;
         prev = current;
         current = next;
-    } // end while
+    }
 
     flist->head = prev;
-} // end of func
+}
 
-// Function to reverse the list in the backward direction
-void flist_reverse_backward(cflist* flist) {
-    // Assuming you want to reverse the list by using additional memory
+void tscl_flist_reverse_backward(cflist* flist) {
+    if (flist == NULL || flist->head == NULL) {
+        return;
+    }
+
+    cflist_node* prev = NULL;
     cflist_node* current = flist->head;
-    cflist_node* reversed = NULL;
+    cflist_node* next = NULL;
 
     while (current != NULL) {
-        cflist_node* newNode = (cflist_node*)malloc(sizeof(cflist_node));
-        if (newNode == NULL) {
-            exit(EXIT_FAILURE);
-        } // end if
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
 
-        newNode->data = current->data;
-        newNode->next = reversed;
-        reversed = newNode;
-
-        current = current->next;
-    } // end while
-
-    // Clean up the original list
-    while (flist->head != NULL) {
-        cflist_node* temp = flist->head;
-        flist->head = flist->head->next;
-        free(temp);
-    } // end while
-
-    flist->head = reversed;
-} // end of func
+    flist->head = prev;
+}
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-
-// Function to get the size of the cflist
-size_t flist_size(const cflist* flist) {
+size_t tscl_flist_size(const cflist* flist) {
     if (flist == NULL) {
         return 0;
-    } // end if
+    }
 
-    size_t count = 0;
+    size_t size = 0;
     cflist_node* current = flist->head;
+
     while (current != NULL) {
-        count++;
+        ++size;
         current = current->next;
-    } // end while
+    }
 
-    return count;
-} // end of func
+    return size;
+}
 
-// Function to get a pointer to a ctofu data in the list
-ctofu* flist_getter(cflist* flist, ctofu data) {
-    if (flist == NULL || flist->list_type != data.type) {
-        return NULL;
-    } // end if
-
-    cflist_node* current = flist->head;
-    while (current != NULL) {
-        if (tofu_compare(current->data, data) == 0) {
-            // Found the matching data, return a pointer to the data
-            return &(current->data);
-        } // end if
-        current = current->next;
-    } // end while
-
-    return NULL; // Return NULL if the data is not found
-} // end of func
-
-// Function to set a ctofu data in the list
-ctofu_error flist_setter(cflist* flist, ctofu data) {
+ctofu* tscl_flist_getter(cflist* flist, ctofu data) {
     if (flist == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
-    if (flist->list_type != data.type) {
-        return TRILO_XDATA_TYPE_WAS_MISMATCH;
-    } // end if
+        return NULL;
+    }
 
-    // Check if the data already exists in the list
-    ctofu* existingData = flist_getter(flist, data);
+    cflist_node* current = flist->head;
 
-    if (existingData != NULL) {
-        // Data already exists, update the existing data
-        *existingData = data;
-    } else {
-        // Data doesn't exist, insert a new node with the provided data
-        flist_insert(flist, data);
-    } // end if else
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
+    while (current != NULL) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+            return &current->data; // Found
+        }
 
-// Function to check if the list is not empty
-bool flist_not_empty(const cflist* flist) {
-    return flist_size(flist) > 0;
-} // end of func
+        current = current->next;
+    }
 
-// Function to check if the list is not null
-bool flist_not_cnullptr(const cflist* flist) {
+    return NULL; // Not found
+}
+
+ctofu_error tscl_flist_setter(cflist* flist, ctofu data) {
+    if (flist == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    cflist_node* current = flist->head;
+
+    while (current != NULL) {
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+            // Found, update the data
+            current->data = data;
+            return TOFU_SUCCESS;
+        }
+
+        current = current->next;
+    }
+
+    return TOFU_NOT_FOUND; // Not found
+}
+
+bool tscl_flist_not_empty(const cflist* flist) {
+    return flist != NULL && flist->head != NULL;
+}
+
+bool tscl_flist_not_cnullptr(const cflist* flist) {
     return flist != NULL;
-} // end of func
+}
 
-// Function to check if the list is empty
-bool flist_is_empty(const cflist* flist) {
-    return !flist_not_empty(flist);
-} // end of func
+bool tscl_flist_is_empty(const cflist* flist) {
+    return flist == NULL || flist->head == NULL;
+}
 
-// Function to check if the list is null
-bool flist_is_cnullptr(const cflist* flist) {
-    return !flist_not_cnullptr(flist);
-} // end of func
+bool tscl_flist_is_cnullptr(const cflist* flist) {
+    return flist == NULL;
+}

@@ -34,127 +34,203 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Initialize a cmap
-cmap* map_create(enum ctofu_type list_type) {
-    cmap* map = malloc(sizeof(cmap));
-    if (map) {
-        map->size = 0;
-    } // end if
-    return map;
-} // end of func
+// =======================
+// CREATE and DELETE
+// =======================
 
-// Destroy the cmap
-void map_erase(cmap* map) {
-    if (map) {
-        for (size_t i = 0; i < map->size; i++) {
-            // No need to destroy the key and value
-        } // end for
-        free(map);
-    } // end if
-} // end of func
+cmap* tscl_map_create(ctofu_type list_type) {
+    cmap* new_map = (cmap*)malloc(sizeof(cmap));
+    if (new_map == NULL) {
+        // Handle memory allocation failure
+        return NULL;
+    }
 
-// Insert a key-value pair into the map
-ctofu_error map_insert(cmap* map, ctofu key, ctofu value) {
-    if (map && map->size < MAX_MAP_SIZE) {
-        map->keys[map->size] = key;
-        map->values[map->size] = value;
-        map->size++;
-        return TRILO_XDATA_TYPE_SUCCESS;
-    } // end if
-    return TRILO_XDATA_TYPE_WAS_BAD_RANGE; // Map is full
-} // end of func
+    new_map->size = 0;
 
-// Remove a key-value pair by key
-ctofu_error map_remove(cmap* map, ctofu key) {
-    if (map) {
-        for (size_t i = 0; i < map->size; i++) {
-            if (tofu_equal(key, map->keys[i])) {
-                // No need to destroy the key and value
-                // Shift elements to remove the key-value pair
-                for (size_t j = i; j < map->size - 1; j++) {
-                    map->keys[j] = map->keys[j + 1];
-                    map->values[j] = map->values[j + 1];
-                } // end for
-                map->size--;
-                return TRILO_XDATA_TYPE_SUCCESS;
-            } // end if
-        } // end for
-    } // end if
-    return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Key not found
-} // end of func
+    return new_map;
+}
 
-// Search for a key in the map
-ctofu_error map_search(const cmap* map, ctofu key) {
-    if (map) {
-        for (size_t i = 0; i < map->size; i++) {
-            if (tofu_equal(key, map->keys[i])) {
-                return TRILO_XDATA_TYPE_SUCCESS;
-            } // end if
-        } // end for
-    } // end if
-    return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Key not found
-} // end of func
+void tscl_map_erase(cmap* map) {
+    if (map == NULL) {
+        return;
+    }
 
-// Get the size of the map
-size_t map_size(const cmap* map) {
-    return map ? map->size : 0;
-} // end of func
+    free(map);
+}
 
-// Getter function to retrieve a key-value pair
-ctofu_error map_getter(cmap* map, ctofu key, ctofu* value) {
-    if (map) {
-        for (size_t i = 0; i < map->size; i++) {
-            if (tofu_equal(key, map->keys[i])) {
-                *value = map->values[i];
-                return TRILO_XDATA_TYPE_SUCCESS;
-            } // end if
-        } // end for
-    } // end if
-    return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Key not found
-} // end of func
+// =======================
+// ALGORITHM FUNCTIONS
+// =======================
 
-// Setter function to update a key-value pair
-ctofu_error map_setter(cmap* map, ctofu key, ctofu value) {
-    if (map) {
-        for (size_t i = 0; i < map->size; i++) {
-            if (tofu_equal(key, map->keys[i])) {
-                // No need to destroy the old value
-                map->values[i] = value;
-                return TRILO_XDATA_TYPE_SUCCESS;
-            } // end if
-        } // end for
-    } // end if
-    return TRILO_XDATA_TYPE_WAS_UNKNOWN; // Key not found
-} // end of func
+ctofu_error tscl_map_insert(cmap* map, ctofu key, ctofu value) {
+    if (map == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
 
-// Check if the map is not empty
-bool map_not_empty(const cmap* map) {
-    return map ? map->size > 0 : false;
-} // end of func
+    if (map->size >= MAX_MAP_SIZE) {
+        return TOFU_WAS_BAD_RANGE; // Map is full
+    }
 
-// Check if the map is not a null pointer
-bool map_not_cnullptr(const cmap* map) {
+    // Check if the key already exists
+    for (size_t i = 0; i < map->size; ++i) {
+        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+            return TOFU_WAS_MISMATCH; // Duplicate key
+        }
+    }
+
+    map->keys[map->size] = key;
+    map->values[map->size] = value;
+    map->size++;
+
+    return TOFU_SUCCESS;
+}
+
+ctofu_error tscl_map_remove(cmap* map, ctofu key) {
+    if (map == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    size_t index = MAX_MAP_SIZE;
+
+    // Find the index of the key
+    for (size_t i = 0; i < map->size; ++i) {
+        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index == MAX_MAP_SIZE) {
+        return TOFU_NOT_FOUND; // Key not found
+    }
+
+    // Shift elements to fill the gap
+    for (size_t i = index; i < map->size - 1; ++i) {
+        map->keys[i] = map->keys[i + 1];
+        map->values[i] = map->values[i + 1];
+    }
+
+    map->size--;
+
+    return TOFU_SUCCESS;
+}
+
+ctofu_error tscl_map_search(const cmap* map, ctofu key) {
+    if (map == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    for (size_t i = 0; i < map->size; ++i) {
+        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+            return TOFU_SUCCESS; // Found
+        }
+    }
+
+    return TOFU_NOT_FOUND; // Key not found
+}
+
+// =======================
+// UTILITY FUNCTIONS
+// =======================
+
+size_t tscl_map_size(const cmap* map) {
+    if (map == NULL) {
+        return 0;
+    }
+
+    return map->size;
+}
+
+ctofu_error tscl_map_getter(cmap* map, ctofu key, ctofu* value) {
+    if (map == NULL || value == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    for (size_t i = 0; i < map->size; ++i) {
+        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+            *value = map->values[i];
+            return TOFU_SUCCESS; // Found
+        }
+    }
+
+    return TOFU_NOT_FOUND; // Key not found
+}
+
+ctofu_error tscl_map_setter(cmap* map, ctofu key, ctofu value) {
+    if (map == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    for (size_t i = 0; i < map->size; ++i) {
+        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+            // Found, update the value
+            map->values[i] = value;
+            return TOFU_SUCCESS;
+        }
+    }
+
+    return TOFU_NOT_FOUND; // Key not found
+}
+
+bool tscl_map_not_empty(const cmap* map) {
+    return map != NULL && map->size > 0;
+}
+
+bool tscl_map_not_cnullptr(const cmap* map) {
     return map != NULL;
-} // end of func
+}
 
-// Check if the map is empty
-bool map_is_empty(const cmap* map) {
-    return map ? map->size == 0 : true;
-} // end of func
+bool tscl_map_is_empty(const cmap* map) {
+    return map == NULL || map->size == 0;
+}
 
-// Check if the map is a null pointer
-bool map_is_cnullptr(const cmap* map) {
+bool tscl_map_is_cnullptr(const cmap* map) {
     return map == NULL;
-} // end of func
+}
 
-// Check if a key exists in the map
-bool map_contains(const cmap* map, ctofu key) {
-    if (map) {
-        for (size_t i = 0; i < map->size; i++) {
-            if (tofu_equal(key, map->keys[i])) {
-                return true;
-            } // end if
-        } // end for
-    } // end if
-    return false;
-} // end of func
+bool tscl_map_contains(const cmap* map, ctofu key) {
+    if (map == NULL) {
+        return false;
+    }
+
+    for (size_t i = 0; i < map->size; ++i) {
+        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+            return true; // Found
+        }
+    }
+
+    return false; // Key not found
+}
+
+// =======================
+// ITERATOR FUNCTIONS
+// =======================
+ctofu_iterator tscl_map_iterator_start(cmap* map) {
+    ctofu_iterator iterator;
+    iterator.current_key = map->keys;
+    iterator.current_value = map->values;
+    iterator.index = 0;
+
+    return iterator;
+}
+
+ctofu_iterator tscl_map_iterator_end(cmap* map) {
+    ctofu_iterator iterator;
+    iterator.current_key = map->keys + map->size;
+    iterator.current_value = map->values + map->size;
+    iterator.index = map->size;
+
+    return iterator;
+}
+
+ctofu_iterator tscl_map_iterator_next(ctofu_iterator iterator) {
+    iterator.current_key++;
+    iterator.current_value++;
+    iterator.index++;
+
+    return iterator;
+}
+
+bool tscl_map_iterator_has_next(ctofu_iterator iterator) {
+    return iterator.index < MAX_MAP_SIZE;
+}

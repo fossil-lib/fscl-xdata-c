@@ -38,184 +38,176 @@
 // CREATE and DELETE
 // =======================
 
-// Function to create a new cqueue
-cqueue* queue_create(enum ctofu_type queue_type) {
-    cqueue* queue = (cqueue*)malloc(sizeof(cqueue));
-    if (queue != NULL) {
-        queue->front = NULL;
-        queue->rear = NULL;
-        queue->queue_type = queue_type;
-    } // end if
-    return queue;
-} // end of func
+cqueue* tscl_queue_create(ctofu_type queue_type) {
+    cqueue* new_queue = (cqueue*)malloc(sizeof(cqueue));
+    if (new_queue == NULL) {
+        // Handle memory allocation failure
+        return NULL;
+    }
 
-// Function to destroy the cqueue
-void queue_erase(cqueue* queue) {
-    if (queue != NULL) {
-        // Free all nodes in the queue
-        while (queue->front != NULL) {
-            cqueue_node* temp = queue->front;
-            queue->front = queue->front->next;
-            free(temp);
-        } // end while
-        free(queue);
-    } // end if
-} // end of func
+    new_queue->queue_type = queue_type;
+    new_queue->front = NULL;
+    new_queue->rear = NULL;
+
+    return new_queue;
+}
+
+void tscl_queue_erase(cqueue* queue) {
+    if (queue == NULL) {
+        return;
+    }
+
+    while (queue->front != NULL) {
+        ctofu data;
+        tscl_queue_remove(queue, &data);
+    }
+
+    free(queue);
+}
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-// Function to insert a ctofu data into the queue
-ctofu_error queue_insert(cqueue* queue, ctofu data) {
+
+ctofu_error tscl_queue_insert(cqueue* queue, ctofu data) {
     if (queue == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
-    cqueue_node* newNode = (cqueue_node*)malloc(sizeof(cqueue_node));
-    if (newNode == NULL) {
-        return TRILO_XDATA_TYPE_WAS_BAD_MALLOC;
-    } // end if
+    cqueue_node* new_node = (cqueue_node*)malloc(sizeof(cqueue_node));
+    if (new_node == NULL) {
+        // Handle memory allocation failure
+        return TOFU_WAS_BAD_MALLOC;
+    }
 
-    newNode->data = data;
-    newNode->next = NULL;
+    new_node->data = data;
+    new_node->next = NULL;
 
     if (queue->rear == NULL) {
-        queue->front = newNode;
-        queue->rear = newNode;
+        // Queue is empty
+        queue->front = new_node;
+        queue->rear = new_node;
     } else {
-        queue->rear->next = newNode;
-        queue->rear = newNode;
-    } // end if else
+        queue->rear->next = new_node;
+        queue->rear = new_node;
+    }
 
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
+    return TOFU_SUCCESS;
+}
 
-// Function to remove a ctofu data from the queue
-ctofu_error queue_remove(cqueue* queue) {
-    // Check if the queue is NULL or empty
-    if (queue == NULL || queue_is_empty(queue)) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+ctofu_error tscl_queue_remove(cqueue* queue, ctofu* data) {
+    if (queue == NULL || data == NULL) {
+        return TOFU_WAS_NULLPTR;
+    }
 
-    // Save a reference to the front node
-    cqueue_node* frontNode = queue->front;
-
-    // Update the front pointer to the next node
-    queue->front = frontNode->next;
-
-    // If the removed node was the last one, update the rear pointer
     if (queue->front == NULL) {
+        return TOFU_NOT_FOUND; // Queue is empty
+    }
+
+    cqueue_node* temp = queue->front;
+    *data = temp->data;
+
+    if (queue->front == queue->rear) {
+        // Only one element in the queue
+        free(temp);
+        queue->front = NULL;
         queue->rear = NULL;
-    } // end if
+    } else {
+        queue->front = queue->front->next;
+        free(temp);
+    }
 
-    // Free the memory of the removed node
-    free(frontNode);
+    return TOFU_SUCCESS;
+}
 
-    return TRILO_XDATA_TYPE_SUCCESS;
-} // end of func
-
-// Function to search for a ctofu data in the queue
-ctofu_error queue_search(const cqueue* queue, ctofu data) {
+ctofu_error tscl_queue_search(const cqueue* queue, ctofu data) {
     if (queue == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
     cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        ctofu_error compareResult = tofu_compare(current->data, data);
-
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } // end if
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+            return TOFU_SUCCESS; // Found
+        }
 
         current = current->next;
-    } // end while
+    }
 
-    return TRILO_XDATA_TYPE_SUCCESS;  // No matching data found
-} // end of func
-
+    return TOFU_NOT_FOUND; // Not found
+}
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-// Function to get the size of the cqueue
-size_t queue_size(const cqueue* queue) {
+
+size_t tscl_queue_size(const cqueue* queue) {
     if (queue == NULL) {
         return 0;
-    } // end if
+    }
 
     size_t size = 0;
     cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        size++;
+        ++size;
         current = current->next;
-    } // end while
+    }
 
     return size;
-} // end of func
+}
 
-// Function to insert a ctofu data into the queue
-ctofu* queue_getter(cqueue* queue, ctofu data) {
+ctofu* tscl_queue_getter(cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return NULL;
-    } // end if
+    }
 
     cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        ctofu_error compareResult = tofu_compare(current->data, data);
-
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            return &current->data;
-        } // end if
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+            return &current->data; // Found
+        }
 
         current = current->next;
-    } // end while
+    }
 
-    return NULL;  // No matching data found
-} // end of func
+    return NULL; // Not found
+}
 
-// Function to insert a ctofu data into the queue
-ctofu_error queue_setter(cqueue* queue, ctofu data) {
+ctofu_error tscl_queue_setter(cqueue* queue, ctofu data) {
     if (queue == NULL) {
-        return TRILO_XDATA_TYPE_WAS_NULLPTR;
-    } // end if
+        return TOFU_WAS_NULLPTR;
+    }
 
     cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        ctofu_error compareResult = tofu_compare(current->data, data);
-
-        if (compareResult == TRILO_XDATA_TYPE_SUCCESS) {
-            // Data with the same value already exists
+        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+            // Found, update the data
             current->data = data;
-            return TRILO_XDATA_TYPE_SUCCESS;
-        } // end if
+            return TOFU_SUCCESS;
+        }
 
         current = current->next;
-    } // end while
+    }
 
-    return TRILO_XDATA_TYPE_SUCCESS;  // No matching data found, insert as a new node
-} // end of func
+    return TOFU_NOT_FOUND; // Not found
+}
 
-// Function to check if the queue is not empty
-bool queue_not_empty(const cqueue* queue) {
+bool tscl_queue_not_empty(const cqueue* queue) {
     return queue != NULL && queue->front != NULL;
-} // end of func
+}
 
-// Function to check if the queue is not null
-bool queue_not_cnullptr(const cqueue* queue) {
+bool tscl_queue_not_cnullptr(const cqueue* queue) {
     return queue != NULL;
-} // end of func
+}
 
-// Function to check if the queue is empty
-bool queue_is_empty(const cqueue* queue) {
+bool tscl_queue_is_empty(const cqueue* queue) {
     return queue == NULL || queue->front == NULL;
-} // end of func
+}
 
-// Function to check if the queue is null
-bool queue_is_cnullptr(const cqueue* queue) {
+bool tscl_queue_is_cnullptr(const cqueue* queue) {
     return queue == NULL;
-} // end of func
+}

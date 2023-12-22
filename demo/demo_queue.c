@@ -33,22 +33,34 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cqueue instance with INTEGER_TYPE
-    cqueue* queue = queue_create(INTEGER_TYPE);
+    // Create a queue for integers
+    cqueue* int_queue = tscl_queue_create(INTEGER_TYPE);
 
-    // Insert data elements into the cqueue
-    queue_insert(queue, tofu_create_from_integer(10));
-    queue_insert(queue, tofu_create_from_integer(20));
-    queue_insert(queue, tofu_create_from_integer(30));
+    // Insert elements into the queue
+    tscl_queue_insert(int_queue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 10});
+    tscl_queue_insert(int_queue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 20});
+    tscl_queue_insert(int_queue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 30});
 
-    // Check if the cqueue is not empty
-    printf("Is queue not empty? %s\n", queue_not_empty(queue) ? "true" : "false");
+    // Display queue size
+    printf("Queue Size: %zu\n", tscl_queue_size(int_queue));
 
-    // Check if the cqueue is not empty
-    printf("Is queue not empty? %s\n", queue_not_empty(queue) ? "true" : "false");
+    // Check if the queue is not empty
+    if (tscl_queue_not_empty(int_queue)) {
+        printf("The queue is not empty.\n");
+    }
 
-    // Destroy the cqueue
-    queue_erase(queue);
+    // Remove an element from the queue
+    ctofu removed_element;
+    tscl_queue_remove(int_queue, &removed_element);
+
+    // Display the removed element
+    printf("Removed Element: %d\n", removed_element.data.integer_type);
+
+    // Display updated queue size
+    printf("Queue Size after removal: %zu\n", tscl_queue_size(int_queue));
+
+    // Clean up
+    tscl_queue_erase(int_queue);
 
     return 0;
 } // end of func

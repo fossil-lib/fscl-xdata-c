@@ -33,47 +33,44 @@
 #include <stdio.h>
 
 int main() {
-    cmap* map = map_create(STRING_TYPE);
+    // Create a map for integers
+    cmap* int_map = tscl_map_create(INTEGER_TYPE);
 
     // Insert key-value pairs into the map
-    ctofu key1 = tofu_create_from_string("name");
-    ctofu value1 = tofu_create_from_string("John");
-    map_insert(map, key1, value1);
+    tscl_map_insert(int_map, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 1}, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 10});
+    tscl_map_insert(int_map, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 20});
+    tscl_map_insert(int_map, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 3}, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 30});
 
-    ctofu key2 = tofu_create_from_string("age");
-    ctofu value2 = tofu_create_from_integer(30);
-    map_insert(map, key2, value2);
+    // Display the size of the map
+    printf("Map Size: %zu\n", tscl_map_size(int_map));
 
-    // Lookup values by key
-    ctofu result;
-    ctofu_error lookupResult = map_search(map, key1);
-    if (lookupResult == TRILO_XDATA_TYPE_SUCCESS) {
-        map_getter(map, key1, &result);
-        printf("Name: %s\n", tofu_get_string(result));
-    } // end if
+    // Check if the map is not empty
+    if (tscl_map_not_empty(int_map)) {
+        printf("The map is not empty.\n");
+    }
 
-    lookupResult = map_search(map, key2);
-    if (lookupResult == TRILO_XDATA_TYPE_SUCCESS) {
-        map_getter(map, key2, &result);
-        printf("Age: %d\n", tofu_get_integer(result));
-    } // end if
-
-    // Remove a key-value pair
-    map_remove(map, key1);
-
-    // Check if a key exists
-    if (map_contains(map, key1)) {
-        printf("Key 'name' exists in the map.\n");
+    // Search for a key in the map
+    ctofu searched_value;
+    if (tscl_map_search(int_map, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}) == 0) {
+        printf("Key found in the map.\n");
+        // Get the value associated with the key
+        tscl_map_getter(int_map, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}, &searched_value);
+        printf("Associated Value: %d\n", searched_value.data.integer_type);
     } else {
-        printf("Key 'name' does not exist in the map.\n");
-    } // end if else
+        printf("Key not found in the map.\n");
+    }
 
-    // Get the number of key-value pairs in the map
-    size_t mapSize = map_size(map);
-    printf("Map size: %zu\n");
+    // Display the key-value pairs using an iterator
+    ctofu_iterator iterator = tscl_map_iterator_start(int_map);
+    while (tscl_map_iterator_has_next(iterator)) {
+        ctofu key = *iterator.current_key;
+        ctofu value = *iterator.current_value;
+        printf("Key: %d, Value: %d\n", key.data.integer_type, value.data.integer_type);
+        iterator = tscl_map_iterator_next(iterator);
+    }
 
-    // Destroy the map
-    map_erase(map);
+    // Clean up
+    tscl_map_erase(int_map);
 
     return 0;
 }

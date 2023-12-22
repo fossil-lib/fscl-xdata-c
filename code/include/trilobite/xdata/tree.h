@@ -37,8 +37,8 @@
 
    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
 */
-#ifndef TRILOBITE_XDATA_TREE_H
-#define TRILOBITE_XDATA_TREE_H
+#ifndef TSCL_TREE_H
+#define TSCL_TREE_H
 
 #ifdef __cplusplus
 extern "C"
@@ -55,131 +55,35 @@ typedef struct ctree_node {
 } ctree_node;
 
 // Tree structure
-typedef struct ctree {
+typedef struct {
     ctree_node* root;
-    enum ctofu_type tree_type;  // Type of the tree
+    ctofu_type tree; // Type of the tree
 } ctree;
 
 // =======================
 // CREATE and DELETE
 // =======================
-
-/**
- * @brief Creates a new ctree instance with the specified list type.
- *
- * @param list_type The data type for the ctree (e.g., INTEGER_TYPE, DOUBLE_TYPE).
- * @return A pointer to the newly created ctree instance.
- */
-ctree* tree_create(enum ctofu_type list_type);
-
-/**
- * @brief Destroys the ctree instance, freeing all associated memory.
- *
- * @param tree The ctree instance to be destroyed.
- */
-void tree_erase(ctree* tree);
+ctree* tscl_tree_create(ctofu_type tree);
+void tscl_tree_erase(ctree* tree);
 
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-
-/**
- * @brief Inserts a ctofu data element into the ctree.
- *
- * @param tree The ctree where the data will be inserted.
- * @param data The ctofu data element to be inserted.
- * @return A ctofu_error value indicating the result of the insertion.
- */
-ctofu_error tree_insert(ctree* tree, ctofu data);
-
-/**
- * @brief Removes a ctofu data element from the ctree.
- *
- * @param tree The ctree from which the data will be removed.
- * @param data The ctofu data element to be removed.
- * @return A ctofu_error value indicating the result of the removal.
- */
-ctofu_error tree_remove(ctree* tree, ctofu data);
-
-/**
- * @brief Searches for a ctofu data element in the ctree.
- *
- * @param tree The ctree to search within.
- * @param data The ctofu data element to search for.
- * @return A ctofu_error value indicating the result of the search.
- */
-ctofu_error tree_search(const ctree* tree, ctofu data);
+ctofu_error tscl_tree_insert(ctree* tree, ctofu data);
+ctofu_error tscl_tree_remove(ctree* tree, ctofu data);
+ctofu_error tscl_tree_search(const ctree* tree, ctofu data);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-
-/**
- * @brief Gets the size of the ctree.
- *
- * @param tree The ctree for which the size will be determined.
- * @return The size of the ctree.
- */
-size_t tree_size(const ctree* tree);
-
-/**
- * @brief Getter function to retrieve a ctofu data element from the ctree.
- *
- * @param tree The ctree from which the data will be retrieved.
- * @param data The ctofu data element to retrieve.
- * @return A pointer to the ctofu data element in the ctree (or NULL if not found).
- */
-ctofu* tree_getter(const ctree* tree, ctofu data);
-
-/**
- * @brief Setter function to update a ctofu data element in the ctree.
- *
- * @param tree The ctree in which the data will be updated.
- * @param data The ctofu data element to update.
- * @return A ctofu_error value indicating the result of the update.
- */
-ctofu_error tree_setter(ctree* tree, ctofu data);
-
-/**
- * @brief Checks if the ctree is not empty.
- *
- * @param tree The ctree to check.
- * @return true if the ctree is not empty, false otherwise.
- */
-bool tree_not_empty(const ctree* tree);
-
-/**
- * @brief Checks if the ctree is not a null pointer.
- *
- * @param tree The ctree to check.
- * @return true if the ctree is not a null pointer, false otherwise.
- */
-bool tree_not_cnullptr(const ctree* tree);
-
-/**
- * @brief Checks if the ctree is empty.
- *
- * @param tree The ctree to check.
- * @return true if the ctree is empty, false otherwise.
- */
-bool tree_is_empty(const ctree* tree);
-
-/**
- * @brief Checks if the ctree is a null pointer.
- *
- * @param tree The ctree to check.
- * @return true if the ctree is a null pointer, false otherwise.
- */
-bool tree_is_cnullptr(const ctree* tree);
-
-/**
- * @brief Checks if a ctofu data element is present in the ctree.
- *
- * @param tree The ctree to check.
- * @param data The ctofu data element to search for.
- * @return true if the data element is present, false otherwise.
- */
-bool tree_contains(const ctree* tree, ctofu data);
+size_t tscl_tree_size(const ctree* tree);
+ctofu* tscl_tree_getter(const ctree* tree, ctofu data);
+ctofu_error tscl_tree_setter(ctree* tree, ctofu data);
+bool tscl_tree_not_empty(const ctree* tree);
+bool tscl_tree_not_cnullptr(const ctree* tree);
+bool tscl_tree_is_empty(const ctree* tree);
+bool tscl_tree_is_cnullptr(const ctree* tree);
+bool tscl_tree_contains(const ctree* tree, ctofu data);
 
 #ifdef __cplusplus
 }

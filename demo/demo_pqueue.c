@@ -33,25 +33,35 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cpqueue instance with INTEGER_TYPE
-    cpqueue* pqueue = pqueue_create(INTEGER_TYPE);
+    // Create a priority queue for integers
+    cpqueue* int_pqueue = tscl_pqueue_create(INTEGER_TYPE);
 
-    // Insert data elements into the cpqueue with priorities
-    pqueue_insert(pqueue, tofu_create_from_integer(10), 3);
-    pqueue_insert(pqueue, tofu_create_from_integer(20), 1);
-    pqueue_insert(pqueue, tofu_create_from_integer(30), 2);
+    // Insert elements with priorities into the priority queue
+    tscl_pqueue_insert(int_pqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 10}, 2);
+    tscl_pqueue_insert(int_pqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 20}, 1);
+    tscl_pqueue_insert(int_pqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 30}, 3);
 
-    // Print the size of the cpqueue
-    printf("Size of the priority queue: %zu\n", pqueue_size(pqueue));
+    // Display priority queue size
+    printf("Priority Queue Size: %zu\n", tscl_pqueue_size(int_pqueue));
 
-    // Check if the cpqueue is not empty
-    printf("Is priority queue not empty? %s\n", pqueue_not_empty(pqueue) ? "true" : "false");
+    // Check if the priority queue is not empty
+    if (tscl_pqueue_not_empty(int_pqueue)) {
+        printf("The priority queue is not empty.\n");
+    }
 
-    // Check if the cpqueue is not empty
-    printf("Is priority queue not empty? %s\n", pqueue_not_empty(pqueue) ? "true" : "false");
+    // Remove an element with priority from the priority queue
+    ctofu removed_element;
+    int removed_priority;
+    tscl_pqueue_remove(int_pqueue, &removed_element, &removed_priority);
 
-    // Destroy the cpqueue
-    pqueue_erase(pqueue);
+    // Display the removed element and its priority
+    printf("Removed Element: %d with Priority: %d\n", removed_element.data.integer_type, removed_priority);
+
+    // Display updated priority queue size
+    printf("Priority Queue Size after removal: %zu\n", tscl_pqueue_size(int_pqueue));
+
+    // Clean up
+    tscl_pqueue_erase(int_pqueue);
 
     return 0;
 } // end of func

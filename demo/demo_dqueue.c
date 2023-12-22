@@ -33,30 +33,43 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cdqueue instance with INTEGER_TYPE
-    cdqueue* dqueue = dqueue_create(INTEGER_TYPE);
+    // Create a double-ended queue for integers
+    cdqueue* int_dqueue = tscl_dqueue_create(INTEGER_TYPE);
 
-    // Insert data elements into the cdqueue
-    dqueue_insert(dqueue, tofu_create_from_integer(10));
-    dqueue_insert(dqueue, tofu_create_from_integer(20));
-    dqueue_insert(dqueue, tofu_create_from_integer(30));
+    // Insert elements into the double-ended queue
+    tscl_dqueue_insert(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 1});
+    tscl_dqueue_insert(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2});
+    tscl_dqueue_insert(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 3});
 
-    // Print the size of the cdqueue
-    printf("Size of the double-ended queue: %zu\n", dqueue_size(dqueue));
+    // Display the size of the double-ended queue
+    printf("Queue Size: %zu\n", tscl_dqueue_size(int_dqueue));
 
-    // Print the cdqueue elements
-    printf("Double-ended queue elements:\n");
-    while (!dqueue_is_empty(dqueue)) {
-        ctofu* tofu = dqueue_get_front(dqueue);
-        printf("%d\n", tofu_get_integer(*tofu));
-        dqueue_remove_front(dqueue);
-    } // end while
+    // Check if the double-ended queue is not empty
+    if (tscl_dqueue_not_empty(int_dqueue)) {
+        printf("The double-ended queue is not empty.\n");
+    }
 
-    // Check if the cdqueue is not empty
-    printf("Is double-ended queue not empty? %s\n", dqueue_not_empty(dqueue) ? "true" : "false");
+    // Search for an element in the double-ended queue
+    ctofu searched_value;
+    if (tscl_dqueue_search(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}) == 0) {
+        printf("Element found in the double-ended queue.\n");
+        // Get the value associated with the element
+        tscl_dqueue_getter(int_dqueue, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 2}, &searched_value);
+        printf("Associated Value: %d\n", searched_value.data.integer_type);
+    } else {
+        printf("Element not found in the double-ended queue.\n");
+    }
 
-    // Destroy the cdqueue
-    dqueue_erase(dqueue);
+    // Remove elements from the double-ended queue
+    ctofu removed_value;
+    tscl_dqueue_remove(int_dqueue, &removed_value);
+    printf("Removed Value: %d\n", removed_value.data.integer_type);
+
+    // Display the size after removal
+    printf("Queue Size After Removal: %zu\n", tscl_dqueue_size(int_dqueue));
+
+    // Clean up
+    tscl_dqueue_erase(int_dqueue);
 
     return 0;
 } // end of func

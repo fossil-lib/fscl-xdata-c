@@ -33,41 +33,30 @@
 #include <stdio.h>
 
 int main() {
-    // Create a cstack instance with INTEGER_TYPE
-    cstack* stack = stack_create(INTEGER_TYPE);
+    // Create a stack for integers
+    cstack* int_stack = tscl_stack_create(INTEGER_TYPE);
 
-    // Insert data elements into the cstack
-    stack_insert(stack, tofu_create_from_integer(10));
-    stack_insert(stack, tofu_create_from_integer(20));
-    stack_insert(stack, tofu_create_from_integer(30));
+    // Push elements onto the stack
+    tscl_stack_insert(int_stack, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 10});
+    tscl_stack_insert(int_stack, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 20});
+    tscl_stack_insert(int_stack, (ctofu){.type = INTEGER_TYPE, .data.integer_type = 30});
 
-    // Print the size of the cstack
-    printf("Size of the stack: %zu\n", stack_size(stack));
+    // Display stack size
+    printf("Stack Size: %zu\n", tscl_stack_size(int_stack));
 
-    // Print the cstack
-    printf("Stack elements:\n");
-    for (size_t i = 0; i < stack_size(stack); i++) {
-        ctofu* tofu = stack_getter(stack, i);
-        printf("%d\n", tofu_get_integer(*tofu));
-    } // end for
+    // Display and remove the top element from the stack
+    ctofu top_element;
+    if (tscl_stack_remove(int_stack, &top_element) == TOFU_SUCCESS) {
+        printf("Top Element: %d\n", top_element.data.integer_type);
+    }
 
-    // Check if the cstack is not empty
-    printf("Is stack not empty? %s\n", stack_not_empty(stack) ? "true" : "false");
+    // Check if the stack is not empty
+    if (tscl_stack_not_empty(int_stack)) {
+        printf("The stack is not empty.\n");
+    }
 
-    // Remove an element from the cstack
-    ctofu* removedTofu = stack_getter(stack, 1);
-    ctofu_error removalResult = stack_remove(stack, *removedTofu);
-    printf("Removal result: %s\n", removalResult == TRILO_XDATA_TYPE_SUCCESS ? "success" : "failure");
-
-    // Print the updated cstack
-    printf("Updated stack elements:\n");
-    for (size_t i = 0; i < stack_size(stack); i++) {
-        ctofu* tofu = stack_getter(stack, i);
-        printf("%d\n", tofu_get_integer(*tofu));
-    } // end for
-
-    // Destroy the cstack
-    stack_erase(stack);
+    // Clean up
+    tscl_stack_erase(int_stack);
 
     return 0;
-} // end of func
+}
