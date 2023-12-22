@@ -105,7 +105,7 @@ XTEST_CASE(test_tree_remove) {
 XTEST_GROUP_DEFINE(xdata_test_tree_group) {
     XTEST_NOTE("Running all test cases for tree:");
 
-    XTEST_RUN_UNIT(test_tree_creation_and_deletion, runner);
+    XTEST_RUN_UNIT(test_tree_create_and_erase, runner);
     XTEST_RUN_UNIT(test_tree_insert_and_search,     runner);
     XTEST_RUN_UNIT(test_tree_remove,                runner);
 } // end of func
