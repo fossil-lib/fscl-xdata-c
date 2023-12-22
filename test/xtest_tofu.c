@@ -53,20 +53,41 @@ XTEST_CASE(test_tofu_create_and_erase) {
 }
 
 XTEST_CASE(test_tofu_sort_insertion) {
-    // Create an array of integers
-    ctofu_data data_array[] = { {INTEGER_TYPE, 5}, {INTEGER_TYPE, 3}, {INTEGER_TYPE, 7} };
-    ctofu* array = NULL;
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(ARRAY_TYPE, data_array, &array));
+    // Create linked list nodes for integers
+    ctofu_data data1 = {INTEGER_TYPE, 5};
+    ctofu_data data2 = {INTEGER_TYPE, 3};
+    ctofu_data data3 = {INTEGER_TYPE, 7};
 
-    // Sort the array using insertion sort
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_sort_insertion(array->data.array_type.elements, array->data.array_type.size));
+    ctofu* node1 = NULL;
+    ctofu* node2 = NULL;
+    ctofu* node3 = NULL;
 
-    // Check if the array is sorted
-    TEST_ASSERT_EQUAL_INT(3, array->data.array_type.elements[0].data.integer_type);
-    TEST_ASSERT_EQUAL_INT(5, array->data.array_type.elements[1].data.integer_type);
-    TEST_ASSERT_EQUAL_INT(7, array->data.array_type.elements[2].data.integer_type);
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(INTEGER_TYPE, &data1, &node1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(INTEGER_TYPE, &data2, &node2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(INTEGER_TYPE, &data3, &node3));
 
-    tscl_tofu_erase(array);
+    // Create a linked list with the nodes
+    node1->data.array_type.elements = node2;
+    node1->data.array_type.size = 1;
+
+    node2->data.array_type.elements = node3;
+    node2->data.array_type.size = 2;
+
+    node3->data.array_type.elements = NULL;  // End of the list
+    node3->data.array_type.size = 3;
+
+    // Sort the linked list using insertion sort
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_sort_insertion(node1, 3));
+
+    // Check if the linked list is sorted
+    TEST_ASSERT_EQUAL_INT(3, node1->data.integer_type);
+    TEST_ASSERT_EQUAL_INT(5, node2->data.integer_type);
+    TEST_ASSERT_EQUAL_INT(7, node3->data.integer_type);
+
+    // Clean up
+    tscl_tofu_erase(node1);
+    tscl_tofu_erase(node2);
+    tscl_tofu_erase(node3);
 }
 
 //
