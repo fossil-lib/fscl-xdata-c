@@ -4,10 +4,10 @@ code = files(
     'set.c'  , 'stack.c' , 'map.c'   ,
     'vector.c', 'tofu.c')
 
-lib = static_library('tscl-xdata-c',
+lib = static_library('fscl-xdata-c',
     code,
     include_directories: dir)
 
-tscl_xdata_c_dep = declare_dependency(
+fscl_xdata_c_dep = declare_dependency(
     link_with: lib,
     include_directories: dir)
