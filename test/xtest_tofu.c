@@ -1,38 +1,19 @@
-/*  ----------------------------------------------------------------------------
-    File: xtest_tofu.c
-
-    Description:
-    This test file contains unit tests for the various functions and utilities provided
-    by the Trilobite Stdlib. These tests ensure the correctness and reliability of the
-    library's components and demonstrate their intended usage.
-
-    Author: Michael Gene Brockus (Dreamer)
-    Email: michaelbrockus@gmail.com
-    Website: [Trilobite Coder Blog](https://trilobite.home.blog)
-
-    Project: Trilobite Stdlib
-
-    License: Apache License 2.0
-    SPDX Identifier: Apache-2.0
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
-
-    Unless required by applicable law or agreed to in writing, software distributed under the License
-    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-    or implied. See the License for the specific language governing permissions and limitations
-    under the License.
-
-    Please review the full text of the Apache License 2.0 for the complete terms and conditions.
-
-    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
-    ----------------------------------------------------------------------------
+/*
+==============================================================================
+Author: Michael Gene Brockus (Dreamer)
+Email: michaelbrockus@gmail.com
+Organization: Fossil Logic
+Description: 
+    This file is part of the Fossil Logic project, where innovation meets
+    excellence in software development. Michael Gene Brockus, also known as
+    "Dreamer," is a dedicated contributor to this project. For any inquiries,
+    feel free to contact Michael at michaelbrockus@gmail.com.
+==============================================================================
 */
-#include "trilobite/xdata/tofu.h" // lib source code
+#include "fossil/xdata/tofu.h" // lib source code
 
-#include <trilobite/xtest.h>   // basic test tools
-#include <trilobite/xassert.h> // extra asserts
+#include <fossil/xtest.h>   // basic test tools
+#include <fossil/xassert.h> // extra asserts
 
 #define EPSILON 0.001 // Define a small epsilon value for double comparisons
 
@@ -45,10 +26,10 @@ XTEST_CASE(test_tofu_create_and_erase) {
     data.integer_type = 42;
 
     ctofu* result = NULL;
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(INTEGER_TYPE, &data, &result));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(INTEGER_TYPE, &data, &result));
     TEST_ASSERT_NOT_NULL_PTR(result);
 
-    tscl_tofu_erase(result);
+    fscl_tofu_erase(result);
     TEST_ASSERT_NULL_PTR(result);
 }
 
@@ -65,25 +46,25 @@ XTEST_CASE(test_tofu_sort_insertion) {
     ctofu* node2 = NULL;
     ctofu* node3 = NULL;
 
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(INTEGER_TYPE, &data1, &node1));
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(INTEGER_TYPE, &data2, &node2));
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_create(INTEGER_TYPE, &data3, &node3));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(INTEGER_TYPE, &data1, &node1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(INTEGER_TYPE, &data2, &node2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(INTEGER_TYPE, &data3, &node3));
 
     // Sort the linked list using insertion sort
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, tscl_tofu_sort_insertion(node1, 3));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_sort_insertion(node1, 3));
 
     // Clean up
-    tscl_tofu_erase(node1);
-    tscl_tofu_erase(node2);
-    tscl_tofu_erase(node3);
+    fscl_tofu_erase(node1);
+    fscl_tofu_erase(node2);
+    fscl_tofu_erase(node3);
 }
 
 //
 // XUNIT-TEST RUNNER
 //
-XTEST_GROUP_DEFINE(xdata_test_tofu_group) {
+XTEST_DEFINE_POOL(xdata_test_tofu_group) {
     XTEST_NOTE("Running all test cases for tofu:");
 
-    XTEST_RUN_UNIT(test_tofu_create_and_erase, runner);
-    XTEST_RUN_UNIT(test_tofu_sort_insertion,   runner);
+    XTEST_RUN_UNIT(test_tofu_create_and_erase);
+    XTEST_RUN_UNIT(test_tofu_sort_insertion);
 } // end of func

@@ -1,35 +1,16 @@
-/*  ----------------------------------------------------------------------------
-    File: queue.c
-
-    Description:
-    This source file contains the code entry point for the Trilobite Stdlib project.
-    It demonstrates the usage of various utilities and functions provided by the
-    Trilobite Stdlib to enhance software development.
-
-    Author: Michael Gene Brockus (Dreamer)
-    Email: michaelbrockus@gmail.com
-    Website: [Trilobite Coder Blog](https://trilobite.home.blog)
-
-    Project: Trilobite Stdlib
-
-    License: Apache License 2.0
-    SPDX Identifier: Apache-2.0
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
-
-    Unless required by applicable law or agreed to in writing, software distributed under the License
-    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-    or implied. See the License for the specific language governing permissions and limitations
-    under the License.
-
-    Please review the full text of the Apache License 2.0 for the complete terms and conditions.
-
-    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
-    ----------------------------------------------------------------------------
+/*
+==============================================================================
+Author: Michael Gene Brockus (Dreamer)
+Email: michaelbrockus@gmail.com
+Organization: Fossil Logic
+Description: 
+    This file is part of the Fossil Logic project, where innovation meets
+    excellence in software development. Michael Gene Brockus, also known as
+    "Dreamer," is a dedicated contributor to this project. For any inquiries,
+    feel free to contact Michael at michaelbrockus@gmail.com.
+==============================================================================
 */
-#include "trilobite/xdata/queue.h"
+#include "fossil/xdata/queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,7 +19,7 @@
 // CREATE and DELETE
 // =======================
 
-cqueue* tscl_queue_create(ctofu_type queue_type) {
+cqueue* fscl_queue_create(ctofu_type queue_type) {
     cqueue* new_queue = (cqueue*)malloc(sizeof(cqueue));
     if (new_queue == NULL) {
         // Handle memory allocation failure
@@ -52,14 +33,14 @@ cqueue* tscl_queue_create(ctofu_type queue_type) {
     return new_queue;
 }
 
-void tscl_queue_erase(cqueue* queue) {
+void fscl_queue_erase(cqueue* queue) {
     if (queue == NULL) {
         return;
     }
 
     while (queue->front != NULL) {
         ctofu data;
-        tscl_queue_remove(queue, &data);
+        fscl_queue_remove(queue, &data);
     }
 
     free(queue);
@@ -69,7 +50,7 @@ void tscl_queue_erase(cqueue* queue) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-ctofu_error tscl_queue_insert(cqueue* queue, ctofu data) {
+ctofu_error fscl_queue_insert(cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -95,7 +76,7 @@ ctofu_error tscl_queue_insert(cqueue* queue, ctofu data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_queue_remove(cqueue* queue, ctofu* data) {
+ctofu_error fscl_queue_remove(cqueue* queue, ctofu* data) {
     if (queue == NULL || data == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -120,7 +101,7 @@ ctofu_error tscl_queue_remove(cqueue* queue, ctofu* data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_queue_search(const cqueue* queue, ctofu data) {
+ctofu_error fscl_queue_search(const cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -128,7 +109,7 @@ ctofu_error tscl_queue_search(const cqueue* queue, ctofu data) {
     cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_SUCCESS; // Found
         }
 
@@ -142,7 +123,7 @@ ctofu_error tscl_queue_search(const cqueue* queue, ctofu data) {
 // UTILITY FUNCTIONS
 // =======================
 
-size_t tscl_queue_size(const cqueue* queue) {
+size_t fscl_queue_size(const cqueue* queue) {
     if (queue == NULL) {
         return 0;
     }
@@ -158,7 +139,7 @@ size_t tscl_queue_size(const cqueue* queue) {
     return size;
 }
 
-ctofu* tscl_queue_getter(cqueue* queue, ctofu data) {
+ctofu* fscl_queue_getter(cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return NULL;
     }
@@ -166,7 +147,7 @@ ctofu* tscl_queue_getter(cqueue* queue, ctofu data) {
     cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return &current->data; // Found
         }
 
@@ -176,7 +157,7 @@ ctofu* tscl_queue_getter(cqueue* queue, ctofu data) {
     return NULL; // Not found
 }
 
-ctofu_error tscl_queue_setter(cqueue* queue, ctofu data) {
+ctofu_error fscl_queue_setter(cqueue* queue, ctofu data) {
     if (queue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -184,7 +165,7 @@ ctofu_error tscl_queue_setter(cqueue* queue, ctofu data) {
     cqueue_node* current = queue->front;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             // Found, update the data
             current->data = data;
             return TOFU_SUCCESS;
@@ -196,18 +177,18 @@ ctofu_error tscl_queue_setter(cqueue* queue, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-bool tscl_queue_not_empty(const cqueue* queue) {
+bool fscl_queue_not_empty(const cqueue* queue) {
     return queue != NULL && queue->front != NULL;
 }
 
-bool tscl_queue_not_cnullptr(const cqueue* queue) {
+bool fscl_queue_not_cnullptr(const cqueue* queue) {
     return queue != NULL;
 }
 
-bool tscl_queue_is_empty(const cqueue* queue) {
+bool fscl_queue_is_empty(const cqueue* queue) {
     return queue == NULL || queue->front == NULL;
 }
 
-bool tscl_queue_is_cnullptr(const cqueue* queue) {
+bool fscl_queue_is_cnullptr(const cqueue* queue) {
     return queue == NULL;
 }

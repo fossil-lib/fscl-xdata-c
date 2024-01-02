@@ -1,35 +1,16 @@
-/*  ----------------------------------------------------------------------------
-    File: vector.c
-
-    Description:
-    This source file contains the code entry point for the Trilobite Stdlib project.
-    It demonstrates the usage of various utilities and functions provided by the
-    Trilobite Stdlib to enhance software development.
-
-    Author: Michael Gene Brockus (Dreamer)
-    Email: michaelbrockus@gmail.com
-    Website: [Trilobite Coder Blog](https://trilobite.home.blog)
-
-    Project: Trilobite Stdlib
-
-    License: Apache License 2.0
-    SPDX Identifier: Apache-2.0
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
-
-    Unless required by applicable law or agreed to in writing, software distributed under the License
-    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-    or implied. See the License for the specific language governing permissions and limitations
-    under the License.
-
-    Please review the full text of the Apache License 2.0 for the complete terms and conditions.
-
-    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
-    ----------------------------------------------------------------------------
+/*
+==============================================================================
+Author: Michael Gene Brockus (Dreamer)
+Email: michaelbrockus@gmail.com
+Organization: Fossil Logic
+Description: 
+    This file is part of the Fossil Logic project, where innovation meets
+    excellence in software development. Michael Gene Brockus, also known as
+    "Dreamer," is a dedicated contributor to this project. For any inquiries,
+    feel free to contact Michael at michaelbrockus@gmail.com.
+==============================================================================
 */
-#include "trilobite/xdata/vector.h"
+#include "fossil/xdata/vector.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -37,7 +18,7 @@
 // CREATE and DELETE
 // =======================
 
-cvector tscl_vector_create(ctofu_type expected_type) {
+cvector fscl_vector_create(ctofu_type expected_type) {
     cvector new_vector;
     new_vector.data = (ctofu*)malloc(INITIAL_CAPACITY * sizeof(ctofu));
     if (new_vector.data == NULL) {
@@ -52,7 +33,7 @@ cvector tscl_vector_create(ctofu_type expected_type) {
     return new_vector;
 }
 
-void tscl_vector_erase(cvector* vector) {
+void fscl_vector_erase(cvector* vector) {
     if (vector == NULL) {
         return;
     }
@@ -67,7 +48,7 @@ void tscl_vector_erase(cvector* vector) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-void tscl_vector_push_back(cvector* vector, ctofu element) {
+void fscl_vector_push_back(cvector* vector, ctofu element) {
     if (vector == NULL) {
         return;
     }
@@ -92,13 +73,13 @@ void tscl_vector_push_back(cvector* vector, ctofu element) {
     vector->data[vector->size++] = element;
 }
 
-int tscl_vector_search(const cvector* vector, ctofu target) {
+int fscl_vector_search(const cvector* vector, ctofu target) {
     if (vector == NULL) {
         return -1;
     }
 
     for (size_t i = 0; i < vector->size; ++i) {
-        if (tscl_tofu_compare(&target, &vector->data[i], NULL) == TOFU_SUCCESS) {
+        if (fscl_tofu_compare(&target, &vector->data[i], NULL) == TOFU_SUCCESS) {
             return i; // Element found at index i
         }
     }
@@ -106,7 +87,7 @@ int tscl_vector_search(const cvector* vector, ctofu target) {
     return -1; // Element not found
 }
 
-void tscl_vector_reverse(cvector* vector) {
+void fscl_vector_reverse(cvector* vector) {
     if (vector == NULL) {
         return;
     }
@@ -123,23 +104,23 @@ void tscl_vector_reverse(cvector* vector) {
 // UTILITY FUNCTIONS
 // =======================
 
-bool tscl_vector_is_cnullptr(const cvector* vector) {
+bool fscl_vector_is_cnullptr(const cvector* vector) {
     return vector == NULL;
 }
 
-bool tscl_vector_not_cnullptr(const cvector* vector) {
+bool fscl_vector_not_cnullptr(const cvector* vector) {
     return vector != NULL;
 }
 
-bool tscl_vector_is_empty(const cvector* vector) {
+bool fscl_vector_is_empty(const cvector* vector) {
     return vector == NULL || vector->size == 0;
 }
 
-bool tscl_vector_not_empty(const cvector* vector) {
+bool fscl_vector_not_empty(const cvector* vector) {
     return vector != NULL && vector->size != 0;
 }
 
-void tscl_vector_setter(cvector* vector, size_t index, ctofu element) {
+void fscl_vector_setter(cvector* vector, size_t index, ctofu element) {
     if (vector == NULL || index >= vector->size) {
         return;
     }
@@ -153,7 +134,7 @@ void tscl_vector_setter(cvector* vector, size_t index, ctofu element) {
     vector->data[index] = element;
 }
 
-ctofu tscl_vector_getter(const cvector* vector, size_t index) {
+ctofu fscl_vector_getter(const cvector* vector, size_t index) {
     if (vector == NULL || index >= vector->size) {
         return (ctofu){.type = INVALID_TYPE}; // Invalid or out-of-bounds access
     }
@@ -161,7 +142,7 @@ ctofu tscl_vector_getter(const cvector* vector, size_t index) {
     return vector->data[index];
 }
 
-size_t tscl_vector_size(const cvector* vector) {
+size_t fscl_vector_size(const cvector* vector) {
     return vector != NULL ? vector->size : 0;
 }
 
@@ -194,7 +175,7 @@ void print_ctofu_value(const ctofu value) {
     }
 }
 
-void tscl_vector_peek(const cvector* vector) {
+void fscl_vector_peek(const cvector* vector) {
     if (vector == NULL) {
         return;
     }
@@ -213,7 +194,7 @@ void tscl_vector_peek(const cvector* vector) {
 // ITERATOR FUNCTIONS
 // =======================
 
-ctofu_iterator tscl_vector_iterator_start(const cvector* vector) {
+ctofu_iterator fscl_vector_iterator_start(const cvector* vector) {
     if (vector == NULL || vector->size == 0) {
         return (ctofu_iterator){.current_value = NULL, .index = 0};
     }
@@ -221,7 +202,7 @@ ctofu_iterator tscl_vector_iterator_start(const cvector* vector) {
     return (ctofu_iterator){.current_value = &vector->data[0], .index = 0};
 }
 
-ctofu_iterator tscl_vector_iterator_end(const cvector* vector) {
+ctofu_iterator fscl_vector_iterator_end(const cvector* vector) {
     if (vector == NULL || vector->size == 0) {
         return (ctofu_iterator){.current_value = NULL, .index = vector->size};
     }
@@ -229,7 +210,7 @@ ctofu_iterator tscl_vector_iterator_end(const cvector* vector) {
     return (ctofu_iterator){.current_value = &vector->data[vector->size - 1], .index = vector->size - 1};
 }
 
-ctofu_iterator tscl_vector_iterator_next(const cvector* vector, ctofu_iterator iterator) {
+ctofu_iterator fscl_vector_iterator_next(const cvector* vector, ctofu_iterator iterator) {
     if (vector == NULL || iterator.index >= vector->size - 1) {
         return (ctofu_iterator){.current_value = NULL, .index = iterator.index + 1};
     }
@@ -237,6 +218,6 @@ ctofu_iterator tscl_vector_iterator_next(const cvector* vector, ctofu_iterator i
     return (ctofu_iterator){.current_value = &vector->data[iterator.index + 1], .index = iterator.index + 1};
 }
 
-bool tscl_vector_iterator_has_next(const cvector* vector, ctofu_iterator iterator) {
+bool fscl_vector_iterator_has_next(const cvector* vector, ctofu_iterator iterator) {
     return vector != NULL && iterator.index < vector->size - 1;
 }

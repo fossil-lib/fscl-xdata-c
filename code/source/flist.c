@@ -1,35 +1,16 @@
-/*  ----------------------------------------------------------------------------
-    File: flist.c
-
-    Description:
-    This source file contains the code entry point for the Trilobite Stdlib project.
-    It demonstrates the usage of various utilities and functions provided by the
-    Trilobite Stdlib to enhance software development.
-
-    Author: Michael Gene Brockus (Dreamer)
-    Email: michaelbrockus@gmail.com
-    Website: [Trilobite Coder Blog](https://trilobite.home.blog)
-
-    Project: Trilobite Stdlib
-
-    License: Apache License 2.0
-    SPDX Identifier: Apache-2.0
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
-
-    Unless required by applicable law or agreed to in writing, software distributed under the License
-    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-    or implied. See the License for the specific language governing permissions and limitations
-    under the License.
-
-    Please review the full text of the Apache License 2.0 for the complete terms and conditions.
-
-    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
-    ----------------------------------------------------------------------------
+/*
+==============================================================================
+Author: Michael Gene Brockus (Dreamer)
+Email: michaelbrockus@gmail.com
+Organization: Fossil Logic
+Description: 
+    This file is part of the Fossil Logic project, where innovation meets
+    excellence in software development. Michael Gene Brockus, also known as
+    "Dreamer," is a dedicated contributor to this project. For any inquiries,
+    feel free to contact Michael at michaelbrockus@gmail.com.
+==============================================================================
 */
-#include "trilobite/xdata/flist.h"
+#include "fossil/xdata/flist.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,7 +19,7 @@
 // CREATE and DELETE
 // =======================
 
-cflist* tscl_flist_create(ctofu_type list_type) {
+cflist* fscl_flist_create(ctofu_type list_type) {
     cflist* new_flist = (cflist*)malloc(sizeof(cflist));
     if (new_flist == NULL) {
         // Handle memory allocation failure
@@ -51,14 +32,14 @@ cflist* tscl_flist_create(ctofu_type list_type) {
     return new_flist;
 }
 
-void tscl_flist_erase(cflist* flist) {
+void fscl_flist_erase(cflist* flist) {
     if (flist == NULL) {
         return;
     }
 
     while (flist->head != NULL) {
         ctofu data;
-        tscl_flist_remove(flist, &data);
+        fscl_flist_remove(flist, &data);
     }
 
     free(flist);
@@ -68,7 +49,7 @@ void tscl_flist_erase(cflist* flist) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-ctofu_error tscl_flist_insert(cflist* flist, ctofu data) {
+ctofu_error fscl_flist_insert(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -86,7 +67,7 @@ ctofu_error tscl_flist_insert(cflist* flist, ctofu data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_flist_remove(cflist* flist, ctofu* data) {
+ctofu_error fscl_flist_remove(cflist* flist, ctofu* data) {
     if (flist == NULL || data == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -104,7 +85,7 @@ ctofu_error tscl_flist_remove(cflist* flist, ctofu* data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_flist_search(const cflist* flist, ctofu data) {
+ctofu_error fscl_flist_search(const cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -112,7 +93,7 @@ ctofu_error tscl_flist_search(const cflist* flist, ctofu data) {
     cflist_node* current = flist->head;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_SUCCESS; // Found
         }
 
@@ -122,7 +103,7 @@ ctofu_error tscl_flist_search(const cflist* flist, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-void tscl_flist_reverse_forward(cflist* flist) {
+void fscl_flist_reverse_forward(cflist* flist) {
     if (flist == NULL || flist->head == NULL) {
         return;
     }
@@ -141,7 +122,7 @@ void tscl_flist_reverse_forward(cflist* flist) {
     flist->head = prev;
 }
 
-void tscl_flist_reverse_backward(cflist* flist) {
+void fscl_flist_reverse_backward(cflist* flist) {
     if (flist == NULL || flist->head == NULL) {
         return;
     }
@@ -163,7 +144,7 @@ void tscl_flist_reverse_backward(cflist* flist) {
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t tscl_flist_size(const cflist* flist) {
+size_t fscl_flist_size(const cflist* flist) {
     if (flist == NULL) {
         return 0;
     }
@@ -179,7 +160,7 @@ size_t tscl_flist_size(const cflist* flist) {
     return size;
 }
 
-ctofu* tscl_flist_getter(cflist* flist, ctofu data) {
+ctofu* fscl_flist_getter(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return NULL;
     }
@@ -187,7 +168,7 @@ ctofu* tscl_flist_getter(cflist* flist, ctofu data) {
     cflist_node* current = flist->head;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return &current->data; // Found
         }
 
@@ -197,7 +178,7 @@ ctofu* tscl_flist_getter(cflist* flist, ctofu data) {
     return NULL; // Not found
 }
 
-ctofu_error tscl_flist_setter(cflist* flist, ctofu data) {
+ctofu_error fscl_flist_setter(cflist* flist, ctofu data) {
     if (flist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -205,7 +186,7 @@ ctofu_error tscl_flist_setter(cflist* flist, ctofu data) {
     cflist_node* current = flist->head;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             // Found, update the data
             current->data = data;
             return TOFU_SUCCESS;
@@ -217,18 +198,18 @@ ctofu_error tscl_flist_setter(cflist* flist, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-bool tscl_flist_not_empty(const cflist* flist) {
+bool fscl_flist_not_empty(const cflist* flist) {
     return flist != NULL && flist->head != NULL;
 }
 
-bool tscl_flist_not_cnullptr(const cflist* flist) {
+bool fscl_flist_not_cnullptr(const cflist* flist) {
     return flist != NULL;
 }
 
-bool tscl_flist_is_empty(const cflist* flist) {
+bool fscl_flist_is_empty(const cflist* flist) {
     return flist == NULL || flist->head == NULL;
 }
 
-bool tscl_flist_is_cnullptr(const cflist* flist) {
+bool fscl_flist_is_cnullptr(const cflist* flist) {
     return flist == NULL;
 }
