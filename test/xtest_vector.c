@@ -23,14 +23,14 @@ XTEST_CASE(test_vector_create_and_erase) {
     
     // Check if the vector is created with the expected values
     TEST_ASSERT_EQUAL(INTEGER_TYPE, vector.expected_type);
-    TEST_ASSERT_NULL_PTR(vector.data);
+    TEST_ASSERT_CNULLPTR(vector.data);
     TEST_ASSERT_EQUAL_UINT(0, vector.size);
     TEST_ASSERT_EQUAL_UINT(INITIAL_CAPACITY, vector.capacity);
 
     fscl_vector_erase(&vector);
 
     // Check if the vector is erased
-    TEST_ASSERT_NULL_PTR(vector.data);
+    TEST_ASSERT_CNULLPTR(vector.data);
     TEST_ASSERT_EQUAL_UINT(0, vector.size);
     TEST_ASSERT_EQUAL_UINT(0, vector.capacity);
 }

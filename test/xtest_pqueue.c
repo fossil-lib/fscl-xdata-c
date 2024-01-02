@@ -22,15 +22,15 @@ XTEST_CASE(test_pqueue_create_and_erase) {
     cpqueue* pqueue = fscl_pqueue_create(INTEGER_TYPE);
 
     // Check if the priority queue is created with the expected values
-    TEST_ASSERT_NOT_NULL_PTR(pqueue);
-    TEST_ASSERT_NULL_PTR(pqueue->front);
+    TEST_ASSERT_NOT_CNULLPTR(pqueue);
+    TEST_ASSERT_CNULLPTR(pqueue->front);
     TEST_ASSERT_EQUAL(INTEGER_TYPE, pqueue->queue_type);
 
     fscl_pqueue_erase(pqueue);
 
     // Check if the priority queue is erased
-    TEST_ASSERT_NULL_PTR(pqueue->front);
-    TEST_ASSERT_NULL_PTR(pqueue);
+    TEST_ASSERT_CNULLPTR(pqueue->front);
+    TEST_ASSERT_CNULLPTR(pqueue);
 }
 
 XTEST_CASE(test_pqueue_insert_and_size) {

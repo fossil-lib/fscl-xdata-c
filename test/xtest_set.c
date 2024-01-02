@@ -22,15 +22,15 @@ XTEST_CASE(test_set_create_and_erase) {
     cset* set = fscl_set_create(INTEGER_TYPE);
 
     // Check if the set is created with the expected values
-    TEST_ASSERT_NOT_NULL_PTR(set);
-    TEST_ASSERT_NULL_PTR(set->head);
+    TEST_ASSERT_NOT_CNULLPTR(set);
+    TEST_ASSERT_CNULLPTR(set->head);
     TEST_ASSERT_EQUAL(INTEGER_TYPE, set->set_type);
 
     fscl_set_erase(set);
 
     // Check if the set is erased
-    TEST_ASSERT_NULL_PTR(set->head);
-    TEST_ASSERT_NULL_PTR(set);
+    TEST_ASSERT_CNULLPTR(set->head);
+    TEST_ASSERT_CNULLPTR(set);
 }
 
 XTEST_CASE(test_set_insert_and_size) {

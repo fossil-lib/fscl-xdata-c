@@ -22,14 +22,14 @@ XTEST_CASE(test_map_create_and_erase) {
     cmap* map = fscl_map_create(INTEGER_TYPE);
 
     // Check if the map is created with the expected values
-    TEST_ASSERT_NOT_NULL_PTR(map);
+    TEST_ASSERT_NOT_CNULLPTR(map);
     TEST_ASSERT_EQUAL_UINT(0, map->size);
 
     fscl_map_erase(map);
 
     // Check if the map is erased
     TEST_ASSERT_EQUAL_UINT(0, map->size);
-    TEST_ASSERT_NULL_PTR(map);
+    TEST_ASSERT_CNULLPTR(map);
 }
 
 XTEST_CASE(test_map_insert_and_size) {

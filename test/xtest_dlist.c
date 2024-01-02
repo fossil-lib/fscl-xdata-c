@@ -22,17 +22,17 @@ XTEST_CASE(test_dlist_create_and_erase) {
     cdlist* dlist = fscl_dlist_create(INTEGER_TYPE);
 
     // Check if the doubly linked list is created with the expected values
-    TEST_ASSERT_NOT_NULL_PTR(dlist);
-    TEST_ASSERT_NULL_PTR(dlist->head);
-    TEST_ASSERT_NULL_PTR(dlist->tail);
+    TEST_ASSERT_NOT_CNULLPTR(dlist);
+    TEST_ASSERT_CNULLPTR(dlist->head);
+    TEST_ASSERT_CNULLPTR(dlist->tail);
     TEST_ASSERT_EQUAL(INTEGER_TYPE, dlist->list_type);
 
     fscl_dlist_erase(dlist);
 
     // Check if the doubly linked list is erased
-    TEST_ASSERT_NULL_PTR(dlist->head);
-    TEST_ASSERT_NULL_PTR(dlist->tail);
-    TEST_ASSERT_NULL_PTR(dlist);
+    TEST_ASSERT_CNULLPTR(dlist->head);
+    TEST_ASSERT_CNULLPTR(dlist->tail);
+    TEST_ASSERT_CNULLPTR(dlist);
 }
 
 XTEST_CASE(test_dlist_insert_and_size) {
@@ -95,15 +95,15 @@ XTEST_CASE(test_dlist_reverse_forward) {
 
     // Check if the elements are in reverse order
     ctofu* retrievedElement = fscl_dlist_getter(dlist, element3);
-    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
     TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.integer_type);
 
     retrievedElement = fscl_dlist_getter(dlist, element2);
-    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
     TEST_ASSERT_EQUAL_INT(10, retrievedElement->data.integer_type);
 
     retrievedElement = fscl_dlist_getter(dlist, element1);
-    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
     TEST_ASSERT_EQUAL_INT(5, retrievedElement->data.integer_type);
 
     fscl_dlist_erase(dlist);
@@ -126,15 +126,15 @@ XTEST_CASE(test_dlist_reverse_backward) {
 
     // Check if the elements are in reverse order
     ctofu* retrievedElement = fscl_dlist_getter(dlist, element3);
-    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
     TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.integer_type);
 
     retrievedElement = fscl_dlist_getter(dlist, element2);
-    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
     TEST_ASSERT_EQUAL_INT(10, retrievedElement->data.integer_type);
 
     retrievedElement = fscl_dlist_getter(dlist, element1);
-    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
     TEST_ASSERT_EQUAL_INT(5, retrievedElement->data.integer_type);
 
     fscl_dlist_erase(dlist);

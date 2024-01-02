@@ -22,15 +22,15 @@ XTEST_CASE(test_tree_create_and_erase) {
     ctree* tree = fscl_tree_create(INTEGER_TYPE);
     
     // Check if the tree is created with the expected values
-    TEST_ASSERT_NOT_NULL_PTR(tree);
-    TEST_ASSERT_NULL_PTR(tree->root);
+    TEST_ASSERT_NOT_CNULLPTR(tree);
+    TEST_ASSERT_CNULLPTR(tree->root);
     TEST_ASSERT_EQUAL(INTEGER_TYPE, tree->tree);
 
     fscl_tree_erase(tree);
 
     // Check if the tree is erased
-    TEST_ASSERT_NULL_PTR(tree->root);
-    TEST_ASSERT_NULL_PTR(tree);
+    TEST_ASSERT_CNULLPTR(tree->root);
+    TEST_ASSERT_CNULLPTR(tree);
 }
 
 XTEST_CASE(test_tree_insert_and_search) {

@@ -22,17 +22,17 @@ XTEST_CASE(test_queue_create_and_erase) {
     cqueue* queue = fscl_queue_create(INTEGER_TYPE);
 
     // Check if the queue is created with the expected values
-    TEST_ASSERT_NOT_NULL_PTR(queue);
-    TEST_ASSERT_NULL_PTR(queue->front);
-    TEST_ASSERT_NULL_PTR(queue->rear);
+    TEST_ASSERT_NOT_CNULLPTR(queue);
+    TEST_ASSERT_CNULLPTR(queue->front);
+    TEST_ASSERT_CNULLPTR(queue->rear);
     TEST_ASSERT_EQUAL(INTEGER_TYPE, queue->queue_type);
 
     fscl_queue_erase(queue);
 
     // Check if the queue is erased
-    TEST_ASSERT_NULL_PTR(queue->front);
-    TEST_ASSERT_NULL_PTR(queue->rear);
-    TEST_ASSERT_NULL_PTR(queue);
+    TEST_ASSERT_CNULLPTR(queue->front);
+    TEST_ASSERT_CNULLPTR(queue->rear);
+    TEST_ASSERT_CNULLPTR(queue);
 }
 
 XTEST_CASE(test_queue_insert_and_size) {

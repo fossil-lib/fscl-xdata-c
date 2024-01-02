@@ -22,17 +22,17 @@ XTEST_CASE(test_dqueue_create_and_erase) {
     cdqueue* dqueue = fscl_dqueue_create(INTEGER_TYPE);
 
     // Check if the deque is created with the expected values
-    TEST_ASSERT_NOT_NULL_PTR(dqueue);
-    TEST_ASSERT_NULL_PTR(dqueue->front);
-    TEST_ASSERT_NULL_PTR(dqueue->rear);
+    TEST_ASSERT_NOT_CNULLPTR(dqueue);
+    TEST_ASSERT_CNULLPTR(dqueue->front);
+    TEST_ASSERT_CNULLPTR(dqueue->rear);
     TEST_ASSERT_EQUAL(INTEGER_TYPE, dqueue->list_type);
 
     fscl_dqueue_erase(dqueue);
 
     // Check if the deque is erased
-    TEST_ASSERT_NULL_PTR(dqueue->front);
-    TEST_ASSERT_NULL_PTR(dqueue->rear);
-    TEST_ASSERT_NULL_PTR(dqueue);
+    TEST_ASSERT_CNULLPTR(dqueue->front);
+    TEST_ASSERT_CNULLPTR(dqueue->rear);
+    TEST_ASSERT_CNULLPTR(dqueue);
 }
 
 XTEST_CASE(test_dqueue_insert_and_size) {
@@ -87,7 +87,7 @@ XTEST_CASE(test_dqueue_getter_and_setter) {
 
     // Get the value for an element
     ctofu* retrievedElement = fscl_dqueue_getter(dqueue, element);
-    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
     TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.integer_type);
 
     // Update the value for an element
@@ -96,7 +96,7 @@ XTEST_CASE(test_dqueue_getter_and_setter) {
 
     // Get the updated value for the element
     retrievedElement = fscl_dqueue_getter(dqueue, updatedElement);
-    TEST_ASSERT_NOT_NULL_PTR(retrievedElement);
+    TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
     TEST_ASSERT_EQUAL_INT(50, retrievedElement->data.integer_type);
 
     fscl_dqueue_erase(dqueue);

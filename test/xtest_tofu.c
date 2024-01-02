@@ -27,10 +27,10 @@ XTEST_CASE(test_tofu_create_and_erase) {
 
     ctofu* result = NULL;
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(INTEGER_TYPE, &data, &result));
-    TEST_ASSERT_NOT_NULL_PTR(result);
+    TEST_ASSERT_NOT_CNULLPTR(result);
 
     fscl_tofu_erase(result);
-    TEST_ASSERT_NULL_PTR(result);
+    TEST_ASSERT_CNULLPTR(result);
 }
 
 XTEST_CASE(test_tofu_sort_insertion) {

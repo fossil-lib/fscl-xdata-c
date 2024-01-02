@@ -23,15 +23,15 @@ XTEST_CASE(test_stack_create_and_erase) {
     cstack* stack = fscl_stack_create(INTEGER_TYPE);
 
     // Check if the stack is created with the expected values
-    TEST_ASSERT_NOT_NULL_PTR(stack);
-    TEST_ASSERT_NULL_PTR(stack->top);
+    TEST_ASSERT_NOT_CNULLPTR(stack);
+    TEST_ASSERT_CNULLPTR(stack->top);
     TEST_ASSERT_EQUAL(INTEGER_TYPE, stack->stack_type);
 
     fscl_stack_erase(stack);
 
     // Check if the stack is erased
-    TEST_ASSERT_NULL_PTR(stack->top);
-    TEST_ASSERT_NULL_PTR(stack);
+    TEST_ASSERT_CNULLPTR(stack->top);
+    TEST_ASSERT_CNULLPTR(stack);
 }
 
 XTEST_CASE(test_stack_insert_and_size) {
