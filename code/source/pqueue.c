@@ -1,35 +1,16 @@
-/*  ----------------------------------------------------------------------------
-    File: pqueue.c
-
-    Description:
-    This source file contains the code entry point for the Trilobite Stdlib project.
-    It demonstrates the usage of various utilities and functions provided by the
-    Trilobite Stdlib to enhance software development.
-
-    Author: Michael Gene Brockus (Dreamer)
-    Email: michaelbrockus@gmail.com
-    Website: [Trilobite Coder Blog](https://trilobite.home.blog)
-
-    Project: Trilobite Stdlib
-
-    License: Apache License 2.0
-    SPDX Identifier: Apache-2.0
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
-
-    Unless required by applicable law or agreed to in writing, software distributed under the License
-    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-    or implied. See the License for the specific language governing permissions and limitations
-    under the License.
-
-    Please review the full text of the Apache License 2.0 for the complete terms and conditions.
-
-    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
-    ----------------------------------------------------------------------------
+/*
+==============================================================================
+Author: Michael Gene Brockus (Dreamer)
+Email: michaelbrockus@gmail.com
+Organization: Fossil Logic
+Description: 
+    This file is part of the Fossil Logic project, where innovation meets
+    excellence in software development. Michael Gene Brockus, also known as
+    "Dreamer," is a dedicated contributor to this project. For any inquiries,
+    feel free to contact Michael at michaelbrockus@gmail.com.
+==============================================================================
 */
-#include "trilobite/xdata/pqueue.h"
+#include "fossil/xdata/pqueue.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,7 +18,7 @@
 // =======================
 // CREATE and DELETE
 // =======================
-cpqueue* tscl_pqueue_create(ctofu_type queue_type) {
+cpqueue* fscl_pqueue_create(ctofu_type queue_type) {
     cpqueue* new_pqueue = (cpqueue*)malloc(sizeof(cpqueue));
     if (new_pqueue == NULL) {
         // Handle memory allocation failure
@@ -50,7 +31,7 @@ cpqueue* tscl_pqueue_create(ctofu_type queue_type) {
     return new_pqueue;
 }
 
-void tscl_pqueue_erase(cpqueue* pqueue) {
+void fscl_pqueue_erase(cpqueue* pqueue) {
     if (pqueue == NULL) {
         return;
     }
@@ -58,7 +39,7 @@ void tscl_pqueue_erase(cpqueue* pqueue) {
     while (pqueue->front != NULL) {
         ctofu data;
         int priority;
-        tscl_pqueue_remove(pqueue, &data, &priority);
+        fscl_pqueue_remove(pqueue, &data, &priority);
     }
 
     free(pqueue);
@@ -68,7 +49,7 @@ void tscl_pqueue_erase(cpqueue* pqueue) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-ctofu_error tscl_pqueue_insert(cpqueue* pqueue, ctofu data, int priority) {
+ctofu_error fscl_pqueue_insert(cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -101,7 +82,7 @@ ctofu_error tscl_pqueue_insert(cpqueue* pqueue, ctofu data, int priority) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_pqueue_remove(cpqueue* pqueue, ctofu* data, int* priority) {
+ctofu_error fscl_pqueue_remove(cpqueue* pqueue, ctofu* data, int* priority) {
     if (pqueue == NULL || data == NULL || priority == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -120,7 +101,7 @@ ctofu_error tscl_pqueue_remove(cpqueue* pqueue, ctofu* data, int* priority) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_pqueue_search(const cpqueue* pqueue, ctofu data, int priority) {
+ctofu_error fscl_pqueue_search(const cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -128,7 +109,7 @@ ctofu_error tscl_pqueue_search(const cpqueue* pqueue, ctofu data, int priority) 
     cpqueue_node* current = pqueue->front;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0 && current->priority == priority) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0 && current->priority == priority) {
             return TOFU_SUCCESS; // Found
         }
 
@@ -142,7 +123,7 @@ ctofu_error tscl_pqueue_search(const cpqueue* pqueue, ctofu data, int priority) 
 // UTILITY FUNCTIONS
 // =======================
 
-size_t tscl_pqueue_size(const cpqueue* pqueue) {
+size_t fscl_pqueue_size(const cpqueue* pqueue) {
     if (pqueue == NULL) {
         return 0;
     }
@@ -158,7 +139,7 @@ size_t tscl_pqueue_size(const cpqueue* pqueue) {
     return size;
 }
 
-ctofu* tscl_pqueue_getter(cpqueue* pqueue, ctofu data, int priority) {
+ctofu* fscl_pqueue_getter(cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
         return NULL;
     }
@@ -166,7 +147,7 @@ ctofu* tscl_pqueue_getter(cpqueue* pqueue, ctofu data, int priority) {
     cpqueue_node* current = pqueue->front;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0 && current->priority == priority) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0 && current->priority == priority) {
             return &current->data; // Found
         }
 
@@ -176,7 +157,7 @@ ctofu* tscl_pqueue_getter(cpqueue* pqueue, ctofu data, int priority) {
     return NULL; // Not found
 }
 
-ctofu_error tscl_pqueue_setter(cpqueue* pqueue, ctofu data, int priority) {
+ctofu_error fscl_pqueue_setter(cpqueue* pqueue, ctofu data, int priority) {
     if (pqueue == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -184,7 +165,7 @@ ctofu_error tscl_pqueue_setter(cpqueue* pqueue, ctofu data, int priority) {
     cpqueue_node* current = pqueue->front;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0 && current->priority == priority) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0 && current->priority == priority) {
             // Found, update the data
             current->data = data;
             return TOFU_SUCCESS;
@@ -196,18 +177,18 @@ ctofu_error tscl_pqueue_setter(cpqueue* pqueue, ctofu data, int priority) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-bool tscl_pqueue_not_empty(const cpqueue* pqueue) {
+bool fscl_pqueue_not_empty(const cpqueue* pqueue) {
     return pqueue != NULL && pqueue->front != NULL;
 }
 
-bool tscl_pqueue_not_cnullptr(const cpqueue* pqueue) {
+bool fscl_pqueue_not_cnullptr(const cpqueue* pqueue) {
     return pqueue != NULL;
 }
 
-bool tscl_pqueue_is_empty(const cpqueue* pqueue) {
+bool fscl_pqueue_is_empty(const cpqueue* pqueue) {
     return pqueue == NULL || pqueue->front == NULL;
 }
 
-bool tscl_pqueue_is_cnullptr(const cpqueue* pqueue) {
+bool fscl_pqueue_is_cnullptr(const cpqueue* pqueue) {
     return pqueue == NULL;
 }

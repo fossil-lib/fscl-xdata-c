@@ -1,35 +1,16 @@
-/*  ----------------------------------------------------------------------------
-    File: stack.c
-
-    Description:
-    This source file contains the code entry point for the Trilobite Stdlib project.
-    It demonstrates the usage of various utilities and functions provided by the
-    Trilobite Stdlib to enhance software development.
-
-    Author: Michael Gene Brockus (Dreamer)
-    Email: michaelbrockus@gmail.com
-    Website: [Trilobite Coder Blog](https://trilobite.home.blog)
-
-    Project: Trilobite Stdlib
-
-    License: Apache License 2.0
-    SPDX Identifier: Apache-2.0
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
-
-    Unless required by applicable law or agreed to in writing, software distributed under the License
-    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-    or implied. See the License for the specific language governing permissions and limitations
-    under the License.
-
-    Please review the full text of the Apache License 2.0 for the complete terms and conditions.
-
-    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
-    ----------------------------------------------------------------------------
+/*
+==============================================================================
+Author: Michael Gene Brockus (Dreamer)
+Email: michaelbrockus@gmail.com
+Organization: Fossil Logic
+Description: 
+    This file is part of the Fossil Logic project, where innovation meets
+    excellence in software development. Michael Gene Brockus, also known as
+    "Dreamer," is a dedicated contributor to this project. For any inquiries,
+    feel free to contact Michael at michaelbrockus@gmail.com.
+==============================================================================
 */
-#include "trilobite/xdata/stack.h"
+#include "fossil/xdata/stack.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -37,7 +18,7 @@
 // CREATE and DELETE
 // =======================
 
-cstack* tscl_stack_create(ctofu_type stack_type) {
+cstack* fscl_stack_create(ctofu_type stack_type) {
     cstack* new_stack = (cstack*)malloc(sizeof(cstack));
     if (new_stack == NULL) {
         return NULL; // Handle memory allocation failure
@@ -49,14 +30,14 @@ cstack* tscl_stack_create(ctofu_type stack_type) {
     return new_stack;
 }
 
-void tscl_stack_erase(cstack* stack) {
+void fscl_stack_erase(cstack* stack) {
     if (stack == NULL) {
         return;
     }
 
-    while (tscl_stack_not_empty(stack)) {
+    while (fscl_stack_not_empty(stack)) {
         ctofu removedData;
-        tscl_stack_remove(stack, &removedData);
+        fscl_stack_remove(stack, &removedData);
     }
 
     free(stack);
@@ -65,7 +46,7 @@ void tscl_stack_erase(cstack* stack) {
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error tscl_stack_insert(cstack* stack, ctofu data) {
+ctofu_error fscl_stack_insert(cstack* stack, ctofu data) {
     if (stack == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -83,7 +64,7 @@ ctofu_error tscl_stack_insert(cstack* stack, ctofu data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_stack_remove(cstack* stack, ctofu* data) {
+ctofu_error fscl_stack_remove(cstack* stack, ctofu* data) {
     if (stack == NULL || data == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -101,7 +82,7 @@ ctofu_error tscl_stack_remove(cstack* stack, ctofu* data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_stack_search(const cstack* stack, ctofu data) {
+ctofu_error fscl_stack_search(const cstack* stack, ctofu data) {
     if (stack == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -109,7 +90,7 @@ ctofu_error tscl_stack_search(const cstack* stack, ctofu data) {
     cstack_node* current = stack->top;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_SUCCESS; // Found
         }
 
@@ -123,7 +104,7 @@ ctofu_error tscl_stack_search(const cstack* stack, ctofu data) {
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t tscl_stack_size(const cstack* stack) {
+size_t fscl_stack_size(const cstack* stack) {
     if (stack == NULL) {
         return 0;
     }
@@ -139,7 +120,7 @@ size_t tscl_stack_size(const cstack* stack) {
     return size;
 }
 
-ctofu* tscl_stack_getter(cstack* stack, ctofu data) {
+ctofu* fscl_stack_getter(cstack* stack, ctofu data) {
     if (stack == NULL) {
         return NULL;
     }
@@ -147,7 +128,7 @@ ctofu* tscl_stack_getter(cstack* stack, ctofu data) {
     cstack_node* current = stack->top;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return &current->data; // Found
         }
 
@@ -157,7 +138,7 @@ ctofu* tscl_stack_getter(cstack* stack, ctofu data) {
     return NULL; // Not found
 }
 
-ctofu_error tscl_stack_setter(cstack* stack, ctofu data) {
+ctofu_error fscl_stack_setter(cstack* stack, ctofu data) {
     if (stack == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -165,7 +146,7 @@ ctofu_error tscl_stack_setter(cstack* stack, ctofu data) {
     cstack_node* current = stack->top;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             // Found, update the data
             current->data = data;
             return TOFU_SUCCESS;
@@ -177,23 +158,23 @@ ctofu_error tscl_stack_setter(cstack* stack, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-bool tscl_stack_not_empty(const cstack* stack) {
+bool fscl_stack_not_empty(const cstack* stack) {
     return stack != NULL && stack->top != NULL;
 }
 
-bool tscl_stack_not_cnullptr(const cstack* stack) {
+bool fscl_stack_not_cnullptr(const cstack* stack) {
     return stack != NULL;
 }
 
-bool tscl_stack_is_empty(const cstack* stack) {
+bool fscl_stack_is_empty(const cstack* stack) {
     return stack == NULL || stack->top == NULL;
 }
 
-bool tscl_stack_is_cnullptr(const cstack* stack) {
+bool fscl_stack_is_cnullptr(const cstack* stack) {
     return stack == NULL;
 }
 
-ctofu tscl_stack_top(cstack* stack, ctofu default_value) {
+ctofu fscl_stack_top(cstack* stack, ctofu default_value) {
     if (stack == NULL || stack->top == NULL) {
         return default_value; // Return default value if the stack is empty
     }

@@ -1,35 +1,16 @@
-/*  ----------------------------------------------------------------------------
-    File: dlist.c
-
-    Description:
-    This source file contains the code entry point for the Trilobite Stdlib project.
-    It demonstrates the usage of various utilities and functions provided by the
-    Trilobite Stdlib to enhance software development.
-
-    Author: Michael Gene Brockus (Dreamer)
-    Email: michaelbrockus@gmail.com
-    Website: [Trilobite Coder Blog](https://trilobite.home.blog)
-
-    Project: Trilobite Stdlib
-
-    License: Apache License 2.0
-    SPDX Identifier: Apache-2.0
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
-
-    Unless required by applicable law or agreed to in writing, software distributed under the License
-    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-    or implied. See the License for the specific language governing permissions and limitations
-    under the License.
-
-    Please review the full text of the Apache License 2.0 for the complete terms and conditions.
-
-    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
-    ----------------------------------------------------------------------------
+/*
+==============================================================================
+Author: Michael Gene Brockus (Dreamer)
+Email: michaelbrockus@gmail.com
+Organization: Fossil Logic
+Description: 
+    This file is part of the Fossil Logic project, where innovation meets
+    excellence in software development. Michael Gene Brockus, also known as
+    "Dreamer," is a dedicated contributor to this project. For any inquiries,
+    feel free to contact Michael at michaelbrockus@gmail.com.
+==============================================================================
 */
-#include "trilobite/xdata/dlist.h"
+#include "fossil/xdata/dlist.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,7 +18,7 @@
 // =======================
 // CREATE and DELETE
 // =======================
-cdlist* tscl_dlist_create(ctofu_type list_type) {
+cdlist* fscl_dlist_create(ctofu_type list_type) {
     cdlist* new_dlist = (cdlist*)malloc(sizeof(cdlist));
     if (new_dlist == NULL) {
         // Handle memory allocation failure
@@ -51,14 +32,14 @@ cdlist* tscl_dlist_create(ctofu_type list_type) {
     return new_dlist;
 }
 
-void tscl_dlist_erase(cdlist* dlist) {
+void fscl_dlist_erase(cdlist* dlist) {
     if (dlist == NULL) {
         return;
     }
 
     while (dlist->head != NULL) {
         ctofu data;
-        tscl_dlist_remove(dlist, &data);
+        fscl_dlist_remove(dlist, &data);
     }
 
     free(dlist);
@@ -67,7 +48,7 @@ void tscl_dlist_erase(cdlist* dlist) {
 // =======================
 // ALGORITHM FUNCTIONS
 // =======================
-ctofu_error tscl_dlist_insert(cdlist* dlist, ctofu data) {
+ctofu_error fscl_dlist_insert(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -95,7 +76,7 @@ ctofu_error tscl_dlist_insert(cdlist* dlist, ctofu data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_dlist_remove(cdlist* dlist, ctofu* data) {
+ctofu_error fscl_dlist_remove(cdlist* dlist, ctofu* data) {
     if (dlist == NULL || data == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -121,7 +102,7 @@ ctofu_error tscl_dlist_remove(cdlist* dlist, ctofu* data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_dlist_search(const cdlist* dlist, ctofu data) {
+ctofu_error fscl_dlist_search(const cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -129,7 +110,7 @@ ctofu_error tscl_dlist_search(const cdlist* dlist, ctofu data) {
     cdlist_node* current = dlist->head;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_SUCCESS; // Found
         }
 
@@ -139,7 +120,7 @@ ctofu_error tscl_dlist_search(const cdlist* dlist, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-void tscl_dlist_reverse_forward(cdlist* dlist) {
+void fscl_dlist_reverse_forward(cdlist* dlist) {
     if (dlist == NULL || dlist->head == NULL || dlist->head == dlist->tail) {
         return;
     }
@@ -159,7 +140,7 @@ void tscl_dlist_reverse_forward(cdlist* dlist) {
     dlist->tail = temp;
 }
 
-void tscl_dlist_reverse_backward(cdlist* dlist) {
+void fscl_dlist_reverse_backward(cdlist* dlist) {
     if (dlist == NULL || dlist->head == NULL || dlist->head == dlist->tail) {
         return;
     }
@@ -183,7 +164,7 @@ void tscl_dlist_reverse_backward(cdlist* dlist) {
 // UTILITY FUNCTIONS
 // =======================
 
-size_t tscl_dlist_size(const cdlist* dlist) {
+size_t fscl_dlist_size(const cdlist* dlist) {
     if (dlist == NULL) {
         return 0;
     }
@@ -199,7 +180,7 @@ size_t tscl_dlist_size(const cdlist* dlist) {
     return size;
 }
 
-ctofu* tscl_dlist_getter(cdlist* dlist, ctofu data) {
+ctofu* fscl_dlist_getter(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return NULL;
     }
@@ -207,7 +188,7 @@ ctofu* tscl_dlist_getter(cdlist* dlist, ctofu data) {
     cdlist_node* current = dlist->head;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return &current->data; // Found
         }
 
@@ -217,7 +198,7 @@ ctofu* tscl_dlist_getter(cdlist* dlist, ctofu data) {
     return NULL; // Not found
 }
 
-ctofu_error tscl_dlist_setter(cdlist* dlist, ctofu data) {
+ctofu_error fscl_dlist_setter(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -225,7 +206,7 @@ ctofu_error tscl_dlist_setter(cdlist* dlist, ctofu data) {
     cdlist_node* current = dlist->head;
 
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             // Found, update the data
             current->data = data;
             return TOFU_SUCCESS;
@@ -237,18 +218,18 @@ ctofu_error tscl_dlist_setter(cdlist* dlist, ctofu data) {
     return TOFU_NOT_FOUND; // Not found
 }
 
-bool tscl_dlist_not_empty(const cdlist* dlist) {
+bool fscl_dlist_not_empty(const cdlist* dlist) {
     return dlist != NULL && dlist->head != NULL;
 }
 
-bool tscl_dlist_not_cnullptr(const cdlist* dlist) {
+bool fscl_dlist_not_cnullptr(const cdlist* dlist) {
     return dlist != NULL;
 }
 
-bool tscl_dlist_is_empty(const cdlist* dlist) {
+bool fscl_dlist_is_empty(const cdlist* dlist) {
     return dlist == NULL || dlist->head == NULL;
 }
 
-bool tscl_dlist_is_cnullptr(const cdlist* dlist) {
+bool fscl_dlist_is_cnullptr(const cdlist* dlist) {
     return dlist == NULL;
 }

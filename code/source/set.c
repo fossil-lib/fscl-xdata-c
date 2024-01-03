@@ -1,35 +1,16 @@
-/*  ----------------------------------------------------------------------------
-    File: set.c
-
-    Description:
-    This source file contains the code entry point for the Trilobite Stdlib project.
-    It demonstrates the usage of various utilities and functions provided by the
-    Trilobite Stdlib to enhance software development.
-
-    Author: Michael Gene Brockus (Dreamer)
-    Email: michaelbrockus@gmail.com
-    Website: [Trilobite Coder Blog](https://trilobite.home.blog)
-
-    Project: Trilobite Stdlib
-
-    License: Apache License 2.0
-    SPDX Identifier: Apache-2.0
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
-
-    Unless required by applicable law or agreed to in writing, software distributed under the License
-    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-    or implied. See the License for the specific language governing permissions and limitations
-    under the License.
-
-    Please review the full text of the Apache License 2.0 for the complete terms and conditions.
-
-    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
-    ----------------------------------------------------------------------------
+/*
+==============================================================================
+Author: Michael Gene Brockus (Dreamer)
+Email: michaelbrockus@gmail.com
+Organization: Fossil Logic
+Description: 
+    This file is part of the Fossil Logic project, where innovation meets
+    excellence in software development. Michael Gene Brockus, also known as
+    "Dreamer," is a dedicated contributor to this project. For any inquiries,
+    feel free to contact Michael at michaelbrockus@gmail.com.
+==============================================================================
 */
-#include "trilobite/xdata/set.h"
+#include "fossil/xdata/set.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,7 +19,7 @@
 // CREATE and DELETE
 // =======================
 
-cset* tscl_set_create(ctofu_type set_type) {
+cset* fscl_set_create(ctofu_type set_type) {
     cset* new_set = (cset*)malloc(sizeof(cset));
     if (new_set == NULL) {
         // Handle memory allocation failure
@@ -51,7 +32,7 @@ cset* tscl_set_create(ctofu_type set_type) {
     return new_set;
 }
 
-void tscl_set_erase(cset* set) {
+void fscl_set_erase(cset* set) {
     if (set == NULL) {
         return;
     }
@@ -71,7 +52,7 @@ void tscl_set_erase(cset* set) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-ctofu_error tscl_set_insert(cset* set, ctofu data) {
+ctofu_error fscl_set_insert(cset* set, ctofu data) {
     if (set == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -79,7 +60,7 @@ ctofu_error tscl_set_insert(cset* set, ctofu data) {
     // Check if the element already exists
     cset_node* current = set->head;
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_WAS_MISMATCH; // Duplicate element
         }
         current = current->next;
@@ -99,7 +80,7 @@ ctofu_error tscl_set_insert(cset* set, ctofu data) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_set_remove(cset* set, ctofu data) {
+ctofu_error fscl_set_remove(cset* set, ctofu data) {
     if (set == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -109,7 +90,7 @@ ctofu_error tscl_set_remove(cset* set, ctofu data) {
 
     // Find the node to remove
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             if (prev == NULL) {
                 set->head = current->next; // Remove the head node
             } else {
@@ -127,7 +108,7 @@ ctofu_error tscl_set_remove(cset* set, ctofu data) {
     return TOFU_NOT_FOUND; // Element not found
 }
 
-ctofu_error tscl_set_search(const cset* set, ctofu data) {
+ctofu_error fscl_set_search(const cset* set, ctofu data) {
     if (set == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -136,7 +117,7 @@ ctofu_error tscl_set_search(const cset* set, ctofu data) {
 
     // Search for the element
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return TOFU_SUCCESS; // Element found
         }
         current = current->next;
@@ -149,7 +130,7 @@ ctofu_error tscl_set_search(const cset* set, ctofu data) {
 // UTILITY FUNCTIONS
 // =======================
 
-size_t tscl_set_size(const cset* set) {
+size_t fscl_set_size(const cset* set) {
     if (set == NULL) {
         return 0;
     }
@@ -166,7 +147,7 @@ size_t tscl_set_size(const cset* set) {
     return size;
 }
 
-ctofu* tscl_set_getter(cset* set, ctofu data) {
+ctofu* fscl_set_getter(cset* set, ctofu data) {
     if (set == NULL) {
         return NULL;
     }
@@ -175,7 +156,7 @@ ctofu* tscl_set_getter(cset* set, ctofu data) {
 
     // Search for the element
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return &current->data; // Return a pointer to the element
         }
         current = current->next;
@@ -184,7 +165,7 @@ ctofu* tscl_set_getter(cset* set, ctofu data) {
     return NULL; // Element not found
 }
 
-ctofu_error tscl_set_setter(cset* set, ctofu data) {
+ctofu_error fscl_set_setter(cset* set, ctofu data) {
     if (set == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -193,7 +174,7 @@ ctofu_error tscl_set_setter(cset* set, ctofu data) {
 
     // Search for the element
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             current->data = data; // Update the element
             return TOFU_SUCCESS;
         }
@@ -203,23 +184,23 @@ ctofu_error tscl_set_setter(cset* set, ctofu data) {
     return TOFU_NOT_FOUND; // Element not found
 }
 
-bool tscl_set_not_empty(const cset* set) {
+bool fscl_set_not_empty(const cset* set) {
     return set != NULL && set->head != NULL;
 }
 
-bool tscl_set_not_cnullptr(const cset* set) {
+bool fscl_set_not_cnullptr(const cset* set) {
     return set != NULL;
 }
 
-bool tscl_set_is_empty(const cset* set) {
+bool fscl_set_is_empty(const cset* set) {
     return set == NULL || set->head == NULL;
 }
 
-bool tscl_set_is_cnullptr(const cset* set) {
+bool fscl_set_is_cnullptr(const cset* set) {
     return set == NULL;
 }
 
-bool tscl_set_contains(const cset* set, ctofu data) {
+bool fscl_set_contains(const cset* set, ctofu data) {
     if (set == NULL) {
         return false;
     }
@@ -228,7 +209,7 @@ bool tscl_set_contains(const cset* set, ctofu data) {
 
     // Check if the element exists
     while (current != NULL) {
-        if (tscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
             return true; // Element found
         }
         current = current->next;
@@ -240,7 +221,7 @@ bool tscl_set_contains(const cset* set, ctofu data) {
 // =======================
 // ITERATOR FUNCTIONS
 // =======================
-ctofu_iterator tscl_set_iterator_start(cset* set) {
+ctofu_iterator fscl_set_iterator_start(cset* set) {
     ctofu_iterator iterator;
     iterator.current_key = NULL;
     iterator.current_value = NULL;
@@ -254,7 +235,7 @@ ctofu_iterator tscl_set_iterator_start(cset* set) {
     return iterator;
 }
 
-ctofu_iterator tscl_set_iterator_end() {
+ctofu_iterator fscl_set_iterator_end() {
     ctofu_iterator iterator;
     iterator.current_key = NULL;
     iterator.current_value = NULL;
@@ -262,7 +243,7 @@ ctofu_iterator tscl_set_iterator_end() {
     return iterator;
 }
 
-ctofu_iterator tscl_set_iterator_next(ctofu_iterator iterator) {
+ctofu_iterator fscl_set_iterator_next(ctofu_iterator iterator) {
     if (iterator.current_value != NULL) {
         iterator.current_key = &iterator.current_value[1];
         iterator.current_value = &iterator.current_value[1];
@@ -272,6 +253,6 @@ ctofu_iterator tscl_set_iterator_next(ctofu_iterator iterator) {
     return iterator;
 }
 
-bool tscl_set_iterator_has_next(ctofu_iterator iterator) {
+bool fscl_set_iterator_has_next(ctofu_iterator iterator) {
     return iterator.current_value != NULL;
 }

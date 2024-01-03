@@ -1,35 +1,16 @@
-/*  ----------------------------------------------------------------------------
-    File: map.c
-
-    Description:
-    This source file contains the code entry point for the Trilobite Stdlib project.
-    It demonstrates the usage of various utilities and functions provided by the
-    Trilobite Stdlib to enhance software development.
-
-    Author: Michael Gene Brockus (Dreamer)
-    Email: michaelbrockus@gmail.com
-    Website: [Trilobite Coder Blog](https://trilobite.home.blog)
-
-    Project: Trilobite Stdlib
-
-    License: Apache License 2.0
-    SPDX Identifier: Apache-2.0
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
-
-    Unless required by applicable law or agreed to in writing, software distributed under the License
-    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-    or implied. See the License for the specific language governing permissions and limitations
-    under the License.
-
-    Please review the full text of the Apache License 2.0 for the complete terms and conditions.
-
-    (Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0)
-    ----------------------------------------------------------------------------
+/*
+==============================================================================
+Author: Michael Gene Brockus (Dreamer)
+Email: michaelbrockus@gmail.com
+Organization: Fossil Logic
+Description: 
+    This file is part of the Fossil Logic project, where innovation meets
+    excellence in software development. Michael Gene Brockus, also known as
+    "Dreamer," is a dedicated contributor to this project. For any inquiries,
+    feel free to contact Michael at michaelbrockus@gmail.com.
+==============================================================================
 */
-#include "trilobite/xdata/map.h"
+#include "fossil/xdata/map.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,7 +19,7 @@
 // CREATE and DELETE
 // =======================
 
-cmap* tscl_map_create(ctofu_type list_type) {
+cmap* fscl_map_create(ctofu_type list_type) {
     cmap* new_map = (cmap*)malloc(sizeof(cmap));
     if (new_map == NULL) {
         // Handle memory allocation failure
@@ -50,7 +31,7 @@ cmap* tscl_map_create(ctofu_type list_type) {
     return new_map;
 }
 
-void tscl_map_erase(cmap* map) {
+void fscl_map_erase(cmap* map) {
     if (map == NULL) {
         return;
     }
@@ -62,7 +43,7 @@ void tscl_map_erase(cmap* map) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-ctofu_error tscl_map_insert(cmap* map, ctofu key, ctofu value) {
+ctofu_error fscl_map_insert(cmap* map, ctofu key, ctofu value) {
     if (map == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -73,7 +54,7 @@ ctofu_error tscl_map_insert(cmap* map, ctofu key, ctofu value) {
 
     // Check if the key already exists
     for (size_t i = 0; i < map->size; ++i) {
-        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
             return TOFU_WAS_MISMATCH; // Duplicate key
         }
     }
@@ -85,7 +66,7 @@ ctofu_error tscl_map_insert(cmap* map, ctofu key, ctofu value) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_map_remove(cmap* map, ctofu key) {
+ctofu_error fscl_map_remove(cmap* map, ctofu key) {
     if (map == NULL) {
         return TOFU_WAS_NULLPTR;
     }
@@ -94,7 +75,7 @@ ctofu_error tscl_map_remove(cmap* map, ctofu key) {
 
     // Find the index of the key
     for (size_t i = 0; i < map->size; ++i) {
-        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
             index = i;
             break;
         }
@@ -115,13 +96,13 @@ ctofu_error tscl_map_remove(cmap* map, ctofu key) {
     return TOFU_SUCCESS;
 }
 
-ctofu_error tscl_map_search(const cmap* map, ctofu key) {
+ctofu_error fscl_map_search(const cmap* map, ctofu key) {
     if (map == NULL) {
         return TOFU_WAS_NULLPTR;
     }
 
     for (size_t i = 0; i < map->size; ++i) {
-        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
             return TOFU_SUCCESS; // Found
         }
     }
@@ -133,7 +114,7 @@ ctofu_error tscl_map_search(const cmap* map, ctofu key) {
 // UTILITY FUNCTIONS
 // =======================
 
-size_t tscl_map_size(const cmap* map) {
+size_t fscl_map_size(const cmap* map) {
     if (map == NULL) {
         return 0;
     }
@@ -141,13 +122,13 @@ size_t tscl_map_size(const cmap* map) {
     return map->size;
 }
 
-ctofu_error tscl_map_getter(cmap* map, ctofu key, ctofu* value) {
+ctofu_error fscl_map_getter(cmap* map, ctofu key, ctofu* value) {
     if (map == NULL || value == NULL) {
         return TOFU_WAS_NULLPTR;
     }
 
     for (size_t i = 0; i < map->size; ++i) {
-        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
             *value = map->values[i];
             return TOFU_SUCCESS; // Found
         }
@@ -156,13 +137,13 @@ ctofu_error tscl_map_getter(cmap* map, ctofu key, ctofu* value) {
     return TOFU_NOT_FOUND; // Key not found
 }
 
-ctofu_error tscl_map_setter(cmap* map, ctofu key, ctofu value) {
+ctofu_error fscl_map_setter(cmap* map, ctofu key, ctofu value) {
     if (map == NULL) {
         return TOFU_WAS_NULLPTR;
     }
 
     for (size_t i = 0; i < map->size; ++i) {
-        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
             // Found, update the value
             map->values[i] = value;
             return TOFU_SUCCESS;
@@ -172,29 +153,29 @@ ctofu_error tscl_map_setter(cmap* map, ctofu key, ctofu value) {
     return TOFU_NOT_FOUND; // Key not found
 }
 
-bool tscl_map_not_empty(const cmap* map) {
+bool fscl_map_not_empty(const cmap* map) {
     return map != NULL && map->size > 0;
 }
 
-bool tscl_map_not_cnullptr(const cmap* map) {
+bool fscl_map_not_cnullptr(const cmap* map) {
     return map != NULL;
 }
 
-bool tscl_map_is_empty(const cmap* map) {
+bool fscl_map_is_empty(const cmap* map) {
     return map == NULL || map->size == 0;
 }
 
-bool tscl_map_is_cnullptr(const cmap* map) {
+bool fscl_map_is_cnullptr(const cmap* map) {
     return map == NULL;
 }
 
-bool tscl_map_contains(const cmap* map, ctofu key) {
+bool fscl_map_contains(const cmap* map, ctofu key) {
     if (map == NULL) {
         return false;
     }
 
     for (size_t i = 0; i < map->size; ++i) {
-        if (tscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
             return true; // Found
         }
     }
@@ -205,7 +186,7 @@ bool tscl_map_contains(const cmap* map, ctofu key) {
 // =======================
 // ITERATOR FUNCTIONS
 // =======================
-ctofu_iterator tscl_map_iterator_start(cmap* map) {
+ctofu_iterator fscl_map_iterator_start(cmap* map) {
     ctofu_iterator iterator;
     iterator.current_key = map->keys;
     iterator.current_value = map->values;
@@ -214,7 +195,7 @@ ctofu_iterator tscl_map_iterator_start(cmap* map) {
     return iterator;
 }
 
-ctofu_iterator tscl_map_iterator_end(cmap* map) {
+ctofu_iterator fscl_map_iterator_end(cmap* map) {
     ctofu_iterator iterator;
     iterator.current_key = map->keys + map->size;
     iterator.current_value = map->values + map->size;
@@ -223,7 +204,7 @@ ctofu_iterator tscl_map_iterator_end(cmap* map) {
     return iterator;
 }
 
-ctofu_iterator tscl_map_iterator_next(ctofu_iterator iterator) {
+ctofu_iterator fscl_map_iterator_next(ctofu_iterator iterator) {
     iterator.current_key++;
     iterator.current_value++;
     iterator.index++;
@@ -231,6 +212,6 @@ ctofu_iterator tscl_map_iterator_next(ctofu_iterator iterator) {
     return iterator;
 }
 
-bool tscl_map_iterator_has_next(ctofu_iterator iterator) {
+bool fscl_map_iterator_has_next(ctofu_iterator iterator) {
     return iterator.index < MAX_MAP_SIZE;
 }
