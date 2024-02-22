@@ -85,9 +85,8 @@ typedef enum {
     TOFU_WAS_BAD_MALLOC = -4,
     TOFU_WAS_UNKNOWN    = -5,
     TOFU_NOT_FOUND      = -6
-} ctofu_error;
+} ctofu_error;  // Error codes for tofu operations
 
-// Generic and secure flavorless data type.
 typedef enum {
     INTEGER_TYPE,
     DOUBLE_TYPE,
@@ -98,9 +97,8 @@ typedef enum {
     NULLPTR_TYPE,
     INVALID_TYPE,
     UNKNOWN_TYPE
-} ctofu_type;
+} ctofu_type;  // Enumerated types for various tofu data
 
-// Define a union to hold data of different types
 typedef union {
     int integer_type;
     double double_type;
@@ -111,20 +109,35 @@ typedef union {
         struct ctofu* elements;
         size_t size;
     } array_type;
-} ctofu_data;
+} ctofu_data;  // Union to hold data of different types
 
-// Define a struct to represent the data and its type
 typedef struct {
     ctofu_type type;
     ctofu_data data;
-} ctofu;
+} ctofu;  // Struct to represent the data and its type
 
-// Define a struct to represent the iterator
 typedef struct {
     ctofu* current_key;
     ctofu* current_value;
     size_t index;
-} ctofu_iterator;
+} ctofu_iterator;  // Struct to represent the iterator
+
+typedef struct {
+    ctofu_type type;
+    ctofu_data data;
+    ctofu* key;
+} ctofu_searchable;  // Struct to represent the searchable data type
+
+typedef struct {
+    ctofu_type type;
+    ctofu_data data;
+    size_t index;
+} ctofu_sortable;  // Struct to represent the sortable data type
+
+typedef struct {
+    ctofu_type type;
+    ctofu_data data;
+} ctofu_comparable;  // Struct to represent the comparable data type
 
 // create and erase
 ctofu_error fscl_tofu_create(ctofu_type type, ctofu_data* value, ctofu** result);
