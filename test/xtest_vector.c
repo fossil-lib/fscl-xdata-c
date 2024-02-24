@@ -19,10 +19,10 @@ Description:
 // XUNIT TEST CASES
 //
 XTEST_CASE(test_vector_create_and_erase) {
-    cvector vector = fscl_vector_create(INTEGER_TYPE);
+    cvector vector = fscl_vector_create(TOFU_INTEGER_TYPE);
     
     // Check if the vector is created with the expected values
-    TEST_ASSERT_EQUAL(INTEGER_TYPE, vector.expected_type);
+    TEST_ASSERT_EQUAL(TOFU_INTEGER_TYPE, vector.expected_type);
     TEST_ASSERT_CNULLPTR(vector.data);
     TEST_ASSERT_EQUAL_UINT(0, vector.size);
     TEST_ASSERT_EQUAL_UINT(INITIAL_CAPACITY, vector.capacity);
@@ -36,12 +36,12 @@ XTEST_CASE(test_vector_create_and_erase) {
 }
 
 XTEST_CASE(test_vector_push_back) {
-    cvector vector = fscl_vector_create(INTEGER_TYPE);
+    cvector vector = fscl_vector_create(TOFU_INTEGER_TYPE);
 
     // Push back some elements
-    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
 
     fscl_vector_push_back(&vector, element1);
     fscl_vector_push_back(&vector, element2);
@@ -57,12 +57,12 @@ XTEST_CASE(test_vector_push_back) {
 }
 
 XTEST_CASE(test_vector_search) {
-    cvector vector = fscl_vector_create(INTEGER_TYPE);
+    cvector vector = fscl_vector_create(TOFU_INTEGER_TYPE);
 
     // Push back some elements
-    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
 
     fscl_vector_push_back(&vector, element1);
     fscl_vector_push_back(&vector, element2);
@@ -74,7 +74,7 @@ XTEST_CASE(test_vector_search) {
     TEST_ASSERT_EQUAL_INT(2, fscl_vector_search(&vector, element3));
 
     // Search for non-existing element
-    ctofu nonExistingElement = { INTEGER_TYPE, { .integer_type = 100 } };
+    ctofu nonExistingElement = { TOFU_INTEGER_TYPE, { .integer_type = 100 } };
     TEST_ASSERT_EQUAL_INT(-1, fscl_vector_search(&vector, nonExistingElement));
 
     fscl_vector_erase(&vector);

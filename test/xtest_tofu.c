@@ -26,7 +26,7 @@ XTEST_CASE(test_tofu_create_and_erase) {
     data.integer_type = 42;
 
     ctofu* result = NULL;
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(INTEGER_TYPE, &data, &result));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(TOFU_INTEGER_TYPE, &data, &result));
     TEST_ASSERT_NOT_CNULLPTR(result);
 
     fscl_tofu_erase(result);
@@ -46,9 +46,9 @@ XTEST_CASE(test_tofu_sort_insertion) {
     ctofu* node2 = NULL;
     ctofu* node3 = NULL;
 
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(INTEGER_TYPE, &data1, &node1));
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(INTEGER_TYPE, &data2, &node2));
-    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(INTEGER_TYPE, &data3, &node3));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(TOFU_INTEGER_TYPE, &data1, &node1));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(TOFU_INTEGER_TYPE, &data2, &node2));
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_create(TOFU_INTEGER_TYPE, &data3, &node3));
 
     // Sort the linked list using insertion sort
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_sort_insertion(node1, 3));

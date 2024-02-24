@@ -19,13 +19,13 @@ Description:
 // XUNIT TEST CASES
 //
 XTEST_CASE(test_queue_create_and_erase) {
-    cqueue* queue = fscl_queue_create(INTEGER_TYPE);
+    cqueue* queue = fscl_queue_create(TOFU_INTEGER_TYPE);
 
     // Check if the queue is created with the expected values
     TEST_ASSERT_NOT_CNULLPTR(queue);
     TEST_ASSERT_CNULLPTR(queue->front);
     TEST_ASSERT_CNULLPTR(queue->rear);
-    TEST_ASSERT_EQUAL(INTEGER_TYPE, queue->queue_type);
+    TEST_ASSERT_EQUAL(TOFU_INTEGER_TYPE, queue->queue_type);
 
     fscl_queue_erase(queue);
 
@@ -36,12 +36,12 @@ XTEST_CASE(test_queue_create_and_erase) {
 }
 
 XTEST_CASE(test_queue_insert_and_size) {
-    cqueue* queue = fscl_queue_create(INTEGER_TYPE);
+    cqueue* queue = fscl_queue_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_queue_insert(queue, element1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_queue_insert(queue, element2));
@@ -54,12 +54,12 @@ XTEST_CASE(test_queue_insert_and_size) {
 }
 
 XTEST_CASE(test_queue_remove) {
-    cqueue* queue = fscl_queue_create(INTEGER_TYPE);
+    cqueue* queue = fscl_queue_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
 
     fscl_queue_insert(queue, element1);
     fscl_queue_insert(queue, element2);
@@ -79,14 +79,14 @@ XTEST_CASE(test_queue_remove) {
 }
 
 XTEST_CASE(test_queue_not_empty_and_is_empty) {
-    cqueue* queue = fscl_queue_create(INTEGER_TYPE);
+    cqueue* queue = fscl_queue_create(TOFU_INTEGER_TYPE);
 
     // Check initially not empty
     TEST_ASSERT_FALSE(fscl_queue_not_empty(queue));
     TEST_ASSERT_TRUE(fscl_queue_is_empty(queue));
 
     // Insert an element
-    ctofu element = { INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_queue_insert(queue, element));
 
     // Check not empty after insertion

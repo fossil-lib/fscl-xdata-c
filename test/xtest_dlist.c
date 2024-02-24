@@ -39,9 +39,9 @@ XTEST_CASE(test_dlist_insert_and_size) {
     cdlist* dlist = fscl_dlist_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { integer_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dlist_insert(dlist, element1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dlist_insert(dlist, element2));
@@ -57,9 +57,9 @@ XTEST_CASE(test_dlist_remove) {
     cdlist* dlist = fscl_dlist_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { integer_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);
@@ -82,9 +82,9 @@ XTEST_CASE(test_dlist_reverse_forward) {
     cdlist* dlist = fscl_dlist_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { integer_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);
@@ -113,9 +113,9 @@ XTEST_CASE(test_dlist_reverse_backward) {
     cdlist* dlist = fscl_dlist_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { integer_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);

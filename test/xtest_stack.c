@@ -20,12 +20,12 @@ Description:
 //
 
 XTEST_CASE(test_stack_create_and_erase) {
-    cstack* stack = fscl_stack_create(INTEGER_TYPE);
+    cstack* stack = fscl_stack_create(TOFU_INTEGER_TYPE);
 
     // Check if the stack is created with the expected values
     TEST_ASSERT_NOT_CNULLPTR(stack);
     TEST_ASSERT_CNULLPTR(stack->top);
-    TEST_ASSERT_EQUAL(INTEGER_TYPE, stack->stack_type);
+    TEST_ASSERT_EQUAL(TOFU_INTEGER_TYPE, stack->stack_type);
 
     fscl_stack_erase(stack);
 
@@ -35,12 +35,12 @@ XTEST_CASE(test_stack_create_and_erase) {
 }
 
 XTEST_CASE(test_stack_insert_and_size) {
-    cstack* stack = fscl_stack_create(INTEGER_TYPE);
+    cstack* stack = fscl_stack_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_stack_insert(stack, element1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_stack_insert(stack, element2));
@@ -53,12 +53,12 @@ XTEST_CASE(test_stack_insert_and_size) {
 }
 
 XTEST_CASE(test_stack_remove) {
-    cstack* stack = fscl_stack_create(INTEGER_TYPE);
+    cstack* stack = fscl_stack_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
 
     fscl_stack_insert(stack, element1);
     fscl_stack_insert(stack, element2);
@@ -78,26 +78,26 @@ XTEST_CASE(test_stack_remove) {
 }
 
 XTEST_CASE(test_stack_top) {
-    cstack* stack = fscl_stack_create(INTEGER_TYPE);
+    cstack* stack = fscl_stack_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
 
     fscl_stack_insert(stack, element1);
     fscl_stack_insert(stack, element2);
     fscl_stack_insert(stack, element3);
 
     // Check the top element
-    ctofu topElement = fscl_stack_top(stack, (ctofu){INTEGER_TYPE, {.integer_type = -1}});
+    ctofu topElement = fscl_stack_top(stack, (ctofu){TOFU_INTEGER_TYPE, {.integer_type = -1}});
     TEST_ASSERT_EQUAL_INT(5, topElement.data.integer_type);
 
     // Remove an element
     fscl_stack_remove(stack, NULL);
 
     // Check the top element after removal
-    topElement = fscl_stack_top(stack, (ctofu){INTEGER_TYPE, {.integer_type = -1}});
+    topElement = fscl_stack_top(stack, (ctofu){TOFU_INTEGER_TYPE, {.integer_type = -1}});
     TEST_ASSERT_EQUAL_INT(10, topElement.data.integer_type);
 
     fscl_stack_erase(stack);
