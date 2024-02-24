@@ -186,13 +186,14 @@ void fscl_tofu_erase(ctofu* value);
 // =======================
 // SMART ALGORITHM FUNCTIONS
 // =======================
-// Options for algorithm param: auto, std, custom, terbo
+// Options for algorithm param: auto, std, custom
+// Options auto will select   : basic, medium, fast
 ctofu_error fscl_tofu_smart_accumulate(ctofu* objects, const char *algorithm);
 ctofu_error fscl_tofu_smart_transform(ctofu* objects, const char *algorithm, int (*transformFunc)(int));
 ctofu_error fscl_tofu_smart_sort(ctofu* objects, const char *algorithm);
 ctofu_error fscl_tofu_smart_search(ctofu* objects, const char *algorithm, ctofu* key);
 ctofu_error fscl_tofu_smart_filter(ctofu* objects, const char *algorithm, bool (*filterFunc)(const ctofu*));
-ctofu_error fscl_tofu_smart_reverse(ctofu* array, const char *algorithm);
+ctofu_error fscl_tofu_smart_reverse(ctofu* objects, const char *algorithm);
 ctofu_error fscl_tofu_smart_compare(const ctofu* right, const ctofu* left, const char *algorithm);
 ctofu_error fscl_tofu_smart_reduce(ctofu* objects, const char *algorithm, ctofu (*reduceFunc)(const ctofu*, const ctofu*));
 ctofu_error fscl_tofu_smart_shuffle(ctofu* objects, const char *algorithm);
