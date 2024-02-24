@@ -193,11 +193,11 @@ size_t fscl_tofu_search_binary(ctofu* array, size_t num, ctofu* key);
 // =======================
 ctofu_error fscl_tofu_accumulate(ctofu* objects, size_t num, ctofu* result);
 ctofu_error fscl_tofu_transform(ctofu* objects, size_t num, ctofu* result, int (*transformFunc)(int));
-void fscl_tofu_shuffle(ctofu* objects, size_t num);
 ctofu_error fscl_tofu_reverse(ctofu* array, size_t num);
 ctofu_error fscl_tofu_compare(const ctofu* a, const ctofu* b, int* result);
 ctofu_error fscl_tofu_filter(ctofu* objects, size_t num, ctofu* result, bool (*filterFunc)(const ctofu*));
 ctofu_error fscl_tofu_reduce(ctofu* objects, size_t num, ctofu* result, ctofu (*reduceFunc)(const ctofu*, const ctofu*));
+ctofu_error fscl_tofu_shuffle(ctofu* objects, size_t num);
 
 // =======================
 // UTILITY FUNCTIONS
@@ -216,6 +216,9 @@ bool fscl_tofu_its_cnullptr(const ctofu* value);
 ctofu_iterator fscl_tofu_iterator_at(ctofu* array, size_t num, size_t at);
 ctofu_iterator fscl_tofu_iterator_start(ctofu* array, size_t num);
 ctofu_iterator fscl_tofu_iterator_end(ctofu* array, size_t num);
+void fscl_tofu_iterator_next(ctofu_iterator* iterator, size_t num);
+void fscl_tofu_iterator_prev(ctofu_iterator* iterator, size_t num);
+void fscl_tofu_iterator_jump(ctofu_iterator* iterator, size_t num, size_t index);
 
 #ifdef __cplusplus
 }
