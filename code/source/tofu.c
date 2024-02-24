@@ -172,14 +172,6 @@ ctofu_error fscl_tofu_smart_accumulate(ctofu* objects, const char *algorithm) {
             return TOFU_WAS_NULLPTR;
         }
 
-    } else if (strcmp(algorithm, "custom") == 0) {
-        // Allow the user to override with their custom implementation
-        if (fscl_tofu_not_cnullptr(objects)) {
-            return fscl_tofu_custom_accumulate(objects);
-        } else {
-            return TOFU_WAS_NULLPTR;
-        }
-
     } else {
         // Handle unsupported algorithm
         return TOFU_WAS_UNKNOWN;
@@ -202,14 +194,6 @@ ctofu_error fscl_tofu_smart_transform(ctofu* objects, const char *algorithm, int
                 return TOFU_WAS_BAD_RANGE;
             }
             return fscl_tofu_transform(objects->data.array_type.elements, transformFunc);
-        } else {
-            return TOFU_WAS_NULLPTR;
-        }
-
-    } else if (strcmp(algorithm, "custom") == 0) {
-        // Allow the user to override with their custom implementation
-        if (fscl_tofu_not_cnullptr(objects)) {
-            return fscl_tofu_custom_transform(objects, transformFunc);
         } else {
             return TOFU_WAS_NULLPTR;
         }
@@ -240,14 +224,6 @@ ctofu_error fscl_tofu_smart_sort(ctofu* objects, const char *algorithm) {
             return TOFU_WAS_NULLPTR;
         }
 
-    } else if (strcmp(algorithm, "custom") == 0) {
-        // Allow the user to override with their custom implementation
-        if (fscl_tofu_not_cnullptr(objects)) {
-            return fscl_tofu_custom_sort(objects);
-        } else {
-            return TOFU_WAS_NULLPTR;
-        }
-
     } else {
         // Handle unsupported algorithm
         return TOFU_WAS_UNKNOWN;
@@ -270,14 +246,6 @@ ctofu_error fscl_tofu_smart_search(ctofu* objects, const char *algorithm, ctofu*
                 return TOFU_WAS_BAD_RANGE;
             }
             return fscl_tofu_search(objects->data.array_type.elements, key);
-        } else {
-            return TOFU_WAS_NULLPTR;
-        }
-
-    } else if (strcmp(algorithm, "custom") == 0) {
-        // Allow the user to override with their custom implementation
-        if (fscl_tofu_not_cnullptr(objects)) {
-            return fscl_tofu_custom_search(objects, key);
         } else {
             return TOFU_WAS_NULLPTR;
         }
@@ -308,14 +276,6 @@ ctofu_error fscl_tofu_smart_filter(ctofu* objects, const char *algorithm, bool (
             return TOFU_WAS_NULLPTR;
         }
 
-    } else if (strcmp(algorithm, "custom") == 0) {
-        // Allow the user to override with their custom implementation
-        if (fscl_tofu_not_cnullptr(objects)) {
-            return fscl_tofu_custom_filter(objects, filterFunc);
-        } else {
-            return TOFU_WAS_NULLPTR;
-        }
-
     } else {
         // Handle unsupported algorithm
         return TOFU_WAS_UNKNOWN;
@@ -338,14 +298,6 @@ ctofu_error fscl_tofu_smart_reverse(ctofu* objects, const char *algorithm) {
                 return TOFU_WAS_BAD_RANGE;
             }
             return fscl_tofu_reverse(objects->data.array_type.elements);
-        } else {
-            return TOFU_WAS_NULLPTR;
-        }
-
-    } else if (strcmp(algorithm, "custom") == 0) {
-        // Allow the user to override with their custom implementation
-        if (fscl_tofu_not_cnullptr(objects)) {
-            return fscl_tofu_custom_reverse(objects);
         } else {
             return TOFU_WAS_NULLPTR;
         }
@@ -373,14 +325,6 @@ ctofu_error fscl_tofu_smart_compare(const ctofu* right, const ctofu* left, const
             return TOFU_WAS_NULLPTR;
         }
 
-    } else if (strcmp(algorithm, "custom") == 0) {
-        // Allow the user to override with their custom implementation
-        if (fscl_tofu_not_cnullptr(right) && fscl_tofu_not_cnullptr(left)) {
-            return fscl_tofu_custom_compare(right, left);
-        } else {
-            return TOFU_WAS_NULLPTR;
-        }
-
     } else {
         // Handle unsupported algorithm
         return TOFU_WAS_UNKNOWN;
@@ -400,14 +344,6 @@ ctofu_error fscl_tofu_smart_reduce(ctofu* objects, const char *algorithm, ctofu 
         // Use the existing classic version
         if (fscl_tofu_not_cnullptr(objects)) {
             return fscl_tofu_reduce(objects->data.array_type.elements, reduceFunc);
-        } else {
-            return TOFU_WAS_NULLPTR;
-        }
-
-    } else if (strcmp(algorithm, "custom") == 0) {
-        // Allow the user to override with their custom implementation
-        if (fscl_tofu_not_cnullptr(objects)) {
-            return fscl_tofu_custom_reduce(objects, reduceFunc);
         } else {
             return TOFU_WAS_NULLPTR;
         }
@@ -438,66 +374,10 @@ ctofu_error fscl_tofu_smart_shuffle(ctofu* objects, const char *algorithm) {
             return TOFU_WAS_NULLPTR;
         }
 
-    } else if (strcmp(algorithm, "custom") == 0) {
-        // Allow the user to override with their custom implementation
-        if (fscl_tofu_not_cnullptr(objects)) {
-            return fscl_tofu_custom_shuffle(objects);
-        } else {
-            return TOFU_WAS_NULLPTR;
-        }
-
     } else {
         // Handle unsupported algorithm
         return TOFU_WAS_UNKNOWN;
     }
-}
-
-// =======================
-// CUSTOM ALGORITHM FUNCTIONS
-// =======================
-ctofu_error fscl_tofu_custom_accumulate(ctofu* objects) {
-    // Default implementation using the existing classic version
-    return fscl_tofu_accumulate(objects);
-}
-
-ctofu_error fscl_tofu_custom_transform(ctofu* objects, int (*transformFunc)(int)) {
-    // Default implementation using the existing classic version
-    return fscl_tofu_transform(objects, transformFunc);
-}
-
-ctofu_error fscl_tofu_custom_sort(ctofu* objects) {
-    // Default implementation using the existing classic version
-    return fscl_tofu_sort(objects);
-}
-
-ctofu_error fscl_tofu_custom_search(ctofu* objects, ctofu* key) {
-    // Default implementation using the existing classic version
-    return fscl_tofu_search(objects, key);
-}
-
-ctofu_error fscl_tofu_custom_filter(ctofu* objects, bool (*filterFunc)(const ctofu*)) {
-    // Default implementation using the existing classic version
-    return fscl_tofu_filter(objects, filterFunc);
-}
-
-ctofu_error fscl_tofu_custom_reverse(ctofu* objects) {
-    // Default implementation using the existing classic version
-    return fscl_tofu_reverse(objects);
-}
-
-ctofu_error fscl_tofu_custom_compare(const ctofu* right, const ctofu* left) {
-    // Default implementation using the existing classic version
-    return fscl_tofu_compare(right, left);
-}
-
-ctofu_error fscl_tofu_custom_reduce(ctofu* objects, ctofu (*reduceFunc)(const ctofu*, const ctofu*)) {
-    // Default implementation using the existing classic version
-    return fscl_tofu_reduce(objects, reduceFunc);
-}
-
-ctofu_error fscl_tofu_custom_shuffle(ctofu* objects) {
-    // Default implementation using the existing classic version
-    return fscl_tofu_shuffle(objects);
 }
 
 // =======================
