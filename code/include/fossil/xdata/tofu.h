@@ -154,21 +154,28 @@ typedef struct {
 } ctofu_iterator;  // Struct to represent the iterator
 
 typedef struct {
-    ctofu_type type;
-    ctofu_data data;
-    ctofu* key;
-} ctofu_searchable;  // Struct to represent the searchable data type
-
-typedef struct {
-    ctofu_type type;
-    ctofu_data data;
-    size_t index;
+    ctofu* objects;
 } ctofu_sortable;  // Struct to represent the sortable data type
 
 typedef struct {
-    ctofu_type type;
-    ctofu_data data;
+    ctofu* current_key;
+    ctofu* current_value;
+} ctofu_searchable;  // Struct to represent the searchable data type
+
+typedef struct {
+    ctofu* left_objects;
+    ctofu* right_objects;
 } ctofu_comparable;  // Struct to represent the comparable data type
+
+typedef struct {
+    ctofu* temp_objects;
+    ctofu* left_objects;
+    ctofu* right_objects;
+} ctofu_reverseable; // Define a struct to represent the reversible data type
+
+typedef struct {
+    ctofu* objects;
+} ctofu_shufflable; // Define a struct to represent the shufflable data type
 
 // =======================
 // CREATE/ERASE FUNCTIONS
@@ -177,27 +184,44 @@ ctofu_error fscl_tofu_create(ctofu_type type, ctofu_data* value, ctofu** result)
 void fscl_tofu_erase(ctofu* value);
 
 // =======================
-// SORT ALGORITHM FUNCTIONS
+// SMART ALGORITHM FUNCTIONS
 // =======================
-ctofu_error fscl_tofu_sort_insertion(ctofu* array, size_t num);
-ctofu_error fscl_tofu_sort_selection(ctofu* array, size_t num);
+// Options for algorithm param: auto, std, custom, terbo
+ctofu_error fscl_tofu_smart_accumulate(ctofu* objects, const char *algorithm);
+ctofu_error fscl_tofu_smart_transform(ctofu* objects, const char *algorithm, int (*transformFunc)(int));
+ctofu_error fscl_tofu_smart_sort(ctofu* objects, const char *algorithm);
+ctofu_error fscl_tofu_smart_search(ctofu* objects, const char *algorithm, ctofu* key);
+ctofu_error fscl_tofu_smart_filter(ctofu* objects, const char *algorithm, bool (*filterFunc)(const ctofu*));
+ctofu_error fscl_tofu_smart_reverse(ctofu* array, const char *algorithm);
+ctofu_error fscl_tofu_smart_compare(const ctofu* right, const ctofu* left, const char *algorithm);
+ctofu_error fscl_tofu_smart_reduce(ctofu* objects, const char *algorithm, ctofu (*reduceFunc)(const ctofu*, const ctofu*));
+ctofu_error fscl_tofu_smart_shuffle(ctofu* objects, const char *algorithm);
 
 // =======================
-// SEARCH ALGORITHM FUNCTIONS
+// CUSTOM ALGORITHM FUNCTIONS
 // =======================
-size_t fscl_tofu_search_linear(ctofu* array, size_t num, ctofu* key);
-size_t fscl_tofu_search_binary(ctofu* array, size_t num, ctofu* key);
+__attribute__((weak)) ctofu_error fscl_tofu_custom_accumulate(ctofu* objects);
+__attribute__((weak)) ctofu_error fscl_tofu_custom_transform(ctofu* objects, int (*transformFunc)(int));
+__attribute__((weak)) ctofu_error fscl_tofu_custom_sort(ctofu* objects);
+__attribute__((weak)) ctofu_error fscl_tofu_custom_search(ctofu* objects, ctofu* key);
+__attribute__((weak)) ctofu_error fscl_tofu_custom_filter(ctofu* objects, bool (*filterFunc)(const ctofu*));
+__attribute__((weak)) ctofu_error fscl_tofu_custom_reverse(ctofu* objects);
+__attribute__((weak)) ctofu_error fscl_tofu_custom_compare(const ctofu* right, const ctofu* left);
+__attribute__((weak)) ctofu_error fscl_tofu_custom_reduce(ctofu* objects, ctofu (*reduceFunc)(const ctofu*, const ctofu*));
+__attribute__((weak)) ctofu_error fscl_tofu_custom_shuffle(ctofu* objects);
 
 // =======================
-// OTHER ALGORITHM FUNCTIONS
+// CLASSIC ALGORITHM FUNCTIONS
 // =======================
-ctofu_error fscl_tofu_accumulate(ctofu* objects, size_t num, ctofu* result);
-ctofu_error fscl_tofu_transform(ctofu* objects, size_t num, ctofu* result, int (*transformFunc)(int));
-ctofu_error fscl_tofu_reverse(ctofu* array, size_t num);
-ctofu_error fscl_tofu_compare(const ctofu* a, const ctofu* b, int* result);
-ctofu_error fscl_tofu_filter(ctofu* objects, size_t num, ctofu* result, bool (*filterFunc)(const ctofu*));
-ctofu_error fscl_tofu_reduce(ctofu* objects, size_t num, ctofu* result, ctofu (*reduceFunc)(const ctofu*, const ctofu*));
-ctofu_error fscl_tofu_shuffle(ctofu* objects, size_t num);
+ctofu_error fscl_tofu_accumulate(ctofu* objects);
+ctofu_error fscl_tofu_transform(ctofu* objects, int (*transformFunc)(int));
+ctofu_error fscl_tofu_sort(ctofu* objects);
+ctofu_error fscl_tofu_search(ctofu* objects, ctofu* key);
+ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu*));
+ctofu_error fscl_tofu_reverse(ctofu* objects);
+ctofu_error fscl_tofu_compare(const ctofu* right, const ctofu* left);
+ctofu_error fscl_tofu_reduce(ctofu* objects, ctofu (*reduceFunc)(const ctofu*, const ctofu*));
+ctofu_error fscl_tofu_shuffle(ctofu* objects);
 
 // =======================
 // UTILITY FUNCTIONS
