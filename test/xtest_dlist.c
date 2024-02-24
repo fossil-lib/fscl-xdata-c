@@ -19,13 +19,13 @@ Description:
 // XUNIT TEST CASES
 //
 XTEST_CASE(test_dlist_create_and_erase) {
-    cdlist* dlist = fscl_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = fscl_dlist_create(TOFU_INTEGER_TYPE);
 
     // Check if the doubly linked list is created with the expected values
     TEST_ASSERT_NOT_CNULLPTR(dlist);
     TEST_ASSERT_CNULLPTR(dlist->head);
     TEST_ASSERT_CNULLPTR(dlist->tail);
-    TEST_ASSERT_EQUAL(INTEGER_TYPE, dlist->list_type);
+    TEST_ASSERT_EQUAL(TOFU_INTEGER_TYPE, dlist->list_type);
 
     fscl_dlist_erase(dlist);
 
@@ -36,12 +36,12 @@ XTEST_CASE(test_dlist_create_and_erase) {
 }
 
 XTEST_CASE(test_dlist_insert_and_size) {
-    cdlist* dlist = fscl_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = fscl_dlist_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dlist_insert(dlist, element1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dlist_insert(dlist, element2));
@@ -54,12 +54,12 @@ XTEST_CASE(test_dlist_insert_and_size) {
 }
 
 XTEST_CASE(test_dlist_remove) {
-    cdlist* dlist = fscl_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = fscl_dlist_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);
@@ -79,12 +79,12 @@ XTEST_CASE(test_dlist_remove) {
 }
 
 XTEST_CASE(test_dlist_reverse_forward) {
-    cdlist* dlist = fscl_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = fscl_dlist_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);
@@ -110,12 +110,12 @@ XTEST_CASE(test_dlist_reverse_forward) {
 }
 
 XTEST_CASE(test_dlist_reverse_backward) {
-    cdlist* dlist = fscl_dlist_create(INTEGER_TYPE);
+    cdlist* dlist = fscl_dlist_create(TOFU_INTEGER_TYPE);
 
     // Insert some elements
-    ctofu element1 = { INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);
