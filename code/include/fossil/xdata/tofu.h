@@ -199,19 +199,6 @@ ctofu_error fscl_tofu_smart_reduce(ctofu* objects, const char *algorithm, ctofu 
 ctofu_error fscl_tofu_smart_shuffle(ctofu* objects, const char *algorithm);
 
 // =======================
-// CUSTOM ALGORITHM FUNCTIONS
-// =======================
-__attribute__((weak)) ctofu_error fscl_tofu_custom_accumulate(ctofu* objects);
-__attribute__((weak)) ctofu_error fscl_tofu_custom_transform(ctofu* objects, int (*transformFunc)(int));
-__attribute__((weak)) ctofu_error fscl_tofu_custom_sort(ctofu* objects);
-__attribute__((weak)) ctofu_error fscl_tofu_custom_search(ctofu* objects, ctofu* key);
-__attribute__((weak)) ctofu_error fscl_tofu_custom_filter(ctofu* objects, bool (*filterFunc)(const ctofu*));
-__attribute__((weak)) ctofu_error fscl_tofu_custom_reverse(ctofu* objects);
-__attribute__((weak)) ctofu_error fscl_tofu_custom_compare(const ctofu* right, const ctofu* left);
-__attribute__((weak)) ctofu_error fscl_tofu_custom_reduce(ctofu* objects, ctofu (*reduceFunc)(const ctofu*, const ctofu*));
-__attribute__((weak)) ctofu_error fscl_tofu_custom_shuffle(ctofu* objects);
-
-// =======================
 // CLASSIC ALGORITHM FUNCTIONS
 // =======================
 ctofu_error fscl_tofu_accumulate(ctofu* objects);
