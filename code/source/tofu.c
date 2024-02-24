@@ -15,28 +15,6 @@ Description:
 #include <stdlib.h>
 #include <string.h>
 
-// Function to check if a ctofu object is even
-bool isEven(const ctofu* value) {
-    if (value->type == TOFU_INT_TYPE) {
-        return (value->data.intager_type % 2 == 0);
-    }
-    return false;  // Return false for unsupported types
-}
-
-// Function to sum two ctofu objects
-ctofu sumReducer(const ctofu* a, const ctofu* b) {
-    ctofu result;
-    if (a->type == TOFU_INT_TYPE && b->type == TOFU_INT_TYPE) {
-        result.type = TOFU_INT_TYPE;
-        result.data.intager_type = a->data.intager_type + b->data.intager_type;
-    } else {
-        // Return a default value for unsupported types
-        result.type = TOFU_INT_TYPE;
-        result.data.intager_type = 0;
-    }
-    return result;
-}
-
 char* tofu_custom_strdup(const char* source) {
     if (source == NULL) {
         return NULL;
@@ -172,395 +150,651 @@ void fscl_tofu_erase(ctofu* value) {
 }
 
 // =======================
-// ALGORITHM FUNCTIONS
+// SMART ALGORITHM FUNCTIONS
 // =======================
-ctofu_error fscl_tofu_filter(ctofu* objects, size_t num, ctofu* result, bool (*filterFunc)(const ctofu*)) {
-    if (objects == NULL || result == NULL || filterFunc == NULL) {
+ctofu_error fscl_tofu_smart_accumulate(ctofu* objects, const char *algorithm) {
+    if (!objects) {
         return TOFU_WAS_NULLPTR;
     }
 
-    size_t filteredCount = 0;
+    if (strcmp(algorithm, "auto") == 0) {
+        // Automatically select an appropriate algorithm based on size and type
+        // ...
 
-    // Count the number of elements that pass the filter
-    for (size_t i = 0; i < num; ++i) {
-        if (filterFunc(&objects[i])) {
-            ++filteredCount;
-        }
-    }
-
-    // Allocate memory for the result array
-    result->type = TOFU_ARRAY_TYPE;
-    result->data.array_type.size = filteredCount;
-    result->data.array_type.elements = (ctofu*)malloc(filteredCount * sizeof(ctofu));
-    if (result->data.array_type.elements == NULL) {
-        return TOFU_WAS_BAD_MALLOC;
-    }
-
-    // Populate the result array with elements that pass the filter
-    size_t resultIndex = 0;
-    for (size_t i = 0; i < num; ++i) {
-        if (filterFunc(&objects[i])) {
-            fscl_tofu_value_copy(&objects[i], &result->data.array_type.elements[resultIndex]);
-            ++resultIndex;
-        }
-    }
-
-    return TOFU_SUCCESS;
-}
-
-ctofu_error fscl_tofu_reduce(ctofu* objects, size_t num, ctofu* result, ctofu (*reduceFunc)(const ctofu*, const ctofu*)) {
-    if (objects == NULL || result == NULL || reduceFunc == NULL) {
-        return TOFU_WAS_NULLPTR;
-    }
-
-    if (num == 0) {
-        // Return a default value for an empty array
-        result->type = TOFU_INT_TYPE;
-        result->data.intager_type = 0;
-        return TOFU_SUCCESS;
-    }
-
-    // Initialize the result with the first element
-    fscl_tofu_value_copy(&objects[0], result);
-
-    // Apply the reduce function to the remaining elements
-    for (size_t i = 1; i < num; ++i) {
-        ctofu tempResult = reduceFunc(result, &objects[i]);
-        fscl_tofu_value_setter(&tempResult, result);
-        fscl_tofu_value_erase(&tempResult);
-    }
-
-    return TOFU_SUCCESS;
-}
-
-ctofu_error fscl_tofu_accumulate(ctofu* objects, size_t num, ctofu* result) {
-    if (objects == NULL || result == NULL) {
-        return TOFU_WAS_NULLPTR;
-    }
-
-    result->type = TOFU_INT_TYPE;
-    result->data.intager_type = 0;
-
-    for (size_t i = 0; i < num; ++i) {
-        if (objects[i].type != TOFU_INT_TYPE) {
-            // Handle unsupported types
-            printf("Unsupported type for accumulation\n");
-            return TOFU_WAS_UNKNOWN;
-        }
-        result->data.intager_type += objects[i].data.intager_type;
-    }
-
-    return TOFU_SUCCESS;
-}
-
-ctofu_error fscl_tofu_transform(ctofu* objects, size_t num, ctofu* result, int (*transformFunc)(int)) {
-    if (objects == NULL || result == NULL || transformFunc == NULL) {
-        return TOFU_WAS_NULLPTR;
-    }
-
-    result->type = TOFU_ARRAY_TYPE;
-    result->data.array_type.size = num;
-    result->data.array_type.elements = (ctofu*)malloc(num * sizeof(ctofu));
-    if (result->data.array_type.elements == NULL) {
-        return TOFU_WAS_BAD_MALLOC;
-    }
-
-    for (size_t i = 0; i < num; ++i) {
-        if (objects[i].type != TOFU_INT_TYPE) {
-            // Handle unsupported types
-            printf("Unsupported type for transformation\n");
-            return TOFU_WAS_UNKNOWN;
-        }
-        result->data.array_type.elements[i].type = TOFU_INT_TYPE;
-        result->data.array_type.elements[i].data.intager_type = transformFunc(objects[i].data.intager_type);
-    }
-
-    return TOFU_SUCCESS;
-}
-
-ctofu_error fscl_tofu_shuffle(ctofu* objects, size_t num) {
-    if (objects == NULL || num <= 1) {
-        return TOFU_WAS_NULLPTR;  // or TOFU_NOT_FOUND, depending on your preference
-    }
-
-    for (size_t i = num - 1; i > 0; --i) {
-        size_t j = rand() % (i + 1);
-
-        // Swap elements i and j
-        ctofu temp = objects[i];
-        objects[i] = objects[j];
-        objects[j] = temp;
-    }
-
-    return TOFU_SUCCESS;
-}
-
-ctofu_error fscl_tofu_sort_insertion(ctofu* array, size_t num) {
-    if (array == NULL || num == 0) {
-        return TOFU_WAS_NULLPTR;
-    }
-
-    for (size_t i = 1; i < num; ++i) {
-        ctofu key = array[i];
-        size_t j = i;
-
-        while (j > 0) {
-            int cmpResult;
-            ctofu_error compareError = fscl_tofu_compare(&array[j - 1], &key, &cmpResult);
-            if (compareError != TOFU_SUCCESS) {
-                return compareError;
+    } else if (strcmp(algorithm, "std") == 0) {
+        // Use the existing classic version
+        if (fscl_tofu_not_cnullptr(objects)) {
+            if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+                return TOFU_WAS_BAD_RANGE;
             }
-
-            if (cmpResult > 0) {
-                array[j] = array[j - 1];
-                --j;
-            } else {
-                break;
-            }
-        }
-
-        array[j] = key;
-    }
-
-    return TOFU_SUCCESS;
-}
-
-ctofu_error fscl_tofu_sort_selection(ctofu* array, size_t num) {
-    if (array == NULL || num == 0) {
-        return TOFU_WAS_NULLPTR;
-    }
-
-    for (size_t i = 0; i < num - 1; ++i) {
-        size_t min_index = i;
-
-        for (size_t j = i + 1; j < num; ++j) {
-            int cmpResult;
-            ctofu_error compareError = fscl_tofu_compare(&array[j], &array[min_index], &cmpResult);
-            if (compareError != TOFU_SUCCESS) {
-                return compareError;
-            }
-
-            if (cmpResult < 0) {
-                min_index = j;
-            }
-        }
-
-        if (min_index != i) {
-            ctofu temp = array[i];
-            array[i] = array[min_index];
-            array[min_index] = temp;
-        }
-    }
-
-    return TOFU_SUCCESS;
-}
-
-size_t fscl_tofu_search_linear(ctofu* array, size_t num, ctofu* key) {
-    if (array == NULL || num == 0 || key == NULL) {
-        return num; // Not found
-    }
-
-    for (size_t i = 0; i < num; ++i) {
-        int cmpResult;
-        ctofu_error compareError = fscl_tofu_compare(&array[i], key, &cmpResult);
-        if (compareError != TOFU_SUCCESS) {
-            // Handle comparison error
-            return num; // Not found
-        }
-
-        if (cmpResult == 0) {
-            return i; // Found
-        }
-    }
-
-    return num; // Not found
-}
-
-size_t fscl_tofu_search_binary(ctofu* array, size_t num, ctofu* key) {
-    if (array == NULL || num == 0 || key == NULL) {
-        return num; // Not found
-    }
-
-    size_t low = 0, high = num - 1;
-
-    while (low <= high) {
-        size_t mid = low + (high - low) / 2;
-
-        int cmpResult;
-        ctofu_error compareError = fscl_tofu_compare(&array[mid], key, &cmpResult);
-        if (compareError != TOFU_SUCCESS) {
-            // Handle comparison error
-            return num; // Not found
-        }
-
-        if (cmpResult == 0) {
-            return mid; // Found
-        } else if (cmpResult < 0) {
-            low = mid + 1;
+            return fscl_tofu_accumulate(objects->data.array_type.elements);
         } else {
-            high = mid - 1;
+            return TOFU_WAS_NULLPTR;
         }
-    }
 
-    return num; // Not found
+    } else if (strcmp(algorithm, "custom") == 0) {
+        // Allow the user to override with their custom implementation
+        if (fscl_tofu_not_cnullptr(objects)) {
+            return fscl_tofu_custom_accumulate(objects);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else {
+        // Handle unsupported algorithm
+        return TOFU_WAS_UNKNOWN;
+    }
 }
 
-ctofu_error fscl_tofu_reverse(ctofu* array, size_t num) {
-    if (array == NULL || num == 0) {
+ctofu_error fscl_tofu_smart_transform(ctofu* objects, const char *algorithm, int (*transformFunc)(int)) {
+    if (!objects) {
         return TOFU_WAS_NULLPTR;
     }
 
-    size_t start = 0;
-    size_t end = num - 1;
+    if (strcmp(algorithm, "auto") == 0) {
+        // Automatically select an appropriate algorithm based on size and type
+        // ...
 
-    while (start < end) {
-        // Swap elements at start and end indices
-        ctofu temp = array[start];
-        array[start] = array[end];
-        array[end] = temp;
+    } else if (strcmp(algorithm, "std") == 0) {
+        // Use the existing classic version
+        if (fscl_tofu_not_cnullptr(objects)) {
+            if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+                return TOFU_WAS_BAD_RANGE;
+            }
+            return fscl_tofu_transform(objects->data.array_type.elements, transformFunc);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
 
-        // Move indices towards each other
-        ++start;
-        --end;
+    } else if (strcmp(algorithm, "custom") == 0) {
+        // Allow the user to override with their custom implementation
+        if (fscl_tofu_not_cnullptr(objects)) {
+            return fscl_tofu_custom_transform(objects, transformFunc);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else {
+        // Handle unsupported algorithm
+        return TOFU_WAS_UNKNOWN;
+    }
+}
+
+ctofu_error fscl_tofu_smart_sort(ctofu* objects, const char *algorithm) {
+    if (!objects) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (strcmp(algorithm, "auto") == 0) {
+        // Automatically select an appropriate algorithm based on size and type
+        // ...
+
+    } else if (strcmp(algorithm, "std") == 0) {
+        // Use the existing classic version
+        if (fscl_tofu_not_cnullptr(objects)) {
+            if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+                return TOFU_WAS_BAD_RANGE;
+            }
+            return fscl_tofu_sort(objects->data.array_type.elements);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else if (strcmp(algorithm, "custom") == 0) {
+        // Allow the user to override with their custom implementation
+        if (fscl_tofu_not_cnullptr(objects)) {
+            return fscl_tofu_custom_sort(objects);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else {
+        // Handle unsupported algorithm
+        return TOFU_WAS_UNKNOWN;
+    }
+}
+
+ctofu_error fscl_tofu_smart_search(ctofu* objects, const char *algorithm, ctofu* key) {
+    if (!objects || !key) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (strcmp(algorithm, "auto") == 0) {
+        // Automatically select an appropriate algorithm based on size and type
+        // ...
+
+    } else if (strcmp(algorithm, "std") == 0) {
+        // Use the existing classic version
+        if (fscl_tofu_not_cnullptr(objects)) {
+            if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+                return TOFU_WAS_BAD_RANGE;
+            }
+            return fscl_tofu_search(objects->data.array_type.elements, key);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else if (strcmp(algorithm, "custom") == 0) {
+        // Allow the user to override with their custom implementation
+        if (fscl_tofu_not_cnullptr(objects)) {
+            return fscl_tofu_custom_search(objects, key);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else {
+        // Handle unsupported algorithm
+        return TOFU_WAS_UNKNOWN;
+    }
+}
+
+ctofu_error fscl_tofu_smart_filter(ctofu* objects, const char *algorithm, bool (*filterFunc)(const ctofu*)) {
+    if (!objects || !filterFunc) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (strcmp(algorithm, "auto") == 0) {
+        // Automatically select an appropriate algorithm based on size and type
+        // ...
+
+    } else if (strcmp(algorithm, "std") == 0) {
+        // Use the existing classic version
+        if (fscl_tofu_not_cnullptr(objects)) {
+            if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+                return TOFU_WAS_BAD_RANGE;
+            }
+            return fscl_tofu_filter(objects->data.array_type.elements, filterFunc);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else if (strcmp(algorithm, "custom") == 0) {
+        // Allow the user to override with their custom implementation
+        if (fscl_tofu_not_cnullptr(objects)) {
+            return fscl_tofu_custom_filter(objects, filterFunc);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else {
+        // Handle unsupported algorithm
+        return TOFU_WAS_UNKNOWN;
+    }
+}
+
+ctofu_error fscl_tofu_smart_reverse(ctofu* objects, const char *algorithm) {
+    if (!objects) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (strcmp(algorithm, "auto") == 0) {
+        // Automatically select an appropriate algorithm based on size and type
+        // ...
+
+    } else if (strcmp(algorithm, "std") == 0) {
+        // Use the existing classic version
+        if (fscl_tofu_not_cnullptr(objects)) {
+            if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+                return TOFU_WAS_BAD_RANGE;
+            }
+            return fscl_tofu_reverse(objects->data.array_type.elements);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else if (strcmp(algorithm, "custom") == 0) {
+        // Allow the user to override with their custom implementation
+        if (fscl_tofu_not_cnullptr(objects)) {
+            return fscl_tofu_custom_reverse(objects);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else {
+        // Handle unsupported algorithm
+        return TOFU_WAS_UNKNOWN;
+    }
+}
+
+ctofu_error fscl_tofu_smart_compare(const ctofu* right, const ctofu* left, const char *algorithm) {
+    if (!right || !left) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (strcmp(algorithm, "auto") == 0) {
+        // Automatically select an appropriate algorithm based on size and type
+        // ...
+
+    } else if (strcmp(algorithm, "std") == 0) {
+        // Use the existing classic version
+        if (fscl_tofu_not_cnullptr(right) && fscl_tofu_not_cnullptr(left)) {
+            return fscl_tofu_compare(right, left);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else if (strcmp(algorithm, "custom") == 0) {
+        // Allow the user to override with their custom implementation
+        if (fscl_tofu_not_cnullptr(right) && fscl_tofu_not_cnullptr(left)) {
+            return fscl_tofu_custom_compare(right, left);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else {
+        // Handle unsupported algorithm
+        return TOFU_WAS_UNKNOWN;
+    }
+}
+
+ctofu_error fscl_tofu_smart_reduce(ctofu* objects, const char *algorithm, ctofu (*reduceFunc)(const ctofu*, const ctofu*)) {
+    if (!objects || !reduceFunc) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (strcmp(algorithm, "auto") == 0) {
+        // Automatically select an appropriate algorithm based on size and type
+        // ...
+
+    } else if (strcmp(algorithm, "std") == 0) {
+        // Use the existing classic version
+        if (fscl_tofu_not_cnullptr(objects)) {
+            return fscl_tofu_reduce(objects->data.array_type.elements, reduceFunc);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else if (strcmp(algorithm, "custom") == 0) {
+        // Allow the user to override with their custom implementation
+        if (fscl_tofu_not_cnullptr(objects)) {
+            return fscl_tofu_custom_reduce(objects, reduceFunc);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else {
+        // Handle unsupported algorithm
+        return TOFU_WAS_UNKNOWN;
+    }
+}
+
+ctofu_error fscl_tofu_smart_shuffle(ctofu* objects, const char *algorithm) {
+    if (!objects) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (strcmp(algorithm, "auto") == 0) {
+        // Automatically select an appropriate algorithm based on size and type
+        // ...
+
+    } else if (strcmp(algorithm, "std") == 0) {
+        // Use the existing classic version
+        if (fscl_tofu_not_cnullptr(objects)) {
+            if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+                return TOFU_WAS_BAD_RANGE;
+            }
+            return fscl_tofu_shuffle(objects->data.array_type.elements);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else if (strcmp(algorithm, "custom") == 0) {
+        // Allow the user to override with their custom implementation
+        if (fscl_tofu_not_cnullptr(objects)) {
+            return fscl_tofu_custom_shuffle(objects);
+        } else {
+            return TOFU_WAS_NULLPTR;
+        }
+
+    } else {
+        // Handle unsupported algorithm
+        return TOFU_WAS_UNKNOWN;
+    }
+}
+
+// =======================
+// CUSTOM ALGORITHM FUNCTIONS
+// =======================
+ctofu_error fscl_tofu_custom_accumulate(ctofu* objects) {
+    // Default implementation using the existing classic version
+    return fscl_tofu_accumulate(objects);
+}
+
+ctofu_error fscl_tofu_custom_transform(ctofu* objects, int (*transformFunc)(int)) {
+    // Default implementation using the existing classic version
+    return fscl_tofu_transform(objects, transformFunc);
+}
+
+ctofu_error fscl_tofu_custom_sort(ctofu* objects) {
+    // Default implementation using the existing classic version
+    return fscl_tofu_sort(objects);
+}
+
+ctofu_error fscl_tofu_custom_search(ctofu* objects, ctofu* key) {
+    // Default implementation using the existing classic version
+    return fscl_tofu_search(objects, key);
+}
+
+ctofu_error fscl_tofu_custom_filter(ctofu* objects, bool (*filterFunc)(const ctofu*)) {
+    // Default implementation using the existing classic version
+    return fscl_tofu_filter(objects, filterFunc);
+}
+
+ctofu_error fscl_tofu_custom_reverse(ctofu* objects) {
+    // Default implementation using the existing classic version
+    return fscl_tofu_reverse(objects);
+}
+
+ctofu_error fscl_tofu_custom_compare(const ctofu* right, const ctofu* left) {
+    // Default implementation using the existing classic version
+    return fscl_tofu_compare(right, left);
+}
+
+ctofu_error fscl_tofu_custom_reduce(ctofu* objects, ctofu (*reduceFunc)(const ctofu*, const ctofu*)) {
+    // Default implementation using the existing classic version
+    return fscl_tofu_reduce(objects, reduceFunc);
+}
+
+ctofu_error fscl_tofu_custom_shuffle(ctofu* objects) {
+    // Default implementation using the existing classic version
+    return fscl_tofu_shuffle(objects);
+}
+
+// =======================
+// CLASSIC ALGORITHM FUNCTIONS
+// =======================
+ctofu_error fscl_tofu_accumulate(ctofu* objects) {
+    if (!fscl_tofu_not_cnullptr(objects)) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+        return TOFU_INVALID_TYPE;
+    }
+
+    // Ensure that array elements have compatible types for accumulation
+    for (size_t i = 0; i < objects->data.array_type.size; ++i) {
+        if (fscl_tofu_type_getter(&objects->data.array_type.elements[i]) != TOFU_INT64_TYPE) {
+            return TOFU_INVALID_TYPE;
+        }
+    }
+
+    ctofu_data result = { .int64_type = 0 };  // Initialize result to 0
+
+    for (size_t i = 0; i < objects->data.array_type.size; ++i) {
+        ctofu_data current = fscl_tofu_value_getter(&objects->data.array_type.elements[i]);
+        result.int64_type += current.int64_type;
+    }
+
+    fscl_tofu_erase(objects);  // Clear the existing data
+    fscl_tofu_create(TOFU_INT64_TYPE, &result, objects);  // Store the accumulated result
+
+    return TOFU_SUCCESS;
+}
+
+ctofu_error fscl_tofu_transform(ctofu* objects, int (*transformFunc)(int)) {
+    if (!fscl_tofu_not_cnullptr(objects)) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+        return TOFU_INVALID_TYPE;
+    }
+
+    // Ensure that array elements have compatible types for transformation
+    for (size_t i = 0; i < objects->data.array_type.size; ++i) {
+        if (fscl_tofu_type_getter(&objects->data.array_type.elements[i]) != TOFU_INT64_TYPE) {
+            return TOFU_INVALID_TYPE;
+        }
+    }
+
+    for (size_t i = 0; i < objects->data.array_type.size; ++i) {
+        ctofu_data current = fscl_tofu_value_getter(&objects->data.array_type.elements[i]);
+        current.int64_type = transformFunc(current.int64_type);
+        fscl_tofu_erase(&objects->data.array_type.elements[i]);  // Clear the existing data
+        fscl_tofu_create(TOFU_INT64_TYPE, &current, &objects->data.array_type.elements[i]);  // Store the transformed result
     }
 
     return TOFU_SUCCESS;
 }
 
-ctofu_error fscl_tofu_compare(const ctofu* a, const ctofu* b, int* result) {
-    if (a == NULL || b == NULL || result == NULL) {
+ctofu_error fscl_tofu_sort(ctofu* objects) {
+    if (!fscl_tofu_not_cnullptr(objects)) {
         return TOFU_WAS_NULLPTR;
     }
 
-    if (a->type != b->type) {
-        // Types are different, cannot compare
-        printf("Incompatible types for comparison\n");
+    if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+        return TOFU_INVALID_TYPE;
+    }
+
+    // Ensure that array elements have compatible types for sorting
+    for (size_t i = 0; i < objects->data.array_type.size; ++i) {
+        if (fscl_tofu_type_getter(&objects->data.array_type.elements[i]) != TOFU_INT64_TYPE) {
+            return TOFU_INVALID_TYPE;
+        }
+    }
+
+    // Implement a simple bubble sort algorithm
+    for (size_t i = 0; i < objects->data.array_type.size - 1; ++i) {
+        for (size_t j = 0; j < objects->data.array_type.size - i - 1; ++j) {
+            ctofu_data current = fscl_tofu_value_getter(&objects->data.array_type.elements[j]);
+            ctofu_data next = fscl_tofu_value_getter(&objects->data.array_type.elements[j + 1]);
+
+            if (current.int64_type > next.int64_type) {
+                // Swap elements if they are in the wrong order
+                fscl_tofu_data temp = objects->data.array_type.elements[j].data;
+                objects->data.array_type.elements[j].data = objects->data.array_type.elements[j + 1].data;
+                objects->data.array_type.elements[j + 1].data = temp;
+            }
+        }
+    }
+
+    return TOFU_SUCCESS;
+}
+
+ctofu_error fscl_tofu_search(ctofu* objects, ctofu* key) {
+    if (!fscl_tofu_not_cnullptr(objects) || !fscl_tofu_not_cnullptr(key)) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+        return TOFU_INVALID_TYPE;
+    }
+
+    ctofu_type keyType = fscl_tofu_type_getter(key);
+
+    // Ensure that array elements have compatible types for searching
+    for (size_t i = 0; i < objects->data.array_type.size; ++i) {
+        if (fscl_tofu_type_getter(&objects->data.array_type.elements[i]) != keyType) {
+            return TOFU_INVALID_TYPE;
+        }
+    }
+
+    // Implement a simple linear search algorithm
+    for (size_t i = 0; i < objects->data.array_type.size; ++i) {
+        if (fscl_tofu_compare(&objects->data.array_type.elements[i], key) == TOFU_SUCCESS) {
+            return TOFU_SUCCESS;  // Key found
+        }
+    }
+
+    return TOFU_NOT_FOUND;  // Key not found
+}
+
+ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu*)) {
+    if (!fscl_tofu_not_cnullptr(objects)) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+        return TOFU_INVALID_TYPE;
+    }
+
+    ctofu_data filteredArray[objects->data.array_type.size];
+    size_t filteredSize = 0;
+
+    // Filter elements based on the provided function
+    for (size_t i = 0; i < objects->data.array_type.size; ++i) {
+        if (filterFunc(&objects->data.array_type.elements[i])) {
+            fscl_tofu_value_copy(&objects->data.array_type.elements[i], &filteredArray[filteredSize]);
+            ++filteredSize;
+        }
+    }
+
+    // Clear existing data and store the filtered result
+    fscl_tofu_erase(objects);
+    fscl_tofu_create(TOFU_ARRAY_TYPE, filteredArray, objects);
+    objects->data.array_type.size = filteredSize;
+
+    return TOFU_SUCCESS;
+}
+
+ctofu_error fscl_tofu_reverse(ctofu* objects) {
+    if (!fscl_tofu_not_cnullptr(objects)) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+        return TOFU_INVALID_TYPE;
+    }
+
+    // Reverse the array elements
+    size_t i = 0;
+    size_t j = objects->data.array_type.size - 1;
+
+    while (i < j) {
+        // Swap elements at positions i and j
+        fscl_tofu_data temp = objects->data.array_type.elements[i].data;
+        objects->data.array_type.elements[i].data = objects->data.array_type.elements[j].data;
+        objects->data.array_type.elements[j].data = temp;
+
+        ++i;
+        --j;
+    }
+
+    return TOFU_SUCCESS;
+}
+
+ctofu_error fscl_tofu_compare(const ctofu* right, const ctofu* left) {
+    if (!fscl_tofu_not_cnullptr(right) || !fscl_tofu_not_cnullptr(left)) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (fscl_tofu_type_getter(right) != fscl_tofu_type_getter(left)) {
         return TOFU_WAS_MISMATCH;
     }
 
-    switch (a->type) {
+    // Compare the data based on their types
+    switch (fscl_tofu_type_getter(right)) {
         case TOFU_INT_TYPE:
-            *result = a->data.intager_type - b->data.intager_type;
-            break;
-
+            return (right->data.intager_type == left->data.intager_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_INT8_TYPE:
-            *result = (int)a->data.int8_type - (int)b->data.int8_type;
-            break;
+            return (right->data.int8_type == left->data.int8_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_INT16_TYPE:
-            *result = (int)a->data.int16_type - (int)b->data.int16_type;
-            break;
+            return (right->data.int16_type == left->data.int16_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_INT32_TYPE:
-            *result = (int)a->data.int32_type - (int)b->data.int32_type;
-            break;
+            return (right->data.int32_type == left->data.int32_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_INT64_TYPE:
-            *result = (int)a->data.int64_type - (int)b->data.int64_type;
-            break;
+            return (right->data.int64_type == left->data.int64_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_UINT_TYPE:
-            *result = (int)a->data.uint_type - (int)b->data.uint_type;
-            break;
+            return (right->data.uint_type == left->data.uint_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_UINT8_TYPE:
-            *result = (int)a->data.uint8_type - (int)b->data.uint8_type;
-            break;
+            return (right->data.uint8_type == left->data.uint8_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_UINT16_TYPE:
-            *result = (int)a->data.uint16_type - (int)b->data.uint16_type;
-            break;
+            return (right->data.uint16_type == left->data.uint16_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_UINT32_TYPE:
-            *result = (int)a->data.uint32_type - (int)b->data.uint32_type;
-            break;
+            return (right->data.uint32_type == left->data.uint32_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_UINT64_TYPE:
-            *result = (int)a->data.uint64_type - (int)b->data.uint64_type;
-            break;
-        case TOFU_FLOAT_TYPE:
-            if (a->data.float_type < b->data.float_type) {
-                *result = -1;
-            } else if (a->data.float_type > b->data.float_type) {
-                *result = 1;
-            } else {
-                *result = 0;
-            }
-            break;
-        case TOFU_DOUBLE_TYPE:
-            if (a->data.double_type < b->data.double_type) {
-                *result = -1;
-            } else if (a->data.double_type > b->data.double_type) {
-                *result = 1;
-            } else {
-                *result = 0;
-            }
-            break;
-        case TOFU_STRING_TYPE:
-            *result = strcmp(a->data.string_type, b->data.string_type);
-            break;
-        case TOFU_HEX8_TYPE:
-            *result = (int)a->data.hex8_type - (int)b->data.hex8_type;
-            break;
-        case TOFU_HEX16_TYPE:
-            *result = (int)a->data.hex16_type - (int)b->data.hex16_type;
-            break;
-        case TOFU_HEX32_TYPE:
-            *result = (int)a->data.hex32_type - (int)b->data.hex32_type;
-            break;
-        case TOFU_HEX64_TYPE:
-            *result = (int)a->data.hex64_type - (int)b->data.hex64_type;
-            break;
-        case TOFU_BITWISE8_TYPE:
-            *result = (int)a->data.bitwise8_type - (int)b->data.bitwise8_type;
-            break;
-        case TOFU_BITWISE16_TYPE:
-            *result = (int)a->data.bitwise16_type - (int)b->data.bitwise16_type;
-            break;
-        case TOFU_BITWISE32_TYPE:
-            *result = (int)a->data.bitwise32_type - (int)b->data.bitwise32_type;
-            break;
-        case TOFU_BITWISE64_TYPE:
-            *result = (int)a->data.bitwise64_type - (int)b->data.bitwise64_type;
-            break;
-        case TOFU_QBIT_TYPE:
-            *result = (int)a->data.qbit_type - (int)b->data.qbit_type;
-            break;
+            return (right->data.uint64_type == left->data.uint64_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_OCTAL8_TYPE:
-            *result = (int)a->data.octal8_type - (int)b->data.octal8_type;
-                break;
+            return (right->data.octal8_type == left->data.octal8_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_OCTAL16_TYPE:
-            *result = (int)a->data.octal16_type - (int)b->data.octal16_type;
-                break;
+            return (right->data.octal16_type == left->data.octal16_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_OCTAL32_TYPE:
-            *result = (int)a->data.octal32_type - (int)b->data.octal32_type;
-                break;
+            return (right->data.octal32_type == left->data.octal32_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_OCTAL64_TYPE:
-            *result = (int)a->data.octal64_type - (int)b->data.octal64_type;
-            break;
+            return (right->data.octal64_type == left->data.octal64_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_BITWISE8_TYPE:
+            return (right->data.bitwise8_type == left->data.bitwise8_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_BITWISE16_TYPE:
+            return (right->data.bitwise16_type == left->data.bitwise16_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_BITWISE32_TYPE:
+            return (right->data.bitwise32_type == left->data.bitwise32_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_BITWISE64_TYPE:
+            return (right->data.bitwise64_type == left->data.bitwise64_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_HEX8_TYPE:
+            return (right->data.hex8_type == left->data.hex8_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_HEX16_TYPE:
+            return (right->data.hex16_type == left->data.hex16_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_HEX32_TYPE:
+            return (right->data.hex32_type == left->data.hex32_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_HEX64_TYPE:
+            return (right->data.hex64_type == left->data.hex64_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_FLOAT_TYPE:
+            return (right->data.float_type == left->data.float_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_DOUBLE_TYPE:
+            return (right->data.double_type == left->data.double_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_STRING_TYPE:
+            return (strcmp(right->data.string_type, left->data.string_type) == 0) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_CHAR_TYPE:
+            return (right->data.char_type == left->data.char_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+        case TOFU_BOOLEAN_TYPE:
+            return (right->data.boolean_type == left->data.boolean_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_NULLPTR_TYPE:
-            *result = 0;  // Null pointers are considered equal
-            break;
-        case TOFU_ARRAY_TYPE:
-            // Compare arrays based on their elements and size
-            if (a->data.array_type.size != b->data.array_type.size) {
-                *result = a->data.array_type.size - b->data.array_type.size;
-            } else {
-                for (size_t i = 0; i < a->data.array_type.size; ++i) {
-                    ctofu elementA = a->data.array_type.elements[i];
-                    ctofu elementB = b->data.array_type.elements[i];
-                    int elementResult;
-                    
-                    // Recursive comparison for array elements
-                    ctofu_error elementComparisonResult = fscl_tofu_compare(&elementA, &elementB, &elementResult);
-                    if (elementComparisonResult != TOFU_SUCCESS) {
-                        return elementComparisonResult;
-                    }
-
-                    if (elementResult != 0) {
-                        *result = elementResult;
-                        break;  // Stop comparison if elements are not equal
-                    }
-                }
-            }
-            break;
-
+            // Comparison for null pointers (always equal)
+            return TOFU_SUCCESS;
+        case TOFU_QBIT_TYPE:
+            return (right->data.qbit_type == left->data.qbit_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         default:
-            // Handle unsupported types
-            puts("Unsupported type for comparison must be a ghost type");
-            return TOFU_WAS_UNKNOWN;
+            return TOFU_INVALID_TYPE;  // Unsupported data type for comparison
+    }
+
+    return TOFU_SUCCESS;
+}
+
+ctofu_error fscl_tofu_reduce(ctofu* objects, ctofu (*reduceFunc)(const ctofu*, const ctofu*)) {
+    if (!fscl_tofu_not_cnullptr(objects) || !fscl_tofu_not_cnullptr(reduceFunc)) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+        return TOFU_INVALID_TYPE;
+    }
+
+    if (objects->data.array_type.size < 2) {
+        return TOFU_SUCCESS;  // No reduction needed for less than two elements
+    }
+
+    // Apply the reduce function iteratively
+    for (size_t i = 1; i < objects->data.array_type.size; ++i) {
+        ctofu reducedValue = reduceFunc(&objects->data.array_type.elements[i - 1], &objects->data.array_type.elements[i]);
+        fscl_tofu_value_setter(&reducedValue, &objects->data.array_type.elements[i]);
+    }
+
+    // Update the size after reduction
+    objects->data.array_type.size = 1;
+
+    return TOFU_SUCCESS;
+}
+
+ctofu_error fscl_tofu_shuffle(ctofu* objects) {
+    if (!fscl_tofu_not_cnullptr(objects)) {
+        return TOFU_WAS_NULLPTR;
+    }
+
+    if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
+        return TOFU_INVALID_TYPE;
+    }
+
+    size_t size = objects->data.array_type.size;
+
+    // Use Fisher-Yates shuffle algorithm to randomize the array elements
+    for (size_t i = size - 1; i > 0; --i) {
+        size_t j = rand() % (i + 1);
+
+        // Swap elements at positions i and j
+        ctofu_data temp = objects->data.array_type.elements[i].data;
+        objects->data.array_type.elements[i].data = objects->data.array_type.elements[j].data;
+        objects->data.array_type.elements[j].data = temp;
     }
 
     return TOFU_SUCCESS;
