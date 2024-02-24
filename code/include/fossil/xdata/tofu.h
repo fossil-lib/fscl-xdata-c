@@ -107,7 +107,7 @@ typedef enum {
 } ctofu_type;  // Enumerated types for various tofu data
 
 typedef union {
-    int int_type;
+    int intager_type;
     int8_t int8_type;
     int16_t int16_type;
     int32_t int32_type;
@@ -191,14 +191,20 @@ size_t fscl_tofu_search_binary(ctofu* array, size_t num, ctofu* key);
 // =======================
 // OTHER ALGORITHM FUNCTIONS
 // =======================
+ctofu_error fscl_tofu_accumulate(ctofu* objects, size_t num, ctofu* result);
+ctofu_error fscl_tofu_transform(ctofu* objects, size_t num, ctofu* result, int (*transformFunc)(int));
+void fscl_tofu_shuffle(ctofu* objects, size_t num);
 ctofu_error fscl_tofu_reverse(ctofu* array, size_t num);
 ctofu_error fscl_tofu_compare(const ctofu* a, const ctofu* b, int* result);
+ctofu_error fscl_tofu_filter(ctofu* objects, size_t num, ctofu* result, bool (*filterFunc)(const ctofu*));
+ctofu_error fscl_tofu_reduce(ctofu* objects, size_t num, ctofu* result, ctofu (*reduceFunc)(const ctofu*, const ctofu*));
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 ctofu_error fscl_tofu_value_copy(const ctofu* source, ctofu* dest);
 void fscl_tofu_value_setter(const ctofu* source, ctofu* dest);
+void fscl_tofu_value_erase(ctofu* value);
 ctofu_data fscl_tofu_value_getter(const ctofu* current);
 ctofu_type fscl_tofu_type_getter(const ctofu* current);
 bool fscl_tofu_not_cnullptr(const ctofu* value);
