@@ -60,16 +60,32 @@ with gravity, and observation plays a crucial role in defining the nature of rea
 continue to challenge and reshape our perceptions of the fundamental fabric of the cosmos.
 */
 
+typedef struct ctofu ctofu; // Forward declaration of the ctofu struct
+
 // Define error constants for tofu operations
 typedef enum {
-    TOFU_SUCCESS        = 0,
-    TOFU_WAS_MISMATCH   = -1,
-    TOFU_WAS_BAD_RANGE  = -2,
-    TOFU_WAS_NULLPTR    = -3,
-    TOFU_WAS_BAD_MALLOC = -4,
-    TOFU_WAS_UNKNOWN    = -5,
-    TOFU_NOT_FOUND      = -6
-} ctofu_error;  // Error codes for tofu operations
+    TOFU_SUCCESS            = 0,
+    TOFU_WAS_MISMATCH       = -1,
+    TOFU_WAS_BAD_RANGE      = -2,
+    TOFU_WAS_NULLPTR        = -3,
+    TOFU_WAS_BAD_MALLOC     = -4,
+    TOFU_WAS_UNKNOWN        = -5,
+    TOFU_NOT_FOUND          = -6,
+    TOFU_INVALID_OPERATION  = -7,  // Invalid operation on the data structure
+    TOFU_DUPLICATE_ELEMENT  = -8,  // Attempt to insert a duplicate element
+    TOFU_OUT_OF_MEMORY      = -9,  // Insufficient memory to perform the operation
+    TOFU_EMPTY_STRUCTURE    = -10, // Operation not allowed on an empty structure
+    TOFU_STRUCTURE_FULL     = -11, // Structure has reached its maximum capacity
+    TOFU_STRUCTURE_OVERFLOW = -12, // Overflow occurred while performing an operation
+    TOFU_STRUCTURE_UNDERFLOW = -13, // Underflow occurred while performing an operation
+    TOFU_STRUCTURE_NOT_EMPTY = -14, // Operation not allowed on a non-empty structure
+    TOFU_STRUCTURE_NOT_FULL = -15,  // Structure is not at maximum capacity
+    TOFU_STRUCTURE_EMPTY    = -16,  // Operation not allowed on an empty structure
+    TOFU_STRUCTURE_NOT_FOUND = -17, // Element not found in the structure
+    TOFU_STRUCTURE_CORRUPTED = -18, // Data structure integrity compromised
+    TOFU_STRUCTURE_INVALID   = -19, // Invalid data structure type
+    TOFU_INVALID_ARGUMENT   = -20  // Invalid argument provided to the operation
+} ctofu_error;  // Extended error codes for tofu operations on data structures
 
 typedef enum {
     TOFU_INT_TYPE,
@@ -142,10 +158,10 @@ typedef union {
     } array_type;
 } ctofu_data;  // Union to hold data of different types
 
-typedef struct {
+struct ctofu {
     ctofu_type type;
     ctofu_data data;
-} ctofu;  // Struct to represent the data and its type
+}; // Struct to represent the data and its type
 
 typedef struct {
     ctofu* current_key;
@@ -180,23 +196,10 @@ typedef struct {
 // =======================
 // CREATE/ERASE FUNCTIONS
 // =======================
-ctofu_error fscl_tofu_create(ctofu_type type, ctofu_data* value, ctofu** result);
-void fscl_tofu_erase(ctofu* value);
-
-// =======================
-// SMART ALGORITHM FUNCTIONS
-// =======================
-// Options for algorithm param: auto, std, custom
-// Options auto will select   : basic, medium, fast
-ctofu_error fscl_tofu_smart_accumulate(ctofu* objects, const char *algorithm);
-ctofu_error fscl_tofu_smart_transform(ctofu* objects, const char *algorithm, int (*transformFunc)(int));
-ctofu_error fscl_tofu_smart_sort(ctofu* objects, const char *algorithm);
-ctofu_error fscl_tofu_smart_search(ctofu* objects, const char *algorithm, ctofu* key);
-ctofu_error fscl_tofu_smart_filter(ctofu* objects, const char *algorithm, bool (*filterFunc)(const ctofu*));
-ctofu_error fscl_tofu_smart_reverse(ctofu* objects, const char *algorithm);
-ctofu_error fscl_tofu_smart_compare(const ctofu* right, const ctofu* left, const char *algorithm);
-ctofu_error fscl_tofu_smart_reduce(ctofu* objects, const char *algorithm, ctofu (*reduceFunc)(const ctofu*, const ctofu*));
-ctofu_error fscl_tofu_smart_shuffle(ctofu* objects, const char *algorithm);
+ctofu* fscl_tofu_create(ctofu_type type, ctofu_data* value);
+ctofu* fscl_tofu_create_array(ctofu_type type, size_t size, ...);
+ctofu_error fscl_tofu_erase(ctofu* value);
+ctofu_error fscl_tofu_erase_array(ctofu* array);
 
 // =======================
 // CLASSIC ALGORITHM FUNCTIONS
@@ -207,18 +210,20 @@ ctofu_error fscl_tofu_sort(ctofu* objects);
 ctofu_error fscl_tofu_search(ctofu* objects, ctofu* key);
 ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu*));
 ctofu_error fscl_tofu_reverse(ctofu* objects);
-ctofu_error fscl_tofu_compare(const ctofu* right, const ctofu* left);
+ctofu_error fscl_tofu_swap(ctofu* right, ctofu* left);
+ctofu_error fscl_tofu_compare(ctofu* right, ctofu* left);
 ctofu_error fscl_tofu_reduce(ctofu* objects, ctofu (*reduceFunc)(const ctofu*, const ctofu*));
 ctofu_error fscl_tofu_shuffle(ctofu* objects);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
+ctofu_error fscl_tofu_error(ctofu_error error);
 ctofu_error fscl_tofu_value_copy(const ctofu* source, ctofu* dest);
 void fscl_tofu_value_setter(const ctofu* source, ctofu* dest);
 void fscl_tofu_value_erase(ctofu* value);
-ctofu_data fscl_tofu_value_getter(const ctofu* current);
-ctofu_type fscl_tofu_type_getter(const ctofu* current);
+ctofu_data fscl_tofu_value_getter(ctofu* current);
+ctofu_type fscl_tofu_type_getter(ctofu* current);
 bool fscl_tofu_not_cnullptr(const ctofu* value);
 bool fscl_tofu_its_cnullptr(const ctofu* value);
 
@@ -228,9 +233,6 @@ bool fscl_tofu_its_cnullptr(const ctofu* value);
 ctofu_iterator fscl_tofu_iterator_at(ctofu* array, size_t num, size_t at);
 ctofu_iterator fscl_tofu_iterator_start(ctofu* array, size_t num);
 ctofu_iterator fscl_tofu_iterator_end(ctofu* array, size_t num);
-void fscl_tofu_iterator_next(ctofu_iterator* iterator, size_t num);
-void fscl_tofu_iterator_prev(ctofu_iterator* iterator, size_t num);
-void fscl_tofu_iterator_jump(ctofu_iterator* iterator, size_t num, size_t index);
 
 #ifdef __cplusplus
 }
