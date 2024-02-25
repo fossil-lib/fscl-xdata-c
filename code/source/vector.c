@@ -79,7 +79,7 @@ int fscl_vector_search(const cvector* vector, ctofu target) {
     }
 
     for (size_t i = 0; i < vector->size; ++i) {
-        if (fscl_tofu_compare(&target, &vector->data[i], NULL) == TOFU_SUCCESS) {
+        if (fscl_tofu_compare(&target, &vector->data[i]) == TOFU_SUCCESS) {
             return i; // Element found at index i
         }
     }
@@ -136,7 +136,7 @@ void fscl_vector_setter(cvector* vector, size_t index, ctofu element) {
 
 ctofu fscl_vector_getter(const cvector* vector, size_t index) {
     if (vector == NULL || index >= vector->size) {
-        return (ctofu){.type = INVALID_TYPE}; // Invalid or out-of-bounds access
+        return (ctofu){.type = TOFU_INVALID_TYPE}; // Invalid or out-of-bounds access
     }
 
     return vector->data[index];
@@ -149,27 +149,27 @@ size_t fscl_vector_size(const cvector* vector) {
 // Print ctofu value based on its type
 void print_ctofu_value(const ctofu value) {
     switch (value.type) {
-        case INTEGER_TYPE:
-            printf("%d", value.data.integer_type);
+        case TOFU_INT_TYPE:
+            printf("%d", value.data.int_type);
             break;
-        case DOUBLE_TYPE:
+        case TOFU_DOUBLE_TYPE:
             printf("%f", value.data.double_type);
             break;
-        case STRING_TYPE:
+        case TOFU_STRING_TYPE:
             printf("%s", value.data.string_type);
             break;
-        case CHAR_TYPE:
+        case TOFU_CHAR_TYPE:
             printf("%c", value.data.char_type);
             break;
-        case BOOLEAN_TYPE:
+        case TOFU_BOOLEAN_TYPE:
             printf("%s", value.data.boolean_type ? "true" : "false");
             break;
-        case NULLPTR_TYPE:
+        case TOFU_NULLPTR_TYPE:
             printf("cnullptr");
             break;
-        case ARRAY_TYPE:
-        case INVALID_TYPE:
-        case UNKNOWN_TYPE:
+        case TOFU_ARRAY_TYPE:
+        case TOFU_INVALID_TYPE:
+        case TOFU_UNKNOWN_TYPE:
             printf("[Invalid or Unknown Type]");
             break;
     }

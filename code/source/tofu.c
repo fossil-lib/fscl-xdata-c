@@ -45,7 +45,7 @@ ctofu* fscl_tofu_create(ctofu_type type, ctofu_data* value) {
 
     switch (type) {
         case TOFU_INT_TYPE:
-            result->data.intager_type = value->intager_type;
+            result->data.int_type = value->int_type;
             break;
         case TOFU_INT8_TYPE:
             result->data.int8_type = value->int8_type;
@@ -181,7 +181,7 @@ ctofu* fscl_tofu_create_array(ctofu_type type, size_t size, ...) {
 
         switch (type) {
             case TOFU_INT_TYPE:
-                tofu_array->data.array_type.elements[i].data.intager_type = va_arg(args, int);
+                tofu_array->data.array_type.elements[i].data.int_type = va_arg(args, int);
                 break;
             case TOFU_INT8_TYPE:
                 tofu_array->data.array_type.elements[i].data.int8_type = va_arg(args, int);
@@ -329,7 +329,7 @@ ctofu_error fscl_tofu_accumulate(ctofu* objects) {
     }
 
     ctofu_data result;
-    result.intager_type = 0;
+    result.int_type = 0;
 
     for (size_t i = 0; i < size; ++i) {
         if (objects->data.array_type.elements[i].type != TOFU_INT_TYPE) {
@@ -339,7 +339,7 @@ ctofu_error fscl_tofu_accumulate(ctofu* objects) {
         ctofu_data currentData = fscl_tofu_value_getter(&objects->data.array_type.elements[i]);
 
         // Accumulate the values
-        result.intager_type += currentData.intager_type;
+        result.int_type += currentData.int_type;
     }
 
     // Create a new ctofu with the accumulated value
@@ -384,7 +384,7 @@ ctofu_error fscl_tofu_transform(ctofu* objects, int (*transformFunc)(int)) {
         ctofu_data currentData = fscl_tofu_value_getter(&objects->data.array_type.elements[i]);
 
         // Apply the transformation function to each element
-        currentData.intager_type = transformFunc(currentData.intager_type);
+        currentData.int_type = transformFunc(currentData.int_type);
         fscl_tofu_value_setter(&objects->data.array_type.elements[i], &currentData);
     }
 
@@ -531,7 +531,7 @@ ctofu_error fscl_tofu_compare(ctofu* right, ctofu* left) {
     // Compare the data based on their types
     switch (fscl_tofu_type_getter(right)) {
         case TOFU_INT_TYPE:
-            return (right->data.intager_type == left->data.intager_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
+            return (right->data.int_type == left->data.int_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_INT8_TYPE:
             return (right->data.int8_type == left->data.int8_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         case TOFU_INT16_TYPE:
@@ -730,7 +730,7 @@ ctofu_error fscl_tofu_value_copy(const ctofu* source, ctofu* dest) {
 
     switch (source->type) {
         case TOFU_INT_TYPE:
-            dest->data.intager_type = source->data.intager_type;
+            dest->data.int_type = source->data.int_type;
             break;
 
         case TOFU_INT8_TYPE:
@@ -914,7 +914,7 @@ void fscl_tofu_value_setter(const ctofu* source, ctofu* dest) {
 
     switch (source->type) {
         case TOFU_INT_TYPE:
-            dest->data.intager_type = source->data.intager_type;
+            dest->data.int_type = source->data.int_type;
             break;
 
         case TOFU_INT8_TYPE:
@@ -1071,13 +1071,13 @@ ctofu_data fscl_tofu_value_getter(ctofu* current) {
 
     if (current == NULL) {
         // You might want to handle this case differently based on your requirements
-        result.intager_type = 0;
+        result.int_type = 0;
         return result;
     }
 
     switch (current->type) {
         case TOFU_INT_TYPE:
-            result.intager_type = current->data.intager_type;
+            result.int_type = current->data.int_type;
             break;
 
         case TOFU_INT8_TYPE:
@@ -1196,7 +1196,7 @@ ctofu_data fscl_tofu_value_getter(ctofu* current) {
             // Handle unsupported types
             printf("Unsupported type for value getter\n");
             // You might want to set a default value or handle this case differently
-            result.intager_type = 0;
+            result.int_type = 0;
     }
 
     return result;

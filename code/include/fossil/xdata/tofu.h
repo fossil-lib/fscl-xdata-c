@@ -123,7 +123,7 @@ typedef enum {
 } ctofu_type;  // Enumerated types for various tofu data
 
 typedef union {
-    int intager_type;
+    int int_type;
     int8_t int8_type;
     int16_t int16_type;
     int32_t int32_type;
