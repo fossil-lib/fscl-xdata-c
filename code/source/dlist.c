@@ -50,13 +50,13 @@ void fscl_dlist_erase(cdlist* dlist) {
 // =======================
 ctofu_error fscl_dlist_insert(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cdlist_node* new_node = (cdlist_node*)malloc(sizeof(cdlist_node));
     if (new_node == NULL) {
         // Handle memory allocation failure
-        return TOFU_WAS_BAD_MALLOC;
+        return fscl_tofu_error(TOFU_WAS_BAD_MALLOC);
     }
 
     new_node->data = data;
@@ -73,16 +73,16 @@ ctofu_error fscl_dlist_insert(cdlist* dlist, ctofu data) {
         dlist->head = new_node;
     }
 
-    return TOFU_SUCCESS;
+    return fscl_tofu_error(TOFU_SUCCESS);
 }
 
 ctofu_error fscl_dlist_remove(cdlist* dlist, ctofu* data) {
     if (dlist == NULL || data == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     if (dlist->head == NULL) {
-        return TOFU_NOT_FOUND; // List is empty
+        return fscl_tofu_error(TOFU_NOT_FOUND); // List is empty
     }
 
     cdlist_node* temp = dlist->head;
@@ -99,25 +99,25 @@ ctofu_error fscl_dlist_remove(cdlist* dlist, ctofu* data) {
         free(temp);
     }
 
-    return TOFU_SUCCESS;
+    return fscl_tofu_error(TOFU_SUCCESS);
 }
 
 ctofu_error fscl_dlist_search(const cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cdlist_node* current = dlist->head;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
-            return TOFU_SUCCESS; // Found
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
+            return fscl_tofu_error(TOFU_SUCCESS); // Found
         }
 
         current = current->next;
     }
 
-    return TOFU_NOT_FOUND; // Not found
+    return fscl_tofu_error(TOFU_NOT_FOUND); // Not found
 }
 
 void fscl_dlist_reverse_forward(cdlist* dlist) {
@@ -188,7 +188,7 @@ ctofu* fscl_dlist_getter(cdlist* dlist, ctofu data) {
     cdlist_node* current = dlist->head;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
             return &current->data; // Found
         }
 
@@ -200,22 +200,22 @@ ctofu* fscl_dlist_getter(cdlist* dlist, ctofu data) {
 
 ctofu_error fscl_dlist_setter(cdlist* dlist, ctofu data) {
     if (dlist == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cdlist_node* current = dlist->head;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
             // Found, update the data
             current->data = data;
-            return TOFU_SUCCESS;
+            return fscl_tofu_error(TOFU_SUCCESS);
         }
 
         current = current->next;
     }
 
-    return TOFU_NOT_FOUND; // Not found
+    return fscl_tofu_error(TOFU_NOT_FOUND); // Not found
 }
 
 bool fscl_dlist_not_empty(const cdlist* dlist) {

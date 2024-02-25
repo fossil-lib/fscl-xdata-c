@@ -51,7 +51,7 @@ void fscl_dqueue_erase(cdqueue* dqueue) {
 
 ctofu_error fscl_dqueue_insert(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cdqueue_node* new_node = (cdqueue_node*)malloc(sizeof(cdqueue_node));
@@ -111,7 +111,7 @@ ctofu_error fscl_dqueue_search(const cdqueue* dqueue, ctofu data) {
     cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
             return TOFU_SUCCESS; // Found
         }
 
@@ -149,7 +149,7 @@ ctofu* fscl_dqueue_getter(cdqueue* dqueue, ctofu data) {
     cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
             return &current->data; // Found
         }
 
@@ -167,7 +167,7 @@ ctofu_error fscl_dqueue_setter(cdqueue* dqueue, ctofu data) {
     cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
             // Found, update the data
             current->data = data;
             return TOFU_SUCCESS;
