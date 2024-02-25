@@ -19,12 +19,12 @@ Description:
 // XUNIT TEST CASES
 //
 XTEST_CASE(test_set_create_and_erase) {
-    cset* set = fscl_set_create(TOFU_INTEGER_TYPE);
+    cset* set = fscl_set_create(TOFU_INT_TYPE);
 
     // Check if the set is created with the expected values
     TEST_ASSERT_NOT_CNULLPTR(set);
     TEST_ASSERT_CNULLPTR(set->head);
-    TEST_ASSERT_EQUAL(TOFU_INTEGER_TYPE, set->set_type);
+    TEST_ASSERT_EQUAL(TOFU_INT_TYPE, set->set_type);
 
     fscl_set_erase(set);
 
@@ -34,12 +34,12 @@ XTEST_CASE(test_set_create_and_erase) {
 }
 
 XTEST_CASE(test_set_insert_and_size) {
-    cset* set = fscl_set_create(TOFU_INTEGER_TYPE);
+    cset* set = fscl_set_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_set_insert(set, element1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_set_insert(set, element2));
@@ -52,12 +52,12 @@ XTEST_CASE(test_set_insert_and_size) {
 }
 
 XTEST_CASE(test_set_remove) {
-    cset* set = fscl_set_create(TOFU_INTEGER_TYPE);
+    cset* set = fscl_set_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
 
     fscl_set_insert(set, element1);
     fscl_set_insert(set, element2);
@@ -73,12 +73,12 @@ XTEST_CASE(test_set_remove) {
 }
 
 XTEST_CASE(test_set_contains) {
-    cset* set = fscl_set_create(TOFU_INTEGER_TYPE);
+    cset* set = fscl_set_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INTEGER_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INTEGER_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INTEGER_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
 
     fscl_set_insert(set, element1);
     fscl_set_insert(set, element2);
@@ -89,7 +89,7 @@ XTEST_CASE(test_set_contains) {
     TEST_ASSERT_TRUE(fscl_set_contains(set, element3));
 
     // Check for non-existing element
-    ctofu nonExistingElement = { TOFU_INTEGER_TYPE, { .integer_type = 100 } };
+    ctofu nonExistingElement = { TOFU_INT_TYPE, { .integer_type = 100 } };
     TEST_ASSERT_FALSE(fscl_set_contains(set, nonExistingElement));
 
     fscl_set_erase(set);
