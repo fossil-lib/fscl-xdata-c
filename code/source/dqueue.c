@@ -57,7 +57,7 @@ ctofu_error fscl_dqueue_insert(cdqueue* dqueue, ctofu data) {
     cdqueue_node* new_node = (cdqueue_node*)malloc(sizeof(cdqueue_node));
     if (new_node == NULL) {
         // Handle memory allocation failure
-        return TOFU_WAS_BAD_MALLOC;
+        return fscl_tofu_error(TOFU_WAS_BAD_MALLOC);
     }
 
     new_node->data = data;
@@ -74,16 +74,16 @@ ctofu_error fscl_dqueue_insert(cdqueue* dqueue, ctofu data) {
         dqueue->front = new_node;
     }
 
-    return TOFU_SUCCESS;
+    return fscl_tofu_error(TOFU_SUCCESS);
 }
 
 ctofu_error fscl_dqueue_remove(cdqueue* dqueue, ctofu* data) {
     if (dqueue == NULL || data == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     if (dqueue->front == NULL) {
-        return TOFU_NOT_FOUND; // Queue is empty
+        return fscl_tofu_error(TOFU_NOT_FOUND); // Queue is empty
     }
 
     cdqueue_node* temp = dqueue->front;
@@ -100,25 +100,25 @@ ctofu_error fscl_dqueue_remove(cdqueue* dqueue, ctofu* data) {
         free(temp);
     }
 
-    return TOFU_SUCCESS;
+    return fscl_tofu_error(TOFU_SUCCESS);
 }
 
 ctofu_error fscl_dqueue_search(const cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cdqueue_node* current = dqueue->front;
 
     while (current != NULL) {
         if (fscl_tofu_compare(&current->data, &data) == 0) {
-            return TOFU_SUCCESS; // Found
+            return fscl_tofu_error(TOFU_SUCCESS); // Found
         }
 
         current = current->next;
     }
 
-    return TOFU_NOT_FOUND; // Not found
+    return fscl_tofu_error(TOFU_NOT_FOUND); // Not found
 }
 
 // =======================
@@ -161,7 +161,7 @@ ctofu* fscl_dqueue_getter(cdqueue* dqueue, ctofu data) {
 
 ctofu_error fscl_dqueue_setter(cdqueue* dqueue, ctofu data) {
     if (dqueue == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cdqueue_node* current = dqueue->front;
@@ -170,13 +170,13 @@ ctofu_error fscl_dqueue_setter(cdqueue* dqueue, ctofu data) {
         if (fscl_tofu_compare(&current->data, &data) == 0) {
             // Found, update the data
             current->data = data;
-            return TOFU_SUCCESS;
+            return fscl_tofu_error(TOFU_SUCCESS);
         }
 
         current = current->next;
     }
 
-    return TOFU_NOT_FOUND; // Not found
+    return fscl_tofu_error(TOFU_NOT_FOUND); // Not found
 }
 
 bool fscl_dqueue_not_empty(const cdqueue* dqueue) {
