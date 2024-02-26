@@ -153,7 +153,7 @@ ctofu_error fscl_tree_remove(ctree* tree, ctofu data) {
 }
 
 // Helper function to recursively search for a node
-ctofu_error fscl_tree_search_recursive(const ctree_node* root, ctofu data) {
+ctofu_error fscl_tree_search_recursive(ctree_node* root, ctofu data) {
     if (root == NULL) {
         return fscl_tofu_error(TOFU_NOT_FOUND); // Element not found
     }
@@ -181,7 +181,7 @@ ctofu_error fscl_tree_search(const ctree* tree, ctofu data) {
 // UTILITY FUNCTIONS
 // =======================
 
-size_t fscl_tree_size_recursive(const ctree_node* root) {
+size_t fscl_tree_size_recursive(ctree_node* root) {
     if (root == NULL) {
         return 0;
     }
@@ -198,7 +198,7 @@ size_t fscl_tree_size(const ctree* tree) {
 }
 
 // Helper function to recursively get a pointer to a node's data
-ctofu* fscl_tree_getter_recursive(const ctree_node* root, ctofu data) {
+ctofu* fscl_tree_getter_recursive(ctree_node* root, ctofu data) {
     if (root == NULL) {
         return NULL;
     }
@@ -265,7 +265,7 @@ bool fscl_tree_is_cnullptr(const ctree* tree) {
 }
 
 // Helper function to recursively check if the tree contains an element
-bool fscl_tree_contains_recursive(const ctree_node* root, ctofu data) {
+bool fscl_tree_contains_recursive(ctree_node* root, ctofu data) {
     if (root == NULL) {
         return false;
     }
