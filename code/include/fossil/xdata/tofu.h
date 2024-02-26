@@ -151,7 +151,7 @@ typedef enum {
     TOFU_CHAR_TYPE,          ///< Character type.
     TOFU_BOOLEAN_TYPE,       ///< Boolean type.
     TOFU_ARRAY_TYPE,         ///< Array type.
-    // TOFU_MAP_TYPE,           ///< Map type.
+    TOFU_MAP_TYPE,           ///< Map type.
     TOFU_QBIT_TYPE,          ///< Quantum bit type (64-bit).
     TOFU_NULLPTR_TYPE,       ///< Null pointer type.
     TOFU_INVALID_TYPE,       ///< Invalid data structure type.
@@ -381,6 +381,16 @@ ctofu_error fscl_tofu_partition(ctofu* objects, bool (*partitionFunc)(const ctof
 // =======================
 // UTILITY FUNCTIONS
 // =======================
+
+/**
+ * @brief Print the value of a ctofu variable to the standard output.
+ *
+ * This function prints the value of the given ctofu variable to the standard output.
+ * The output format depends on the type of the ctofu variable.
+ *
+ * @param value The ctofu variable whose value needs to be printed.
+ */
+void fscl_tofu_out(const ctofu value);
 
 /**
  * @brief Duplicates a string.

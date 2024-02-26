@@ -146,35 +146,6 @@ size_t fscl_vector_size(const cvector* vector) {
     return vector != NULL ? vector->size : 0;
 }
 
-// Print ctofu value based on its type
-void print_ctofu_value(const ctofu value) {
-    switch (value.type) {
-        case TOFU_INT_TYPE:
-            printf("%d", value.data.int_type);
-            break;
-        case TOFU_DOUBLE_TYPE:
-            printf("%f", value.data.double_type);
-            break;
-        case TOFU_STRING_TYPE:
-            printf("%s", value.data.string_type);
-            break;
-        case TOFU_CHAR_TYPE:
-            printf("%c", value.data.char_type);
-            break;
-        case TOFU_BOOLEAN_TYPE:
-            printf("%s", value.data.boolean_type ? "true" : "false");
-            break;
-        case TOFU_NULLPTR_TYPE:
-            printf("cnullptr");
-            break;
-        case TOFU_ARRAY_TYPE:
-        case TOFU_INVALID_TYPE:
-        case TOFU_UNKNOWN_TYPE:
-            printf("[Invalid or Unknown Type]");
-            break;
-    }
-}
-
 void fscl_vector_peek(const cvector* vector) {
     if (vector == NULL) {
         return;
@@ -185,7 +156,7 @@ void fscl_vector_peek(const cvector* vector) {
         if (i > 0) {
             printf(", ");
         }
-        print_ctofu_value(vector->data[i]);
+        fscl_tofu_out(vector->data[i]);
     }
     printf("]\n");
 }

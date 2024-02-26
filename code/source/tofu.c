@@ -246,8 +246,9 @@ ctofu* fscl_tofu_create_array(ctofu_type type, size_t size, ...) {
             case TOFU_BOOLEAN_TYPE:
                 tofu_array->data.array_type.elements[i].data.boolean_type = va_arg(args, int);
                 break;
+            case TOFU_MAP_TYPE:
             case TOFU_ARRAY_TYPE:
-                // Nested array not supported in this function
+                // Nested array or map not supported in this function
                 free(tofu_array->data.array_type.elements);
                 free(tofu_array);
                 va_end(args);
@@ -572,6 +573,19 @@ ctofu_error fscl_tofu_compare(ctofu* right, ctofu* left) {
         case TOFU_NULLPTR_TYPE:
             // Comparison for null pointers (always equal)
             return fscl_tofu_error(TOFU_SUCCESS);
+        case TOFU_ARRAY_TYPE:
+            // Handle array type
+            // You might want to implement specific logic for comparing array elements
+            // For simplicity, I'll return TOFU_UNKNOWN_TYPE indicating unsupported comparison
+            printf("Unsupported type (array) for value comparison\n");
+            return TOFU_UNKNOWN_TYPE;
+
+        case TOFU_MAP_TYPE:
+            // Handle map type
+            // You might want to implement specific logic for comparing map elements
+            // For simplicity, I'll return TOFU_UNKNOWN_TYPE indicating unsupported comparison
+            printf("Unsupported type (map) for value comparison\n");
+            return TOFU_UNKNOWN_TYPE;
         case TOFU_QBIT_TYPE:
             return (right->data.qbit_type == left->data.qbit_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         default:
@@ -686,6 +700,121 @@ ctofu_error fscl_tofu_partition(ctofu* objects, bool (*partitionFunc)(const ctof
 // =======================
 // UTILITY FUNCTIONS
 // =======================
+
+void fscl_tofu_out(const ctofu value) {
+    switch (value.type) {
+        case TOFU_INT_TYPE:
+            printf("%d", value.data.int_type);
+            break;
+        case TOFU_INT8_TYPE:
+            printf("%d", (int)value.data.int8_type);
+            break;
+        case TOFU_INT16_TYPE:
+            printf("%d", (int)value.data.int16_type);
+            break;
+        case TOFU_INT32_TYPE:
+            printf("%d", value.data.int32_type);
+            break;
+        case TOFU_INT64_TYPE:
+            printf("%lld", value.data.int64_type);
+            break;
+        case TOFU_UINT_TYPE:
+            printf("%u", value.data.uint_type);
+            break;
+        case TOFU_UINT8_TYPE:
+            printf("%u", (unsigned int)value.data.uint8_type);
+            break;
+        case TOFU_UINT16_TYPE:
+            printf("%u", (unsigned int)value.data.uint16_type);
+            break;
+        case TOFU_UINT32_TYPE:
+            printf("%u", value.data.uint32_type);
+            break;
+        case TOFU_UINT64_TYPE:
+            printf("%llu", value.data.uint64_type);
+            break;
+        case TOFU_OCTAL8_TYPE:
+            printf("0%o", (unsigned int)value.data.octal8_type);
+            break;
+        case TOFU_OCTAL16_TYPE:
+            printf("0%o", (unsigned int)value.data.octal16_type);
+            break;
+        case TOFU_OCTAL32_TYPE:
+            printf("0%o", value.data.octal32_type);
+            break;
+        case TOFU_OCTAL64_TYPE:
+            printf("0%llo", value.data.octal64_type);
+            break;
+        case TOFU_BITWISE8_TYPE:
+            printf("0x%x", (unsigned int)value.data.bitwise8_type);
+            break;
+        case TOFU_BITWISE16_TYPE:
+            printf("0x%x", (unsigned int)value.data.bitwise16_type);
+            break;
+        case TOFU_BITWISE32_TYPE:
+            printf("0x%x", value.data.bitwise32_type);
+            break;
+        case TOFU_BITWISE64_TYPE:
+            printf("0x%llx", value.data.bitwise64_type);
+            break;
+        case TOFU_HEX8_TYPE:
+            printf("0x%x", (unsigned int)value.data.hex8_type);
+            break;
+        case TOFU_HEX16_TYPE:
+            printf("0x%x", (unsigned int)value.data.hex16_type);
+            break;
+        case TOFU_HEX32_TYPE:
+            printf("0x%x", value.data.hex32_type);
+            break;
+        case TOFU_HEX64_TYPE:
+            printf("0x%llx", value.data.hex64_type);
+            break;
+        case TOFU_FLOAT_TYPE:
+            printf("%f", value.data.float_type);
+            break;
+        case TOFU_DOUBLE_TYPE:
+            printf("%f", value.data.double_type);
+            break;
+        case TOFU_STRING_TYPE:
+            printf("%s", value.data.string_type);
+            break;
+        case TOFU_CHAR_TYPE:
+            printf("%c", value.data.char_type);
+            break;
+        case TOFU_BOOLEAN_TYPE:
+            printf("%s", value.data.boolean_type ? "true" : "false");
+            break;
+        case TOFU_NULLPTR_TYPE:
+            printf("cnullptr");
+            break;
+        case TOFU_ARRAY_TYPE:
+            printf("[ ");
+            for (size_t i = 0; i < value.data.array_type.size; ++i) {
+                fscl_tofu_out(value.data.array_type.elements[i]);
+                if (i < value.data.array_type.size - 1) {
+                    printf(", ");
+                }
+            }
+            printf(" ]");
+            break;
+        case TOFU_MAP_TYPE:
+            printf("< ");
+            for (size_t i = 0; i < value.data.map_type.size; ++i) {
+                fscl_tofu_out(value.data.map_type.key[i]);
+                printf(": ");
+                fscl_tofu_out(value.data.map_type.value[i]);
+                if (i < value.data.map_type.size - 1) {
+                    printf(", ");
+                }
+            }
+            printf(" >");
+            break;
+        case TOFU_INVALID_TYPE:
+        case TOFU_UNKNOWN_TYPE:
+            printf("[Invalid or Unknown Type]");
+            break;
+    }
+}
 
 char* fscl_tofu_strdup(const char* source) {
     if (source == NULL) {
@@ -918,6 +1047,49 @@ ctofu_error fscl_tofu_value_copy(const ctofu* source, ctofu* dest) {
                 return fscl_tofu_error(TOFU_WAS_BAD_RANGE); // Array is empty or null
             }
             break;
+        case TOFU_MAP_TYPE:
+            dest->data.map_type.size = source->data.map_type.size;
+
+            // Allocate memory for keys and values
+            dest->data.map_type.key = (ctofu*)malloc(sizeof(ctofu) * dest->data.map_type.size);
+            dest->data.map_type.value = (ctofu*)malloc(sizeof(ctofu) * dest->data.map_type.size);
+
+            if (dest->data.map_type.key == NULL || dest->data.map_type.value == NULL) {
+                // Handle memory allocation failure
+                free(dest->data.map_type.key);
+                free(dest->data.map_type.value);
+                return fscl_tofu_error(TOFU_WAS_BAD_MALLOC);
+            }
+
+            // Copy keys and values
+            for (size_t i = 0; i < dest->data.map_type.size; ++i) {
+                ctofu_error copyResult = fscl_tofu_value_copy(&source->data.map_type.key[i], &dest->data.map_type.key[i]);
+                if (copyResult != TOFU_SUCCESS) {
+                    // Handle copy error
+                    // Clean up allocated memory
+                    for (size_t j = 0; j < i; ++j) {
+                        free(dest->data.map_type.key[j].data.string_type);
+                        free(dest->data.map_type.value[j].data.string_type);
+                    }
+                    free(dest->data.map_type.key);
+                    free(dest->data.map_type.value);
+                    return copyResult;
+                }
+
+                copyResult = fscl_tofu_value_copy(&source->data.map_type.value[i], &dest->data.map_type.value[i]);
+                if (copyResult != TOFU_SUCCESS) {
+                    // Handle copy error
+                    // Clean up allocated memory
+                    for (size_t j = 0; j <= i; ++j) {
+                        free(dest->data.map_type.key[j].data.string_type);
+                        free(dest->data.map_type.value[j].data.string_type);
+                    }
+                    free(dest->data.map_type.key);
+                    free(dest->data.map_type.value);
+                    return copyResult;
+                }
+            }
+            break;
 
         case TOFU_QBIT_TYPE:
             dest->data.qbit_type = source->data.qbit_type;
@@ -1105,6 +1277,27 @@ void fscl_tofu_value_setter(const ctofu* source, ctofu* dest) {
             }
             break;
 
+        case TOFU_MAP_TYPE:
+            dest->data.map_type.size = source->data.map_type.size;
+
+            // Allocate memory for keys and values
+            dest->data.map_type.key = (ctofu*)malloc(sizeof(ctofu) * dest->data.map_type.size);
+            dest->data.map_type.value = (ctofu*)malloc(sizeof(ctofu) * dest->data.map_type.size);
+
+            if (dest->data.map_type.key == NULL || dest->data.map_type.value == NULL) {
+                // Handle memory allocation failure
+                free(dest->data.map_type.key);
+                free(dest->data.map_type.value);
+                printf("Memory allocation failed for map keys or values\n");
+                break;
+            }
+
+            // Copy keys and values
+            for (size_t i = 0; i < dest->data.map_type.size; ++i) {
+                fscl_tofu_value_setter(&source->data.map_type.key[i], &dest->data.map_type.key[i]);
+                fscl_tofu_value_setter(&source->data.map_type.value[i], &dest->data.map_type.value[i]);
+            }
+            break;
 
         case TOFU_QBIT_TYPE:
             dest->data.qbit_type = source->data.qbit_type;
@@ -1244,6 +1437,20 @@ ctofu_data fscl_tofu_value_getter(ctofu* current) {
 
         case TOFU_NULLPTR_TYPE:
             result.nullptr_type = current->data.nullptr_type;
+            break;
+
+        case TOFU_ARRAY_TYPE:
+            // Handle array type
+            printf("Unsupported type (array) for value getter\n");
+            // You might want to set a default value or handle this case differently
+            result.int_type = 0;
+            break;
+
+        case TOFU_MAP_TYPE:
+            // Handle map type
+            printf("Unsupported type (map) for value getter\n");
+            // You might want to set a default value or handle this case differently
+            result.int_type = 0;
             break;
 
         default:
