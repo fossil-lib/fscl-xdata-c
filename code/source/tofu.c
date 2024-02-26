@@ -16,7 +16,7 @@ Description:
 #include <string.h>
 #include <stdarg.h>
 
-char* tofu_custom_strdup(const char* source) {
+char* fscl_tofu_strdup(const char* source) {
     if (source == NULL) {
         return NULL;
     }
@@ -132,7 +132,7 @@ ctofu* fscl_tofu_create(ctofu_type type, ctofu_data* value) {
             result->data.qbit_type = value->qbit_type;
             break;
         case TOFU_STRING_TYPE:
-            result->data.string_type = tofu_custom_strdup(value->string_type);
+            result->data.string_type = fscl_tofu_strdup(value->string_type);
             if (result->data.string_type == NULL) {
                 // Handle memory allocation failure
                 free(result);
@@ -879,7 +879,7 @@ ctofu_error fscl_tofu_value_copy(const ctofu* source, ctofu* dest) {
             break;
 
         case TOFU_STRING_TYPE:
-            dest->data.string_type = tofu_custom_strdup(source->data.string_type);
+            dest->data.string_type = fscl_tofu_strdup(source->data.string_type);
             break;
 
         case TOFU_CHAR_TYPE:
@@ -1063,7 +1063,7 @@ void fscl_tofu_value_setter(const ctofu* source, ctofu* dest) {
             break;
 
         case TOFU_STRING_TYPE:
-            dest->data.string_type = tofu_custom_strdup(source->data.string_type);
+            dest->data.string_type = fscl_tofu_strdup(source->data.string_type);
             break;
 
         case TOFU_CHAR_TYPE:

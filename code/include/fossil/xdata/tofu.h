@@ -382,6 +382,8 @@ ctofu_error fscl_tofu_partition(ctofu* objects, bool (*partitionFunc)(const ctof
 // UTILITY FUNCTIONS
 // =======================
 
+char* fscl_tofu_strdup(const char* source);
+
 /**
  * Retrieves a descriptive error message for the given "tofu" error code.
  *
