@@ -382,7 +382,19 @@ ctofu_error fscl_tofu_partition(ctofu* objects, bool (*partitionFunc)(const ctof
 // UTILITY FUNCTIONS
 // =======================
 
+/**
+ * @brief Duplicates a string.
+ *
+ * This function takes a null-terminated string `source` as input and creates
+ * a duplicate, allocating memory for the new string. The duplicated string is
+ * null-terminated as well. The caller is responsible for freeing the memory
+ * allocated by this function using `free()`.
+ *
+ * @param source The null-terminated string to be duplicated.
+ * @return A pointer to the duplicated string or NULL if memory allocation fails.
+ */
 char* fscl_tofu_strdup(const char* source);
+
 
 /**
  * Retrieves a descriptive error message for the given "tofu" error code.
