@@ -1326,6 +1326,147 @@ XTEST_CASE(test_tofu_shuffle_qbit) {
     fscl_tofu_erase_array(array_result);
 }
 
+// Helper function to create an array with maximum representable values
+ctofu* create_array_max_values(ctofu_type type) {
+    ctofu_data data;
+
+    switch (type) {
+        case TOFU_INT_TYPE:
+            data.int_type = INT_MAX;
+            break;
+        case TOFU_UINT_TYPE:
+            data.uint_type = UINT_MAX;
+            break;
+        // Add cases for other types as needed
+
+        default:
+            return NULL; // Unsupported type
+    }
+
+    return fscl_tofu_create_array(type, 1, &data);
+}
+
+// Test Case 109: Test case for maximum representable values
+XTEST_CASE(test_tofu_create_and_erase_max_values) {
+    ctofu* result = create_array_max_values(TOFU_INT_TYPE);
+    TEST_ASSERT_NOT_CNULLPTR(result);
+
+    fscl_tofu_erase(result);
+    TEST_ASSERT_CNULLPTR(result);
+}
+
+// Helper function to create an array with minimum representable values
+ctofu* create_array_min_values(ctofu_type type) {
+    ctofu_data data;
+
+    switch (type) {
+        case TOFU_INT_TYPE:
+            data.int_type = INT_MIN;
+            break;
+        case TOFU_UINT_TYPE:
+            data.uint_type = 0;
+            break;
+        // Add cases for other types as needed
+
+        default:
+            return NULL; // Unsupported type
+    }
+
+    return fscl_tofu_create_array(type, 1, &data);
+}
+
+// Test Case 110: Test case for minimum representable values
+XTEST_CASE(test_tofu_create_and_erase_min_values) {
+    ctofu* result = create_array_min_values(TOFU_INT_TYPE);
+    TEST_ASSERT_NOT_CNULLPTR(result);
+
+    fscl_tofu_erase(result);
+    TEST_ASSERT_CNULLPTR(result);
+}
+
+// Helper function to create an array with mixed types
+ctofu* create_array_mixed_types() {
+    ctofu_data data[] = {
+        {int_type: 42},
+        {float_type: 3.14},
+        {string_type: "hello"},
+        // Add more mixed types as needed
+    };
+
+    return fscl_tofu_create_array(TOFU_UNKNOWN_TYPE, sizeof(data) / sizeof(data[0]), data);
+}
+
+//  Test Case 111: Test case for sorting mixed types
+XTEST_CASE(test_tofu_sort_mixed_types) {
+    ctofu* array = create_array_mixed_types();
+    TEST_ASSERT_NOT_CNULLPTR(array);
+
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_sort(array));
+    // Add assertions for the expected order of elements based on mixed types
+
+    fscl_tofu_erase(array);
+    TEST_ASSERT_CNULLPTR(array);
+}
+
+// Test Case 112: Test case for searching mixed types
+XTEST_CASE(test_tofu_search_mixed_types) {
+    ctofu* array = create_array_mixed_types();
+    TEST_ASSERT_NOT_CNULLPTR(array);
+
+    ctofu* key = fscl_tofu_create(TOFU_FLOAT_TYPE, &(ctofu_data){float_type: 3.14});
+    TEST_ASSERT_NOT_CNULLPTR(key);
+
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_search(array, key));
+    // Add assertions for the expected result of the search
+
+    fscl_tofu_erase(key);
+    fscl_tofu_erase(array);
+}
+
+// Test Case 113: Test case for error handling
+XTEST_CASE(test_tofu_error_handling) {
+    // Case 1: Attempting to create an array with an invalid type
+    ctofu* invalid_array = fscl_tofu_create_array(TOFU_INVALID_TYPE, 3, 1, 2, 3);
+    TEST_ASSERT_CNULLPTR(invalid_array);
+
+    // Case 2: Attempting to erase a null pointer
+    TEST_ASSERT_EQUAL(TOFU_WAS_NULLPTR, fscl_tofu_erase(NULL));
+
+    // Add more error scenarios as needed
+}
+
+// Test Case 114: Test case for performance
+XTEST_CASE(test_tofu_performance) {
+    // Measure the performance of specific algorithms and operations
+    // This may include time measurements, memory usage, etc.
+    // Example: Sorting a large array
+    const size_t large_size = 1000000;
+    ctofu* large_array = fscl_tofu_create_array(TOFU_INT_TYPE, large_size, /* values */);
+    TEST_ASSERT_NOT_CNULLPTR(large_array);
+
+    TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tofu_sort(large_array));
+
+    fscl_tofu_erase(large_array);
+}
+
+// Test Case 115: Test case for boundary conditions
+XTEST_CASE(test_tofu_boundary_conditions) {
+    // Case 1: Creating an array with the maximum allowed size
+    const size_t max_size = SIZE_MAX;
+    ctofu* max_array = fscl_tofu_create_array(TOFU_INT_TYPE, max_size, /* values */);
+    TEST_ASSERT_NOT_CNULLPTR(max_array);
+
+    // Case 2: Attempting to insert an element into a full structure
+    ctofu_data data = {int_type: 42};
+    ctofu* full_structure = fscl_tofu_create(TOFU_ARRAY_TYPE, &data);
+    TEST_ASSERT_NOT_CNULLPTR(full_structure);
+
+    TEST_ASSERT_EQUAL(TOFU_STRUCTURE_FULL, fscl_tofu_insert(full_structure, &data));
+
+    fscl_tofu_erase(max_array);
+    fscl_tofu_erase(full_structure);
+}
+
 //
 // XUNIT-TEST RUNNER
 //
@@ -1456,5 +1597,22 @@ XTEST_DEFINE_POOL(xdata_test_tofu_group) {
     XTEST_RUN_UNIT(test_tofu_compare_uint);
     XTEST_RUN_UNIT(test_tofu_reduce_uint);
     XTEST_RUN_UNIT(test_tofu_shuffle_uint);
+
+    // Test cases for Edge Cases
+    XTEST_RUN_UNIT(test_tofu_create_and_erase_max_values);
+    XTEST_RUN_UNIT(test_tofu_create_and_erase_min_values);
+
+    // Test cases for Mixed Data Types
+    XTEST_RUN_UNIT(test_tofu_sort_mixed_types);
+    XTEST_RUN_UNIT(test_tofu_search_mixed_types);
+
+    // Test cases for Error Handling
+    XTEST_RUN_UNIT(test_tofu_error_handling);
+
+    // Test cases for Performance
+    XTEST_RUN_UNIT(test_tofu_performance);
+
+    // Test cases for Boundary Conditions
+    XTEST_RUN_UNIT(test_tofu_boundary_conditions);
 
 } // end of xdata_test_tofu_group
