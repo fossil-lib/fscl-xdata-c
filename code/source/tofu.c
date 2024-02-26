@@ -596,7 +596,7 @@ ctofu_error fscl_tofu_compare(ctofu* right, ctofu* left) {
 }
 
 ctofu_error fscl_tofu_reduce(ctofu* objects, ctofu (*reduceFunc)(const ctofu*, const ctofu*)) {
-    if (!fscl_tofu_not_cnullptr(objects) || !fscl_tofu_not_cnullptr(reduceFunc)) {
+    if (!fscl_tofu_not_cnullptr(objects)) {
         return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
@@ -716,7 +716,7 @@ void fscl_tofu_out(const ctofu value) {
             printf("%d", value.data.int32_type);
             break;
         case TOFU_INT64_TYPE:
-            printf("%lld", value.data.int64_type);
+            printf("%ld", value.data.int64_type);
             break;
         case TOFU_UINT_TYPE:
             printf("%u", value.data.uint_type);
@@ -731,7 +731,7 @@ void fscl_tofu_out(const ctofu value) {
             printf("%u", value.data.uint32_type);
             break;
         case TOFU_UINT64_TYPE:
-            printf("%llu", value.data.uint64_type);
+            printf("%lu", value.data.uint64_type);
             break;
         case TOFU_OCTAL8_TYPE:
             printf("0%o", (unsigned int)value.data.octal8_type);
@@ -743,7 +743,7 @@ void fscl_tofu_out(const ctofu value) {
             printf("0%o", value.data.octal32_type);
             break;
         case TOFU_OCTAL64_TYPE:
-            printf("0%llo", value.data.octal64_type);
+            printf("0%lo", value.data.octal64_type);
             break;
         case TOFU_BITWISE8_TYPE:
             printf("0x%x", (unsigned int)value.data.bitwise8_type);
@@ -755,7 +755,7 @@ void fscl_tofu_out(const ctofu value) {
             printf("0x%x", value.data.bitwise32_type);
             break;
         case TOFU_BITWISE64_TYPE:
-            printf("0x%llx", value.data.bitwise64_type);
+            printf("0x%lx", value.data.bitwise64_type);
             break;
         case TOFU_HEX8_TYPE:
             printf("0x%x", (unsigned int)value.data.hex8_type);
