@@ -16,21 +16,6 @@ Description:
 #include <string.h>
 #include <stdarg.h>
 
-char* fscl_tofu_strdup(const char* source) {
-    if (source == NULL) {
-        return NULL;
-    }
-
-    size_t length = strlen(source) + 1;  // +1 for the null terminator
-    char* destination = (char*)malloc(length);
-
-    if (destination != NULL) {
-        memcpy(destination, source, length);
-    }
-
-    return destination;
-}
-
 // =======================
 // CREATE/ERASE FUNCTIONS
 // =======================
@@ -701,6 +686,22 @@ ctofu_error fscl_tofu_partition(ctofu* objects, bool (*partitionFunc)(const ctof
 // =======================
 // UTILITY FUNCTIONS
 // =======================
+
+char* fscl_tofu_strdup(const char* source) {
+    if (source == NULL) {
+        return NULL;
+    }
+
+    size_t length = strlen(source) + 1;  // +1 for the null terminator
+    char* destination = (char*)malloc(length);
+
+    if (destination != NULL) {
+        memcpy(destination, source, length);
+    }
+
+    return destination;
+}
+
 ctofu_error fscl_tofu_error(ctofu_error error) {
     switch (error) {
         case TOFU_SUCCESS:
