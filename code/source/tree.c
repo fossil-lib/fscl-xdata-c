@@ -104,6 +104,40 @@ ctofu_error fscl_tree_remove_recursive(ctree_node** root, ctofu data) {
     }
 }
 
+// Helper function to recursively insert a node
+ctofu_error fscl_tree_insert_recursive(ctree_node** root, ctofu* data) {
+    if (root == NULL || data == NULL) {
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
+    }
+
+    if (*root == NULL) {
+        *root = (ctree_node*)malloc(sizeof(ctree_node));
+        if (*root == NULL) {
+            return fscl_tofu_error(TOFU_WAS_BAD_MALLOC);  // Handle memory allocation failure
+        }
+
+        (*root)->data = *data;
+        (*root)->left = NULL;
+        (*root)->right = NULL;
+
+        return fscl_tofu_error(TOFU_SUCCESS);
+    }
+
+    int compare_result;
+    ctofu_error comparison_error = fscl_tofu_compare(data, &(*root)->data);
+    if (comparison_error != TOFU_SUCCESS) {
+        return comparison_error;
+    }
+
+    if (compare_result < 0) {
+        return fscl_tree_insert_recursive(&(*root)->left, data);
+    } else if (compare_result > 0) {
+        return fscl_tree_insert_recursive(&(*root)->right, data);
+    } else {
+        return fscl_tofu_error(TOFU_DUPLICATE_ELEMENT);  // Duplicate element
+    }
+}
+
 ctofu_error fscl_tree_insert(ctree* tree, ctofu data) {
     if (tree == NULL) {
         return fscl_tofu_error(TOFU_WAS_NULLPTR);
