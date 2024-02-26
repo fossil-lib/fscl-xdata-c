@@ -58,49 +58,6 @@ void fscl_tree_erase(ctree* tree) {
 // ALGORITHM FUNCTIONS
 // =======================
 
-// Helper function to recursively remove a node
-ctofu_error fscl_tree_remove_recursive(ctree_node** root, ctofu data) {
-    if (*root == NULL) {
-        return fscl_tofu_error(TOFU_NOT_FOUND); // Element not found
-    }
-
-    int compare_result = fscl_tofu_compare(&data, &(*root)->data);
-
-    if (compare_result < 0) {
-        return fscl_tree_remove_recursive(&(*root)->left, data);
-    } else if (compare_result > 0) {
-        return fscl_tree_remove_recursive(&(*root)->right, data);
-    } else {
-        // Node with the key found
-
-        // Case 1: Node with only one child or no child
-        if ((*root)->left == NULL) {
-            ctree_node* temp = *root;
-            *root = (*root)->right;
-            free(temp);
-        } else if ((*root)->right == NULL) {
-            ctree_node* temp = *root;
-            *root = (*root)->left;
-            free(temp);
-        } else {
-            // Case 3: Node with two children
-            ctree_node* temp = fscl_tree_find_min((*root)->right);
-            (*root)->data = temp->data;
-            return fscl_tree_remove_recursive(&(*root)->right, temp->data);
-        }
-
-        return fscl_tofu_error(TOFU_SUCCESS);
-    }
-}
-
-ctofu_error fscl_tree_insert(ctree* tree, ctofu data) {
-    if (tree == NULL) {
-        return fscl_tofu_error(TOFU_WAS_NULLPTR);
-    }
-
-    return fscl_tree_insert_recursive(&tree->root, data);
-}
-
 // Helper function to find the minimum node in a subtree
 ctree_node* fscl_tree_find_min(ctree_node* node) {
     while (node->left != NULL) {
@@ -142,6 +99,14 @@ ctofu_error fscl_tree_remove_recursive(ctree_node** root, ctofu data) {
 
         return fscl_tofu_error(TOFU_SUCCESS);
     }
+}
+
+ctofu_error fscl_tree_insert(ctree* tree, ctofu data) {
+    if (tree == NULL) {
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
+    }
+
+    return fscl_tree_insert_recursive(&tree->root, data);
 }
 
 ctofu_error fscl_tree_remove(ctree* tree, ctofu data) {
