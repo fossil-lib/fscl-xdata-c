@@ -258,7 +258,7 @@ ctofu* fscl_tofu_create_array(ctofu_type type, size_t size, ...) {
     va_end(args);
 
     // Perform type checking to ensure homogeneity
-    if (!fscl_tofu_is_homogeneous_array(type, size, tofu_array->data.array_type.elements)) {
+    if (!fscl_tofu_is_homogeneous(type, size, tofu_array->data.array_type.elements)) {
         // Handle mixed types, free allocated memory and return NULL
         free(tofu_array->data.array_type.elements);
         free(tofu_array);
