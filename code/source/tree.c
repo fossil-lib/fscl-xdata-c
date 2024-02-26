@@ -123,15 +123,14 @@ ctofu_error fscl_tree_insert_recursive(ctree_node** root, ctofu* data) {
         return fscl_tofu_error(TOFU_SUCCESS);
     }
 
-    int compare_result;
     ctofu_error comparison_error = fscl_tofu_compare(data, &(*root)->data);
     if (comparison_error != TOFU_SUCCESS) {
         return comparison_error;
     }
 
-    if (compare_result < 0) {
+    if (comparison_error < 0) {
         return fscl_tree_insert_recursive(&(*root)->left, data);
-    } else if (compare_result > 0) {
+    } else if (comparison_error > 0) {
         return fscl_tree_insert_recursive(&(*root)->right, data);
     } else {
         return fscl_tofu_error(TOFU_DUPLICATE_ELEMENT);  // Duplicate element
