@@ -151,7 +151,7 @@ typedef enum {
     TOFU_CHAR_TYPE,          ///< Character type.
     TOFU_BOOLEAN_TYPE,       ///< Boolean type.
     TOFU_ARRAY_TYPE,         ///< Array type.
-    TOFU_MAP_TYPE,           ///< Map type.
+    // TOFU_MAP_TYPE,           ///< Map type.
     TOFU_QBIT_TYPE,          ///< Quantum bit type (64-bit).
     TOFU_NULLPTR_TYPE,       ///< Null pointer type.
     TOFU_INVALID_TYPE,       ///< Invalid data structure type.
