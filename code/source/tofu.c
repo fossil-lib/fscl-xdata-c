@@ -246,6 +246,9 @@ ctofu* fscl_tofu_create_array(ctofu_type type, size_t size, ...) {
             case TOFU_BOOLEAN_TYPE:
                 tofu_array->data.array_type.elements[i].data.boolean_type = va_arg(args, int);
                 break;
+            case TOFU_QBIT_TYPE:
+                tofu_array->data.array_type.elements[i].data.qbit_type = va_arg(args, uint64_t);
+                break;
             case TOFU_NULLPTR_TYPE:
             case TOFU_UNKNOWN_TYPE:
             case TOFU_INVALID_TYPE:
