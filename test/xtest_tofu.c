@@ -20,7 +20,14 @@ int square_transform_function(int value) {
     return value * value;
 }
 
-bool even_filter_function(const ctofu* element) {
+bool even_filter_function(const ctofu_data* element) {
+    // Ensure the data is of type TOFU_INT_TYPE
+    if (element->type != TOFU_INT_TYPE) {
+        // Handle the case where the data type is not an integer
+        printf("Invalid data type for filtering.\n");
+        return false;
+    }
+
     return (element->data.int_type % 2) == 0;
 }
 
@@ -29,8 +36,7 @@ ctofu sum_reduce_function(const ctofu* element, const ctofu* accumulator) {
     // Ensure both elements are integers
     if (element->type != TOFU_INT_TYPE || accumulator->type != TOFU_INT_TYPE) {
         ctofu error_result;
-        error_result.type = TOFU_ERROR_TYPE;
-        error_result.data.error_type = TOFU_WAS_MISMATCH;
+        error_result.type = TOFU_UNKNOWN_TYPE;
         return error_result;
     }
 

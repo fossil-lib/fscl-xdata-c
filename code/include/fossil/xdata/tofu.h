@@ -279,6 +279,16 @@ ctofu_error fscl_tofu_erase_array(ctofu* array);
 ctofu_error fscl_tofu_accumulate(ctofu* objects);
 
 /**
+ * Transforms the elements of a TOFU array using a specified transformation function.
+ *
+ * @param objects   The TOFU array to be transformed.
+ * @param transformFunc  A function pointer to the transformation function.
+ *                       It should take an integer as input and return an integer.
+ * @return           Returns an error code indicating the success or failure of the operation.
+ */
+ctofu_error fscl_tofu_transform(ctofu* objects, int (*transformFunc)(int));
+
+/**
  * Transforms each element in the "tofu" structure using the provided transformation function.
  *
  * @param objects The "tofu" structure to transform.
