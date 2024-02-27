@@ -39,7 +39,7 @@ XTEST_CASE(test_map_insert_and_size) {
     ctofu key1 = { TOFU_INT_TYPE, { .int_type = 42 } };
     ctofu value1 = { TOFU_INT_TYPE, { .int_type = 10 } };
     ctofu key2 = { TOFU_INT_TYPE, { .int_type = 5 } };
-    ctofu value2 = { TOFU_INT_TYPE, { int_type = 20 } };
+    ctofu value2 = { TOFU_INT_TYPE, { .int_type = 20 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_map_insert(map, key1, value1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_map_insert(map, key2, value2));
@@ -57,7 +57,7 @@ XTEST_CASE(test_map_remove) {
     ctofu key1 = { TOFU_INT_TYPE, { .int_type = 42 } };
     ctofu value1 = { TOFU_INT_TYPE, { .int_type = 10 } };
     ctofu key2 = { TOFU_INT_TYPE, { .int_type = 5 } };
-    ctofu value2 = { TOFU_INT_TYPE, { int_type = 20 } };
+    ctofu value2 = { TOFU_INT_TYPE, { .int_type = 20 } };
 
     fscl_map_insert(map, key1, value1);
     fscl_map_insert(map, key2, value2);
@@ -88,7 +88,7 @@ XTEST_CASE(test_map_getter_and_setter) {
     TEST_ASSERT_EQUAL_INT(10, retrievedValue.data.int_type);
 
     // Update the value for a key
-    ctofu updatedValue = { TOFU_INT_TYPE, { int_type = 50 } };
+    ctofu updatedValue = { TOFU_INT_TYPE, { .int_type = 50 } };
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_map_setter(map, key, updatedValue));
 
     // Get the updated value for the key
@@ -113,7 +113,7 @@ XTEST_CASE(test_map_contains) {
     TEST_ASSERT_TRUE(fscl_map_contains(map, key));
 
     // Check for a non-existing key
-    ctofu nonExistingKey = { TOFU_INT_TYPE, { int_type = 100 } };
+    ctofu nonExistingKey = { TOFU_INT_TYPE, { .int_type = 100 } };
     TEST_ASSERT_FALSE(fscl_map_contains(map, nonExistingKey));
 
     fscl_map_erase(map);
