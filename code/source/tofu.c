@@ -389,13 +389,13 @@ ctofu_error fscl_tofu_sort(ctofu* objects) {
     }
 
     if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
-        return TOFU_INVALID_TYPE;
+        return fscl_tofu_error(TOFU_WAS_MISMATCH);
     }
 
     // Ensure that array elements have compatible types for sorting
     for (size_t i = 0; i < objects->data.array_type.size; ++i) {
         if (fscl_tofu_type_getter(&objects->data.array_type.elements[i]) != TOFU_INT64_TYPE) {
-            return TOFU_INVALID_TYPE;
+            return fscl_tofu_error(TOFU_WAS_MISMATCH);
         }
     }
 
@@ -423,7 +423,7 @@ ctofu_error fscl_tofu_search(ctofu* objects, ctofu* key) {
     }
 
     if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
-        return TOFU_INVALID_TYPE;
+        return fscl_tofu_error(TOFU_WAS_MISMATCH);
     }
 
     ctofu_type keyType = fscl_tofu_type_getter(key);
@@ -431,7 +431,7 @@ ctofu_error fscl_tofu_search(ctofu* objects, ctofu* key) {
     // Ensure that array elements have compatible types for searching
     for (size_t i = 0; i < objects->data.array_type.size; ++i) {
         if (fscl_tofu_type_getter(&objects->data.array_type.elements[i]) != keyType) {
-            return TOFU_INVALID_TYPE;
+            return fscl_tofu_error(TOFU_WAS_MISMATCH);
         }
     }
 
@@ -451,7 +451,7 @@ ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu*)) {
     }
 
     if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
-        return TOFU_INVALID_TYPE;
+        return fscl_tofu_error(TOFU_WAS_MISMATCH);
     }
 
     ctofu_data filteredArray[objects->data.array_type.size];
@@ -479,7 +479,7 @@ ctofu_error fscl_tofu_reverse(ctofu* objects) {
     }
 
     if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
-        return TOFU_INVALID_TYPE;
+        return fscl_tofu_error(TOFU_WAS_UNKNOWN);
     }
 
     // Reverse the array elements
@@ -584,18 +584,18 @@ ctofu_error fscl_tofu_compare(ctofu* right, ctofu* left) {
             // You might want to implement specific logic for comparing array elements
             // For simplicity, I'll return TOFU_UNKNOWN_TYPE indicating unsupported comparison
             printf("Unsupported type (array) for value comparison\n");
-            return TOFU_UNKNOWN_TYPE;
+            return fscl_tofu_error(TOFU_WAS_UNKNOWN);
 
         case TOFU_MAP_TYPE:
             // Handle map type
             // You might want to implement specific logic for comparing map elements
             // For simplicity, I'll return TOFU_UNKNOWN_TYPE indicating unsupported comparison
             printf("Unsupported type (map) for value comparison\n");
-            return TOFU_UNKNOWN_TYPE;
+            return fscl_tofu_error(TOFU_WAS_UNKNOWN);
         case TOFU_QBIT_TYPE:
             return (right->data.qbit_type == left->data.qbit_type) ? TOFU_SUCCESS : TOFU_WAS_MISMATCH;
         default:
-            return TOFU_INVALID_TYPE;  // Unsupported data type for comparison
+            return fscl_tofu_error(TOFU_WAS_UNKNOWN);  // Unsupported data type for comparison
     }
 
     return fscl_tofu_error(TOFU_SUCCESS);
@@ -607,7 +607,7 @@ ctofu_error fscl_tofu_reduce(ctofu* objects, ctofu (*reduceFunc)(const ctofu*, c
     }
 
     if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
-        return TOFU_INVALID_TYPE;
+        return fscl_tofu_error(TOFU_WAS_UNKNOWN);
     }
 
     if (objects->data.array_type.size < 2) {
@@ -632,7 +632,7 @@ ctofu_error fscl_tofu_shuffle(ctofu* objects) {
     }
 
     if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
-        return TOFU_INVALID_TYPE;
+        return fscl_tofu_error(TOFU_WAS_UNKNOWN);
     }
 
     size_t size = objects->data.array_type.size;
