@@ -24,6 +24,71 @@ bool even_filter_function(const ctofu* element) {
     return (element->data.int_type % 2) == 0;
 }
 
+// Function to calculate the sum of elements in an array
+int sum_reduce_function(const ctofu* element, const ctofu* accumulator) {
+    // Ensure both elements are integers
+    if (element->type != TOFU_INT_TYPE || accumulator->type != TOFU_INT_TYPE) {
+        return TOFU_WAS_MISMATCH;
+    }
+
+    // Calculate the sum
+    int sum = accumulator->data.int_type + element->data.int_type;
+    return sum;
+}
+
+// Function to create an even partition of an array
+void even_partition_function(int* array, int size, int partitions) {
+    if (array == NULL || size <= 0 || partitions <= 0) {
+        // Handle invalid input
+        printf("Invalid input parameters.\n");
+        return;
+    }
+
+    if (partitions > size) {
+        // Handle case where the number of partitions is greater than the array size
+        printf("Number of partitions cannot be greater than the array size.\n");
+        return;
+    }
+
+    int elements_per_partition = size / partitions;
+    int remaining_elements = size % partitions;
+
+    int index = 0;
+    for (int i = 0; i < partitions; ++i) {
+        int partition_size = elements_per_partition + (i < remaining_elements ? 1 : 0);
+
+        // Process the elements in the current partition
+        printf("Partition %d:", i + 1);
+        for (int j = 0; j < partition_size; ++j) {
+            printf(" %d", array[index++]);
+        }
+        printf("\n");
+    }
+}
+
+// Function to calculate the sum of elements in an array
+int sum_reduce_function(const ctofu* element, const ctofu* accumulator) {
+    // Ensure both elements are integers
+    if (element->type != TOFU_INT_TYPE || accumulator->type != TOFU_INT_TYPE) {
+        return TOFU_WAS_MISMATCH;
+    }
+
+    // Calculate the sum
+    int sum = accumulator->data.int_type + element->data.int_type;
+    return sum;
+}
+
+// Function to print each element of an array
+void out_element_function(ctofu* element) {
+    // Ensure the element is an integer
+    if (element->type != TOFU_INT_TYPE) {
+        return;
+    }
+
+    // Print the element
+    printf("%d ", element->data.int_type);
+}
+
 //
 // XUNIT TEST CASES
 //
@@ -323,11 +388,11 @@ XTEST_CASE(test_create_array_all_types) {
 
     // Invalid array type (Unknown type)
     ctofu* invalid_array_tofu = fscl_tofu_create_array(TOFU_INVALID_TYPE, 3, NULL, NULL, NULL);
-    TEST_ASSERT_NULL(invalid_array_tofu);
+    TEST_ASSERT_CNULLPTR(invalid_array_tofu);
 
     // Unknown array type
     ctofu* unknown_array_tofu = fscl_tofu_create_array(TOFU_UNKNOWN_TYPE, 3, NULL, NULL, NULL);
-    TEST_ASSERT_NULL(unknown_array_tofu);
+    TEST_ASSERT_CNULLPTR(unknown_array_tofu);
 
     // Add more test cases for other types as needed
 }
@@ -478,7 +543,7 @@ XTEST_CASE(test_for_each) {
     ctofu* array = fscl_tofu_create_array(TOFU_INT_TYPE, 5, 5, 3, 8, 1, 7);
 
     // Test for_each
-    ctofu_error for_each_result = fscl_tofu_for_each(array, fscl_tofu_out);
+    ctofu_error for_each_result = fscl_tofu_for_each(array, out_element_function);
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, for_each_result);
 
     // Clean up

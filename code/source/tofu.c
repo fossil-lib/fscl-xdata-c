@@ -749,7 +749,7 @@ void fscl_tofu_out(const ctofu value) {
             printf("0%o", value.data.octal32_type);
             break;
         case TOFU_OCTAL64_TYPE:
-            printf("0%llo", value.data.octal64_type);
+            printf("0%llo", (long long unsigned int)value.data.octal64_type);
             break;
         case TOFU_BITWISE8_TYPE:
             printf("0x%x", (unsigned int)value.data.bitwise8_type);
