@@ -40,8 +40,8 @@ XTEST_CASE(test_dlist_insert_and_size) {
 
     // Insert some elements
     ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dlist_insert(dlist, element1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dlist_insert(dlist, element2));
@@ -58,8 +58,8 @@ XTEST_CASE(test_dlist_remove) {
 
     // Insert some elements
     ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);
@@ -83,8 +83,8 @@ XTEST_CASE(test_dlist_reverse_forward) {
 
     // Insert some elements
     ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);
@@ -114,8 +114,8 @@ XTEST_CASE(test_dlist_reverse_backward) {
 
     // Insert some elements
     ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);

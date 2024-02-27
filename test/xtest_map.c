@@ -37,8 +37,8 @@ XTEST_CASE(test_map_insert_and_size) {
 
     // Insert some key-value pairs
     ctofu key1 = { TOFU_INT_TYPE, { .int_type = 42 } };
-    ctofu value1 = { TOFU_INT_TYPE, { int_type = 10 } };
-    ctofu key2 = { TOFU_INT_TYPE, { int_type = 5 } };
+    ctofu value1 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu key2 = { TOFU_INT_TYPE, { .int_type = 5 } };
     ctofu value2 = { TOFU_INT_TYPE, { int_type = 20 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_map_insert(map, key1, value1));
@@ -55,8 +55,8 @@ XTEST_CASE(test_map_remove) {
 
     // Insert some key-value pairs
     ctofu key1 = { TOFU_INT_TYPE, { .int_type = 42 } };
-    ctofu value1 = { TOFU_INT_TYPE, { int_type = 10 } };
-    ctofu key2 = { TOFU_INT_TYPE, { int_type = 5 } };
+    ctofu value1 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu key2 = { TOFU_INT_TYPE, { .int_type = 5 } };
     ctofu value2 = { TOFU_INT_TYPE, { int_type = 20 } };
 
     fscl_map_insert(map, key1, value1);
@@ -76,7 +76,7 @@ XTEST_CASE(test_map_getter_and_setter) {
 
     // Insert a key-value pair
     ctofu key = { TOFU_INT_TYPE, { .int_type = 42 } };
-    ctofu value = { TOFU_INT_TYPE, { int_type = 10 } };
+    ctofu value = { TOFU_INT_TYPE, { .int_type = 10 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_map_insert(map, key, value));
 
@@ -105,7 +105,7 @@ XTEST_CASE(test_map_contains) {
 
     // Insert a key-value pair
     ctofu key = { TOFU_INT_TYPE, { .int_type = 42 } };
-    ctofu value = { TOFU_INT_TYPE, { int_type = 10 } };
+    ctofu value = { TOFU_INT_TYPE, { .int_type = 10 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_map_insert(map, key, value));
 
