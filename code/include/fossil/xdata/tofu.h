@@ -266,7 +266,6 @@ ctofu_error fscl_tofu_erase(ctofu* value);
  */
 ctofu_error fscl_tofu_erase_array(ctofu* array);
 
-
 // =======================
 // CLASSIC ALGORITHM FUNCTIONS
 // =======================
