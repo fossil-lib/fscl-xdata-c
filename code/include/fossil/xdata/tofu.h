@@ -285,7 +285,7 @@ ctofu_error fscl_tofu_accumulate(ctofu* objects);
  * @param transformFunc The transformation function applied to each element.
  * @return Error code indicating the success or failure of the operation.
  */
-ctofu_error fscl_tofu_transform(ctofu* objects, int (*transformFunc)(int));
+ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu_data*));
 
 /**
  * Sorts the elements in the "tofu" structure in ascending order.
@@ -311,7 +311,7 @@ ctofu_error fscl_tofu_search(ctofu* objects, ctofu* key);
  * @param filterFunc The filter function applied to each element.
  * @return Error code indicating the success or failure of the operation.
  */
-ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu*));
+ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu_data*));
 
 /**
  * Reverses the order of elements in the "tofu" structure.
