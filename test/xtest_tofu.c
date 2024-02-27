@@ -28,49 +28,40 @@ bool even_filter_function(const ctofu* element) {
 ctofu sum_reduce_function(const ctofu* element, const ctofu* accumulator) {
     // Ensure both elements are integers
     if (element->type != TOFU_INT_TYPE || accumulator->type != TOFU_INT_TYPE) {
-        return TOFU_WAS_MISMATCH;
+        ctofu error_result;
+        error_result.type = TOFU_ERROR_TYPE;
+        error_result.data.error_type = TOFU_WAS_MISMATCH;
+        return error_result;
     }
 
     // Calculate the sum
     int sum = accumulator->data.int_type + element->data.int_type;
-    return sum;
+
+    // Create a ctofu with the sum and return it
+    ctofu result;
+    result.type = TOFU_INT_TYPE;
+    result.data.int_type = sum;
+    return result;
 }
 
-// Function to create an even partition of an array
+// Function to check if an element meets criteria for partitioning
 bool even_partition_function(const ctofu* element) {
-    // Assuming you have global variables array, size, and partitions
-    if (array == NULL || size <= 0 || partitions <= 0) {
-        // Handle invalid input
-        printf("Invalid input parameters.\n");
+    // Implement your logic here to determine if the element meets the partitioning criteria
+    // For example, you could check if the element is even
+
+    if (element == NULL) {
+        // Handle NULL pointer
         return false;
     }
 
-    if (partitions > size) {
-        // Handle case where the number of partitions is greater than the array size
-        printf("Number of partitions cannot be greater than the array size.\n");
-        return false;
+    // Example logic: Check if the value of the element is even
+    if (element->type == TOFU_INT_TYPE && element->data.int_type % 2 == 0) {
+        return true; // Element meets the criteria for partitioning
     }
 
-    int elements_per_partition = size / partitions;
-    int remaining_elements = size % partitions;
-
-    // Implementation for even_partition_function
-    // You might want to use the 'element' parameter, but the logic was not clear in the provided snippet
-
-    return true;  // Indicate success
+    return false; // Element does not meet the criteria
 }
 
-// Function to calculate the sum of elements in an array
-ctofu sum_reduce_function(const ctofu* element, const ctofu* accumulator) {
-    // Ensure both elements are integers
-    if (element->type != TOFU_INT_TYPE || accumulator->type != TOFU_INT_TYPE) {
-        return TOFU_WAS_MISMATCH;
-    }
-
-    // Calculate the sum
-    int sum = accumulator->data.int_type + element->data.int_type;
-    return sum;
-}
 
 // Function to print each element of an array
 void out_element_function(ctofu* element) {
