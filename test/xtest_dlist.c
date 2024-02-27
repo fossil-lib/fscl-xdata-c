@@ -39,7 +39,7 @@ XTEST_CASE(test_dlist_insert_and_size) {
     cdlist* dlist = fscl_dlist_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
     ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
     ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
 
@@ -57,7 +57,7 @@ XTEST_CASE(test_dlist_remove) {
     cdlist* dlist = fscl_dlist_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
     ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
     ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
 
@@ -82,7 +82,7 @@ XTEST_CASE(test_dlist_reverse_forward) {
     cdlist* dlist = fscl_dlist_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
     ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
     ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
 
@@ -113,7 +113,7 @@ XTEST_CASE(test_dlist_reverse_backward) {
     cdlist* dlist = fscl_dlist_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
     ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
     ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
 

@@ -36,7 +36,7 @@ XTEST_CASE(test_map_insert_and_size) {
     cmap* map = fscl_map_create(TOFU_INT_TYPE);
 
     // Insert some key-value pairs
-    ctofu key1 = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu key1 = { TOFU_INT_TYPE, { .int_type = 42 } };
     ctofu value1 = { TOFU_INT_TYPE, { int_type = 10 } };
     ctofu key2 = { TOFU_INT_TYPE, { int_type = 5 } };
     ctofu value2 = { TOFU_INT_TYPE, { int_type = 20 } };
@@ -54,7 +54,7 @@ XTEST_CASE(test_map_remove) {
     cmap* map = fscl_map_create(TOFU_INT_TYPE);
 
     // Insert some key-value pairs
-    ctofu key1 = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu key1 = { TOFU_INT_TYPE, { .int_type = 42 } };
     ctofu value1 = { TOFU_INT_TYPE, { int_type = 10 } };
     ctofu key2 = { TOFU_INT_TYPE, { int_type = 5 } };
     ctofu value2 = { TOFU_INT_TYPE, { int_type = 20 } };
@@ -75,7 +75,7 @@ XTEST_CASE(test_map_getter_and_setter) {
     cmap* map = fscl_map_create(TOFU_INT_TYPE);
 
     // Insert a key-value pair
-    ctofu key = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu key = { TOFU_INT_TYPE, { .int_type = 42 } };
     ctofu value = { TOFU_INT_TYPE, { int_type = 10 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_map_insert(map, key, value));
@@ -104,7 +104,7 @@ XTEST_CASE(test_map_contains) {
     cmap* map = fscl_map_create(TOFU_INT_TYPE);
 
     // Insert a key-value pair
-    ctofu key = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu key = { TOFU_INT_TYPE, { .int_type = 42 } };
     ctofu value = { TOFU_INT_TYPE, { int_type = 10 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_map_insert(map, key, value));
