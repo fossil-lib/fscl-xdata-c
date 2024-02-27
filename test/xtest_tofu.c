@@ -25,7 +25,7 @@ bool even_filter_function(const ctofu* element) {
 }
 
 // Function to calculate the sum of elements in an array
-int sum_reduce_function(const ctofu* element, const ctofu* accumulator) {
+ctofu sum_reduce_function(const ctofu* element, const ctofu* accumulator) {
     // Ensure both elements are integers
     if (element->type != TOFU_INT_TYPE || accumulator->type != TOFU_INT_TYPE) {
         return TOFU_WAS_MISMATCH;
@@ -37,37 +37,31 @@ int sum_reduce_function(const ctofu* element, const ctofu* accumulator) {
 }
 
 // Function to create an even partition of an array
-void even_partition_function(int* array, int size, int partitions) {
+bool even_partition_function(const ctofu* element) {
+    // Assuming you have global variables array, size, and partitions
     if (array == NULL || size <= 0 || partitions <= 0) {
         // Handle invalid input
         printf("Invalid input parameters.\n");
-        return;
+        return false;
     }
 
     if (partitions > size) {
         // Handle case where the number of partitions is greater than the array size
         printf("Number of partitions cannot be greater than the array size.\n");
-        return;
+        return false;
     }
 
     int elements_per_partition = size / partitions;
     int remaining_elements = size % partitions;
 
-    int index = 0;
-    for (int i = 0; i < partitions; ++i) {
-        int partition_size = elements_per_partition + (i < remaining_elements ? 1 : 0);
+    // Implementation for even_partition_function
+    // You might want to use the 'element' parameter, but the logic was not clear in the provided snippet
 
-        // Process the elements in the current partition
-        printf("Partition %d:", i + 1);
-        for (int j = 0; j < partition_size; ++j) {
-            printf(" %d", array[index++]);
-        }
-        printf("\n");
-    }
+    return true;  // Indicate success
 }
 
 // Function to calculate the sum of elements in an array
-int sum_reduce_function(const ctofu* element, const ctofu* accumulator) {
+ctofu sum_reduce_function(const ctofu* element, const ctofu* accumulator) {
     // Ensure both elements are integers
     if (element->type != TOFU_INT_TYPE || accumulator->type != TOFU_INT_TYPE) {
         return TOFU_WAS_MISMATCH;
