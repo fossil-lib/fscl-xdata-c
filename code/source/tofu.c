@@ -722,7 +722,7 @@ void fscl_tofu_out(const ctofu value) {
             printf("%d", value.data.int32_type);
             break;
         case TOFU_INT64_TYPE:
-            printf("%ld", value.data.int64_type);
+            printf("%lld", value.data.int64_type);
             break;
         case TOFU_UINT_TYPE:
             printf("%u", value.data.uint_type);
@@ -737,7 +737,7 @@ void fscl_tofu_out(const ctofu value) {
             printf("%u", value.data.uint32_type);
             break;
         case TOFU_UINT64_TYPE:
-            printf("%lu", value.data.uint64_type);
+            printf("%llu", value.data.uint64_type);
             break;
         case TOFU_OCTAL8_TYPE:
             printf("0%o", (unsigned int)value.data.octal8_type);
@@ -749,7 +749,7 @@ void fscl_tofu_out(const ctofu value) {
             printf("0%o", value.data.octal32_type);
             break;
         case TOFU_OCTAL64_TYPE:
-            printf("0%lo", value.data.octal64_type);
+            printf("0%llo", value.data.octal64_type);
             break;
         case TOFU_BITWISE8_TYPE:
             printf("0x%x", (unsigned int)value.data.bitwise8_type);
@@ -761,7 +761,7 @@ void fscl_tofu_out(const ctofu value) {
             printf("0x%x", value.data.bitwise32_type);
             break;
         case TOFU_BITWISE64_TYPE:
-            printf("0x%lx", value.data.bitwise64_type);
+            printf("0x%llx", value.data.bitwise64_type);
             break;
         case TOFU_HEX8_TYPE:
             printf("0x%x", (unsigned int)value.data.hex8_type);
@@ -773,7 +773,7 @@ void fscl_tofu_out(const ctofu value) {
             printf("0x%x", value.data.hex32_type);
             break;
         case TOFU_HEX64_TYPE:
-            printf("0x%lx", value.data.hex64_type);
+            printf("0x%llx", value.data.hex64_type);
             break;
         case TOFU_FLOAT_TYPE:
             printf("%f", value.data.float_type);
@@ -797,7 +797,7 @@ void fscl_tofu_out(const ctofu value) {
             // Assuming that qbit_type is an unsigned integer type
             printf("0b");
             for (int i = sizeof(value.data.qbit_type) * 8 - 1; i >= 0; --i) {
-                printf("%ld", (value.data.qbit_type >> i) & 1);
+                printf("%llu", (value.data.qbit_type >> i) & 1);
             }
             break;
         case TOFU_ARRAY_TYPE:
