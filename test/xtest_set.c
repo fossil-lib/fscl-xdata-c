@@ -99,8 +99,6 @@ XTEST_CASE(test_set_contains) {
 // XUNIT-TEST RUNNER
 //
 XTEST_DEFINE_POOL(xdata_test_set_group) {
-    XTEST_NOTE("Running all test cases for set:");
-
     XTEST_RUN_UNIT(test_set_create_and_erase);
     XTEST_RUN_UNIT(test_set_insert_and_size);
     XTEST_RUN_UNIT(test_set_remove);

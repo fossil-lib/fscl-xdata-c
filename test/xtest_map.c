@@ -123,8 +123,6 @@ XTEST_CASE(test_map_contains) {
 // XUNIT-TEST RUNNER
 //
 XTEST_DEFINE_POOL(xdata_test_map_group) {
-    XTEST_NOTE("Running all test cases for map:");
-
     XTEST_RUN_UNIT(test_map_create_and_erase);
     XTEST_RUN_UNIT(test_map_insert_and_size);
     XTEST_RUN_UNIT(test_map_remove);

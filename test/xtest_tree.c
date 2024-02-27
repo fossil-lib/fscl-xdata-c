@@ -84,8 +84,6 @@ XTEST_CASE(test_tree_remove) {
 // XUNIT-TEST RUNNER
 //
 XTEST_DEFINE_POOL(xdata_test_tree_group) {
-    XTEST_NOTE("Running all test cases for tree:");
-
     XTEST_RUN_UNIT(test_tree_create_and_erase);
     XTEST_RUN_UNIT(test_tree_insert_and_search);
     XTEST_RUN_UNIT(test_tree_remove);

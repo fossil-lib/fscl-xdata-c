@@ -552,8 +552,6 @@ XTEST_CASE(test_partition) {
 // XUNIT-TEST RUNNER
 //
 XTEST_DEFINE_POOL(xdata_test_tofu_group) {
-    XTEST_NOTE("Running all test cases for tofu:");
-
     XTEST_RUN_UNIT(test_create_and_erase);
     XTEST_RUN_UNIT(test_create_array_all_types);
     XTEST_RUN_UNIT(test_type_mismatch);

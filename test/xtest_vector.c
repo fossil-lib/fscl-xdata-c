@@ -84,8 +84,6 @@ XTEST_CASE(test_vector_search) {
 // XUNIT-TEST RUNNER
 //
 XTEST_DEFINE_POOL(xdata_test_vector_group) {
-    XTEST_NOTE("Running all test cases for vector:");
-
     XTEST_RUN_UNIT(test_vector_create_and_erase);
     XTEST_RUN_UNIT(test_vector_push_back);
     XTEST_RUN_UNIT(test_vector_search);

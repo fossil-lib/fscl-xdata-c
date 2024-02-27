@@ -144,8 +144,6 @@ XTEST_CASE(test_dlist_reverse_backward) {
 // XUNIT-TEST RUNNER
 //
 XTEST_DEFINE_POOL(xdata_test_dlist_group) {
-    XTEST_NOTE("Running all test cases for dlist:");
-
     XTEST_RUN_UNIT(test_dlist_create_and_erase);
     XTEST_RUN_UNIT(test_dlist_insert_and_size);
     XTEST_RUN_UNIT(test_dlist_remove);

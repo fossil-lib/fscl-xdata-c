@@ -142,8 +142,6 @@ XTEST_CASE(test_flist_reverse_backward) {
 // XUNIT-TEST RUNNER
 //
 XTEST_DEFINE_POOL(xdata_test_flist_group) {
-    XTEST_NOTE("Running all test cases for flist:");
-
     XTEST_RUN_UNIT(test_flist_create_and_erase);
     XTEST_RUN_UNIT(test_flist_insert_and_size);
     XTEST_RUN_UNIT(test_flist_remove);

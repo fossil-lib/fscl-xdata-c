@@ -108,8 +108,6 @@ XTEST_CASE(test_stack_top) {
 // XUNIT-TEST RUNNER
 //
 XTEST_DEFINE_POOL(xdata_test_stack_group) {
-    XTEST_NOTE("Running all test cases for stack:");
-
     XTEST_RUN_UNIT(test_stack_create_and_erase);
     XTEST_RUN_UNIT(test_stack_insert_and_size);
     XTEST_RUN_UNIT(test_stack_remove);

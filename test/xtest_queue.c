@@ -108,8 +108,6 @@ XTEST_CASE(test_queue_not_empty_and_is_empty) {
 // XUNIT-TEST RUNNER
 //
 XTEST_DEFINE_POOL(xdata_test_queue_group) {
-    XTEST_NOTE("Running all test cases for queue:");
-
     XTEST_RUN_UNIT(test_queue_create_and_erase);
     XTEST_RUN_UNIT(test_queue_insert_and_size);
     XTEST_RUN_UNIT(test_queue_remove);
