@@ -259,7 +259,7 @@ ctofu* fscl_tofu_create_array(ctofu_type type, size_t size, ...) {
     va_end(args);
 
     // Perform type checking to ensure homogeneity
-    if (!fscl_tofu_is_homogeneous(type, size, tofu_array->data.array_type.elements)) {
+    if (!fscl_tofu_is_homogeneous(type, size, &tofu_array->data)) {
         // Handle mixed types, free allocated memory and return NULL
         free(tofu_array->data.array_type.elements);
         free(tofu_array);
@@ -767,7 +767,7 @@ void fscl_tofu_out(const ctofu value) {
             printf("0x%x", value.data.hex32_type);
             break;
         case TOFU_HEX64_TYPE:
-            printf("0x%llx", value.data.hex64_type);
+            printf("0x%lx", value.data.hex64_type);
             break;
         case TOFU_FLOAT_TYPE:
             printf("%f", value.data.float_type);
@@ -786,6 +786,13 @@ void fscl_tofu_out(const ctofu value) {
             break;
         case TOFU_NULLPTR_TYPE:
             printf("cnullptr");
+            break;
+        case TOFU_QBIT_TYPE:
+            // Assuming that qbit_type is an unsigned integer type
+            printf("0b");
+            for (int i = sizeof(value.data.qbit_type) * 8 - 1; i >= 0; --i) {
+                printf("%d", (value.data.qbit_type >> i) & 1);
+            }
             break;
         case TOFU_ARRAY_TYPE:
             printf("[ ");

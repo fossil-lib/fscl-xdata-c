@@ -96,7 +96,7 @@ ctofu_error fscl_map_remove(cmap* map, ctofu key) {
     return fscl_tofu_error(TOFU_SUCCESS);
 }
 
-ctofu_error fscl_map_search(const cmap* map, ctofu key) {
+ctofu_error fscl_map_search(cmap* map, ctofu key) {
     if (map == NULL) {
         return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
@@ -114,7 +114,7 @@ ctofu_error fscl_map_search(const cmap* map, ctofu key) {
 // UTILITY FUNCTIONS
 // =======================
 
-size_t fscl_map_size(const cmap* map) {
+size_t fscl_map_size(cmap* map) {
     if (map == NULL) {
         return 0;
     }
@@ -153,23 +153,23 @@ ctofu_error fscl_map_setter(cmap* map, ctofu key, ctofu value) {
     return fscl_tofu_error(TOFU_NOT_FOUND); // Key not found
 }
 
-bool fscl_map_not_empty(const cmap* map) {
+bool fscl_map_not_empty(cmap* map) {
     return map != NULL && map->size > 0;
 }
 
-bool fscl_map_not_cnullptr(const cmap* map) {
+bool fscl_map_not_cnullptr(cmap* map) {
     return map != NULL;
 }
 
-bool fscl_map_is_empty(const cmap* map) {
+bool fscl_map_is_empty(cmap* map) {
     return map == NULL || map->size == 0;
 }
 
-bool fscl_map_is_cnullptr(const cmap* map) {
+bool fscl_map_is_cnullptr(cmap* map) {
     return map == NULL;
 }
 
-bool fscl_map_contains(const cmap* map, ctofu key) {
+bool fscl_map_contains(cmap* map, ctofu key) {
     if (map == NULL) {
         return false;
     }
