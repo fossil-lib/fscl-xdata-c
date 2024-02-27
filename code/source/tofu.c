@@ -463,7 +463,7 @@ ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu_data
 
     // Filter elements based on the provided function
     for (size_t i = 0; i < objects->data.array_type.size; ++i) {
-        if (filterFunc(&objects->data.array_type.elements[i])) {
+        if (filterFunc(&objects->data.array_type.elements[i].data)) {
             // Copy the entire ctofu_data element into the filteredArray
             filteredArray[filteredSize] = objects->data.array_type.elements[i].data;
             ++filteredSize;
