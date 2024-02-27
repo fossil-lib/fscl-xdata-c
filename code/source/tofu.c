@@ -350,11 +350,11 @@ ctofu_error fscl_tofu_accumulate(ctofu* objects) {
 }
 
 ctofu_error fscl_tofu_transform(ctofu* objects, int (*transformFunc)(int)) {
-    if (objects == NULL) {
+    if (!fscl_tofu_not_cnullptr(objects)) {
         return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
-    if (objects->type != TOFU_ARRAY_TYPE) {
+    if (fscl_tofu_type_getter(objects) != TOFU_ARRAY_TYPE) {
         return TOFU_INVALID_OPERATION;
     }
 
@@ -373,10 +373,13 @@ ctofu_error fscl_tofu_transform(ctofu* objects, int (*transformFunc)(int)) {
             return TOFU_INVALID_OPERATION;
         }
 
-        ctofu_data currentData = fscl_tofu_value_getter(&objects->data.array_type.elements[i]);
+        // Get the current ctofu element
+        ctofu currentData = objects->data.array_type.elements[i];
 
-        // Apply the transformation function to each element
-        currentData.int_type = transformFunc(currentData.int_type);
+        // Apply the transformation function to the int_type
+        currentData.data.int_type = transformFunc(currentData.data.int_type);
+
+        // Set the updated ctofu element back to the array
         fscl_tofu_value_setter(&objects->data.array_type.elements[i], &currentData);
     }
 
@@ -460,7 +463,7 @@ ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu_data
 
     // Filter elements based on the provided function
     for (size_t i = 0; i < objects->data.array_type.size; ++i) {
-        if (filterFunc(&objects->data.array_type.elements[i])) {
+        if (filterFunc(&objects->data.array_type)) {
             // Copy the entire ctofu element into the filteredArray
             filteredArray[filteredSize] = objects->data.array_type.elements[i];
             ++filteredSize;
