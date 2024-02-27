@@ -445,7 +445,7 @@ ctofu_error fscl_tofu_search(ctofu* objects, ctofu* key) {
     return fscl_tofu_error(TOFU_NOT_FOUND);  // Key not found
 }
 
-ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu*)) {
+ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu_data*)) {
     if (!fscl_tofu_not_cnullptr(objects)) {
         return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
@@ -454,19 +454,22 @@ ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu*)) {
         return fscl_tofu_error(TOFU_WAS_MISMATCH);
     }
 
-    ctofu_data filteredArray[objects->data.array_type.size];
+    // Declare an array of ctofu to store the filtered elements
+    ctofu filteredArray[objects->data.array_type.size];
     size_t filteredSize = 0;
 
     // Filter elements based on the provided function
     for (size_t i = 0; i < objects->data.array_type.size; ++i) {
         if (filterFunc(&objects->data.array_type.elements[i])) {
-            fscl_tofu_value_copy(&objects->data.array_type.elements[i], &filteredArray[filteredSize]);
+            // Copy the entire ctofu element into the filteredArray
+            filteredArray[filteredSize] = objects->data.array_type.elements[i];
             ++filteredSize;
         }
     }
 
     // Clear existing data and store the filtered result
     fscl_tofu_erase(objects);
+    // Create a new TOFU array and set its data
     objects = fscl_tofu_create(TOFU_ARRAY_TYPE, filteredArray);
     objects->data.array_type.size = filteredSize;
 
