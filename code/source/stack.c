@@ -48,29 +48,29 @@ void fscl_stack_erase(cstack* stack) {
 // =======================
 ctofu_error fscl_stack_insert(cstack* stack, ctofu data) {
     if (stack == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cstack_node* new_node = (cstack_node*)malloc(sizeof(cstack_node));
     if (new_node == NULL) {
         // Handle memory allocation failure
-        return TOFU_WAS_BAD_MALLOC;
+        return fscl_tofu_error(TOFU_WAS_BAD_MALLOC);
     }
 
     new_node->data = data;
     new_node->next = stack->top;
     stack->top = new_node;
 
-    return TOFU_SUCCESS;
+    return fscl_tofu_error(TOFU_SUCCESS);
 }
 
 ctofu_error fscl_stack_remove(cstack* stack, ctofu* data) {
     if (stack == NULL || data == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     if (stack->top == NULL) {
-        return TOFU_NOT_FOUND; // Stack is empty
+        return fscl_tofu_error(TOFU_NOT_FOUND); // Stack is empty
     }
 
     cstack_node* temp = stack->top;
@@ -79,25 +79,25 @@ ctofu_error fscl_stack_remove(cstack* stack, ctofu* data) {
     *data = temp->data;
     free(temp);
 
-    return TOFU_SUCCESS;
+    return fscl_tofu_error(TOFU_SUCCESS);
 }
 
 ctofu_error fscl_stack_search(const cstack* stack, ctofu data) {
     if (stack == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cstack_node* current = stack->top;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
-            return TOFU_SUCCESS; // Found
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
+            return fscl_tofu_error(TOFU_SUCCESS); // Found
         }
 
         current = current->next;
     }
 
-    return TOFU_NOT_FOUND; // Not found
+    return fscl_tofu_error(TOFU_NOT_FOUND); // Not found
 }
 
 
@@ -128,7 +128,7 @@ ctofu* fscl_stack_getter(cstack* stack, ctofu data) {
     cstack_node* current = stack->top;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
             return &current->data; // Found
         }
 
@@ -140,22 +140,22 @@ ctofu* fscl_stack_getter(cstack* stack, ctofu data) {
 
 ctofu_error fscl_stack_setter(cstack* stack, ctofu data) {
     if (stack == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cstack_node* current = stack->top;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
             // Found, update the data
             current->data = data;
-            return TOFU_SUCCESS;
+            return fscl_tofu_error(TOFU_SUCCESS);
         }
 
         current = current->next;
     }
 
-    return TOFU_NOT_FOUND; // Not found
+    return fscl_tofu_error(TOFU_NOT_FOUND); // Not found
 }
 
 bool fscl_stack_not_empty(const cstack* stack) {

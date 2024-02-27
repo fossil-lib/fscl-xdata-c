@@ -45,17 +45,17 @@ void fscl_map_erase(cmap* map) {
 
 ctofu_error fscl_map_insert(cmap* map, ctofu key, ctofu value) {
     if (map == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     if (map->size >= MAX_MAP_SIZE) {
-        return TOFU_WAS_BAD_RANGE; // Map is full
+        return fscl_tofu_error(TOFU_WAS_BAD_RANGE); // Map is full
     }
 
     // Check if the key already exists
     for (size_t i = 0; i < map->size; ++i) {
-        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
-            return TOFU_WAS_MISMATCH; // Duplicate key
+        if (fscl_tofu_compare(&map->keys[i], &key) == 0) {
+            return fscl_tofu_error(TOFU_WAS_MISMATCH); // Duplicate key
         }
     }
 
@@ -63,26 +63,26 @@ ctofu_error fscl_map_insert(cmap* map, ctofu key, ctofu value) {
     map->values[map->size] = value;
     map->size++;
 
-    return TOFU_SUCCESS;
+    return fscl_tofu_error(TOFU_SUCCESS);
 }
 
 ctofu_error fscl_map_remove(cmap* map, ctofu key) {
     if (map == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     size_t index = MAX_MAP_SIZE;
 
     // Find the index of the key
     for (size_t i = 0; i < map->size; ++i) {
-        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+        if (fscl_tofu_compare(&map->keys[i], &key) == 0) {
             index = i;
             break;
         }
     }
 
     if (index == MAX_MAP_SIZE) {
-        return TOFU_NOT_FOUND; // Key not found
+        return fscl_tofu_error(TOFU_NOT_FOUND); // Key not found
     }
 
     // Shift elements to fill the gap
@@ -93,28 +93,28 @@ ctofu_error fscl_map_remove(cmap* map, ctofu key) {
 
     map->size--;
 
-    return TOFU_SUCCESS;
+    return fscl_tofu_error(TOFU_SUCCESS);
 }
 
-ctofu_error fscl_map_search(const cmap* map, ctofu key) {
+ctofu_error fscl_map_search(cmap* map, ctofu key) {
     if (map == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     for (size_t i = 0; i < map->size; ++i) {
-        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
-            return TOFU_SUCCESS; // Found
+        if (fscl_tofu_compare(&map->keys[i], &key) == 0) {
+            return fscl_tofu_error(TOFU_SUCCESS); // Found
         }
     }
 
-    return TOFU_NOT_FOUND; // Key not found
+    return fscl_tofu_error(TOFU_NOT_FOUND); // Key not found
 }
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
 
-size_t fscl_map_size(const cmap* map) {
+size_t fscl_map_size(cmap* map) {
     if (map == NULL) {
         return 0;
     }
@@ -124,58 +124,58 @@ size_t fscl_map_size(const cmap* map) {
 
 ctofu_error fscl_map_getter(cmap* map, ctofu key, ctofu* value) {
     if (map == NULL || value == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     for (size_t i = 0; i < map->size; ++i) {
-        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+        if (fscl_tofu_compare(&map->keys[i], &key) == 0) {
             *value = map->values[i];
-            return TOFU_SUCCESS; // Found
+            return fscl_tofu_error(TOFU_SUCCESS); // Found
         }
     }
 
-    return TOFU_NOT_FOUND; // Key not found
+    return fscl_tofu_error(TOFU_NOT_FOUND); // Key not found
 }
 
 ctofu_error fscl_map_setter(cmap* map, ctofu key, ctofu value) {
     if (map == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     for (size_t i = 0; i < map->size; ++i) {
-        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+        if (fscl_tofu_compare(&map->keys[i], &key) == 0) {
             // Found, update the value
             map->values[i] = value;
-            return TOFU_SUCCESS;
+            return fscl_tofu_error(TOFU_SUCCESS);
         }
     }
 
-    return TOFU_NOT_FOUND; // Key not found
+    return fscl_tofu_error(TOFU_NOT_FOUND); // Key not found
 }
 
-bool fscl_map_not_empty(const cmap* map) {
+bool fscl_map_not_empty(cmap* map) {
     return map != NULL && map->size > 0;
 }
 
-bool fscl_map_not_cnullptr(const cmap* map) {
+bool fscl_map_not_cnullptr(cmap* map) {
     return map != NULL;
 }
 
-bool fscl_map_is_empty(const cmap* map) {
+bool fscl_map_is_empty(cmap* map) {
     return map == NULL || map->size == 0;
 }
 
-bool fscl_map_is_cnullptr(const cmap* map) {
+bool fscl_map_is_cnullptr(cmap* map) {
     return map == NULL;
 }
 
-bool fscl_map_contains(const cmap* map, ctofu key) {
+bool fscl_map_contains(cmap* map, ctofu key) {
     if (map == NULL) {
         return false;
     }
 
     for (size_t i = 0; i < map->size; ++i) {
-        if (fscl_tofu_compare(&map->keys[i], &key, NULL) == 0) {
+        if (fscl_tofu_compare(&map->keys[i], &key) == 0) {
             return true; // Found
         }
     }

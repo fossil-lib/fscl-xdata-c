@@ -51,29 +51,29 @@ void fscl_flist_erase(cflist* flist) {
 
 ctofu_error fscl_flist_insert(cflist* flist, ctofu data) {
     if (flist == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cflist_node* new_node = (cflist_node*)malloc(sizeof(cflist_node));
     if (new_node == NULL) {
         // Handle memory allocation failure
-        return TOFU_WAS_BAD_MALLOC;
+        return fscl_tofu_error(TOFU_WAS_BAD_MALLOC);
     }
 
     new_node->data = data;
     new_node->next = flist->head;
     flist->head = new_node;
 
-    return TOFU_SUCCESS;
+    return fscl_tofu_error(TOFU_SUCCESS);
 }
 
 ctofu_error fscl_flist_remove(cflist* flist, ctofu* data) {
     if (flist == NULL || data == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     if (flist->head == NULL) {
-        return TOFU_NOT_FOUND; // List is empty
+        return fscl_tofu_error(TOFU_NOT_FOUND); // List is empty
     }
 
     cflist_node* temp = flist->head;
@@ -82,25 +82,25 @@ ctofu_error fscl_flist_remove(cflist* flist, ctofu* data) {
     *data = temp->data;
     free(temp);
 
-    return TOFU_SUCCESS;
+    return fscl_tofu_error(TOFU_SUCCESS);
 }
 
 ctofu_error fscl_flist_search(const cflist* flist, ctofu data) {
     if (flist == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cflist_node* current = flist->head;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
-            return TOFU_SUCCESS; // Found
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
+            return fscl_tofu_error(TOFU_SUCCESS); // Found
         }
 
         current = current->next;
     }
 
-    return TOFU_NOT_FOUND; // Not found
+    return fscl_tofu_error(TOFU_NOT_FOUND); // Not found
 }
 
 void fscl_flist_reverse_forward(cflist* flist) {
@@ -168,7 +168,7 @@ ctofu* fscl_flist_getter(cflist* flist, ctofu data) {
     cflist_node* current = flist->head;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
             return &current->data; // Found
         }
 
@@ -180,22 +180,22 @@ ctofu* fscl_flist_getter(cflist* flist, ctofu data) {
 
 ctofu_error fscl_flist_setter(cflist* flist, ctofu data) {
     if (flist == NULL) {
-        return TOFU_WAS_NULLPTR;
+        return fscl_tofu_error(TOFU_WAS_NULLPTR);
     }
 
     cflist_node* current = flist->head;
 
     while (current != NULL) {
-        if (fscl_tofu_compare(&current->data, &data, NULL) == 0) {
+        if (fscl_tofu_compare(&current->data, &data) == 0) {
             // Found, update the data
             current->data = data;
-            return TOFU_SUCCESS;
+            return fscl_tofu_error(TOFU_SUCCESS);
         }
 
         current = current->next;
     }
 
-    return TOFU_NOT_FOUND; // Not found
+    return fscl_tofu_error(TOFU_NOT_FOUND); // Not found
 }
 
 bool fscl_flist_not_empty(const cflist* flist) {

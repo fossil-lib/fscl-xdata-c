@@ -41,19 +41,19 @@ void fscl_map_erase(cmap* map);
 // =======================
 ctofu_error fscl_map_insert(cmap* map, ctofu key, ctofu value);
 ctofu_error fscl_map_remove(cmap* map, ctofu key);
-ctofu_error fscl_map_search(const cmap* map, ctofu key);
+ctofu_error fscl_map_search(cmap* map, ctofu key);
 
 // =======================
 // UTILITY FUNCTIONS
 // =======================
-size_t fscl_map_size(const cmap* map);
+size_t fscl_map_size(cmap* map);
 ctofu_error fscl_map_getter(cmap* map, ctofu key, ctofu* value);
 ctofu_error fscl_map_setter(cmap* map, ctofu key, ctofu value);
-bool fscl_map_not_empty(const cmap* map);
-bool fscl_map_not_cnullptr(const cmap* map);
-bool fscl_map_is_empty(const cmap* map);
-bool fscl_map_is_cnullptr(const cmap* map);
-bool fscl_map_contains(const cmap* map, ctofu key);
+bool fscl_map_not_empty(cmap* map);
+bool fscl_map_not_cnullptr(cmap* map);
+bool fscl_map_is_empty(cmap* map);
+bool fscl_map_is_cnullptr(cmap* map);
+bool fscl_map_contains(cmap* map, ctofu key);
 
 // =======================
 // ITERATOR FUNCTIONS
