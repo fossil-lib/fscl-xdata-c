@@ -28,7 +28,7 @@ bool even_filter_function(const ctofu_data* element) {
         return false;
     }
 
-    return (element->data.int_type % 2) == 0;
+    return (element->int_type % 2) == 0;
 }
 
 // Function to calculate the sum of elements in an array
