@@ -37,9 +37,9 @@ XTEST_CASE(test_tree_insert_and_search) {
     ctree* tree = fscl_tree_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tree_insert(tree, element1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tree_insert(tree, element2));
@@ -51,7 +51,7 @@ XTEST_CASE(test_tree_insert_and_search) {
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_tree_search(tree, element3));
 
     // Search for non-existing element
-    ctofu nonExistingElement = { TOFU_INT_TYPE, { .integer_type = 100 } };
+    ctofu nonExistingElement = { TOFU_INT_TYPE, { .int_type = 100 } };
     TEST_ASSERT_EQUAL(TOFU_NOT_FOUND, fscl_tree_search(tree, nonExistingElement));
 
     fscl_tree_erase(tree);
@@ -61,9 +61,9 @@ XTEST_CASE(test_tree_remove) {
     ctree* tree = fscl_tree_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     fscl_tree_insert(tree, element1);
     fscl_tree_insert(tree, element2);

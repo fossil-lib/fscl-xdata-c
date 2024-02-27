@@ -39,9 +39,9 @@ XTEST_CASE(test_queue_insert_and_size) {
     cqueue* queue = fscl_queue_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_queue_insert(queue, element1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_queue_insert(queue, element2));
@@ -57,9 +57,9 @@ XTEST_CASE(test_queue_remove) {
     cqueue* queue = fscl_queue_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     fscl_queue_insert(queue, element1);
     fscl_queue_insert(queue, element2);
@@ -70,7 +70,7 @@ XTEST_CASE(test_queue_remove) {
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_queue_remove(queue, &removedElement));
 
     // Check if the removed element is correct
-    TEST_ASSERT_EQUAL_INT(42, removedElement.data.integer_type);
+    TEST_ASSERT_EQUAL_INT(42, removedElement.data.int_type);
 
     // Check if the size is correct
     TEST_ASSERT_EQUAL_UINT(2, fscl_queue_size(queue));
@@ -86,7 +86,7 @@ XTEST_CASE(test_queue_not_empty_and_is_empty) {
     TEST_ASSERT_TRUE(fscl_queue_is_empty(queue));
 
     // Insert an element
-    ctofu element = { TOFU_INT_TYPE, { .integer_type = 42 } };
+    ctofu element = { TOFU_INT_TYPE, { .int_type = 42 } };
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_queue_insert(queue, element));
 
     // Check not empty after insertion

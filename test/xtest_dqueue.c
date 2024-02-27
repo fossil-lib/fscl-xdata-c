@@ -39,9 +39,9 @@ XTEST_CASE(test_dqueue_insert_and_size) {
     cdqueue* dqueue = fscl_dqueue_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dqueue_insert(dqueue, element1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dqueue_insert(dqueue, element2));
@@ -57,9 +57,9 @@ XTEST_CASE(test_dqueue_remove) {
     cdqueue* dqueue = fscl_dqueue_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     fscl_dqueue_insert(dqueue, element1);
     fscl_dqueue_insert(dqueue, element2);
@@ -70,7 +70,7 @@ XTEST_CASE(test_dqueue_remove) {
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dqueue_remove(dqueue, &removedElement));
 
     // Check if the removed element is correct
-    TEST_ASSERT_EQUAL_INT(42, removedElement.data.integer_type);
+    TEST_ASSERT_EQUAL_INT(42, removedElement.data.int_type);
 
     // Check if the size is correct
     TEST_ASSERT_EQUAL_UINT(2, fscl_dqueue_size(dqueue));
@@ -82,22 +82,22 @@ XTEST_CASE(test_dqueue_getter_and_setter) {
     cdqueue* dqueue = fscl_dqueue_create(TOFU_INT_TYPE);
 
     // Insert an element
-    ctofu element = { TOFU_INT_TYPE, { .integer_type = 42 } };
+    ctofu element = { TOFU_INT_TYPE, { .int_type = 42 } };
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dqueue_insert(dqueue, element));
 
     // Get the value for an element
     ctofu* retrievedElement = fscl_dqueue_getter(dqueue, element);
     TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
-    TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.integer_type);
+    TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.int_type);
 
     // Update the value for an element
-    ctofu updatedElement = { TOFU_INT_TYPE, { .integer_type = 50 } };
+    ctofu updatedElement = { TOFU_INT_TYPE, { .int_type = 50 } };
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dqueue_setter(dqueue, updatedElement));
 
     // Get the updated value for the element
     retrievedElement = fscl_dqueue_getter(dqueue, updatedElement);
     TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
-    TEST_ASSERT_EQUAL_INT(50, retrievedElement->data.integer_type);
+    TEST_ASSERT_EQUAL_INT(50, retrievedElement->data.int_type);
 
     fscl_dqueue_erase(dqueue);
 }
@@ -110,7 +110,7 @@ XTEST_CASE(test_dqueue_not_empty_and_is_empty) {
     TEST_ASSERT_TRUE(fscl_dqueue_is_empty(dqueue));
 
     // Insert an element
-    ctofu element = { TOFU_INT_TYPE, { .integer_type = 42 } };
+    ctofu element = { TOFU_INT_TYPE, { .int_type = 42 } };
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dqueue_insert(dqueue, element));
 
     // Check not empty after insertion

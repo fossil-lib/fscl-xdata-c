@@ -37,9 +37,9 @@ XTEST_CASE(test_pqueue_insert_and_size) {
     cpqueue* pqueue = fscl_pqueue_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_pqueue_insert(pqueue, element1, 2));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_pqueue_insert(pqueue, element2, 1));
@@ -55,9 +55,9 @@ XTEST_CASE(test_pqueue_remove) {
     cpqueue* pqueue = fscl_pqueue_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     fscl_pqueue_insert(pqueue, element1, 2);
     fscl_pqueue_insert(pqueue, element2, 1);
@@ -69,7 +69,7 @@ XTEST_CASE(test_pqueue_remove) {
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_pqueue_remove(pqueue, &removedElement, &removedPriority));
 
     // Check if the removed element and priority are correct
-    TEST_ASSERT_EQUAL_INT(10, removedElement.data.integer_type);
+    TEST_ASSERT_EQUAL_INT(10, removedElement.data.int_type);
     TEST_ASSERT_EQUAL_INT(1, removedPriority);
 
     // Check if the size is correct
@@ -86,7 +86,7 @@ XTEST_CASE(test_pqueue_not_empty_and_is_empty) {
     TEST_ASSERT_TRUE(fscl_pqueue_is_empty(pqueue));
 
     // Insert an element
-    ctofu element = { TOFU_INT_TYPE, { .integer_type = 42 } };
+    ctofu element = { TOFU_INT_TYPE, { .int_type = 42 } };
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_pqueue_insert(pqueue, element, 2));
 
     // Check not empty after insertion

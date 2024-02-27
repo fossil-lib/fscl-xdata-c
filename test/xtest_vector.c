@@ -39,9 +39,9 @@ XTEST_CASE(test_vector_push_back) {
     cvector vector = fscl_vector_create(TOFU_INT_TYPE);
 
     // Push back some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     fscl_vector_push_back(&vector, element1);
     fscl_vector_push_back(&vector, element2);
@@ -49,9 +49,9 @@ XTEST_CASE(test_vector_push_back) {
 
     // Check if the elements are added correctly
     TEST_ASSERT_EQUAL_UINT(3, vector.size);
-    TEST_ASSERT_EQUAL_INT(42, vector.data[0].data.integer_type);
-    TEST_ASSERT_EQUAL_INT(10, vector.data[1].data.integer_type);
-    TEST_ASSERT_EQUAL_INT(5, vector.data[2].data.integer_type);
+    TEST_ASSERT_EQUAL_INT(42, vector.data[0].data.int_type);
+    TEST_ASSERT_EQUAL_INT(10, vector.data[1].data.int_type);
+    TEST_ASSERT_EQUAL_INT(5, vector.data[2].data.int_type);
 
     fscl_vector_erase(&vector);
 }
@@ -60,9 +60,9 @@ XTEST_CASE(test_vector_search) {
     cvector vector = fscl_vector_create(TOFU_INT_TYPE);
 
     // Push back some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     fscl_vector_push_back(&vector, element1);
     fscl_vector_push_back(&vector, element2);
@@ -74,7 +74,7 @@ XTEST_CASE(test_vector_search) {
     TEST_ASSERT_EQUAL_INT(2, fscl_vector_search(&vector, element3));
 
     // Search for non-existing element
-    ctofu nonExistingElement = { TOFU_INT_TYPE, { .integer_type = 100 } };
+    ctofu nonExistingElement = { TOFU_INT_TYPE, { .int_type = 100 } };
     TEST_ASSERT_EQUAL_INT(-1, fscl_vector_search(&vector, nonExistingElement));
 
     fscl_vector_erase(&vector);

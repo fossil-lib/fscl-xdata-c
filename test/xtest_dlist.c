@@ -39,9 +39,9 @@ XTEST_CASE(test_dlist_insert_and_size) {
     cdlist* dlist = fscl_dlist_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dlist_insert(dlist, element1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dlist_insert(dlist, element2));
@@ -57,9 +57,9 @@ XTEST_CASE(test_dlist_remove) {
     cdlist* dlist = fscl_dlist_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);
@@ -70,7 +70,7 @@ XTEST_CASE(test_dlist_remove) {
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_dlist_remove(dlist, &removedElement));
 
     // Check if the removed element is correct
-    TEST_ASSERT_EQUAL_INT(42, removedElement.data.integer_type);
+    TEST_ASSERT_EQUAL_INT(42, removedElement.data.int_type);
 
     // Check if the size is correct
     TEST_ASSERT_EQUAL_UINT(2, fscl_dlist_size(dlist));
@@ -82,9 +82,9 @@ XTEST_CASE(test_dlist_reverse_forward) {
     cdlist* dlist = fscl_dlist_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);
@@ -96,15 +96,15 @@ XTEST_CASE(test_dlist_reverse_forward) {
     // Check if the elements are in reverse order
     ctofu* retrievedElement = fscl_dlist_getter(dlist, element3);
     TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
-    TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.integer_type);
+    TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.int_type);
 
     retrievedElement = fscl_dlist_getter(dlist, element2);
     TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
-    TEST_ASSERT_EQUAL_INT(10, retrievedElement->data.integer_type);
+    TEST_ASSERT_EQUAL_INT(10, retrievedElement->data.int_type);
 
     retrievedElement = fscl_dlist_getter(dlist, element1);
     TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
-    TEST_ASSERT_EQUAL_INT(5, retrievedElement->data.integer_type);
+    TEST_ASSERT_EQUAL_INT(5, retrievedElement->data.int_type);
 
     fscl_dlist_erase(dlist);
 }
@@ -113,9 +113,9 @@ XTEST_CASE(test_dlist_reverse_backward) {
     cdlist* dlist = fscl_dlist_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { int_type = 5 } };
 
     fscl_dlist_insert(dlist, element1);
     fscl_dlist_insert(dlist, element2);
@@ -127,15 +127,15 @@ XTEST_CASE(test_dlist_reverse_backward) {
     // Check if the elements are in reverse order
     ctofu* retrievedElement = fscl_dlist_getter(dlist, element3);
     TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
-    TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.integer_type);
+    TEST_ASSERT_EQUAL_INT(42, retrievedElement->data.int_type);
 
     retrievedElement = fscl_dlist_getter(dlist, element2);
     TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
-    TEST_ASSERT_EQUAL_INT(10, retrievedElement->data.integer_type);
+    TEST_ASSERT_EQUAL_INT(10, retrievedElement->data.int_type);
 
     retrievedElement = fscl_dlist_getter(dlist, element1);
     TEST_ASSERT_NOT_CNULLPTR(retrievedElement);
-    TEST_ASSERT_EQUAL_INT(5, retrievedElement->data.integer_type);
+    TEST_ASSERT_EQUAL_INT(5, retrievedElement->data.int_type);
 
     fscl_dlist_erase(dlist);
 }

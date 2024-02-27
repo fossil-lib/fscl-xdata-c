@@ -38,9 +38,9 @@ XTEST_CASE(test_stack_insert_and_size) {
     cstack* stack = fscl_stack_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_stack_insert(stack, element1));
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_stack_insert(stack, element2));
@@ -56,9 +56,9 @@ XTEST_CASE(test_stack_remove) {
     cstack* stack = fscl_stack_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     fscl_stack_insert(stack, element1);
     fscl_stack_insert(stack, element2);
@@ -69,7 +69,7 @@ XTEST_CASE(test_stack_remove) {
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, fscl_stack_remove(stack, &removedElement));
 
     // Check if the removed element is correct
-    TEST_ASSERT_EQUAL_INT(5, removedElement.data.integer_type);
+    TEST_ASSERT_EQUAL_INT(5, removedElement.data.int_type);
 
     // Check if the size is correct
     TEST_ASSERT_EQUAL_UINT(2, fscl_stack_size(stack));
@@ -81,24 +81,24 @@ XTEST_CASE(test_stack_top) {
     cstack* stack = fscl_stack_create(TOFU_INT_TYPE);
 
     // Insert some elements
-    ctofu element1 = { TOFU_INT_TYPE, { .integer_type = 42 } };
-    ctofu element2 = { TOFU_INT_TYPE, { .integer_type = 10 } };
-    ctofu element3 = { TOFU_INT_TYPE, { .integer_type = 5 } };
+    ctofu element1 = { TOFU_INT_TYPE, { .int_type = 42 } };
+    ctofu element2 = { TOFU_INT_TYPE, { .int_type = 10 } };
+    ctofu element3 = { TOFU_INT_TYPE, { .int_type = 5 } };
 
     fscl_stack_insert(stack, element1);
     fscl_stack_insert(stack, element2);
     fscl_stack_insert(stack, element3);
 
     // Check the top element
-    ctofu topElement = fscl_stack_top(stack, (ctofu){TOFU_INT_TYPE, {.integer_type = -1}});
-    TEST_ASSERT_EQUAL_INT(5, topElement.data.integer_type);
+    ctofu topElement = fscl_stack_top(stack, (ctofu){TOFU_INT_TYPE, {.int_type = -1}});
+    TEST_ASSERT_EQUAL_INT(5, topElement.data.int_type);
 
     // Remove an element
     fscl_stack_remove(stack, NULL);
 
     // Check the top element after removal
-    topElement = fscl_stack_top(stack, (ctofu){TOFU_INT_TYPE, {.integer_type = -1}});
-    TEST_ASSERT_EQUAL_INT(10, topElement.data.integer_type);
+    topElement = fscl_stack_top(stack, (ctofu){TOFU_INT_TYPE, {.int_type = -1}});
+    TEST_ASSERT_EQUAL_INT(10, topElement.data.int_type);
 
     fscl_stack_erase(stack);
 }
