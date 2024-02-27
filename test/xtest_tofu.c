@@ -478,7 +478,7 @@ XTEST_CASE(test_for_each) {
     ctofu* array = fscl_tofu_create_array(TOFU_INT_TYPE, 5, 5, 3, 8, 1, 7);
 
     // Test for_each
-    ctofu_error for_each_result = fscl_tofu_for_each(array, print_element_function);
+    ctofu_error for_each_result = fscl_tofu_for_each(array, fscl_tofu_out);
     TEST_ASSERT_EQUAL(TOFU_SUCCESS, for_each_result);
 
     // Clean up
