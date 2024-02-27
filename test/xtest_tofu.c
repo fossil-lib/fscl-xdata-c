@@ -21,13 +21,6 @@ int square_transform_function(int value) {
 }
 
 bool even_filter_function(const ctofu_data* element) {
-    // Ensure the data is of type TOFU_INT_TYPE
-    if (element->type != TOFU_INT_TYPE) {
-        // Handle the case where the data type is not an integer
-        printf("Invalid data type for filtering.\n");
-        return false;
-    }
-
     return (element->int_type % 2) == 0;
 }
 
