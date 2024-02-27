@@ -246,6 +246,9 @@ ctofu* fscl_tofu_create_array(ctofu_type type, size_t size, ...) {
             case TOFU_BOOLEAN_TYPE:
                 tofu_array->data.array_type.elements[i].data.boolean_type = va_arg(args, int);
                 break;
+            case TOFU_NULLPTR_TYPE:
+            case TOFU_UNKNOWN_TYPE:
+            case TOFU_INVALID_TYPE:
             case TOFU_MAP_TYPE:
             case TOFU_ARRAY_TYPE:
                 // Nested array or map not supported in this function
@@ -791,7 +794,7 @@ void fscl_tofu_out(const ctofu value) {
             // Assuming that qbit_type is an unsigned integer type
             printf("0b");
             for (int i = sizeof(value.data.qbit_type) * 8 - 1; i >= 0; --i) {
-                printf("%d", (value.data.qbit_type >> i) & 1);
+                printf("%ld", (value.data.qbit_type >> i) & 1);
             }
             break;
         case TOFU_ARRAY_TYPE:
