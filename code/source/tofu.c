@@ -457,15 +457,15 @@ ctofu_error fscl_tofu_filter(ctofu* objects, bool (*filterFunc)(const ctofu_data
         return fscl_tofu_error(TOFU_WAS_MISMATCH);
     }
 
-    // Declare an array of ctofu to store the filtered elements
-    ctofu filteredArray[objects->data.array_type.size];
+    // Declare an array of ctofu_data to store the filtered elements
+    ctofu_data filteredArray[objects->data.array_type.size];
     size_t filteredSize = 0;
 
     // Filter elements based on the provided function
     for (size_t i = 0; i < objects->data.array_type.size; ++i) {
-        if (filterFunc(&objects->data.array_type)) {
-            // Copy the entire ctofu element into the filteredArray
-            filteredArray[filteredSize] = objects->data.array_type.elements[i];
+        if (filterFunc(&objects->data.array_type.elements[i])) {
+            // Copy the entire ctofu_data element into the filteredArray
+            filteredArray[filteredSize] = objects->data.array_type.elements[i].data;
             ++filteredSize;
         }
     }
