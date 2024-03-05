@@ -18,7 +18,7 @@ extern "C"
 {
 #endif
 
-#include "fossil/xdata/tofu.h"
+#include "fossil/xtofu/core.h"
 
 // Define a maximum number of key-value pairs that can be stored in the map
 #define MAX_MAP_SIZE 100
