@@ -4,11 +4,13 @@ code = files(
     'set.c'  , 'stack.c' , 'map.c'   ,
     'vector.c')
 
+tofu = dependency('fscl-xtofu-c'),
 lib = static_library('fscl-xdata-c',
     code,
-    dependencies : dependency('fscl-xtofu-c'),
+    dependencies : tofu,
     include_directories: dir)
 
 fscl_xdata_c_dep = declare_dependency(
     link_with: lib,
+    dependencies : tofu,
     include_directories: dir)
