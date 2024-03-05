@@ -18,7 +18,7 @@ extern "C"
 {
 #endif
 
-#include "fossil/xdata/tofu.h"
+#include "fossil/xtofu/core.h"
 
 // Node structure for the binary search tree
 typedef struct ctree_node {
