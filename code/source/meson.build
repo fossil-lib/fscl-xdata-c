@@ -4,7 +4,7 @@ code = files(
     'set.c'  , 'stack.c' , 'map.c'   ,
     'vector.c')
 
-tofu = dependency('fscl-xtofu-c'),
+tofu = dependency('fscl-xtofu-c')
 lib = static_library('fscl-xdata-c',
     code,
     dependencies : tofu,
