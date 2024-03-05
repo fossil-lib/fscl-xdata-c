@@ -18,7 +18,7 @@ extern "C"
 {
 #endif
 
-#include "fossil/xdata/tofu.h"
+#include "fossil/xtofu/core.h"
 
 // Node structure for the linked list
 typedef struct cflist_node {
