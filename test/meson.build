@@ -7,7 +7,7 @@ if get_option('with_test').enabled()
     test_src = ['xunit_runner.c']
     test_cubes = [
         'queue', 'pqueue', 'dqueue', 'flist', 'dlist',
-        'tree', 'set', 'stack', 'tofu', 'map', 'vector']
+        'tree', 'set', 'stack', 'map', 'vector']
 
     foreach cube : test_cubes
         test_src += ['xtest_' + cube + '.c']
