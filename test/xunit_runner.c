@@ -17,7 +17,6 @@ Description:
 //
 XTEST_EXTERN_POOL(xdata_test_flist_group );
 XTEST_EXTERN_POOL(xdata_test_dlist_group );
-XTEST_EXTERN_POOL(xdata_test_tofu_group  );
 XTEST_EXTERN_POOL(xdata_test_tree_group  );
 XTEST_EXTERN_POOL(xdata_test_set_group   );
 XTEST_EXTERN_POOL(xdata_test_map_group   );
@@ -35,7 +34,6 @@ int main(int argc, char **argv) {
 
     XTEST_IMPORT_POOL(xdata_test_flist_group);
     XTEST_IMPORT_POOL(xdata_test_dlist_group);
-    XTEST_IMPORT_POOL(xdata_test_tofu_group );
     XTEST_IMPORT_POOL(xdata_test_tree_group );
     XTEST_IMPORT_POOL(xdata_test_set_group  );
     XTEST_IMPORT_POOL(xdata_test_map_group  );
