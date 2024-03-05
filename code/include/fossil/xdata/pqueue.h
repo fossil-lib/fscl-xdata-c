@@ -18,7 +18,7 @@ extern "C"
 {
 #endif
 
-#include "fossil/xdata/tofu.h"
+#include "fossil/xtofu/core.h"
 
 typedef struct cpqueue_node {
     ctofu data;
