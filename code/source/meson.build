@@ -6,6 +6,7 @@ code = files(
 
 lib = static_library('fscl-xdata-c',
     code,
+    dependencies : dependency('fscl-xtofu-c'),
     include_directories: dir)
 
 fscl_xdata_c_dep = declare_dependency(
