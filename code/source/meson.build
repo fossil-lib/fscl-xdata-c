@@ -2,7 +2,7 @@ code = files(
     'queue.c', 'pqueue.c', 'dqueue.c',
     'flist.c', 'dlist.c' , 'tree.c'  ,
     'set.c'  , 'stack.c' , 'map.c'   ,
-    'vector.c', 'tofu.c')
+    'vector.c')
 
 lib = static_library('fscl-xdata-c',
     code,
