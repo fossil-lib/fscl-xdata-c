@@ -10,7 +10,7 @@ Description:
     feel free to contact Michael at michaelbrockus@gmail.com.
 ==============================================================================
 */
-#include "fossil/xdata/pqueue.h"
+#include "fossil/xstructures/pqueue.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
