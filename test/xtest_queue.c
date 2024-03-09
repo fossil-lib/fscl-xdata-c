@@ -10,7 +10,7 @@ Description:
     feel free to contact Michael at michaelbrockus@gmail.com.
 ==============================================================================
 */
-#include "fossil/xdata/queue.h" // lib source code
+#include "fossil/xstructures/queue.h" // lib source code
 
 #include <fossil/xtest.h>   // basic test tools
 #include <fossil/xassert.h> // extra asserts
