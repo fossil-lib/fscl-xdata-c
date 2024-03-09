@@ -10,24 +10,24 @@ Description:
     feel free to contact Michael at michaelbrockus@gmail.com.
 ==============================================================================
 */
-#ifndef FSCL_H
-#define FSCL_H
+#ifndef FSCL_XSTRUCTURES_H
+#define FSCL_XSTRUCTURES_H
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-#include "xdata/map.h"
-#include "xdata/queue.h"
-#include "xdata/dqueue.h"
-#include "xdata/pqueue.h"
-#include "xdata/tree.h"
-#include "xdata/set.h"
-#include "xdata/dlist.h"
-#include "xdata/flist.h"
-#include "xdata/stack.h"
-#include "xdata/vector.h"
+#include "xstructures/map.h"
+#include "xstructures/queue.h"
+#include "xstructures/dqueue.h"
+#include "xstructures/pqueue.h"
+#include "xstructures/tree.h"
+#include "xstructures/set.h"
+#include "xstructures/dlist.h"
+#include "xstructures/flist.h"
+#include "xstructures/stack.h"
+#include "xstructures/vector.h"
 
 #ifdef __cplusplus
 }
