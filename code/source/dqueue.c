@@ -10,7 +10,7 @@ Description:
     feel free to contact Michael at michaelbrockus@gmail.com.
 ==============================================================================
 */
-#include "fossil/xdata/dqueue.h"
+#include "fossil/xstructures/dqueue.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
