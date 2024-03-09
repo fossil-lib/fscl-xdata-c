@@ -5,12 +5,12 @@ code = files(
     'vector.c')
 
 tofu = dependency('fscl-xtofu-c')
-lib = static_library('fscl-xdata-c',
+lib = static_library('fscl-xstructures-c',
     code,
     dependencies : tofu,
     include_directories: dir)
 
-fscl_xdata_c_dep = declare_dependency(
+fscl_xstructures_c_dep = declare_dependency(
     link_with: lib,
     dependencies : tofu,
     include_directories: dir)
