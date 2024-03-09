@@ -10,7 +10,7 @@ Description:
     feel free to contact Michael at michaelbrockus@gmail.com.
 ==============================================================================
 */
-#include "fossil/xdata/stack.h"
+#include "fossil/xstructures/stack.h"
 #include <stdio.h>
 #include <stdlib.h>
 
