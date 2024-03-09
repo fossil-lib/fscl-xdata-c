@@ -10,7 +10,7 @@ Description:
     feel free to contact Michael at michaelbrockus@gmail.com.
 ==============================================================================
 */
-#include "fossil/xdata/stack.h" // lib source code
+#include "fossil/xstructures/stack.h" // lib source code
 
 #include <fossil/xtest.h>   // basic test tools
 #include <fossil/xassert.h> // extra asserts
