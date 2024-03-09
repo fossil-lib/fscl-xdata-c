@@ -18,7 +18,7 @@ extern "C"
 {
 #endif
 
-#include "fossil/xtofu/core.h"
+#include "fossil/xtofu.h"
 
 // Stack structure
 typedef struct cstack_node {
