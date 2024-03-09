@@ -18,7 +18,7 @@ extern "C"
 {
 #endif
 
-#include "fossil/xtofu/core.h"
+#include "fossil/xtofu/.h"
 
 #define INITIAL_CAPACITY 10
 
