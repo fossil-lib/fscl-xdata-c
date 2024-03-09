@@ -1,4 +1,4 @@
-# Fossil XData - `C`
+# Fossil XStructures - `C`
 
 Dive into the world of optimized data structures with Fossil XData Structures. This library provides a collection of meticulously crafted data structures designed to maximize efficiency and performance. Whether you're working with arrays, linked lists, trees, or more, Fossil XData Structures ensures that your data management is seamless and highly effective.
 
@@ -12,15 +12,15 @@ Before getting started, make sure you have the following installed:
 
 **Adding Dependency**:
 
-Create a directory named subprojects in the root directory, next create a file named `fscl-xdata-c.wrap` in the `subprojects` directory of your project with the following content:
+Create a directory named subprojects in the root directory, next create a file named `fscl-xstructures-c.wrap` in the `subprojects` directory of your project with the following content:
 
    ```ini
    [wrap-git]
-   url = https://github.com/fossil-lib/fscl-xdata-c.git
+   url = https://github.com/fossil-lib/fscl-xstructures-c.git
    revision = main
    
    [provide]
-   fscl-xdata-c = fscl_xdata_c_dep
+   fscl-xstructures-c = fscl_xstructures_c_dep
    ```
 
 **Integrate Dependency**:
@@ -28,7 +28,7 @@ Create a directory named subprojects in the root directory, next create a file n
    project('my_project', 'c')
 
    exe = executable('my_project', 'my_project.c',
-       dependencies : dependency('fscl-xdata-c')) # add this line
+       dependencies : dependency('fscl-xstructures-c')) # add this line
 
    test('basic', exe)
    ```
